@@ -1,0 +1,124 @@
+{
+  "artifact": "Round 8 Battle Mirror Support Matrix（戰鬥鏡像支援矩陣）",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "overall_status": "PARTIAL",
+  "mirror_file": "battle_mirror_partial.py",
+  "cases": [
+    {
+      "case": "Ordinary Many vs Many, Force vs nonempty Tower",
+      "status": "SUPPORTED_STATIC_SUBSET",
+      "scope": "普通 Shield、Fighter、Chopper、Bomber、Tank、Soldier；22 個容量映射塔型；要求攻守 owner 與 aura snapshot 明確。",
+      "evidence": "448 / 1778 / 2022 / 2408 / 2827 / 3757 / 1888."
+    },
+    {
+      "case": "Ordinary Many vs Many, Force vs Force",
+      "status": "SUPPORTED_STATIC_SUBSET",
+      "scope": "相撞路徑已由呼叫端判定；普通六種兵加 Shield；兩側 aura snapshot 明確。",
+      "evidence": "448 -> 788 -> 522; 1348 callback local mechanics."
+    },
+    {
+      "case": "Shield + ruler aura snapshot",
+      "status": "SUPPORTED_STATIC_SUBSET",
+      "scope": "支持 Shield 與已算好的攻守布林光環快照；不從 Ruler 位置自行推算光環。攻塔 Force 的 Shield 先移除；Force 對 Force 保留兩側 Shield。",
+      "evidence": "448 calls 4969 then 1778; 522 calls 4969 sentinel 27 and 1778."
+    },
+    {
+      "case": "Tower overcapacity field classification",
+      "status": "SUPPORTED_STATIC_SUBSET",
+      "scope": "22/22 有來源順序對應的容量列；僅計算戰鬥中的空／地選兵分類。",
+      "evidence": "GPT_BATTLE_FINAL_TABLES.json and func 2408/2827."
+    },
+    {
+      "case": "Neutral defended tower ordinary combat",
+      "status": "SUPPORTED_STATIC_SUBSET",
+      "scope": "非空中立塔、普通兵、明確 aura；只算交戰與即時塔主結果。",
+      "evidence": "448 relation/units branches and tower terminal."
+    },
+    {
+      "case": "Neutral empty tower capture",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "448 直接設主與 reconcile，不是戰鬥；抵達後 force move-on／merge 需路徑、燃料及同目的地狀態。",
+      "evidence": "func 448 calls 3571 and 3107 before the battle loop."
+    },
+    {
+      "case": "Shell",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "已有 damage 3、即時消耗及單場事件去重的靜態映射；鏡像不回傳其戰果。",
+      "evidence": "1347/1348 enum 6; 2022; GPT_FUNC1347_ANALYSIS.md."
+    },
+    {
+      "case": "EMP",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "已映射 damage 1、一次性消耗、攻方 EMP 時 Tower+47=max(old,240)；delay 倒數會暫停該塔兵力生產／衰減和中立塔降級，不改 Force 移動進度；鏡像仍拒絕該輸入。",
+      "evidence": "1347/1348 enum 7 and 448 0x01b0f1..0x01b10f."
+    },
+    {
+      "case": "Nuke",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "31 sentinel、塔型減傷與 1000 guard 已靜態映射；鏡像不回傳其戰果。",
+      "evidence": "2022 / 2970; GPT_BATTLE_INTEGER_RULES.json."
+    },
+    {
+      "case": "Ruler unit or ruler loss",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "會計入士氣且可作一般末順位兵，但 loss event、killer cause 及玩家淘汰後續不在支援輸入中。",
+      "evidence": "1347/1348 enum 9 and source combatants.rs:175-202."
+    },
+    {
+      "case": "Friendly / allied merge, move-on, fuel and cramming",
+      "status": "UNSUPPORTED_CASE",
+      "scope": "不由戰鬥鏡像推估移動、容量合併、過期或同路上限。",
+      "evidence": "448 post-arrival branches; source chunk.rs:433-494."
+    },
+    {
+      "case": "Runtime differential validation",
+      "status": "NOT_RUN_BY_REQUEST",
+      "scope": "本輪明確禁止執行期連線、遊戲操作與正式版 WASM 直接呼叫。",
+      "evidence": "Round 8 task safety section."
+    }
+  ],
+  "muse_interface": {
+    "name": "BattleEvaluator（戰鬥評估器）最小介面",
+    "input": {
+      "BattleEvaluationInput": {
+        "battle_kind": "force_vs_tower | force_vs_force",
+        "attacker_units": "Unit -> u8 count（單位到兵數）；只限六種普通兵與 Shield",
+        "defender_units": "Unit -> u8 count",
+        "tower_type": "塔戰必填；需為已映射 22 種之一",
+        "attacker_owner": "已知正整數；force-vs-force 必須與 defender_owner 不同",
+        "defender_owner": "塔戰可為 null（中立）；Force-vs-Force 必填正整數",
+        "attacker_aura": "必填布林值，表示已計算的 Force 光環快照",
+        "defender_aura": "必填布林值，表示已計算的 Tower／Force 光環快照",
+        "special_state": "必填 special_units_present=false 且必要塔 EMP delay state 已知；目前只支援沒有 Shell／EMP／Nuke／Ruler 的輸入。非空特殊狀態回 UNSUPPORTED_CASE。",
+        "observed_tick": "呼叫端提供觀測節拍；鏡像不推算同節拍移動順序",
+        "attacker_ruler_state": "物件含 ruler_unit_present:false 與 aura_flag_snapshot:boolean；有國王單位時鏡像必須回 UNSUPPORTED_CASE。Force+21 已快照為 attacker_aura。",
+        "defender_ruler_state": "物件含 ruler_unit_present:false 與 aura_flag_snapshot:boolean；塔戰的 Tower+45 或 Force+21 已快照為 defender_aura；若 defender 是國王單位則 UNSUPPORTED_CASE。"
+      }
+    },
+    "result": {
+      "BattleEvaluationResult": {
+        "supported": "boolean",
+        "winner": "attacker | defender | contested | null",
+        "new_owner_relation": "changed_to_attacker | unchanged | cleared_after_contested_result | not_applicable",
+        "attacker_survivors": "Unit -> u8 count",
+        "defender_survivors": "Unit -> u8 count",
+        "special_effects": "目前支援子集固定為空陣列",
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME DIFFERENTIALLY VALIDATED",
+        "unsupported_reason": "supported=false 時必填文字原因"
+      }
+    },
+    "planner_rule": "Planner（規劃器）只能在 supported=true 時使用 BattleEvaluator（戰鬥評估器）結果決定攻擊／防守；supported=false 時不得依此鏡像主動冒險。不得把 UNSUPPORTED_CASE 改成兵力相減或自行猜測。",
+    "queues": {
+      "IMMEDIATE（可立即工程化）": [
+        "只把正規化後普通兵、已知 owner、塔型、明確 aura snapshot 傳入 partial mirror（部分鏡像）。",
+        "保留 supported/unsupported 原值；普通 Force 對 Force 與普通 Force 對非空 Tower 才可讀 winner／survivors。"
+      ],
+      "RUNTIME VALIDATION（執行期驗證）": [
+        "在另行核准的隔離測試安排比對正式版輸入、勝者、殘兵、塔主與 EMP 延遲；本輪沒有執行。"
+      ],
+      "DO NOT USE YET（目前不可進 Planner）": [
+        "Shell／EMP／Nuke／Ruler、友軍合併／續行、直接中立空塔佔領後的完整抵達狀態、未映射塔型與同節拍部隊排程。"
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+14e724 func[5440] <Units::iter_with_zeros>:
+ 14e725: 20 00                      | local.get 0
+ 14e727: 41 08                      | i32.const 8
+ 14e729: 6a                         | i32.add
+ 14e72a: 20 01                      | local.get 1
+ 14e72c: 10 e9 10                   | call 2153 <Units::clone>
+ 14e72f: 20 00                      | local.get 0
+ 14e731: 42 00                      | i64.const 0
+ 14e733: 37 02 00                   | i64.store 2 0
+ 14e736: 0b                         | end

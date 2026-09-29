@@ -1,0 +1,73 @@
+13d71b func[3825]:
+ 13d71c: 06 7f                      | local[2..7] type=i32
+ 13d71e: 23 00                      | global.get 0
+ 13d720: 41 10                      | i32.const 16
+ 13d722: 6b                         | i32.sub
+ 13d723: 22 02                      | local.tee 2
+ 13d725: 24 00                      | global.set 0
+ 13d727: 20 02                      | local.get 2
+ 13d729: 41 08                      | i32.const 8
+ 13d72b: 6a                         | i32.add
+ 13d72c: 21 04                      | local.set 4
+ 13d72e: 23 00                      | global.get 0
+ 13d730: 41 10                      | i32.const 16
+ 13d732: 6b                         | i32.sub
+ 13d733: 22 03                      | local.tee 3
+ 13d735: 24 00                      | global.set 0
+ 13d737: 20 01                      | local.get 1
+ 13d739: 41 08                      | i32.const 8
+ 13d73b: 6a                         | i32.add
+ 13d73c: 21 06                      | local.set 6
+ 13d73e: 02 7f                      | block i32
+ 13d740: 03 40                      |   loop
+ 13d742: 41 0a                      |     i32.const 10
+ 13d744: 20 01                      |     local.get 1
+ 13d746: 10 a5 1c                   |     call 3621 <UnitIter::next>
+ 13d749: 41 ff 01                   |     i32.const 255
+ 13d74c: 71                         |     i32.and
+ 13d74d: 22 07                      |     local.tee 7
+ 13d74f: 41 0a                      |     i32.const 10
+ 13d751: 46                         |     i32.eq
+ 13d752: 0d 01                      |     br_if 1
+ 13d754: 1a                         |     drop
+ 13d755: 20 03                      |     local.get 3
+ 13d757: 41 08                      |     i32.const 8
+ 13d759: 6a                         |     i32.add
+ 13d75a: 20 06                      |     local.get 6
+ 13d75c: 20 07                      |     local.get 7
+ 13d75e: 10 c4 2a                   |     call 5444
+ 13d761: 20 03                      |     local.get 3
+ 13d763: 28 02 0c                   |     i32.load 2 12
+ 13d766: 22 05                      |     local.tee 5
+ 13d768: 45                         |     i32.eqz
+ 13d769: 0d 00                      |     br_if 0
+ 13d76b: 0b                         |   end
+ 13d76c: 20 03                      |   local.get 3
+ 13d76e: 2d 00 08                   |   i32.load8_u 0 8
+ 13d771: 0b                         | end
+ 13d772: 21 01                      | local.set 1
+ 13d774: 20 04                      | local.get 4
+ 13d776: 20 05                      | local.get 5
+ 13d778: 36 02 04                   | i32.store 2 4
+ 13d77b: 20 04                      | local.get 4
+ 13d77d: 20 01                      | local.get 1
+ 13d77f: 3a 00 00                   | i32.store8 0 0
+ 13d782: 20 03                      | local.get 3
+ 13d784: 41 10                      | i32.const 16
+ 13d786: 6a                         | i32.add
+ 13d787: 24 00                      | global.set 0
+ 13d789: 20 02                      | local.get 2
+ 13d78b: 2d 00 08                   | i32.load8_u 0 8
+ 13d78e: 21 01                      | local.set 1
+ 13d790: 20 00                      | local.get 0
+ 13d792: 20 02                      | local.get 2
+ 13d794: 28 02 0c                   | i32.load 2 12
+ 13d797: 36 02 04                   | i32.store 2 4
+ 13d79a: 20 00                      | local.get 0
+ 13d79c: 20 01                      | local.get 1
+ 13d79e: 3a 00 00                   | i32.store8 0 0
+ 13d7a1: 20 02                      | local.get 2
+ 13d7a3: 41 10                      | i32.const 16
+ 13d7a5: 6a                         | i32.add
+ 13d7a6: 24 00                      | global.set 0
+ 13d7a8: 0b                         | end

@@ -1,0 +1,28 @@
+{
+  "artifact": "GPT_FORCE_STRUCT_CANDIDATES",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "force_size": 24,
+  "tower_size": 48,
+  "fields": [
+    {"offset": 0, "width": 4, "semantic": "path_capacity_or_empty_sentinel", "evidence": "Force::clone 3452; Path readers 4326/4525; Vec growth 3241", "source_mapping": "Path.path Vec<TowerId> capacity", "production_reader": [3452], "production_writer": [1791, 3452], "confidence": "PASS"},
+    {"offset": 4, "width": 4, "semantic": "path_data_pointer", "evidence": "4326 and 4525 load TowerId via pointer", "source_mapping": "Path.path Vec<TowerId> pointer", "production_reader": [4326, 4525, 1845, 1861, 2689], "production_writer": [1791, 3452], "confidence": "PASS"},
+    {"offset": 8, "width": 4, "semantic": "path_length", "evidence": "1845 at 0x102C07..0x102C10 decrements on arrival", "source_mapping": "Path.path Vec<TowerId> length", "production_reader": [4326, 4525, 1845], "production_writer": [1791, 1845], "confidence": "PASS"},
+    {"offset": 12, "width": 2, "semantic": "optional_player_id_encoding_unknown", "evidence": "1791 at 0x10048E..0x100492 copies tower+36; 563 reads for color", "source_mapping": "Force.player_id Option<PlayerId>", "production_reader": [522, 563], "production_writer": [1791, 3452], "confidence": "PASS"},
+    {"offset": 14, "width": 7, "semantic": "inline_units", "evidence": "2031 result sp+17..23 copied by 1791 at 0x10047B/0x100482 to Force base sp+24 plus 14..20", "source_mapping": "Force.units Units", "production_reader": [690, 2153, 3452], "production_writer": [1791, 3452], "confidence": "PASS"},
+    {"offset": 21, "width": 1, "semantic": "movement_boost_flag_exact_name_candidate", "evidence": "1791 copies tower+45; 2689 at 0x11CCF0..0x11CD15 shortens required progress 4/5 when ==1", "source_mapping": "candidate ruler or morale derived flag; absent from older public Force struct", "production_reader": [2689, 563], "production_writer": [1791, 3452], "confidence": "PARTIAL"},
+    {"offset": 22, "width": 1, "semantic": "current_edge_path_progress", "evidence": "1791 initializes zero; 1845 increments; 1861 interpolates", "source_mapping": "Force.path_progress u8", "production_reader": [1845, 1861], "production_writer": [1791, 1845, 3452], "confidence": "PASS"},
+    {"offset": 23, "width": 1, "semantic": "fuel", "evidence": "1791 initializes to 150 with 16-bit store 38400 at Force+22", "source_mapping": "Force.fuel u8", "production_reader": [], "production_writer": [1791, 3452], "confidence": "PARTIAL"}
+  ],
+  "tower_collections": [
+    {"offset": 0, "width": 12, "semantic": "inbound_forces_vec", "entry_stride": 24, "capacity_offset": 0, "pointer_offset": 4, "length_offset": 8, "evidence": "1539 clone; 1393 event insert; 448 update; 1242 render", "confidence": "PASS"},
+    {"offset": 12, "width": 12, "semantic": "outbound_forces_vec", "entry_stride": 24, "capacity_offset": 0, "pointer_offset": 4, "length_offset": 8, "evidence": "1539 clone; 1393 event insert; 1242 render; 6128 update wrapper", "confidence": "PASS"}
+  ],
+  "derived": [
+    {"semantic": "current_source_tower_id", "formula": "read_u32(path_pointer + 4*(path_length-1))", "confidence": "PASS"},
+    {"semantic": "current_target_tower_id", "formula": "read_u32(path_pointer + 4*(path_length-2))", "confidence": "PASS"},
+    {"semantic": "final_target_tower_id", "formula": "read_u32(path_pointer)", "confidence": "PASS"},
+    {"semantic": "world_position", "formula": "lerp(source_vec2,target_vec2,min(1,(progress+time_since_tick*4*speed)/required))", "confidence": "PASS"},
+    {"semantic": "force_id", "formula": null, "confidence": "UNKNOWN"},
+    {"semantic": "start_or_arrival_tick", "formula": null, "confidence": "UNKNOWN"}
+  ]
+}

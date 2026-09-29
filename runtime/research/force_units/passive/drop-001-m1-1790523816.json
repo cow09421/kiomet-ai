@@ -1,0 +1,15 @@
+﻿{
+  "evidence_id": "passive-drop-001",
+  "match_id": "m1-1790523816",
+  "method": "UI 系列結構位元組 vs 後續探測位元組差分（同 tower_ref，間隔約 338 秒）",
+  "events": [
+    {"packed_id": 14745827, "owner": "OTHER", "tower_type": "Barracks",
+     "before": [0, 0, 0, 0, 0, 4, 10], "after": [0, 0, 0, 0, 0, 0, 10],
+     "drop": {"Soldier": 4}, "mirror_total": 4, "mirror_match": true},
+    {"packed_id": 14811363, "owner": "OTHER", "tower_type": "Barracks",
+     "before": [0, 0, 0, 0, 0, 4, 10], "after": [0, 0, 0, 0, 0, 0, 10],
+     "drop": {"Soldier": 4}, "mirror_total": 4, "mirror_match": true}
+  ],
+  "interpretation": "兩座敵方兵營各減少 Soldier 4（護盾不動），下降向量與 mirror 逐兵種一致，符合 take_force_units 自然派兵特徵；但未直接捕捉 2031 的 7 位元組輸出，故為 PARTIAL 旁證，不升 VERIFIED",
+  "sent_actions": 0
+}

@@ -1,0 +1,17 @@
+﻿{
+  "sample_id": "single-003",
+  "source": "force-hunt m1-1790523816 tower 14745828",
+  "match_id": "m1-1790523816",
+  "packed_id": 14745828,
+  "owner": "SELF",
+  "tower_type": "Runway",
+  "struct_bytes_38_46": [1, 1, 9, 0, 0, 5, 15, 1, 22],
+  "decode": {"tag": 1, "single_count": 1, "single_unit_type": "Ruler", "shield": 15},
+  "residue_note": "+43=5 在 Single 塔出現，但 UI 無士兵列（僅護盾 15/15＋前置列），故 +41..+43 為轉換殘留，非即時兵力；Single 只讀 +39/+40/+44",
+  "ui_evidence": "headings 跑道；UI 僅顯示 15/15（Ruler 不以 N/M 顯示）",
+  "units_match_ui": true,
+  "interpretation": "第三個獨立 Single(Ruler,1)；國王物理位置的 Units 轉為 Single，前 Many 殘留位元組仍在",
+  "confidence": "CANDIDATE_PLUS（3 局同構；仍缺非 Ruler 單兵種）",
+  "collected_at": "2026-09-28",
+  "context": {"sent_actions": 0, "spot_check_units": "10/11 raw, 11/11 filtered", "platform": "force-hunt window"}
+}

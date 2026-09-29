@@ -1,0 +1,15 @@
+{
+  "artifact": "Round 6 morale function map",
+  "evidence": "production-client_bg.wasm; static disassembly only",
+  "functions": [
+    {"production_func": 1778, "offset": "0x0ffab8", "role": "由交戰兵力計算士氣優勢", "reads": ["Units counts", "Unit::is_single_use result"], "writes": [], "inputs": ["Combatants/Units pointer"], "outputs": ["i32 0..3"], "source_match": "NONE", "confidence": "HIGH"},
+    {"production_func": 448, "offset": "0x01a4e7..0x01a561", "role": "定期更新塔的國王鄰近光環旗標", "reads": ["Tower+36 owner", "Player+0 optional ruler TowerId", "current TowerId", "tick"], "writes": ["Tower+45 u8=0/1"], "inputs": ["world", "tower", "tick"], "outputs": ["aura flag"], "source_match": "NONE", "confidence": "HIGH"},
+    {"production_func": 2071, "offset": "0x10ac88", "role": "尋址玩家紀錄", "reads": ["player table", "PlayerId"], "writes": [], "inputs": ["player table base/count", "PlayerId"], "outputs": ["64-byte player record pointer"], "source_match": "World player map concept only", "confidence": "HIGH"},
+    {"production_func": 460, "offset": "0x02df20..0x02dfb8", "role": "依伺服器玩家輸入寫入／清除可選國王位置", "reads": ["PlayerInput+200 i64", "player table"], "writes": ["Player+0 i64", "Player+0 i32 zero in another branch"], "inputs": ["server player update"], "outputs": ["updated player record"], "source_match": "public PlayerInput lacks this branch", "confidence": "HIGH for client writes; UNKNOWN for server origin"},
+    {"production_func": 1791, "offset": "0x1004a9..0x1004b0", "role": "派兵時複製光環", "reads": ["Tower+45 u8"], "writes": ["Force+21 u8"], "inputs": ["source tower"], "outputs": ["force aura snapshot"], "source_match": "Tower::deploy_force concept; aura absent", "confidence": "HIGH"},
+    {"production_func": 448, "offset": "0x01acc6..0x01ad06", "role": "攻塔戰鬥的初始累積傷害", "reads": ["Force+21", "Tower+45", "post-shield Units"], "writes": ["local signed i32 damage"], "inputs": ["attacker/defender aura and units"], "outputs": ["-3..3 initial damage"], "source_match": "combatants.rs fight; source starts at 0", "confidence": "HIGH"},
+    {"production_func": 522, "offset": "0x068fa4..0x068fd6", "role": "部隊對向戰鬥的初始累積傷害", "reads": ["both Force+21", "both Units"], "writes": ["local signed i32 damage"], "inputs": ["two forces"], "outputs": ["-3..3 initial damage"], "source_match": "combatants.rs fight; source starts at 0", "confidence": "HIGH"},
+    {"production_func": 2022, "offset": "see dumps/func-2022.txt", "role": "逐次傷害計算，接收前一累積值", "reads": ["unit/field/tower type", "previous damage"], "writes": [], "inputs": ["unit damage context", "previous damage"], "outputs": ["signed damage delta"], "source_match": "combatants.rs damage_against", "confidence": "HIGH"},
+    {"production_func": 2689, "offset": "0x11ccf0..0x11cd15", "role": "同一光環旗標降低行進所需進度", "reads": ["Force+21"], "writes": [], "inputs": ["distance", "aura flag"], "outputs": ["progress_required"], "source_match": "force.rs progress_required without aura branch", "confidence": "HIGH"}
+  ]
+}

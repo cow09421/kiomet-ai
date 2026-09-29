@@ -1,0 +1,105 @@
+{
+  "artifact": "GPT Round 11 Temporal Support Matrix（第十一輪時間序支援矩陣）",
+  "static_runtime_connections": 0,
+  "categories": [
+    {
+      "case": "One exact-tick Tower arrival with complete pre-state",
+      "status": "SUPPORTED",
+      "scope": "Ordering model only; battle result still requires the Round 10 evaluator support gate and production differential before action.",
+      "evidence": "SERVER_REFERENCE: common/src/chunk.rs:310-497; Force::tick/raw_tick."
+    },
+    {
+      "case": "Same-tick arrivals with exact current inbound Vec indexes",
+      "status": "ORDER_DEPENDENT",
+      "scope": "Server-reference sequence is statically known once exact current collection indexes are supplied; PvP action remains gated on fresh index/state and production validation.",
+      "evidence": "SERVER_REFERENCE: extract_if collection order; inbound Vec append and event application order."
+    },
+    {
+      "case": "Same-tick enemy and SELF reinforcement without exact collection indexes",
+      "status": "ORDER_DEPENDENT",
+      "scope": "No reinforcement-first or enemy-first class priority; DefenseEvaluator must ABSTAIN.",
+      "evidence": "SERVER_REFERENCE: per-Force sequential arrival; owner/units mutate inline."
+    },
+    {
+      "case": "Same-tick two enemy Forces with exact sequential states",
+      "status": "ORDER_DEPENDENT",
+      "scope": "Two separate battles can be modeled only when current indexes and each intermediate tower state/result are known.",
+      "evidence": "SERVER_REFERENCE: each extract_if result enters the Tower branch inline."
+    },
+    {
+      "case": "Same-tick two enemy Forces without exact order or intermediate state",
+      "status": "UNSUPPORTED",
+      "scope": "Reject; do not merge attackers or reuse the first battle result.",
+      "evidence": "No authoritative Force ID or pre-merged combat branch."
+    },
+    {
+      "case": "Same-tick multiple SELF reinforcements with exact order and exact capacity states",
+      "status": "ORDER_DEPENDENT",
+      "scope": "Sequential friendly movement/merge; each force needs exact post-merge state and capacity evidence.",
+      "evidence": "SERVER_REFERENCE: post-arrival relationship/try_move_on/add_units_to_tower in Vec order."
+    },
+    {
+      "case": "Same-tick reinforcement/enemy with order inferred from ETA seconds only",
+      "status": "UNSUPPORTED",
+      "scope": "Overlapping quantization interval or missing server tick phase means ABSTAIN.",
+      "evidence": "Source processes integer ticks; display seconds do not carry collection order."
+    },
+    {
+      "case": "Two different players hit an empty neutral Tower in one tick",
+      "status": "ORDER_DEPENDENT",
+      "scope": "First surviving Force captures, owner writes immediately, next Force sees the new owner and takes hostile/friendly branch accordingly.",
+      "evidence": "SERVER_REFERENCE: neutral-empty direct owner setter followed by per-force owner reread."
+    },
+    {
+      "case": "Owner flip then later same-tick arrival with exact order",
+      "status": "SUPPORTED",
+      "scope": "Server-reference branch uses the new owner; production mapping and combat result still require validation before actions.",
+      "evidence": "SERVER_REFERENCE: owner setter is inline; next loop iteration reads tower.player_id again."
+    },
+    {
+      "case": "Collision and Tower arrival in the same tick",
+      "status": "SUPPORTED",
+      "scope": "Phase order is collision first; a collision casualty is removed before arrival handling. Exact collision geometry and battle result remain separate gates.",
+      "evidence": "SERVER_REFERENCE: collision block precedes inbound extract_if arrival block in Chunk::tick."
+    },
+    {
+      "case": "Cross-tick known enemy Forces on one Tower",
+      "status": "SUPPORTED",
+      "scope": "Sequential state can be updated per tick if Force progress, owner, units, and every intervening event are complete.",
+      "evidence": "SERVER_REFERENCE: fixed tick progression and immediate mutation."
+    },
+    {
+      "case": "ETA from exact Force progress_required/path_progress/progress_per_tick",
+      "status": "SUPPORTED",
+      "scope": "Integer ticks only and only when all speed/aura/path inputs are known."
+    },
+    {
+      "case": "ETA seconds without a server-phase anchor",
+      "status": "UNSUPPORTED",
+      "scope": "Use a conservative tick interval. If intervals overlap, ABSTAIN."
+    },
+    {
+      "case": "Friendly merge, neutral capture reconcile, fuel, cramming or move-on outcome",
+      "status": "RUNTIME_VALIDATION_NEEDED",
+      "scope": "Do not derive a full arrival result from the battle mirror; require exact state or a validated runtime sample."
+    },
+    {
+      "case": "Global pause countdown",
+      "status": "UNSUPPORTED",
+      "scope": "No global pause countdown found in saved server source. Tower.delay is a per-tower production/downgrade delay.",
+      "evidence": "common/src/chunk.rs:160-180."
+    },
+    {
+      "case": "Production client/server tick parity",
+      "status": "RUNTIME_VALIDATION_NEEDED",
+      "scope": "Static structures map, but the saved locally rebuilt client binary differs from the production binary and server binary identity is not established."
+    }
+  ],
+  "runtime_validation_needed_before_action": [
+    "Observe current inbound Vec indexes and their invalidation after compaction.",
+    "Compare both orders of same-tick SELF reinforcement and enemy arrivals, including owner and units after each event.",
+    "Compare two same-tick enemy arrivals, two same-tick friendly arrivals, and neutral capture followed by a different player.",
+    "Compare a reverse-road collision at the tick one Force would otherwise arrive.",
+    "Keep the production differential scope limited to tested branches; no run was performed in Round 11."
+  ]
+}

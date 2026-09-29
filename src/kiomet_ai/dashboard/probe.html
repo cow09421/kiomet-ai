@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>Kiomet 本機隔離測試</title>
+<style>body{margin:0;background:#132034;color:white;font-family:system-ui}button{position:absolute;left:10px;top:10px;width:110px;height:50px}input{position:absolute;left:10px;top:70px;width:260px;height:30px}canvas{position:absolute;left:10px;top:130px}p{position:absolute;top:310px}</style>
+<button id="test">本機測試</button><input aria-label="隔離輸入"><canvas width="160" height="160"></canvas><p>這是本機測試頁；不控制正式遊戲。</p>
+<script>
+window.probeStats={clicks:0,frames:0,timers:0,webgl:false,glErrors:0};
+document.querySelector('button').onclick=()=>probeStats.clicks++;
+const gl=document.querySelector('canvas').getContext('webgl');probeStats.webgl=!!gl;
+function frame(){probeStats.frames++;if(gl){gl.clearColor((probeStats.frames%120)/120,.4,.7,1);gl.clear(gl.COLOR_BUFFER_BIT);if(gl.getError()!==gl.NO_ERROR)probeStats.glErrors++;}requestAnimationFrame(frame)}
+requestAnimationFrame(frame);setInterval(()=>probeStats.timers++,100);
+</script></html>

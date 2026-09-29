@@ -1,0 +1,60 @@
+{
+  "artifact": "GPT Round 11 Force Ordering Rules（第十一輪部隊排序規則）",
+  "scope": "SERVER_REFERENCE（伺服器參考來源）; CLIENT_PRODUCTION（正式客戶端） mapping is partial static only",
+  "force_identity": {
+    "source_has_stable_force_id": false,
+    "evidence": "common/src/force.rs Force fields have player_id, units, path, path_progress, fuel; there is no dedicated Force ID, creation tick, or arrival tick.",
+    "planner_implication": "Use an observed snapshot-local inbound/outbound Vec index plus snapshot version. Never synthesize an ID or assume index stays stable after compaction."
+  },
+  "rules": [
+    {
+      "topic": "same_target_order",
+      "server_reference_rule": "Forces at one target are processed from that Tower.inbound_forces Vec. Arrivals are selected by extract_if while preserving the current collection order.",
+      "collection_formation": "ChunkEvent::AddInboundForce appends. World event application iterates destination chunk IDs and source chunk IDs through sorted maps, then processes each source inbox Vec in append order. Source generation traverses ChunkMap and fixed tower arrays deterministically for identical prior state and ordered inputs.",
+      "cross_tick_stability": "Retained inbound entries keep relative Vec order; completed/removed entries compact away; new events append during a later event-application phase. Re-read the index every world snapshot.",
+      "cross_platform": "Deterministic for the saved server-reference implementation when given the same ordered inputs. Does not prove production server scheduling or production client parity."
+    },
+    {
+      "topic": "same_tick_order",
+      "server_reference_rule": "Sequential by current inbound Vec index; no Force-ID, ETA, owner, source, target, creation-time, or stable-sort priority is present.",
+      "planner_rule": "If all current indexes and state versions are observed and the relevant production mapping is validated, simulate the exact sequence. Otherwise ORDER_DEPENDENT and ABSTAIN."
+    },
+    {
+      "topic": "collision_order",
+      "server_reference_rule": "Within each tower, collision runs before inbound tower-arrival handling. The loop is inbound Vec order, then outbound Vec order. It compares current and next progress intervals and mutates both force unit sets inline.",
+      "same_tick_collision_and_arrival": "Collision is evaluated first. An inbound force removed by collision is not then processed by the arrival loop; a survivor can arrive later in the same tower tick.",
+      "limitations": "Collision presence, geometry, and results still require exact progress/path inputs and a supported force-versus-force battle result."
+    },
+    {
+      "topic": "merge_order",
+      "server_reference_rule": "No bulk aggregation of same-tick arrivals. After each arrival's battle/capture branch, the current relationship is re-read; a friendly force may move onward or merge into the current Tower before the next inbound Vec entry is handled.",
+      "capacity": "Friendly merge uses the current tower capacity per force. Neutral-empty capture calls reconcile. Neither merge result is inferable from battle arithmetic alone."
+    },
+    {
+      "topic": "combat_order",
+      "server_reference_rule": "Each hostile arriving Force fights the Tower immediately against the Tower units left by prior arrivals. Multiple enemy Forces are sequential separate battles, not a pre-merged attacking force.",
+      "mutation": "Force/Tower units are changed in place; combat InfoEvents are emitted inline."
+    },
+    {
+      "topic": "owner_reread_timing",
+      "server_reference_rule": "The arrival loop reads tower.player_id at the start of each arriving Force. Owner writeback completes before the next Force begins its relationship check.",
+      "consequence": "A same-tick later arrival is classified against the new owner, not a batch snapshot of the old owner."
+    },
+    {
+      "topic": "capacity_timing",
+      "server_reference_rule": "Tower timed production/decay occurs before collision and arrival. Battle reads current tower units. Empty-neutral capture reconciles immediately. Friendly merge/capacity runs after battle and owner reread for that Force.",
+      "planner_rule": "Require an exact post-merge capacity state. Unknown capacity or overflow semantics must not be coerced to zero or assumed to fit."
+    },
+    {
+      "topic": "event_queue",
+      "server_reference_rule": "InfoEvent callbacks are synchronous. ChunkEvents are queued in inboxes and applied by tick_after_inputs after the world pass and input handling. Ruler-loss elimination is queued in maybe_dead and cleaned at the next post_update boundary.",
+      "ordering": "Chunk destination/source maps are sorted in the saved source; each per-source message inbox is sequential Vec append order. maybe_dead is an FxHashSet and is not a FIFO event queue."
+    },
+    {
+      "topic": "production_vs_client",
+      "server_reference_rule": "The local server calls shared World::tick_before_inputs from TowerService::post_update and tick_after_inputs from TowerService::tick.",
+      "client_production_rule": "Function 448 and 1393 have static structural mappings in existing R8 artifacts. Production client wasm matches its saved page snapshot hash; local rebuilt client wasm differs. Do not call this a proven server/client binary identity."
+    }
+  ],
+  "safe_answer": "No implicit Force ordering priority exists. The saved server source processes the current target collection sequentially by Vec position; collection position is a snapshot-local ordering fact, not a stable Force ID or a general arrival-time guarantee."
+}

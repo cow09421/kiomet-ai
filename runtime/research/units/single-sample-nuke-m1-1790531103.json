@@ -1,0 +1,17 @@
+﻿{
+  "sample_id": "single-005",
+  "source": "concurrent soak m1-1790531103 tower 13500689",
+  "match_id": "m1-1790531103",
+  "packed_id": 13500689,
+  "owner": "NEUTRAL",
+  "tower_type": "Silo",
+  "struct_bytes_38_46": [1, 1, 8, 0, 1, 0, 20, 0, 24],
+  "decode": {"tag": 1, "single_count": 1, "single_unit_type": "Nuke", "shield": 20},
+  "ui_evidence": "headings 發射井；護盾=20/20（Silo raw 20，中立無加成）；核彈=1/1（直接數字真值）",
+  "residue_note": "+42=1 殘留（UI 無坦克列），只讀 +39/+40/+44 規則再確認",
+  "units_match_ui": true,
+  "interpretation": "首個非 Ruler 單兵種獨立真值：Single(Nuke,1)，+39 count 與 +40 enum 皆與 UI 直接吻合",
+  "confidence": "HIGH（單一樣本直接真值；仍需 2 個以上不同樣本才升整體 DERIVED）",
+  "collected_at": "2026-09-28",
+  "context": {"sent_actions": 0, "spot_check_single": "decode-rule UI-verified"}
+}

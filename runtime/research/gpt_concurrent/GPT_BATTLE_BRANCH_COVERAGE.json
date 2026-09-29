@@ -1,0 +1,151 @@
+{
+  "artifact": "Round 8 Battle Branch Coverage（戰鬥分支覆蓋）",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "runtime_calls": 0,
+  "branches": [
+    {
+      "branch": "448 Tower arrival lifecycle（塔抵達生命週期）",
+      "status": "PASS",
+      "source_mapping": "chunk.rs:307-505; combatants.rs:106-365",
+      "production_mapping": "func 448 @ 0x19b86; helpers 1888/3571/3107/2195",
+      "mirror_support": "PARTIAL_RESULT for ordinary enemy/neutral vs nonempty tower; other arrival/movement branches guarded",
+      "confidence": "HIGH_STATIC",
+      "notes": "輸入回呼／事件出口及正式版新增士氣、光環快照已分開記錄。"
+    },
+    {
+      "branch": "Neutral empty tower（中立空塔）",
+      "status": "UNDERSTOOD_STATIC",
+      "source_mapping": "chunk.rs:408-431",
+      "production_mapping": "func 448 calls 1888, 3571, 3107",
+      "mirror_support": "UNSUPPORTED_CASE",
+      "confidence": "HIGH_STATIC",
+      "notes": "直接設塔主並 reconcile，不經戰鬥解析；抵達後續行／合併需額外路徑狀態。"
+    },
+    {
+      "branch": "Force-vs-Tower shield preparation（攻塔盾處理）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs:117-124",
+      "production_mapping": "func 448 calls 4969(27,tower.units), then 4969(tower_type,force.units)",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET",
+      "confidence": "HIGH_STATIC",
+      "notes": "守塔 Shield 保留；攻方 Force Shield 被移除後才計士氣。"
+    },
+    {
+      "branch": "Force-vs-Force shield preparation（部隊相撞盾處理）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs:117-124 with both sides Force",
+      "production_mapping": "func 522 calls 4969 with sentinel 27 for both sides",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET",
+      "confidence": "HIGH_STATIC",
+      "notes": "兩側 Shield 都保留。"
+    },
+    {
+      "branch": "Morale and aura initial accumulator（士氣與光環初值）",
+      "status": "PASS",
+      "source_mapping": "Production-only delta; source resolver begins at zero",
+      "production_mapping": "func 1778 called by 448 and 522; Force+21 and Tower+45",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET when aura booleans are explicit snapshots",
+      "confidence": "HIGH_STATIC",
+      "notes": "N 組成沿用 Round 7；不以每回合重算。"
+    },
+    {
+      "branch": "Air / Surface selection and tower overflow（空／地選兵與塔溢出）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs:204-308",
+      "production_mapping": "funcs 448/522 call 2408/2827; table 22x10",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET for 22 mapped tower types",
+      "confidence": "HIGH_STATIC_NUMERIC_AND_ORDER",
+      "notes": "友軍併兵的容量變更不在本鏡像內。"
+    },
+    {
+      "branch": "Ordinary damage and terminal cleanup（普通傷害與尾端整理）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs:220-365",
+      "production_mapping": "inline loops 448/522; 2022; 3757; 1888",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET",
+      "confidence": "HIGH_STATIC",
+      "notes": "不代表已與執行中的正式版做差分。"
+    },
+    {
+      "branch": "Force-vs-Force caller / retention（部隊對撞與保留）",
+      "status": "PASS",
+      "source_mapping": "chunk.rs:190-304",
+      "production_mapping": "448 -> 788 -> 522; 522 writes inbound-survival flag and returns defender-won boolean",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET for ordinary units",
+      "confidence": "HIGH_STATIC",
+      "notes": "522 不直接移除 vector entry；788 完成勝敗部隊保留／移除。"
+    },
+    {
+      "branch": "Tower owner transition（塔主轉換）",
+      "status": "PASS",
+      "source_mapping": "chunk.rs:346-404; tower.rs:168-207",
+      "production_mapping": "func 448 terminal branches and call 3571",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET for ordinary tower fights",
+      "confidence": "HIGH_STATIC",
+      "notes": "攻方勝換主；守方勝不變；無勝者清空；無主時塔型降級並清延遲。"
+    },
+    {
+      "branch": "Survivor writeback（存活兵力寫回）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs mutates Units in place; chunk.rs:435-494",
+      "production_mapping": "448/522 callbacks 1347/1348, subtract 1448, cleanup 3757, wrapper 788",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET for ordinary combat; movement/merge after battle guarded",
+      "confidence": "HIGH_STATIC",
+      "notes": "force-vs-tower 與 force-vs-force 各由不同外層集合處理。"
+    },
+    {
+      "branch": "Capacity after battle（戰後容量處理）",
+      "status": "PARTIAL",
+      "source_mapping": "chunk.rs:421-431, 445-481; units.rs:279-300",
+      "production_mapping": "func 3107 only direct empty capture; 2195 merge; enemy owner setter does not reconcile",
+      "mirror_support": "Combat field overflow supported; neutral capture and friendly merge unsupported",
+      "confidence": "HIGH_STATIC",
+      "notes": "敵方佔塔後的守軍 survivor 不自動 reconcile。"
+    },
+    {
+      "branch": "Shell single-use event and damage（砲彈一次性事件與傷害）",
+      "status": "UNDERSTOOD_STATIC",
+      "source_mapping": "combatants.rs:147-173, 220-243",
+      "production_mapping": "1347/1348 enum 6 branch; 2970/2022",
+      "mirror_support": "UNSUPPORTED_CASE",
+      "confidence": "HIGH_STATIC_LOCAL; EVENT_SINK_CONTEXTUAL",
+      "notes": "damage 3，立即扣 1，每戰事件去重；特殊輸入仍拒絕。 CombatInfo 經 1943 轉成 InfoEvent，後續由外層事件接收者處理。"
+    },
+    {
+      "branch": "EMP event and tower delay（電磁脈衝事件與塔延遲）",
+      "status": "UNDERSTOOD_STATIC",
+      "source_mapping": "chunk.rs:321-344; combatants.rs:149-155",
+      "production_mapping": "1347/1348 enum 7; 448 scratch attacker-EMP flag writes Tower+47 max 240",
+      "mirror_support": "UNSUPPORTED_CASE",
+      "confidence": "HIGH_STATIC_LOCAL; EVENT_SINK_CONTEXTUAL",
+      "notes": "只攻方 EMP 延長 Tower+47；delay 倒數會暫停該塔兵力生產／衰減與中立塔降級，沒有 Force movement field write。522 Force collision 沒有 Tower delay write。"
+    },
+    {
+      "branch": "Nuke finite damage guard（核彈有限傷害保護）",
+      "status": "UNDERSTOOD_STATIC",
+      "source_mapping": "unit.rs:121-173; combatants.rs:220-243",
+      "production_mapping": "enum 8; 2022 -> 2970; sentinel 31, INT32_MAX, cap 1000",
+      "mirror_support": "UNSUPPORTED_CASE",
+      "confidence": "HIGH_STATIC_ARITHMETIC; EVENT_SINK_CONTEXTUAL",
+      "notes": "塔型遠程減傷先於 sentinel 轉換；Bunker 為 10、Headquarters 為 20。 CombatInfo 經 1943 轉成 InfoEvent，後續由外層事件接收者處理。"
+    },
+    {
+      "branch": "Ruler replacement and loss event（國王替換與陣亡事件）",
+      "status": "PARTIAL",
+      "source_mapping": "combatants.rs:175-202; chunk.rs:483-494",
+      "production_mapping": "1347/1348 enum 9 prior-last branch; helper 2193/2561",
+      "mirror_support": "UNSUPPORTED_CASE",
+      "confidence": "HIGH_STATIC_LOCAL; PLAYER_ELIMINATION_OUTSIDE_SCOPE",
+      "notes": "國王非一次性，傷害 1、計入士氣；外部玩家淘汰後續未納入。"
+    },
+    {
+      "branch": "RNG / probability（隨機／機率分支）",
+      "status": "PASS",
+      "source_mapping": "combatants.rs:106-365 is deterministic",
+      "production_mapping": "battle call graph 448/522/1347/1348/1778/2022 contains no RNG or PRNG callee",
+      "mirror_support": "SUPPORTED_STATIC_SUBSET deterministic",
+      "confidence": "HIGH_STATIC_CALL_GRAPH",
+      "notes": "不涵蓋戰鬥外的部隊排序或伺服器排程。"
+    }
+  ]
+}

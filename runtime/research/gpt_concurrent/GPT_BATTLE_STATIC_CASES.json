@@ -1,0 +1,1600 @@
+{
+  "artifact": "Round 7 static battle cases",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "case_count": 29,
+  "oracle_limit": "No production WASM invocation; supported outputs come from the deliberately restricted partial mirror cross-checked against static disassembly and reference source. Unsupported rows are expected guard results.",
+  "cases": [
+    {
+      "case_id": "neutral_soldier_one_each",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 0,
+        "defender_morale": 0,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {},
+        "new_owner": null,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 0,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 0,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "neutral_many_vs_many",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 5,
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 4,
+          "Tank": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 4
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "attacker_morale_plus",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 8
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 1,
+        "initial_accumulator_i32": 3,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 8
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 1,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "defender_morale_minus",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 8
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 3,
+        "initial_accumulator_i32": -3,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Soldier": 8
+        },
+        "new_owner": null,
+        "remaining_tower_units": {
+          "Soldier": 8
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": -3
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "both_aura_cancel",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 6
+        },
+        "defender_units": {
+          "Soldier": 6
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 3,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 4
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 3,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "neither_aura",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 1,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 1,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "attacker_shield_stripped_before_morale",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shield": 4,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 1,
+        "initial_accumulator_i32": 1,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 1,
+          "initial_accumulator": 1
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_shield_counts_in_morale",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 6,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 3,
+        "initial_accumulator_i32": -3,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Shield": 6,
+          "Soldier": 2
+        },
+        "new_owner": null,
+        "remaining_tower_units": {
+          "Shield": 6,
+          "Soldier": 2
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": -3
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "force_fighter_air",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Fighter": 2
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Fighter": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_fighter_over_capacity_air",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Airfield",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Fighter": 5,
+          "Soldier": 3
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 3,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Fighter": 1,
+          "Soldier": 3
+        },
+        "new_owner": null,
+        "remaining_tower_units": {
+          "Fighter": 1,
+          "Soldier": 3
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "bomber_air_to_surface",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Bomber": 2
+        },
+        "defender_units": {
+          "Soldier": 5
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Bomber": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "chopper_air_vs_surface",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Chopper": 2
+        },
+        "defender_units": {
+          "Soldier": 5
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Chopper": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tank_damage_three",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "mixed_order",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Fighter": 1,
+          "Bomber": 1,
+          "Tank": 1,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 1,
+          "Fighter": 1,
+          "Tank": 1,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 2,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {},
+        "new_owner": null,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 0,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "shield_normal_combat_unit",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shield": 2,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Tank": 2,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Tank": 2,
+          "Soldier": 2
+        },
+        "new_owner": null,
+        "remaining_tower_units": {
+          "Tank": 2,
+          "Soldier": 2
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "large_count_morale_clamps_three",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 255
+        },
+        "defender_units": {
+          "Soldier": 255
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 3,
+        "initial_accumulator_i32": 3,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "headquarters_ranged_rule_not_used_by_ordinary_units",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Headquarters",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 3
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 2,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "bunker_ranged_rule_not_used_by_ordinary_units",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Bunker",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 4
+        },
+        "defender_units": {
+          "Tank": 3
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "tower type has no source-order-confirmed production row"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "enemy_tower_owner",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 3,
+          "Soldier": 3
+        },
+        "defender_units": {
+          "Fighter": 2,
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 3,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_defender_no_live_capture_unit",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 1,
+        "defender_morale": 0,
+        "initial_accumulator_i32": 0,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "empty_neutral_no_resolver",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "neutral_empty",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {}
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "neutral empty-tower capture bypasses the battle resolver"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "friendly_merge_outside_resolver",
+      "input": {
+        "relation": "friendly",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "not_resolved",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "friendly/allied relations use separate arrival branches"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "shell_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shell": 1,
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "emp_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Emp": 1,
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "nuke_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Nuke": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "ruler_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Ruler": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "single_unit_shell_on_defender_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Shell": 1
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "aura_snapshot_on_enemy_force",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 6
+        },
+        "defender_units": {
+          "Tank": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": 3,
+        "defender_morale": 1,
+        "initial_accumulator_i32": 3,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 1,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_SUBSET_ONLY; NOT RUNTIME_VALIDATED",
+        "unsupported_reason": null
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "invalid_enemy_owner_pair",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 1,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "UNSUPPORTED_CASE",
+      "expected_arithmetic_path": {
+        "post_prebattle_attacker_shield": "removed",
+        "attacker_morale": null,
+        "defender_morale": null,
+        "initial_accumulator_i32": null,
+        "unit_order": [
+          "Shield",
+          "Fighter",
+          "Chopper",
+          "Bomber",
+          "Tank",
+          "Soldier",
+          "Shell",
+          "Emp",
+          "Nuke",
+          "Ruler"
+        ],
+        "special_note": "Each case includes only the branch facts needed to identify ordering, aura, field, or unsupported behavior."
+      },
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "unsupported_reason": "enemy relation conflicts with the supplied owner ids"
+      },
+      "confidence": "STATIC_SUBSET_EXPECTATION; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    }
+  ]
+}

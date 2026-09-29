@@ -1,0 +1,118 @@
+{
+  "artifact": "GPT Round 11 Tick Phase Model（第十一輪節拍階段模型）",
+  "scope": "OFFLINE_STATIC_ONLY（僅離線靜態分析）",
+  "authoritative_layer": "SERVER_REFERENCE（伺服器參考來源）",
+  "source_snapshot": {
+    "repository_commit": "d3f0956f27f48f6cac9ac9991f948fa7f90ba77c",
+    "server_source": "runtime/research/source-map/kiomet-local/server/src/service.rs",
+    "shared_world_source": "runtime/research/source-map/kiomet-local/common/src/world.rs",
+    "chunk_source": "runtime/research/source-map/kiomet-local/common/src/chunk.rs",
+    "source_archive_sha256": "f10ac55443aca84391a90c8e457657a8d9d2a3a217c46bdab8e6113e20e9f4fa"
+  },
+  "production_client_mapping": {
+    "artifact": "runtime/research/source-map/production-client_bg.wasm",
+    "sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "runtime_page_snapshot_sha256_matches": true,
+    "local_rebuilt_client_wasm_sha256": "19f874b81fd23d242b283cf8f53a9dbffde7f0dc487db6e0a18e0b73b79c2418",
+    "local_rebuild_equals_production": false,
+    "mapping_confidence": "PARTIAL_STATIC_STRUCTURAL_MAP（部分靜態結構對映）",
+    "notes": "Round 8/force artifacts map production function 448 to World::tick_before_inputs and function 1393 to tick_after_inputs/event insertion. Production binary and saved page snapshot match by hash; the locally rebuilt client binary does not. This does not prove the official server binary is identical to either client binary."
+  },
+  "phases": [
+    {
+      "phase_index": 0,
+      "name": "上一輪結尾清理與延遲淘汰",
+      "functions": ["TowerService::post_update", "World::post_update", "TowerService::kill_player"],
+      "reads": ["previous inboxes", "maybe_dead", "periodic shrink counter"],
+      "writes": ["cleared inboxes", "player/tower cleanup", "destroy maintenance"],
+      "events": ["pending LostRuler（國王死亡）淘汰進入 ChunkMaintenance（區塊維護）"],
+      "confidence": "HIGH_STATIC（高靜態信心）",
+      "server_reference": "service.rs:436-454; actor_model/macros.rs:231. maybe_dead from the prior world pass is drained before the next tick_before_inputs.",
+      "client_production_mapping": "No complete server-hook equivalent is established for the production client. Do not project server cleanup scheduling onto the client."
+    },
+    {
+      "phase_index": 1,
+      "name": "世界節拍遞增與全域停行標記",
+      "functions": ["World::tick_before_inputs", "World::halt_path", "ChunkHaltEvent::apply"],
+      "reads": ["Singleton.tick", "inbound force paths", "supply lines", "alliance changes"],
+      "writes": ["Singleton.tick + 1", "halted inbound force state", "cleared Player.new_alliances"],
+      "events": ["halt events are applied before chunk ticks"],
+      "confidence": "HIGH_STATIC（高靜態信心）",
+      "server_reference": "common/src/world.rs:42-104. Ticks is GenTicks<4>, so the source cadence is 4 ticks/s.",
+      "client_production_mapping": "Production function 448 is statically mapped to the pre-input world tick; exact binary equivalence is not established."
+    },
+    {
+      "phase_index": 2,
+      "name": "逐區塊、逐塔的塔計時與生產",
+      "functions": ["WorldChunks::iter_mut", "Chunk::tick", "Tower::diminish_units_if_dead_or_overflow", "Tower::deploy_force"],
+      "reads": ["tower owner/type/units/delay/supply_line", "current tick plus chunk offset"],
+      "writes": ["tower units", "delay countdown", "neutral tower downgrade", "queued outbound/inbound ChunkEvents"],
+      "events": ["automatic supply-line dispatch is queued for later ChunkEvent application"],
+      "confidence": "HIGH_STATIC（高靜態信心）",
+      "server_reference": "common/src/world.rs:101-115; common/src/chunk.rs:113-194. Tower update precedes collision and arrivals within each tower. A nonzero delay decrements and skips production/decay for that tick.",
+      "client_production_mapping": "Function 448 structurally covers the shared per-chunk update path. Local rebuilt client hash differs from production; only structural mapping is claimed."
+    },
+    {
+      "phase_index": 3,
+      "name": "入站與出站部隊道路相撞",
+      "functions": ["Chunk::tick Force-vs-Force block", "Combatants::fight"],
+      "reads": ["inbound_forces Vec order", "outbound_forces Vec order", "current and next path progress", "owner/alliance"],
+      "writes": ["both force unit sets", "inbound/outbound Vec retention"],
+      "events": ["combat InfoEvent callback is synchronous; only one mirrored collision orientation emits events"],
+      "confidence": "HIGH_STATIC_FOR_PHASE_AND_LOOP（階段與迴圈高靜態信心）；PARTIAL_FOR_PRODUCTION_MAPPING（正式版對映部分完成）",
+      "server_reference": "common/src/chunk.rs:196-307. Nested iteration is inbound Vec order then outbound Vec order. Collision uses next-tick progress projections and occurs before inbound arrival handling.",
+      "client_production_mapping": "Round 8 maps 448→788→522 for the collision path. This establishes structural placement, not identical server/client scheduling."
+    },
+    {
+      "phase_index": 4,
+      "name": "入站進度、塔抵達、逐支戰鬥與立即塔主寫回",
+      "functions": ["Force::tick", "Force::raw_tick", "Chunk::tick Force-vs-Tower block", "Tower::set_player_id_inner"],
+      "reads": ["inbound_forces Vec order", "tower owner/units/type", "force owner/units/fuel/path"],
+      "writes": ["inbound progress/path", "tower and force units", "tower owner/type/delay", "player tower metadata via InfoEvent callback"],
+      "events": ["each arriving force is resolved inline; owner is read at execution for each force; InfoEvent callbacks run inline"],
+      "confidence": "HIGH_STATIC_FOR_SERVER_REFERENCE（伺服器參考來源高靜態信心）",
+      "server_reference": "common/src/chunk.rs:310-497; common/src/force.rs:336-355; server/src/service.rs:502-568. extract_if visits the inbound Vec in collection order. Tower owner writeback precedes the next arrival's owner read.",
+      "client_production_mapping": "Production function 448 and prior Round 8 mapping include arrival, battle, owner, and post-arrival branches. No live differential was run; exact production server scheduling remains unverified."
+    },
+    {
+      "phase_index": 5,
+      "name": "出站鏡像進度與集合壓縮",
+      "functions": ["Force::raw_tick", "shrink_vec"],
+      "reads": ["outbound_forces Vec order", "path progress/speed"],
+      "writes": ["outbound path progress", "outbound mirror removal at arrival", "Vec compaction"],
+      "events": ["no tower battle is run by outbound raw_tick"],
+      "confidence": "HIGH_STATIC（高靜態信心）",
+      "server_reference": "common/src/chunk.rs:498-505; common/src/force.rs:336-355. It runs after inbound collision and arrival processing for the current tower.",
+      "client_production_mapping": "Function 448's force collection update is structurally mapped; exact production/server parity is not runtime-validated."
+    },
+    {
+      "phase_index": 6,
+      "name": "伺服器輸入後套用延遲區塊事件與玩家摘要",
+      "functions": ["TowerService::tick", "World::tick_after_inputs", "apply!", "ChunkEvent::apply"],
+      "reads": ["queued ChunkEvent inbox by destination and source"],
+      "writes": ["inbound/outbound force Vec append", "player score/lifetime/alerts"],
+      "events": ["ChunkEvent is deferred until tick_after_inputs; target chunk and source ChunkId maps iterate in sorted order; each source event inbox is a Vec preserving append order"],
+      "confidence": "HIGH_STATIC_FOR_SAVED_SOURCE（保存來源高靜態信心）",
+      "server_reference": "server/src/service.rs:295-432; common/src/world.rs:117-120; actor_model/macros.rs:46-60, 101-123, 231; actor_model/storage.rs:217-310; common/src/chunk/event.rs:232-249.",
+      "client_production_mapping": "Production function 1393 is mapped to tick_after_inputs/collection insertion in GPT_FORCE_FUNCTION_MAP.json; local rebuild differs from production hash, so only a structural mapping is claimed."
+    },
+    {
+      "phase_index": 7,
+      "name": "特殊玩家事件的延遲清理邊界",
+      "functions": ["TowerService::on_info_event", "TowerService::post_update", "TowerService::kill_player"],
+      "reads": ["LostRuler InfoEvent", "maybe_dead set"],
+      "writes": ["death reason immediately", "player/tower elimination at next post_update boundary"],
+      "events": ["LostRuler callback inserts into maybe_dead; a later post_update drains it before the next world tick"],
+      "confidence": "HIGH_STATIC（高靜態信心）",
+      "server_reference": "server/src/service.rs:436-457, 502-540. This special-unit consequence is outside the ordinary PvP support subset.",
+      "client_production_mapping": "No full global-player elimination mapping is claimed for the production client. Ruler cases remain unsupported."
+    }
+  ],
+  "ordering_summary": [
+    "Per tower: tower timed state/production → Force-vs-Force collision → inbound progress and arrival resolution → outbound progress/removal → Vec compaction.",
+    "World traversal: ChunkMap row-major y then x; Chunk towers are enumerated by fixed array index. Within a target tower, inbound and outbound Forces are Vecs, not sorted by Force ID, ETA, owner, source, or destination.",
+    "ChunkEvents generated during the world pass are staged, then applied in tick_after_inputs; they do not retroactively run through the already-completed tower pass.",
+    "Owner, unit, and battle mutations in an arrival branch are inline. Later arrivals read the updated owner and tower units."
+  ],
+  "global_pause_countdown": "NOT_FOUND_IN_SAVED_SERVER_SOURCE（保存伺服器來源未找到全域暫停倒數）; Tower.delay is a per-tower production/downgrade delay, not a global game pause."
+}

@@ -1,0 +1,69 @@
+1096f9 func[2031] <Tower::force_units>:
+ 1096fa: 03 7f                      | local[2..4] type=i32
+ 1096fc: 23 00                      | global.get 0
+ 1096fe: 41 20                      | i32.const 32
+ 109700: 6b                         | i32.sub
+ 109701: 22 02                      | local.tee 2
+ 109703: 24 00                      | global.set 0
+ 109705: 20 02                      | local.get 2
+ 109707: 41 00                      | i32.const 0
+ 109709: 36 00 0b                   | i32.store 0 11
+ 10970c: 20 02                      | local.get 2
+ 10970e: 41 00                      | i32.const 0
+ 109710: 36 02 08                   | i32.store 2 8
+ 109713: 20 02                      | local.get 2
+ 109715: 41 10                      | i32.const 16
+ 109717: 6a                         | i32.add
+ 109718: 20 01                      | local.get 1
+ 10971a: 41 26                      | i32.const 38
+ 10971c: 6a                         | i32.add
+ 10971d: 10 c0 2a                   | call 5440 <Units::iter_with_zeros>
+ 109720: 20 01                      | local.get 1
+ 109722: 2d 00 2e                   | i32.load8_u 0 46
+ 109725: 41 0f                      | i32.const 15
+ 109727: 46                         | i32.eq
+ 109728: 21 03                      | local.set 3
+ 10972a: 03 40                      | loop
+ 10972c: 02 40                      |   block
+ 10972e: 20 02                      |     local.get 2
+ 109730: 20 02                      |     local.get 2
+ 109732: 41 10                      |     i32.const 16
+ 109734: 6a                         |     i32.add
+ 109735: 10 f1 1d                   |     call 3825
+ 109738: 20 02                      |     local.get 2
+ 10973a: 2d 00 00                   |     i32.load8_u 0 0
+ 10973d: 22 01                      |     local.tee 1
+ 10973f: 41 0a                      |     i32.const 10
+ 109741: 46                         |     i32.eq
+ 109742: 0d 00                      |     br_if 0
+ 109744: 20 02                      |     local.get 2
+ 109746: 28 02 04                   |     i32.load 2 4
+ 109749: 21 04                      |     local.set 4
+ 10974b: 20 01                      |     local.get 1
+ 10974d: 20 03                      |     local.get 3
+ 10974f: 72                         |     i32.or
+ 109750: 45                         |     i32.eqz
+ 109751: 0d 01                      |     br_if 1
+ 109753: 20 02                      |     local.get 2
+ 109755: 41 08                      |     i32.const 8
+ 109757: 6a                         |     i32.add
+ 109758: 20 01                      |     local.get 1
+ 10975a: 20 04                      |     local.get 4
+ 10975c: 10 92 2e                   |     call 5906 <Units::add>
+ 10975f: 1a                         |     drop
+ 109760: 0c 01                      |     br 1
+ 109762: 0b                         |   end
+ 109763: 0b                         | end
+ 109764: 20 00                      | local.get 0
+ 109766: 20 02                      | local.get 2
+ 109768: 28 00 0b                   | i32.load 0 11
+ 10976b: 36 00 03                   | i32.store 0 3
+ 10976e: 20 00                      | local.get 0
+ 109770: 20 02                      | local.get 2
+ 109772: 28 02 08                   | i32.load 2 8
+ 109775: 36 00 00                   | i32.store 0 0
+ 109778: 20 02                      | local.get 2
+ 10977a: 41 20                      | i32.const 32
+ 10977c: 6a                         | i32.add
+ 10977d: 24 00                      | global.set 0
+ 10977f: 0b                         | end

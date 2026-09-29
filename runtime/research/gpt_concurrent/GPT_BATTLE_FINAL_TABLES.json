@@ -1,0 +1,732 @@
+{
+  "artifact": "GPT battle final static tables",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "method": "offline data-section extraction and disassembly; no WASM invocation",
+  "unit_priority": [
+    "Shield",
+    "Fighter",
+    "Chopper",
+    "Bomber",
+    "Tank",
+    "Soldier",
+    "Shell",
+    "Emp",
+    "Nuke",
+    "Ruler"
+  ],
+  "unit_damage": {
+    "Shield": {
+      "default": 1
+    },
+    "Fighter": {
+      "air": 3,
+      "surface": 1
+    },
+    "Chopper": {
+      "air": 3,
+      "surface": 1
+    },
+    "Bomber": {
+      "air_vs_surface": 5,
+      "other": 1
+    },
+    "Tank": {
+      "all_fields": 3
+    },
+    "Soldier": {
+      "all_fields": 1
+    },
+    "Shell": {
+      "all_fields": 3
+    },
+    "Emp": {
+      "all_fields": 1
+    },
+    "Nuke": {
+      "infinite_sentinel": 31
+    },
+    "Ruler": {
+      "all_fields": 1
+    }
+  },
+  "tower_ranged_damage": {
+    "Bunker": "floor(damage/3), unsigned division",
+    "Headquarters": "floor((damage*2)/3), unsigned division; multiply occurs before divide",
+    "all_other_towers": "identity"
+  },
+  "unit_field_rules": {
+    "Shield": "air iff another selected group member makes any_air true; otherwise surface",
+    "Fighter_Chopper_Bomber_Shell_Emp_Nuke": "air in force or when tower stack exceeds that unit capacity; otherwise surface",
+    "other_units": "surface"
+  },
+  "combat_accumulator": {
+    "type": "signed i32",
+    "ordinary_add": "WebAssembly i32.add, two-complement wrapping",
+    "initial": "exclusive morale aura yields +attacker morale or -defender morale; otherwise 0",
+    "nuclear_guard": "when incoming infinite damage would cross signed accumulator half-range, use min(infinite_damage,1000)"
+  },
+  "special_unit_effects": "No complete static lookup table identified; see GPT_SPECIAL_UNIT_COMBAT.md; do not infer missing effects.",
+  "production_capacity_rows": [
+    {
+      "memory_address": 1362240,
+      "tower_type": "Airfield",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 4,
+        "Chopper": 0,
+        "Bomber": 4,
+        "Tank": 3,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        4,
+        0,
+        4,
+        3,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362280,
+      "tower_type": "Armory",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 5,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362320,
+      "tower_type": "Barracks",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 12,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362360,
+      "tower_type": "Centrifuge",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362400,
+      "tower_type": "City",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 2,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 6,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        2,
+        0,
+        0,
+        2,
+        6,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362440,
+      "tower_type": "Cliff",
+      "capacity_by_unit": {
+        "Shield": 30,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362480,
+      "tower_type": "Ews",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362520,
+      "tower_type": "Factory",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362560,
+      "tower_type": "Generator",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362600,
+      "tower_type": "Headquarters",
+      "capacity_by_unit": {
+        "Shield": 40,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 8,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        40,
+        0,
+        0,
+        0,
+        2,
+        8,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362640,
+      "tower_type": "Helipad",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 3,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        3,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362680,
+      "tower_type": "Mine",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362720,
+      "tower_type": "Projector",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362760,
+      "tower_type": "Quarry",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 6,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        6,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362800,
+      "tower_type": "Radar",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362840,
+      "tower_type": "Reactor",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362880,
+      "tower_type": "Refinery",
+      "capacity_by_unit": {
+        "Shield": 5,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        5,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362920,
+      "tower_type": "Rocket",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1362960,
+      "tower_type": "Runway",
+      "capacity_by_unit": {
+        "Shield": 5,
+        "Fighter": 4,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        5,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1363000,
+      "tower_type": "Satellite",
+      "capacity_by_unit": {
+        "Shield": 15,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 2,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1363040,
+      "tower_type": "Silo",
+      "capacity_by_unit": {
+        "Shield": 20,
+        "Fighter": 0,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 1,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 1,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        20,
+        0,
+        0,
+        0,
+        1,
+        4,
+        0,
+        0,
+        1,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    },
+    {
+      "memory_address": 1363080,
+      "tower_type": "Town",
+      "capacity_by_unit": {
+        "Shield": 10,
+        "Fighter": 1,
+        "Chopper": 0,
+        "Bomber": 0,
+        "Tank": 1,
+        "Soldier": 4,
+        "Shell": 0,
+        "Emp": 0,
+        "Nuke": 0,
+        "Ruler": 1
+      },
+      "raw_u32_le": [
+        10,
+        1,
+        0,
+        0,
+        1,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "mapping_status": "HIGH_CONFIDENCE_SOURCE_MATCH_22_OF_22; special tower branch not exhaustively traced",
+      "confidence": "HIGH numeric match; tower order derived from source enum excluding special-capacity branches"
+    }
+  ],
+  "capacity_caveat": "The 22 raw production rows numerically match 22 source rows (Round 5). Five source TowerTypes use special branches: Artillery, Bunker, Launcher, Rampart, Village. Their raw production branch mapping is not exhaustively disassembled. The partial mirror rejects any tower type missing an ordinary row."
+}

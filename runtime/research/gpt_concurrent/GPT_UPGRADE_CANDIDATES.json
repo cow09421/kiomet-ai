@@ -1,0 +1,52 @@
+{
+  "artifact": "GPT_UPGRADE_CANDIDATES",
+  "status": "PARTIAL",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "confirmed_fields": [
+    {
+      "relative_to": "tower_ref",
+      "offset": 46,
+      "size_bytes": 1,
+      "meaning": "TowerType enum",
+      "production_evidence": ["573:0x07D4DE store8", "2031:0x109720 load8"],
+      "source_evidence": "common/src/chunk/event.rs:200 tower.tower_type = tower_type",
+      "confidence": "high"
+    },
+    {
+      "relative_to": "tower_ref",
+      "offset": 47,
+      "size_bytes": 1,
+      "meaning": "remaining delay; zero means inactive delay flag absent, nonzero means temporary suspension",
+      "production_evidence": ["573:0x07D4E5 call TowerType::delay", "573:0x07D4E8 store8", "448:0x01A619-0x01A627 decrement"],
+      "source_evidence": "common/src/chunk/event.rs:204 and common/src/chunk.rs:161-162",
+      "confidence": "high"
+    },
+    {
+      "relative_to": "argument 1 of production function 2425",
+      "offset": 0,
+      "size_bytes": 54,
+      "meaning": "27-entry u16 TowerArray count view; persistent owner/base not established",
+      "production_evidence": ["2425:0x1148EB-0x114914, two-byte loop stride and load16_u"],
+      "source_evidence": "common/src/tower.rs:437-440 TowerArray<u16>",
+      "confidence": "high for argument layout; low for persistent address"
+    }
+  ],
+  "production_functions": {
+    "upgrade_apply": 573,
+    "prerequisite_one": 789,
+    "has_prerequisites": 2425,
+    "tower_type_delay": 6044,
+    "reconcile_units": 4970
+  },
+  "local_functions": {
+    "upgrade_apply": 2882,
+    "prerequisite_one": 3007,
+    "has_prerequisites": 3009,
+    "tower_type_delay": 3018
+  },
+  "unresolved": [
+    "persistent base address of player tower-count array",
+    "any higher-level pending command queue state",
+    "full production eligibility branch mapping beyond prerequisite function"
+  ]
+}

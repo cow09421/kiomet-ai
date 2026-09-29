@@ -1,0 +1,110 @@
+1a9894 func[2893] <_ZN6common5units5Units9available17hafba1954520f5f08E>:
+ 1a9895: 03 7f                      | local[2..4] type=i32
+ 1a9897: 23 80 80 80 80 00          | global.get 0 <__stack_pointer>
+ 1a989d: 41 10                      | i32.const 16
+ 1a989f: 6b                         | i32.sub
+ 1a98a0: 22 02                      | local.tee 2
+ 1a98a2: 24 80 80 80 80 00          | global.set 0 <__stack_pointer>
+ 1a98a8: 41 00                      | i32.const 0
+ 1a98aa: 21 03                      | local.set 3
+ 1a98ac: 02 40                      | block
+ 1a98ae: 02 40                      |   block
+ 1a98b0: 02 40                      |     block
+ 1a98b2: 02 40                      |       block
+ 1a98b4: 02 40                      |         block
+ 1a98b6: 41 01                      |           i32.const 1
+ 1a98b8: 41 02                      |           i32.const 2
+ 1a98ba: 20 01                      |           local.get 1
+ 1a98bc: 41 ff 01                   |           i32.const 255
+ 1a98bf: 71                         |           i32.and
+ 1a98c0: 22 04                      |           local.tee 4
+ 1a98c2: 41 06                      |           i32.const 6
+ 1a98c4: 49                         |           i32.lt_u
+ 1a98c5: 1b                         |           select
+ 1a98c6: 41 00                      |           i32.const 0
+ 1a98c8: 20 04                      |           local.get 4
+ 1a98ca: 1b                         |           select
+ 1a98cb: 0e 03 00 01 02 00          |           br_table 0 1 2 0
+ 1a98d1: 0b                         |         end
+ 1a98d2: 20 04                      |         local.get 4
+ 1a98d4: 45                         |         i32.eqz
+ 1a98d5: 0d 02                      |         br_if 2
+ 1a98d7: 20 01                      |         local.get 1
+ 1a98d9: 41 ff 01                   |         i32.const 255
+ 1a98dc: 71                         |         i32.and
+ 1a98dd: 41 01                      |         i32.const 1
+ 1a98df: 41 c0 ec c4 80 00          |         i32.const 1128000
+ 1a98e5: 10 95 c4 80 80 00          |         call 8725 <_ZN4core9panicking18panic_bounds_check17h68612f1819935a76E>
+ 1a98eb: 00                         |         unreachable
+ 1a98ec: 0b                         |       end
+ 1a98ed: 20 00                      |       local.get 0
+ 1a98ef: 2d 00 00                   |       i32.load8_u 0 0
+ 1a98f2: 0d 02                      |       br_if 2
+ 1a98f4: 20 02                      |       local.get 2
+ 1a98f6: 41 08                      |       i32.const 8
+ 1a98f8: 6a                         |       i32.add
+ 1a98f9: 41 04                      |       i32.const 4
+ 1a98fb: 6a                         |       i32.add
+ 1a98fc: 20 00                      |       local.get 0
+ 1a98fe: 41 05                      |       i32.const 5
+ 1a9900: 6a                         |       i32.add
+ 1a9901: 2d 00 00                   |       i32.load8_u 0 0
+ 1a9904: 3a 00 00                   |       i32.store8 0 0
+ 1a9907: 20 02                      |       local.get 2
+ 1a9909: 20 00                      |       local.get 0
+ 1a990b: 28 00 01                   |       i32.load 0 1
+ 1a990e: 36 02 08                   |       i32.store 2 8
+ 1a9911: 02 40                      |       block
+ 1a9913: 20 01                      |         local.get 1
+ 1a9915: 41 7f                      |         i32.const 4294967295
+ 1a9917: 6a                         |         i32.add
+ 1a9918: 41 ff 01                   |         i32.const 255
+ 1a991b: 71                         |         i32.and
+ 1a991c: 22 00                      |         local.tee 0
+ 1a991e: 41 04                      |         i32.const 4
+ 1a9920: 4b                         |         i32.gt_u
+ 1a9921: 0d 00                      |         br_if 0
+ 1a9923: 20 02                      |         local.get 2
+ 1a9925: 41 08                      |         i32.const 8
+ 1a9927: 6a                         |         i32.add
+ 1a9928: 20 00                      |         local.get 0
+ 1a992a: 6a                         |         i32.add
+ 1a992b: 2d 00 00                   |         i32.load8_u 0 0
+ 1a992e: 21 03                      |         local.set 3
+ 1a9930: 0c 03                      |         br 3
+ 1a9932: 0b                         |       end
+ 1a9933: 20 00                      |       local.get 0
+ 1a9935: 41 05                      |       i32.const 5
+ 1a9937: 41 d0 ec c4 80 00          |       i32.const 1128016
+ 1a993d: 10 95 c4 80 80 00          |       call 8725 <_ZN4core9panicking18panic_bounds_check17h68612f1819935a76E>
+ 1a9943: 00                         |       unreachable
+ 1a9944: 0b                         |     end
+ 1a9945: 20 00                      |     local.get 0
+ 1a9947: 2d 00 00                   |     i32.load8_u 0 0
+ 1a994a: 45                         |     i32.eqz
+ 1a994b: 0d 01                      |     br_if 1
+ 1a994d: 20 00                      |     local.get 0
+ 1a994f: 2d 00 01                   |     i32.load8_u 0 1
+ 1a9952: 41 00                      |     i32.const 0
+ 1a9954: 20 00                      |     local.get 0
+ 1a9956: 2d 00 02                   |     i32.load8_u 0 2
+ 1a9959: 20 01                      |     local.get 1
+ 1a995b: 41 ff 01                   |     i32.const 255
+ 1a995e: 71                         |     i32.and
+ 1a995f: 46                         |     i32.eq
+ 1a9960: 1b                         |     select
+ 1a9961: 21 03                      |     local.set 3
+ 1a9963: 0c 01                      |     br 1
+ 1a9965: 0b                         |   end
+ 1a9966: 20 00                      |   local.get 0
+ 1a9968: 2d 00 06                   |   i32.load8_u 0 6
+ 1a996b: 21 03                      |   local.set 3
+ 1a996d: 0b                         | end
+ 1a996e: 20 02                      | local.get 2
+ 1a9970: 41 10                      | i32.const 16
+ 1a9972: 6a                         | i32.add
+ 1a9973: 24 80 80 80 80 00          | global.set 0 <__stack_pointer>
+ 1a9979: 20 03                      | local.get 3
+ 1a997b: 41 ff 01                   | i32.const 255
+ 1a997e: 71                         | i32.and
+ 1a997f: 0b                         | end

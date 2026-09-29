@@ -1,0 +1,223 @@
+{
+  "artifact": "Round 10 PvP planner static scenarios",
+  "runtime_connections": 0,
+  "game_actions": 0,
+  "defaults": {
+    "tower_type": "Town",
+    "target_branch": "tower_combat",
+    "attacker_aura_snapshot": false,
+    "defender_aura_snapshot": false,
+    "special_unit_flags": {"ruler": false, "shell": false, "emp": false, "nuke": false},
+    "world_context_required": false,
+    "incoming_path_valid": true,
+    "world_fresh": true,
+    "target_owner_fresh": true,
+    "attacker_owner_relation": "SELF",
+    "defender_owner_relation": "ENEMY",
+    "attacker_units": {"Soldier": 20},
+    "defender_units": {"Soldier": 1},
+    "enemy_eta": 5
+  },
+  "scenarios": [
+    {
+      "id": "S01_enemy_incoming_harmless",
+      "battle_case_basis": ["r8_tower_enemy_defender_holds_owner", "defender_morale_minus"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 2}, "defender_units": {"Soldier": 20}},
+      "expected": {"supported": true, "tower_lost": false, "action": "ABSTAIN"},
+      "reason": "Mirror predicts the SELF tower holds; no reinforcement or panic response is allowed."
+    },
+    {
+      "id": "S02_enemy_incoming_tower_survives",
+      "battle_case_basis": ["r8_tower_enemy_defender_holds_owner", "defender_morale_minus"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Tank": 1}, "defender_units": {"Soldier": 20}, "attacker_aura_snapshot": true},
+      "expected": {"supported": true, "tower_lost": false, "action": "ABSTAIN"},
+      "reason": "Explicit aura input is supported; the projected garrison survives."
+    },
+    {
+      "id": "S03_enemy_incoming_tower_lost",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes", "enemy_tower_owner"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}},
+      "expected": {"supported": true, "tower_lost": true, "action": "ABSTAIN"},
+      "reason": "A supported projected loss with no validated rescue produces no speculative action."
+    },
+    {
+      "id": "S04_reinforcement_arrives_in_time",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes", "r8_tower_enemy_defender_holds_owner"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}, "battle_differential_validated": true, "reinforcement_candidates": [{"source_tower_id": "SELF-A", "reinforcement_eta": 2, "post_merge_snapshot_exact": true, "full_deployable_force": {"Soldier": 19}, "post_merge_defender_units": {"Soldier": 20}, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_self": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}}]},
+      "expected": {"supported": true, "tower_lost": true, "rescue_candidates": 1, "action": "REINFORCE_SELF"},
+      "reason": "Only the supplied full force and exact post-merge snapshot are evaluated; no units are synthesized."
+    },
+    {
+      "id": "S05_reinforcement_too_late",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}, "reinforcement_candidates": [{"source_tower_id": "SELF-A", "reinforcement_eta": 6, "post_merge_snapshot_exact": true, "full_deployable_force": {"Soldier": 19}, "post_merge_defender_units": {"Soldier": 20}}]},
+      "expected": {"supported": true, "tower_lost": true, "reinforcement_status": "REINFORCEMENT_TOO_LATE", "action": "ABSTAIN"},
+      "reason": "A late force cannot affect the first battle."
+    },
+    {
+      "id": "S06_reinforcement_merge_unknown",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes", "friendly_merge_outside_resolver"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}, "reinforcement_candidates": [{"source_tower_id": "SELF-A", "reinforcement_eta": 2, "post_merge_snapshot_exact": false, "full_deployable_force": {"Soldier": 19}}]},
+      "expected": {"supported": true, "tower_lost": true, "rescue_candidates": 0, "action": "ABSTAIN"},
+      "reason": "The evaluator refuses to add the arriving force to the tower by assumption."
+    },
+    {
+      "id": "S07_reinforcement_same_tick_order_unknown",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}, "reinforcement_candidates": [{"source_tower_id": "SELF-A", "reinforcement_eta": 5, "post_merge_snapshot_exact": true, "full_deployable_force": {"Soldier": 19}, "post_merge_defender_units": {"Soldier": 20}}]},
+      "expected": {"supported": true, "tower_lost": true, "action": "ABSTAIN"},
+      "reason": "Equal ETAs have unvalidated event order and are not counted as timely rescue."
+    },
+    {
+      "id": "S08_safe_enemy_attack",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes", "attacker_morale_plus"],
+      "operation": "attack",
+      "world_inputs": {"attacker_units": {"Soldier": 20}, "defender_units": {"Soldier": 1}, "battle_differential_validated": true, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": true, "projected_result": "ATTACK_WIN", "safety_margin": "ROBUST_WIN", "action": "ATTACK_ENEMY"},
+      "reason": "The exact SELF mobile force, direct-neighbor enemy target, fresh state, accepted command shape, and robust mirror result all pass."
+    },
+    {
+      "id": "S09_marginal_enemy_attack",
+      "battle_case_basis": ["neutral_soldier_one_each", "attacker_morale_plus"],
+      "operation": "attack",
+      "world_inputs": {"attacker_units": {"Soldier": 2}, "defender_units": {"Soldier": 1}, "battle_differential_validated": true, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}, "expansion_validated": true},
+      "expected": {"supported": true, "projected_result": "ATTACK_WIN", "safety_margin": "MARGINAL_WIN", "action": "EXPAND_NEUTRAL"},
+      "reason": "The policy's one-survivor cutoff is tunable; a marginal win is not an attack candidate."
+    },
+    {
+      "id": "S10_special_unit_attack",
+      "battle_case_basis": ["r8_shell_rejected"],
+      "operation": "attack",
+      "world_inputs": {"attacker_units": {"Shell": 1}, "defender_units": {"Soldier": 1}, "special_unit_flags": {"ruler": false, "shell": true, "emp": false, "nuke": false}, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Special-unit battles are outside the mirror subset and are not used by the planner."
+    },
+    {
+      "id": "S11_unknown_aura_attack",
+      "battle_case_basis": ["r8_aura_snapshot_missing_rejected"],
+      "operation": "attack",
+      "world_inputs": {"attacker_units": {"Soldier": 20}, "defender_units": {"Soldier": 1}, "attacker_aura_snapshot": null, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Unknown aura data fails the support gate before mirror calculation."
+    },
+    {
+      "id": "S12_simultaneous_threats",
+      "battle_case_basis": ["r8_tower_enemy_defender_holds_owner", "r8_tower_enemy_attacker_wins_owner_changes"],
+      "operation": "simultaneous",
+      "world_inputs": {"defense_cases": [{"target_tower_id": "SELF-LATE", "attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 2}, "defender_units": {"Soldier": 20}, "enemy_eta": 9, "battle_differential_validated": true}, {"target_tower_id": "SELF-EARLY", "attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "attacker_units": {"Soldier": 8}, "defender_units": {"Soldier": 1}, "enemy_eta": 4, "battle_differential_validated": true, "reinforcement_candidates": [{"source_tower_id": "SELF-RESERVE", "reinforcement_eta": 2, "post_merge_snapshot_exact": true, "full_deployable_force": {"Soldier": 19}, "post_merge_defender_units": {"Soldier": 20}, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_self": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}}]}]},
+      "expected": {"supported": true, "action": "REINFORCE_SELF", "target_tower_id": "SELF-EARLY"},
+      "reason": "All SELF towers have equal base value; the earliest supported projected loss receives priority."
+    },
+    {
+      "id": "S13_neutral_expansion_no_threat",
+      "battle_case_basis": ["neutral_soldier_one_each"],
+      "operation": "battle",
+      "world_inputs": {"attacker_units": {"Soldier": 1}, "defender_units": {"Soldier": 1}, "expansion_validated": true},
+      "expected": {"supported": true, "action": "EXPAND_NEUTRAL"},
+      "reason": "With no threat or safe enemy attack, the existing validated neutral-expansion candidate wins arbitration."
+    },
+    {
+      "id": "S14_unknown_world_context",
+      "battle_case_basis": ["r8_ruler_rejected"],
+      "operation": "attack",
+      "world_inputs": {"world_context_required": true, "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "A case requiring complete player/world state is unsupported."
+    },
+    {
+      "id": "S15_unknown_tower_type",
+      "battle_case_basis": ["r8_tower_unknown_type_rejected"],
+      "operation": "attack",
+      "world_inputs": {"tower_type": "UnknownTower", "legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Unknown capacity mappings cannot enter the mirror."
+    },
+    {
+      "id": "S16_stale_target_owner",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes", "invalid_enemy_owner_pair"],
+      "operation": "attack",
+      "world_inputs": {"legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": false, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": true, "action": "ABSTAIN"},
+      "reason": "Battle math may be calculable, but stale ownership makes the command legality fail."
+    },
+    {
+      "id": "S17_invalid_attack_path",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes"],
+      "operation": "attack",
+      "world_inputs": {"legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": false, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": true}},
+      "expected": {"supported": true, "action": "ABSTAIN"},
+      "reason": "A path that fails static legality cannot be sent even when its hypothetical battle is a win."
+    },
+    {
+      "id": "S18_server_acceptance_unvalidated",
+      "battle_case_basis": ["r8_tower_enemy_attacker_wins_owner_changes"],
+      "operation": "attack",
+      "world_inputs": {"legality_evidence": {"source_is_self": true, "source_has_full_mobile_force": true, "target_is_enemy": true, "target_is_direct_neighbor": true, "path_valid": true, "world_fresh": true, "target_owner_fresh": true, "command_kind": "DeployForce", "server_acceptance_validated": false}},
+      "expected": {"supported": true, "safety_margin": "ROBUST_WIN", "action": "ABSTAIN"},
+      "reason": "Static path shape does not prove that the production server accepts the command."
+    },
+    {
+      "id": "S19_force_collision_supported",
+      "battle_case_basis": ["r8_force_collision_many_vs_many"],
+      "operation": "battle",
+      "world_inputs": {"battle_kind": "force_vs_force", "target_branch": "force_collision", "force_collision_confirmed": true, "attacker_owner_relation": "SELF", "defender_owner_relation": "ENEMY", "attacker_units": {"Fighter": 4}, "defender_units": {"Tank": 3}, "tower_type": null, "tower_capacity": null},
+      "expected": {"supported": true, "action": "ABSTAIN"},
+      "reason": "Only a caller-confirmed collision between known owners enters the ordinary Force-versus-Force subset."
+    },
+    {
+      "id": "S20_neutral_empty_capture_unsupported",
+      "battle_case_basis": ["r8_neutral_empty_not_battle", "empty_neutral_no_resolver"],
+      "operation": "battle",
+      "world_inputs": {"attacker_owner_relation": "SELF", "defender_owner_relation": "NEUTRAL", "target_branch": "neutral_empty", "defender_units": {}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Empty neutral capture is an arrival branch, not supported tower combat."
+    },
+    {
+      "id": "S21_shield_state_mismatch",
+      "battle_case_basis": ["r8_tower_attacker_shield_removed", "tower_shield_counts_in_morale"],
+      "operation": "battle",
+      "world_inputs": {"shield_state": {"attacker": 1, "defender": 0}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "The explicit Shield state must match the unit vectors."
+    },
+    {
+      "id": "S22_ruler_involved_combat",
+      "battle_case_basis": ["r8_ruler_rejected"],
+      "operation": "battle",
+      "world_inputs": {"special_unit_flags": {"ruler": true, "shell": false, "emp": false, "nuke": false}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Ruler combat and its global elimination consequences are excluded."
+    },
+    {
+      "id": "S23_neutral_defended_tower",
+      "battle_case_basis": ["r8_neutral_defended_tower", "neutral_many_vs_many"],
+      "operation": "battle",
+      "world_inputs": {"attacker_owner_relation": "SELF", "defender_owner_relation": "NEUTRAL", "attacker_units": {"Soldier": 20}, "defender_units": {"Soldier": 1}, "defender_owner_id": null},
+      "expected": {"supported": true, "action": "ABSTAIN"},
+      "reason": "A nonempty neutral tower uses the supported neutral-combat branch."
+    },
+    {
+      "id": "S24_aura_snapshot_supported",
+      "battle_case_basis": ["attacker_morale_plus", "defender_morale_minus", "both_aura_cancel"],
+      "operation": "battle",
+      "world_inputs": {"attacker_aura_snapshot": true, "defender_aura_snapshot": false, "ruler_aura_state": {"attacker": {"ruler_unit_present": false, "aura_flag_snapshot": true}, "defender": {"ruler_unit_present": false, "aura_flag_snapshot": false}}},
+      "expected": {"supported": true, "action": "ABSTAIN"},
+      "reason": "Explicitly supplied aura booleans are supported; deriving aura from a stale board is not."
+    },
+    {
+      "id": "S25_missing_global_player_state",
+      "battle_case_basis": ["r8_ruler_rejected", "ruler_callback_excluded"],
+      "operation": "defense",
+      "world_inputs": {"attacker_owner_relation": "ENEMY", "defender_owner_relation": "SELF", "world_context_required": true, "attacker_units": {"Soldier": 2}, "defender_units": {"Soldier": 20}},
+      "expected": {"supported": false, "action": "ABSTAIN"},
+      "reason": "Ruler-death global consequences require state absent from the mirror input and remain unsupported."
+    }
+  ]
+}

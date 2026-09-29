@@ -1,0 +1,1735 @@
+{
+  "artifact": "GPT Round 11 PvP Red-Team Matrix（第十一輪 PvP 紅隊矩陣）",
+  "audit_target": "Round 10 SafeBattleEvaluator and planner contracts",
+  "scope": "OFFLINE_STATIC_ONLY（僅離線靜態分析）",
+  "scenario_count": 60,
+  "summary": {
+    "PASS": 15,
+    "FAIL": 45,
+    "CRITICAL": 30,
+    "HIGH": 24,
+    "MEDIUM": 6,
+    "LOW": 0
+  },
+  "severity_failures": {
+    "CRITICAL": 24,
+    "HIGH": 18,
+    "MEDIUM": 3,
+    "LOW": 0
+  },
+  "pass_fail_semantics": "PASS means the documented Round 10 contract enforces the expected safety behavior. FAIL identifies a contract gap; it is not a claim that a live game action occurred.",
+  "round10_evaluator_probes": {
+    "unknown_fields": {
+      "units": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "unit maps must contain only known 8-bit counts; special units are excluded"
+      },
+      "owner": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "enemy tower owner is unknown or conflicts with attacker"
+      },
+      "aura": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "both aura snapshots must be explicit booleans"
+      },
+      "shield": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "attacker Shield state does not match the supplied unit vector"
+      },
+      "tower_type": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "tower type has no validated capacity mapping"
+      }
+    },
+    "float_eta": {
+      "status": "UNSUPPORTED",
+      "reason": "enemy ETA is unknown"
+    },
+    "same_tick_reinforcement": [
+      "UNSUPPORTED"
+    ],
+    "special_units": {
+      "ruler": "UNSUPPORTED",
+      "shell": "UNSUPPORTED",
+      "emp": "UNSUPPORTED",
+      "nuke": "UNSUPPORTED"
+    },
+    "marginal_attack": {
+      "safety_margin": "MARGINAL_WIN",
+      "safe_attack_candidate": false,
+      "result": "ATTACK_WIN"
+    }
+  },
+  "temporal_model_probe": {
+    "scenario_count": 36,
+    "passed": 36,
+    "failures": [],
+    "same_tick_order": {
+      "status": "ORDER_MODEL_ONLY",
+      "tower_after": {
+        "owner_id": 1,
+        "units": {
+          "Soldier": 1
+        }
+      },
+      "active_force_ids": [
+        "f7r"
+      ],
+      "trace": [
+        {
+          "tick": 4,
+          "phase_order": [
+            "COLLISION",
+            "ARRIVAL"
+          ],
+          "collisions": [],
+          "arrivals": [
+            {
+              "force_id": "f7r",
+              "inbound_index": 2,
+              "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+              "branch": "FRIENDLY_MERGE",
+              "owner_read_at_execution": 1,
+              "owner_after": 1,
+              "tower_units_before": {
+                "Soldier": 5
+              },
+              "tower_units_after": {
+                "Soldier": 10
+              },
+              "fixture_status": "STATIC_FIXTURE_ONLY"
+            },
+            {
+              "force_id": "f7e",
+              "inbound_index": 5,
+              "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+              "branch": "HOSTILE_BATTLE",
+              "owner_read_at_execution": 1,
+              "owner_after": 1,
+              "tower_units_before": {
+                "Soldier": 10
+              },
+              "tower_units_after": {
+                "Soldier": 1
+              },
+              "fixture_status": "STATIC_FIXTURE_ONLY"
+            }
+          ]
+        }
+      ],
+      "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+      "not_simulated": [
+        "continuous movement",
+        "battle arithmetic",
+        "real tower-capacity calculation",
+        "network scheduling",
+        "production server runtime"
+      ]
+    },
+    "scope": "server-reference ordering only; the supplied battle effects are static fixtures, not validated combat predictions"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "RT01_01",
+      "category": "STALE_WORLD（過期世界）",
+      "world_state": {
+        "variant": "目標由 ENEMY 變為 SELF",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 checks freshness during evaluation; there is no dispatch-time version token to recheck it.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Dispatch-time Action Validity Token and full threat refresh.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT01_02",
+      "category": "STALE_WORLD（過期世界）",
+      "world_state": {
+        "variant": "世界快照在計畫後改變",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 checks freshness during evaluation; there is no dispatch-time version token to recheck it.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Dispatch-time Action Validity Token and full threat refresh.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT01_03",
+      "category": "STALE_WORLD（過期世界）",
+      "world_state": {
+        "variant": "新入站敵軍在派送前出現",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 checks freshness during evaluation; there is no dispatch-time version token to recheck it.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Dispatch-time Action Validity Token and full threat refresh.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT02_01",
+      "category": "STALE_SOURCE（過期來源）",
+      "world_state": {
+        "variant": "來源兵力被另一行動花掉",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Exact deployable force is checked at planning time only; no source-state version or atomic reservation exists in the Round 10 interface.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read source owner, units, threats and source_state_version at dispatch.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT02_02",
+      "category": "STALE_SOURCE（過期來源）",
+      "world_state": {
+        "variant": "來源遭敵軍攻擊後兵力下降",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Exact deployable force is checked at planning time only; no source-state version or atomic reservation exists in the Round 10 interface.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read source owner, units, threats and source_state_version at dispatch.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT02_03",
+      "category": "STALE_SOURCE（過期來源）",
+      "world_state": {
+        "variant": "來源 owner 在派送前改變",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Exact deployable force is checked at planning time only; no source-state version or atomic reservation exists in the Round 10 interface.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read source owner, units, threats and source_state_version at dispatch.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT03_01",
+      "category": "DOUBLE_SPEND（雙重花費）",
+      "world_state": {
+        "variant": "Defense and Attack choose the same source",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The arbitrator selects one candidate per invocation but has no shared atomic source reservation across proposals or cycles.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Single-writer arbitrator; atomically reserve by source_state_version and invalidate siblings.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT03_02",
+      "category": "DOUBLE_SPEND（雙重花費）",
+      "world_state": {
+        "variant": "two planners reserve the same force",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The arbitrator selects one candidate per invocation but has no shared atomic source reservation across proposals or cycles.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Single-writer arbitrator; atomically reserve by source_state_version and invalidate siblings.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT03_03",
+      "category": "DOUBLE_SPEND（雙重花費）",
+      "world_state": {
+        "variant": "two same-cycle proposals spend overlapping units",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The arbitrator selects one candidate per invocation but has no shared atomic source reservation across proposals or cycles.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Single-writer arbitrator; atomically reserve by source_state_version and invalidate siblings.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT04_01",
+      "category": "VERIFY-IN-FLIGHT（驗證尚未完成）",
+      "world_state": {
+        "variant": "前一命令仍 VERIFYING",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The Round 10 battle evaluator has no in-flight execution lock, idempotency key or retry state contract.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Lock proposal/source/target until verification completes; require explicit terminal result before retry.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT04_02",
+      "category": "VERIFY-IN-FLIGHT（驗證尚未完成）",
+      "world_state": {
+        "variant": "下一 cycle 重送同一提案",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The Round 10 battle evaluator has no in-flight execution lock, idempotency key or retry state contract.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Lock proposal/source/target until verification completes; require explicit terminal result before retry.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT04_03",
+      "category": "VERIFY-IN-FLIGHT（驗證尚未完成）",
+      "world_state": {
+        "variant": "驗證逾時後忙迴圈重試",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The Round 10 battle evaluator has no in-flight execution lock, idempotency key or retry state contract.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Lock proposal/source/target until verification completes; require explicit terminal result before retry.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT05_01",
+      "category": "SAME TARGET DOUBLE ACTION（同目標重複行動）",
+      "world_state": {
+        "variant": "兩個 Threat 同一 cycle 救同一塔",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Arbitration is deterministic inside one call but does not deduplicate or lock independent dispatches to the same target.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Target/action reservation and idempotent dispatch token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT05_02",
+      "category": "SAME TARGET DOUBLE ACTION（同目標重複行動）",
+      "world_state": {
+        "variant": "攻擊與增援同時選同一目標",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Arbitration is deterministic inside one call but does not deduplicate or lock independent dispatches to the same target.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Target/action reservation and idempotent dispatch token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT05_03",
+      "category": "SAME TARGET DOUBLE ACTION（同目標重複行動）",
+      "world_state": {
+        "variant": "驗證重播再次點擊相同目標",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Arbitration is deterministic inside one call but does not deduplicate or lock independent dispatches to the same target.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Target/action reservation and idempotent dispatch token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT06_01",
+      "category": "DEFENSE CREATES NEW LOSS（防守導致新失塔）",
+      "world_state": {
+        "variant": "A 派援救 B 後 A 被已知敵軍攻下",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator scores the threatened target; it does not evaluate the source tower after dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Run Source Safety Gate over the exact post-dispatch force and every known incoming threat.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT06_02",
+      "category": "DEFENSE CREATES NEW LOSS（防守導致新失塔）",
+      "world_state": {
+        "variant": "援軍抽走 A 最後防守兵",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator scores the threatened target; it does not evaluate the source tower after dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Run Source Safety Gate over the exact post-dispatch force and every known incoming threat.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT06_03",
+      "category": "DEFENSE CREATES NEW LOSS（防守導致新失塔）",
+      "world_state": {
+        "variant": "同 cycle 兩次抽走同一來源",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator scores the threatened target; it does not evaluate the source tower after dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Run Source Safety Gate over the exact post-dispatch force and every known incoming threat.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT07_01",
+      "category": "ATTACK CREATES HOME WEAKNESS（攻擊造成來源空虛）",
+      "world_state": {
+        "variant": "A 對 B 為 ROBUST_WIN 但 A 隨即失守",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator classifies target battle margin but does not replay known threats against the post-attack source state.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Source Safety Gate must run for ATTACK_ENEMY too.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT07_02",
+      "category": "ATTACK CREATES HOME WEAKNESS（攻擊造成來源空虛）",
+      "world_state": {
+        "variant": "A 派出全部普通兵後守不住入站敵軍",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator classifies target battle margin but does not replay known threats against the post-attack source state.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Source Safety Gate must run for ATTACK_ENEMY too.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT07_03",
+      "category": "ATTACK CREATES HOME WEAKNESS（攻擊造成來源空虛）",
+      "world_state": {
+        "variant": "攻擊改變 A 的光環／防守快照",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator classifies target battle margin but does not replay known threats against the post-attack source state.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Source Safety Gate must run for ATTACK_ENEMY too.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT08_01",
+      "category": "SECOND ENEMY FORCE（第二支敵軍）",
+      "world_state": {
+        "variant": "第二支敵軍晚 1 tick 到達",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator evaluates one supplied incoming Force; arbitration does not build a sequential same-target tower-state chain.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Multi-Threat Defense: sort and simulate each known Force against prior writeback.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT08_02",
+      "category": "SECOND ENEMY FORCE（第二支敵軍）",
+      "world_state": {
+        "variant": "第一場守住但第二場攻下",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator evaluates one supplied incoming Force; arbitration does not build a sequential same-target tower-state chain.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Multi-Threat Defense: sort and simulate each known Force against prior writeback.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT08_03",
+      "category": "SECOND ENEMY FORCE（第二支敵軍）",
+      "world_state": {
+        "variant": "同目標兩支敵軍同 tick 且順序未知",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator evaluates one supplied incoming Force; arbitration does not build a sequential same-target tower-state chain.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Multi-Threat Defense: sort and simulate each known Force against prior writeback.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT09_01",
+      "category": "SECOND REINFORCEMENT（第二支援軍）",
+      "world_state": {
+        "variant": "兩支援軍各自看似救得住但合併容量未知",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "One equal-ETA candidate is rejected safely, but multiple candidates are not jointly sequenced or merged by exact collection order.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "ABSTAIN on unresolved same-tick order; otherwise evaluate each exact intermediate merge state and source safety.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT09_02",
+      "category": "SECOND REINFORCEMENT（第二支援軍）",
+      "world_state": {
+        "variant": "援軍與敵軍同 tick",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "One equal-ETA candidate is rejected safely, but multiple candidates are not jointly sequenced or merged by exact collection order.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "ABSTAIN on unresolved same-tick order; otherwise evaluate each exact intermediate merge state and source safety.",
+      "observed_evaluator_probe": {
+        "reinforcement_status": [
+          "UNSUPPORTED"
+        ]
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT09_03",
+      "category": "SECOND REINFORCEMENT（第二支援軍）",
+      "world_state": {
+        "variant": "兩援軍同 tick 順序改變可派兵結果",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "One equal-ETA candidate is rejected safely, but multiple candidates are not jointly sequenced or merged by exact collection order.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "ABSTAIN on unresolved same-tick order; otherwise evaluate each exact intermediate merge state and source safety.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT10_01",
+      "category": "OWNER FLIP（塔主切換）",
+      "world_state": {
+        "variant": "Target owner changes after plan",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Planning checks target owner freshness but has no dispatch-time token; one-force evaluator cannot re-read owner across same-tick arrivals.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read owner per event and reject stale token; preserve sequential event ordering.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT10_02",
+      "category": "OWNER FLIP（塔主切換）",
+      "world_state": {
+        "variant": "first same-tick Force captures before second arrives",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Planning checks target owner freshness but has no dispatch-time token; one-force evaluator cannot re-read owner across same-tick arrivals.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read owner per event and reject stale token; preserve sequential event ordering.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT10_03",
+      "category": "OWNER FLIP（塔主切換）",
+      "world_state": {
+        "variant": "neutral capture changes second Force to hostile",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Planning checks target owner freshness but has no dispatch-time token; one-force evaluator cannot re-read owner across same-tick arrivals.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Re-read owner per event and reject stale token; preserve sequential event ordering.",
+      "observed_evaluator_probe": {
+        "round10_evaluator": [
+          "UNSUPPORTED"
+        ],
+        "temporal_order_model": {
+          "status": "ORDER_MODEL_ONLY",
+          "tower_after": {
+            "owner_id": 1,
+            "units": {
+              "Soldier": 1
+            }
+          },
+          "active_force_ids": [
+            "f7r"
+          ],
+          "trace": [
+            {
+              "tick": 4,
+              "phase_order": [
+                "COLLISION",
+                "ARRIVAL"
+              ],
+              "collisions": [],
+              "arrivals": [
+                {
+                  "force_id": "f7r",
+                  "inbound_index": 2,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "FRIENDLY_MERGE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 5
+                  },
+                  "tower_units_after": {
+                    "Soldier": 10
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                },
+                {
+                  "force_id": "f7e",
+                  "inbound_index": 5,
+                  "phase": "ARRIVAL_AND_IMMEDIATE_RESOLUTION",
+                  "branch": "HOSTILE_BATTLE",
+                  "owner_read_at_execution": 1,
+                  "owner_after": 1,
+                  "tower_units_before": {
+                    "Soldier": 10
+                  },
+                  "tower_units_after": {
+                    "Soldier": 1
+                  },
+                  "fixture_status": "STATIC_FIXTURE_ONLY"
+                }
+              ]
+            }
+          ],
+          "model_scope": "SERVER_REFERENCE_ORDER_ONLY; STATIC FIXTURES DO NOT PROVE GAMEPLAY OR PRODUCTION CORRECTNESS",
+          "not_simulated": [
+            "continuous movement",
+            "battle arithmetic",
+            "real tower-capacity calculation",
+            "network scheduling",
+            "production server runtime"
+          ]
+        }
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT11_01",
+      "category": "AURA CHANGE（光環改變）",
+      "world_state": {
+        "variant": "Tower+45 snapshot changes",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Aura is explicit at evaluation, but no aura/source/target version token is rechecked at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind aura snapshots to source_state_version/target_state_version and invalidate on change.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT11_02",
+      "category": "AURA CHANGE（光環改變）",
+      "world_state": {
+        "variant": "Force+21 snapshot changes",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Aura is explicit at evaluation, but no aura/source/target version token is rechecked at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind aura snapshots to source_state_version/target_state_version and invalidate on change.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT11_03",
+      "category": "AURA CHANGE（光環改變）",
+      "world_state": {
+        "variant": "Ruler loss changes aura before dispatch",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Aura is explicit at evaluation, but no aura/source/target version token is rechecked at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind aura snapshots to source_state_version/target_state_version and invalidate on change.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT12_01",
+      "category": "UNKNOWN BECOMES ZERO（未知值變成零）",
+      "world_state": {
+        "variant": "units missing/null",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "SafeBattleEvaluator strictly validates the supplied fields; incomplete or conflicting inputs are rejected rather than filled with zero.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Keep strict validation and add equivalent strictness to temporal, source-safety and dispatch interfaces.",
+      "observed_evaluator_probe": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "unit maps must contain only known 8-bit counts; special units are excluded"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT12_02",
+      "category": "UNKNOWN BECOMES ZERO（未知值變成零）",
+      "world_state": {
+        "variant": "owner missing or inconsistent",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "SafeBattleEvaluator strictly validates the supplied fields; incomplete or conflicting inputs are rejected rather than filled with zero.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Keep strict validation and add equivalent strictness to temporal, source-safety and dispatch interfaces.",
+      "observed_evaluator_probe": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "enemy tower owner is unknown or conflicts with attacker"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT12_03",
+      "category": "UNKNOWN BECOMES ZERO（未知值變成零）",
+      "world_state": {
+        "variant": "aura/shield/tower type/ETA unknown",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "SafeBattleEvaluator strictly validates the supplied fields; incomplete or conflicting inputs are rejected rather than filled with zero.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Keep strict validation and add equivalent strictness to temporal, source-safety and dispatch interfaces.",
+      "observed_evaluator_probe": {
+        "supported": false,
+        "status": "UNSUPPORTED",
+        "reason": "both aura snapshots must be explicit booleans"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT13_01",
+      "category": "MARGINAL WIN（邊際勝利）",
+      "world_state": {
+        "variant": "one survivor at threshold",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator labels the threshold case MARGINAL_WIN and does not set safe_attack_candidate; invalid thresholds are rejected.",
+      "pass_fail": "PASS",
+      "severity": "MEDIUM",
+      "required_fix": "Keep ROBUST_WIN as a policy gate and test it with actual supported differential cases.",
+      "observed_evaluator_probe": {
+        "safety_margin": "MARGINAL_WIN",
+        "safe_attack_candidate": false,
+        "result": "ATTACK_WIN"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT13_02",
+      "category": "MARGINAL WIN（邊際勝利）",
+      "world_state": {
+        "variant": "equal to marginal_survivor_max",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator labels the threshold case MARGINAL_WIN and does not set safe_attack_candidate; invalid thresholds are rejected.",
+      "pass_fail": "PASS",
+      "severity": "MEDIUM",
+      "required_fix": "Keep ROBUST_WIN as a policy gate and test it with actual supported differential cases.",
+      "observed_evaluator_probe": {
+        "safety_margin": "MARGINAL_WIN",
+        "safe_attack_candidate": false,
+        "result": "ATTACK_WIN"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT13_03",
+      "category": "MARGINAL WIN（邊際勝利）",
+      "world_state": {
+        "variant": "marginal threshold missing/invalid",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "AttackEvaluator labels the threshold case MARGINAL_WIN and does not set safe_attack_candidate; invalid thresholds are rejected.",
+      "pass_fail": "PASS",
+      "severity": "MEDIUM",
+      "required_fix": "Keep ROBUST_WIN as a policy gate and test it with actual supported differential cases.",
+      "observed_evaluator_probe": {
+        "safety_margin": "MARGINAL_WIN",
+        "safe_attack_candidate": false,
+        "result": "ATTACK_WIN"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT14_01",
+      "category": "TIME QUANTIZATION（時間量化）",
+      "world_state": {
+        "variant": "ETA 1.99 seconds",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator requires nonnegative integer ETA; a float ETA is rejected. This prevents accidental float ordering inside that API, but caller-side conversion still needs the interval rule.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Require integer arrival ticks; when only seconds exist, use conservative tick intervals and ABSTAIN on overlap.",
+      "observed_evaluator_probe": {
+        "status": "UNSUPPORTED",
+        "reason": "enemy ETA is unknown"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT14_02",
+      "category": "TIME QUANTIZATION（時間量化）",
+      "world_state": {
+        "variant": "ETA 2.01 seconds",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator requires nonnegative integer ETA; a float ETA is rejected. This prevents accidental float ordering inside that API, but caller-side conversion still needs the interval rule.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Require integer arrival ticks; when only seconds exist, use conservative tick intervals and ABSTAIN on overlap.",
+      "observed_evaluator_probe": {
+        "status": "UNSUPPORTED",
+        "reason": "enemy ETA is unknown"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT14_03",
+      "category": "TIME QUANTIZATION（時間量化）",
+      "world_state": {
+        "variant": "seconds straddle one server tick",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "DefenseEvaluator requires nonnegative integer ETA; a float ETA is rejected. This prevents accidental float ordering inside that API, but caller-side conversion still needs the interval rule.",
+      "pass_fail": "PASS",
+      "severity": "HIGH",
+      "required_fix": "Require integer arrival ticks; when only seconds exist, use conservative tick intervals and ABSTAIN on overlap.",
+      "observed_evaluator_probe": {
+        "status": "UNSUPPORTED",
+        "reason": "enemy ETA is unknown"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT15_01",
+      "category": "MATCH TRANSITION（對局切換）",
+      "world_state": {
+        "variant": "match_id changes between plan and execute",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 proposal inputs contain no match_id or dispatch token.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Bind match_id and cycle_id in Action Validity Token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT15_02",
+      "category": "MATCH TRANSITION（對局切換）",
+      "world_state": {
+        "variant": "old proposal survives result screen",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 proposal inputs contain no match_id or dispatch token.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Bind match_id and cycle_id in Action Validity Token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT15_03",
+      "category": "MATCH TRANSITION（對局切換）",
+      "world_state": {
+        "variant": "new match reuses tower IDs",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 proposal inputs contain no match_id or dispatch token.",
+      "pass_fail": "FAIL",
+      "severity": "CRITICAL",
+      "required_fix": "Bind match_id and cycle_id in Action Validity Token.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT16_01",
+      "category": "CAMERA / COORDINATE STALE（鏡頭／座標過期）",
+      "world_state": {
+        "variant": "camera pans after world snapshot",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 validates static path/command facts but does not bind camera_version to the proposal or revalidate screen coordinates at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind camera_version; refresh coordinate transform and reject stale pointer coordinates.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT16_02",
+      "category": "CAMERA / COORDINATE STALE（鏡頭／座標過期）",
+      "world_state": {
+        "variant": "screen_xy from old zoom",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 validates static path/command facts but does not bind camera_version to the proposal or revalidate screen coordinates at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind camera_version; refresh coordinate transform and reject stale pointer coordinates.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT16_03",
+      "category": "CAMERA / COORDINATE STALE（鏡頭／座標過期）",
+      "world_state": {
+        "variant": "world fresh but coordinate transform stale",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 validates static path/command facts but does not bind camera_version to the proposal or revalidate screen coordinates at dispatch.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Bind camera_version; refresh coordinate transform and reject stale pointer coordinates.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT17_01",
+      "category": "RULER INVOLVEMENT（國王參戰）",
+      "world_state": {
+        "variant": "Ruler in attacker composition",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 SafeBattleEvaluator marks Ruler/global player state outside support and rejects the case.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep Ruler cases unsupported until their global event chain is separately validated.",
+      "observed_evaluator_probe": {
+        "Ruler_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT17_02",
+      "category": "RULER INVOLVEMENT（國王參戰）",
+      "world_state": {
+        "variant": "Ruler in defender composition",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 SafeBattleEvaluator marks Ruler/global player state outside support and rejects the case.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep Ruler cases unsupported until their global event chain is separately validated.",
+      "observed_evaluator_probe": {
+        "Ruler_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT17_03",
+      "category": "RULER INVOLVEMENT（國王參戰）",
+      "world_state": {
+        "variant": "Ruler loss can trigger player elimination",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 SafeBattleEvaluator marks Ruler/global player state outside support and rejects the case.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep Ruler cases unsupported until their global event chain is separately validated.",
+      "observed_evaluator_probe": {
+        "Ruler_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT18_01",
+      "category": "SPECIAL UNIT HIDDEN IN COMPOSITION（兵種中藏有特殊單位）",
+      "world_state": {
+        "variant": "Shell count > 0",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The battle gate rejects special-unit flags and compositions; they do not become ordinary forces by adding more Soldiers.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep all special-unit cases unsupported.",
+      "observed_evaluator_probe": {
+        "shell_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT18_02",
+      "category": "SPECIAL UNIT HIDDEN IN COMPOSITION（兵種中藏有特殊單位）",
+      "world_state": {
+        "variant": "EMP count > 0",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The battle gate rejects special-unit flags and compositions; they do not become ordinary forces by adding more Soldiers.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep all special-unit cases unsupported.",
+      "observed_evaluator_probe": {
+        "emp_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT18_03",
+      "category": "SPECIAL UNIT HIDDEN IN COMPOSITION（兵種中藏有特殊單位）",
+      "world_state": {
+        "variant": "Nuke count > 0",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The battle gate rejects special-unit flags and compositions; they do not become ordinary forces by adding more Soldiers.",
+      "pass_fail": "PASS",
+      "severity": "CRITICAL",
+      "required_fix": "Keep all special-unit cases unsupported.",
+      "observed_evaluator_probe": {
+        "nuke_gate": "UNSUPPORTED"
+      },
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT19_01",
+      "category": "CAPACITY EDGE（容量邊界）",
+      "world_state": {
+        "variant": "reinforcement exceeds target capacity",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The evaluator refuses to infer merge, but it trusts caller-supplied post_merge_snapshot_exact without a versioned capacity/merge proof.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Require exact merge evidence tied to target_state_version and validate each intermediate capacity result.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT19_02",
+      "category": "CAPACITY EDGE（容量邊界）",
+      "world_state": {
+        "variant": "tower type changed after merge snapshot",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The evaluator refuses to infer merge, but it trusts caller-supplied post_merge_snapshot_exact without a versioned capacity/merge proof.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Require exact merge evidence tied to target_state_version and validate each intermediate capacity result.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT19_03",
+      "category": "CAPACITY EDGE（容量邊界）",
+      "world_state": {
+        "variant": "neutral capture reconcile alters units",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "The evaluator refuses to infer merge, but it trusts caller-supplied post_merge_snapshot_exact without a versioned capacity/merge proof.",
+      "pass_fail": "FAIL",
+      "severity": "HIGH",
+      "required_fix": "Require exact merge evidence tied to target_state_version and validate each intermediate capacity result.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT20_01",
+      "category": "ACTION COOLDOWN LOOP（行動冷卻忙迴圈）",
+      "world_state": {
+        "variant": "cooldown blocks same proposal every cycle",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 arbitration has no cooldown state, retry budget, in-flight lock or terminal verification contract.",
+      "pass_fail": "FAIL",
+      "severity": "MEDIUM",
+      "required_fix": "Track proposal ID, attempt state, cooldown expiry and explicit verification outcome.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT20_02",
+      "category": "ACTION COOLDOWN LOOP（行動冷卻忙迴圈）",
+      "world_state": {
+        "variant": "retry after timeout has no terminal verification",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 arbitration has no cooldown state, retry budget, in-flight lock or terminal verification contract.",
+      "pass_fail": "FAIL",
+      "severity": "MEDIUM",
+      "required_fix": "Track proposal ID, attempt state, cooldown expiry and explicit verification outcome.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    },
+    {
+      "scenario_id": "RT20_03",
+      "category": "ACTION COOLDOWN LOOP（行動冷卻忙迴圈）",
+      "world_state": {
+        "variant": "planner emits identical action continuously",
+        "plan_state": "Round 10 evaluation snapshot",
+        "dispatch_state": "adversarial mutation described by variant",
+        "runtime_or_browser_used": false
+      },
+      "expected_safe_behavior": "Reject stale/unknown/unsafe proposal; otherwise allow only a fully validated single action.",
+      "actual_contract_behavior": "Round 10 arbitration has no cooldown state, retry budget, in-flight lock or terminal verification contract.",
+      "pass_fail": "FAIL",
+      "severity": "MEDIUM",
+      "required_fix": "Track proposal ID, attempt state, cooldown expiry and explicit verification outcome.",
+      "observed_evaluator_probe": null,
+      "baseline": "ROUND10_CONTRACT_STATIC_AUDIT; FAIL means the documented Round 10 interface cannot guarantee the expected safety behavior."
+    }
+  ]
+}

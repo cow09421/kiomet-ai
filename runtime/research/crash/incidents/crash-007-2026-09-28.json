@@ -1,0 +1,13 @@
+﻿{
+  "incident_id": "renderer-crash-007",
+  "timestamp": "2026-09-28T06:30:24",
+  "dump": "296e0d62-142e-459f-b6e5-32be2e7d7bd7.dmp",
+  "signature": "SAME_SIGNATURE_VERIFIED",
+  "exception": "0xC0000005 read",
+  "instruction": "chrome.dll+0x710E1A7",
+  "stack_match_18": true,
+  "instrumentation": "wasm_render_anchor.py --color default-16 samples（開局早期錨點，會話中段超時）",
+  "last_operations": ["enter-match（新局 m1-1790547742）", "兩輪錨點（首輪 0 SELF 疑玩家未建立，次輪進行中崩潰）"],
+  "match_context": "開局早期；錨點 render_color 全 NEUTRAL",
+  "sent_actions": 0
+}

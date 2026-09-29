@@ -1,0 +1,726 @@
+{
+  "wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "method": "static data-section decoding only; no WASM invocation",
+  "production_function": 732,
+  "production_table_stride_bytes": 40,
+  "production_capacity_rows": [
+    {
+      "memory_address": 1362240,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        4,
+        0,
+        4,
+        3,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000040000000000000004000000030000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Airfield",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362280,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        5,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000050000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Armory",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362320,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000c00000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Barracks",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362360,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Centrifuge",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362400,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        2,
+        0,
+        0,
+        2,
+        6,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000020000000000000000000000020000000600000000000000000000000000000001000000",
+      "source_aligned_tower_type": "City",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362440,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "1e000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Cliff",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362480,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Ews",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362520,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Factory",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362560,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Generator",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362600,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        40,
+        0,
+        0,
+        0,
+        2,
+        8,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "28000000000000000000000000000000020000000800000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Headquarters",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362640,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        3,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000300000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Helipad",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362680,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Mine",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362720,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Projector",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362760,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        6,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000600000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Quarry",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362800,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Radar",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362840,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Reactor",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362880,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        5,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "05000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Refinery",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362920,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Rocket",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1362960,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        5,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "05000000040000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Runway",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1363000,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        15,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0f000000000000000000000000000000020000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Satellite",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1363040,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        20,
+        0,
+        0,
+        0,
+        1,
+        4,
+        0,
+        0,
+        1,
+        1
+      ],
+      "raw_hex": "14000000000000000000000000000000010000000400000000000000000000000100000001000000",
+      "source_aligned_tower_type": "Silo",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    },
+    {
+      "memory_address": 1363080,
+      "unit_index_order": [
+        "Shield",
+        "Fighter",
+        "Chopper",
+        "Bomber",
+        "Tank",
+        "Soldier",
+        "Shell",
+        "Emp",
+        "Nuke",
+        "Ruler"
+      ],
+      "raw_u32_le": [
+        10,
+        1,
+        0,
+        0,
+        1,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "raw_hex": "0a000000010000000000000000000000010000000400000000000000000000000000000001000000",
+      "source_aligned_tower_type": "Town",
+      "mapping_status": "CANDIDATE: source enum order and exact capacity row match; production br_table not exhaustively traced"
+    }
+  ],
+  "caution": "Rows are exact raw function-732 lookup data. Tower-type labels are source-aligned candidates; five special-case towers and complete production dispatch require further tracing. Do not use as a production capacity oracle yet.",
+  "source_special_case_tower_capacity": {
+    "Artillery": {
+      "Shield": 20,
+      "Shell": 3,
+      "Ruler": 1
+    },
+    "Bunker": {
+      "Shield": 40,
+      "Soldier": 6,
+      "Ruler": 1
+    },
+    "Launcher": {
+      "Shield": 15,
+      "Emp": 1,
+      "Ruler": 1
+    },
+    "Rampart": {
+      "Shield": 45,
+      "Soldier": 8,
+      "Ruler": 1
+    },
+    "Village": {
+      "Shield": 5,
+      "Soldier": 4,
+      "Ruler": 1
+    },
+    "status": "SOURCE_ONLY; production special branches not exhaustively decoded"
+  },
+  "source_unit_damage": {
+    "Tank": 3,
+    "Fighter_air": 3,
+    "Bomber_air_to_surface": 5,
+    "Chopper_air": 3,
+    "Nuke": "infinite sentinel 31",
+    "Shell": 3,
+    "otherwise": 1,
+    "source": "vendor/kiomet-ref/common/src/unit.rs:161-177",
+    "production_alignment": "func 2970 uses the same enum-index switch and constants 1,3,5,31; no separate damage memory table"
+  },
+  "source_tower_ranged_damage": {
+    "Bunker": "floor(damage/3)",
+    "Headquarters": "floor(2*damage/3)",
+    "other": "damage",
+    "source": "vendor/kiomet-ref/common/src/tower.rs:402-410",
+    "production_alignment": "func 2022 compares tower type indexes 4 and 11 and applies the same divisors"
+  },
+  "source_max_overflow": {
+    "Shield": 15,
+    "Soldier": 10,
+    "Tank": 5,
+    "Fighter": 4,
+    "Bomber": 2,
+    "Chopper": 2,
+    "otherwise": 0,
+    "source": "vendor/kiomet-ref/common/src/unit.rs:140-151",
+    "production_alignment": "not exhaustively validated"
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "artifact": "GPT_UPGRADE_LAYOUT",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "source": "vendor/kiomet-ref/common/src/tower.rs and protocol.rs",
+  "tower_fields": [
+    {
+      "offset": 46,
+      "width_bytes": 1,
+      "type": "u8 TowerType enum",
+      "evidence": [
+        "573:0x07D4DE",
+        "2031:0x109720"
+      ]
+    },
+    {
+      "offset": 47,
+      "width_bytes": 1,
+      "type": "Option<NonZeroU8> encoded 0=None, 1..255=ticks",
+      "tick_period_seconds": 0.25,
+      "evidence": [
+        "573:0x07D4E8",
+        "448:0x01A627",
+        "448:0x01B10C",
+        "448:0x01B257"
+      ]
+    }
+  ],
+  "counts": {
+    "entries": 27,
+    "width_per_entry_bytes": 2,
+    "type": "u16",
+    "source_semantics": "clamped at 65535; upgrading towers excluded",
+    "index_rule": "base + 2 * TowerType enum",
+    "client_root_relative_offset": 592,
+    "client_root_function": 1242,
+    "client_root_acquisition": "unresolved",
+    "validator_vector_base_field_offset": 45092,
+    "validator_record_stride_bytes": 184,
+    "validator_record_counts_offset": 128,
+    "validator_root_function": 460,
+    "confidence": "high for layout and relative paths, partial for root acquisition"
+  },
+  "functions": [
+    {
+      "production_func": 573,
+      "role": "upgrade apply",
+      "source_match": "common/src/chunk/event.rs:196-210"
+    },
+    {
+      "production_func": 6044,
+      "role": "TowerType delay lookup",
+      "source_match": "TowerType::delay"
+    },
+    {
+      "production_func": 448,
+      "role": "tick decrement and EMP update",
+      "source_match": "common/src/chunk.rs:159-167,332-344"
+    },
+    {
+      "production_func": 460,
+      "role": "command validation",
+      "source_match": "upgrade input validation; source boundary unresolved"
+    },
+    {
+      "production_func": 789,
+      "role": "single prerequisite count",
+      "source_match": "TowerType::prerequisite"
+    },
+    {
+      "production_func": 2425,
+      "role": "compare 27 count slots",
+      "source_match": "common/src/tower.rs:437-440"
+    },
+    {
+      "production_func": 3492,
+      "role": "UI/tutorial eligibility",
+      "source_match": "client/src/tutorial.rs:363"
+    },
+    {
+      "production_func": 1242,
+      "role": "client state/count copy",
+      "source_match": "GameClient tick/update"
+    }
+  ],
+  "local_functions": {
+    "TowerType::prerequisite": 3007,
+    "TowerType::has_prerequisites": 3009,
+    "TowerType::delay": 3018,
+    "ChunkInput::apply": 2882
+  },
+  "tower_types": [
+    {
+      "enum": 0,
+      "name": "Airfield",
+      "count_offset": 0,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 1,
+      "name": "Armory",
+      "count_offset": 2,
+      "upgrade_delay_ticks": 100
+    },
+    {
+      "enum": 2,
+      "name": "Artillery",
+      "count_offset": 4,
+      "upgrade_delay_ticks": 160
+    },
+    {
+      "enum": 3,
+      "name": "Barracks",
+      "count_offset": 6,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 4,
+      "name": "Bunker",
+      "count_offset": 8,
+      "upgrade_delay_ticks": 120
+    },
+    {
+      "enum": 5,
+      "name": "Centrifuge",
+      "count_offset": 10,
+      "upgrade_delay_ticks": 120
+    },
+    {
+      "enum": 6,
+      "name": "City",
+      "count_offset": 12,
+      "upgrade_delay_ticks": 120
+    },
+    {
+      "enum": 7,
+      "name": "Cliff",
+      "count_offset": 14,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 8,
+      "name": "Ews",
+      "count_offset": 16,
+      "upgrade_delay_ticks": 120
+    },
+    {
+      "enum": 9,
+      "name": "Factory",
+      "count_offset": 18,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 10,
+      "name": "Generator",
+      "count_offset": 20,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 11,
+      "name": "Headquarters",
+      "count_offset": 22,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 12,
+      "name": "Helipad",
+      "count_offset": 24,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 13,
+      "name": "Launcher",
+      "count_offset": 26,
+      "upgrade_delay_ticks": 120
+    },
+    {
+      "enum": 14,
+      "name": "Mine",
+      "count_offset": 28,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 15,
+      "name": "Projector",
+      "count_offset": 30,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 16,
+      "name": "Quarry",
+      "count_offset": 32,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 17,
+      "name": "Radar",
+      "count_offset": 34,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 18,
+      "name": "Rampart",
+      "count_offset": 36,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 19,
+      "name": "Reactor",
+      "count_offset": 38,
+      "upgrade_delay_ticks": 160
+    },
+    {
+      "enum": 20,
+      "name": "Refinery",
+      "count_offset": 40,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 21,
+      "name": "Rocket",
+      "count_offset": 42,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 22,
+      "name": "Runway",
+      "count_offset": 44,
+      "upgrade_delay_ticks": 40
+    },
+    {
+      "enum": 23,
+      "name": "Satellite",
+      "count_offset": 46,
+      "upgrade_delay_ticks": 160
+    },
+    {
+      "enum": 24,
+      "name": "Silo",
+      "count_offset": 48,
+      "upgrade_delay_ticks": 160
+    },
+    {
+      "enum": 25,
+      "name": "Town",
+      "count_offset": 50,
+      "upgrade_delay_ticks": 80
+    },
+    {
+      "enum": 26,
+      "name": "Village",
+      "count_offset": 52,
+      "upgrade_delay_ticks": 40
+    }
+  ],
+  "confirmed_max_upgrade_delay_ticks": 160,
+  "confirmed_emp_delay_ticks": 240,
+  "runtime_validation": "NOT AVAILABLE"
+}

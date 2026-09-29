@@ -1,0 +1,17 @@
+{
+  "artifact": "GPT_UPGRADE_ROOT_PATH",
+  "status": "PARTIAL",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "known_chain": [
+    {"node": "element_table_438", "value": 1242, "evidence": "production-details.txt elem[438] = ref.func:1242", "confidence": "PASS"},
+    {"node": "callback_root", "value": "func1242 argument0", "evidence": "func1242 signature (i32)->i32; no direct callers", "confidence": "PASS"},
+    {"node": "tower_counts", "value": "callback_root+592", "width": 54, "element_width": 2, "element_count": 27, "evidence": "func1242 54-byte copy; func3492 closure root+4 passed to func2425", "confidence": "PASS"}
+  ],
+  "unresolved": [
+    "creation or ownership of the closure object that supplies func1242 argument0",
+    "stable path from existing Observer tower_ref to callback_root",
+    "per-match root re-anchoring"
+  ],
+  "safe_runtime_validation": "Only if an existing read-only observer channel already exposes the current callback root; compare 27 u16 values with naturally visible upgrade progress.",
+  "runtime_validation": "NOT_AVAILABLE"
+}

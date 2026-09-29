@@ -1,0 +1,82 @@
+{
+  "index_id": "crash-incident-index-001",
+  "generated_from": "runtime/research/crash/incidents/*.json",
+  "incident_count": 6,
+  "signature_summary": "all 0xC0000005 read at chrome.dll+0x710E1A7 (or pending verify, expected same)",
+  "detection": "Page.screenshot: Target crashed (all)",
+  "incidents": [
+    {
+      "file": "crash-006-2026-09-28.json",
+      "incident_id": "renderer-crash-006",
+      "timestamp": "2026-09-28T04:05-04:10",
+      "signature": "SAME_SIGNATURE",
+      "match": null,
+      "sent_actions_before_crash": null,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    },
+    {
+      "file": "crash-007-2026-09-28.json",
+      "incident_id": "renderer-crash-007",
+      "timestamp": "2026-09-28T06:30:24",
+      "signature": "SAME_SIGNATURE_VERIFIED",
+      "match": "m1-1790547742",
+      "sent_actions_before_crash": null,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    },
+    {
+      "file": "crash-008-2026-09-28.json",
+      "incident_id": "renderer-crash-008",
+      "timestamp": "2026-09-28T10:14:34",
+      "signature": "SAME_SIGNATURE_PENDING_VERIFY",
+      "match": "m1-1790559914",
+      "sent_actions_before_crash": 2,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    },
+    {
+      "file": "crash-011-2026-09-29.json",
+      "incident_id": "renderer-crash-011",
+      "timestamp": "2026-09-29T03:38:01",
+      "signature": "PENDING_VERIFY (expected SAME)",
+      "match": "m1-1790622306",
+      "sent_actions_before_crash": 0,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    },
+    {
+      "file": "crash-012-2026-09-29.json",
+      "incident_id": "renderer-crash-012",
+      "timestamp": "2026-09-29T04:08:25",
+      "signature": "PENDING_VERIFY (expected SAME)",
+      "match": "m1-1790626063",
+      "sent_actions_before_crash": 0,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    },
+    {
+      "file": "crash-013-2026-09-29.json",
+      "incident_id": "renderer-crash-013",
+      "timestamp": "2026-09-29T04:49:12",
+      "signature": "PENDING_VERIFY (expected SAME)",
+      "match": "m1-1790628175",
+      "sent_actions_before_crash": 0,
+      "recovery_outcome": "UNKNOWN",
+      "main_loop_resumed": null,
+      "controller_resumed": null,
+      "stale_state_leaked": null
+    }
+  ],
+  "note": "recovery outcome fields are null where no recovery evidence exists; future recovery regressions should fill these from render-crash-recovery-*.json and repair-ladder-*.json episodes"
+}

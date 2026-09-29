@@ -1,0 +1,5 @@
+13b9f9 func[3621] <UnitIter::next>:
+ 13b9fa: 20 00                      | local.get 0
+ 13b9fc: 41 0a                      | i32.const 10
+ 13b9fe: 10 e8 34                   | call 6760
+ 13ba01: 0b                         | end

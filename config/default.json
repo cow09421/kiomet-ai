@@ -1,0 +1,10 @@
+{
+  "host": "127.0.0.1",
+  "port": 8765,
+  "interval_seconds": 1.0,
+  "max_consecutive_errors": 3,
+  "browser_url": "https://kiomet.com/",
+  "mode": "mock",
+  "log_max_bytes": 5242880,
+  "log_backups": 5
+}

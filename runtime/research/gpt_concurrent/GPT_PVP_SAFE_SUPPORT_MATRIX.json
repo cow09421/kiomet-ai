@@ -1,0 +1,104 @@
+{
+  "artifact": "GPT Round 9 PvP Safe Support Matrix（第九輪安全 PvP 支援矩陣）",
+  "overall": "PARTIAL",
+  "planner_rule": "Planner（規劃器）只可使用 SAFE_TO_EVALUATE 案例的 Battle Mirror（戰鬥鏡像）勝者／殘兵／局部塔主結果；不得將局部結果宣稱為完整玩家分數、alive 或全場比賽結果。任何輸入拒絕或輸出 supported=false 時不得據此冒險。",
+  "evidence_scope": {
+    "static_only": true,
+    "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "runtime_differential_validation": "NOT_RUN_BY_REQUEST",
+    "server_reference_parity": "未與正式版伺服器產物核對"
+  },
+  "cases": [
+    {
+      "case": "普通 Many vs Many（多兵種對多兵種），Force vs 非空 Tower",
+      "status": "SAFE_TO_EVALUATE",
+      "scope": "第八輪已映射普通兵種；塔型在鏡像支援表中；owner、關係與雙方 aura snapshot 明確；任何一側均不得含 Ruler／Shell／EMP／Nuke。",
+      "global_effect_boundary": "可讀局部 winner、survivors、new_owner。塔集合事件消費已在保存服務來源閉合；mirror 本身不輸出完整 PlayerData 或重新計算全體 score。",
+      "evidence": ["func448/1347 branch coverage", "GPT_BATTLE_MIRROR_SUPPORT_MATRIX.json Round 8", "GPT_COMBAT_EVENT_MAP.json Tower captured/defended"]
+    },
+    {
+      "case": "普通 Many vs Many（多兵種對多兵種），Force vs Force",
+      "status": "SAFE_TO_EVALUATE",
+      "scope": "相撞與敵對關係已由呼叫端確定；雙方 owner 與 Force+21 aura snapshot 明確；任何一側不得含 Ruler 或特殊一次性單位。",
+      "global_effect_boundary": "只使用局部 winner 與 survivors；若有 Ruler 或特殊事件 callback，立即拒絕。",
+      "evidence": ["448 -> 788 -> 522", "1348 callback", "GPT_BATTLE_STATIC_CASES_R8.json"]
+    },
+    {
+      "case": "Shield（護盾）",
+      "status": "SAFE_TO_EVALUATE",
+      "scope": "Shield count 在支援輸入範圍；塔戰攻方依正式版先移除不能攻塔的 Shield，Force collision 保留兩側 Shield；不含 Ruler。",
+      "global_effect_boundary": "僅限第八輪確認的兩種戰鬥分支。",
+      "evidence": ["func448 -> 4969", "func522 sentinel 27", "battle_mirror_partial.py"]
+    },
+    {
+      "case": "Ruler aura（國王光環）快照",
+      "status": "SAFE_TO_EVALUATE",
+      "scope": "呼叫端提供布林快照：塔戰為 attacker Force+21 與 defender Tower+45；Force collision 為雙方 Force+21。不得由位置自行猜在途 Force 快照。",
+      "global_effect_boundary": "只支援不含 Ruler 單位的局部交戰；此條不等於支援 Ruler death。",
+      "evidence": ["GPT_MORALE_ANALYSIS.md", "GPT_MORALE_LAYOUT.json", "GPT_MORALE_FUNCTION_MAP.json"]
+    },
+    {
+      "case": "Neutral defended tower（中立守軍塔）普通交戰",
+      "status": "SAFE_TO_EVALUATE",
+      "scope": "中立非空塔、明確塔型與 aura、普通兵種；只評估 tower combat 分支。",
+      "global_effect_boundary": "中立空塔直接佔領是不同分支且不在此案例。",
+      "evidence": ["func448 relation／combat／terminal branches", "GPT_BATTLE_BRANCH_COVERAGE.json"]
+    },
+    {
+      "case": "Tower captured/defended 對 PlayerData 的完整寫回",
+      "status": "RUNTIME_VALIDATION_NEEDED",
+      "scope": "參考服務源映射 LostTower／GainedTower 到玩家塔集合，分數每秒重算；尚未在正式版服務端驗證版本與延遲。",
+      "global_effect_boundary": "Battle Mirror 不包含完整玩家塔集合或全世界狀態，不能輸出完整玩家分數差分。",
+      "evidence": ["server/src/service.rs:508-550", "GPT_COMBAT_EVENT_MAP.json"]
+    },
+    {
+      "case": "Aura movement/death refresh（光環移動／死亡刷新）",
+      "status": "RUNTIME_VALIDATION_NEEDED",
+      "scope": "函式靜態語意為同塔／鄰塔、各塔分散 16-tick 重算；伺服器端 Player+0 寫入及死亡清除時序未核對。",
+      "global_effect_boundary": "battle API 必須用觀測快照，不能自行從目前位置推定舊 Force+21。",
+      "evidence": ["GPT_MORALE_LAYOUT.json", "func460／func448 static mapping"]
+    },
+    {
+      "case": "Ruler present or ruler loss（有國王／國王陣亡）",
+      "status": "UNSUPPORTED",
+      "scope": "雖然參考服務來源已閉合 LostRuler→death_reason→queued elimination→world cleanup，但 mirror 沒有 PlayerData／全世界部隊與塔集合輸入，也不輸出 player_state_events。",
+      "global_effect_boundary": "不能只把 Ruler 當普通單位扣除；需要模型化下一更新邊界淘汰與全玩家清理。",
+      "evidence": ["GPT_RULER_GLOBAL_STATE.md", "GPT_RULER_EVENT_FLOW.md"]
+    },
+    {
+      "case": "EMP（電磁脈衝）戰鬥",
+      "status": "UNSUPPORTED",
+      "scope": "攻方 EMP 會修改 Tower.delay，並有特殊單位消耗／事件；現有鏡像不輸出延遲差分。",
+      "global_effect_boundary": "若另殺 Ruler 會觸發淘汰事件。",
+      "evidence": ["GPT_SPECIAL_EVENT_WRITEBACK.md", "func1347／1348 callback"]
+    },
+    {
+      "case": "Nuke（核彈）戰鬥",
+      "status": "UNSUPPORTED",
+      "scope": "特殊 damage、塔型減傷、消耗與事件未由 mirror 實作；可能造成 Ruler loss。",
+      "global_effect_boundary": "不得把「爆炸事件本身無 PlayerData 寫回」誤作整場戰鬥無全域後果。",
+      "evidence": ["GPT_BATTLE_INTEGER_RULES.json", "GPT_SPECIAL_EVENT_WRITEBACK.md"]
+    },
+    {
+      "case": "Shell（砲彈）戰鬥",
+      "status": "UNSUPPORTED",
+      "scope": "特殊 damage、消耗與事件未由 mirror 實作；可能造成 Ruler loss。",
+      "global_effect_boundary": "不可將一次性單位排除事件後用普通兵力公式代替。",
+      "evidence": ["GPT_BATTLE_INTEGER_RULES.json", "GPT_SPECIAL_EVENT_WRITEBACK.md"]
+    },
+    {
+      "case": "Neutral empty capture / friendly merge / move-on / fuel / cramming",
+      "status": "UNSUPPORTED",
+      "scope": "屬抵達後移動／合併生命週期，不是這輪支援的純戰鬥結果。",
+      "global_effect_boundary": "需要路徑、燃料、容量與同 tick 其他部隊狀態。",
+      "evidence": ["GPT_BATTLE_FINAL_FUNCTION_MAP.json func448/2195/3107/3571"]
+    },
+    {
+      "case": "Production differential validation（正式版差分驗證）",
+      "status": "RUNTIME_VALIDATION_NEEDED",
+      "scope": "本輪明確不執行 WASM／遊戲；現有 PASS 為靜態函式與保存來源對應。",
+      "global_effect_boundary": "需要獨立隔離的核驗流程，不能由本輪靜態結果替代。",
+      "evidence": ["Round 9 offline/static constraint"]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+2031 OUTPUT CFG（控制流程圖；正式版靜態分析）
+WASM SHA-256: fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c
+
+Direct call graph（直接呼叫圖）:
+  448  World::tick_before_inputs  --0x01A73C--> 2031
+  488  KiometGame::peek_mouse     --0x057E3B--> 2031
+  864  unnamed                    --0x0B0043--> 2031
+  1091 filter_supply_src          --0x0BFEC4--> 2031
+  1242 unnamed large client loop  --0x0D2E64,0x0D3327,0x0D9D70--> 2031
+  1791 Tower::deploy_force        --0x10041C--> 2031
+No ref.func:2031 in the element listing; no table-mediated entry found.
+
+Return-flow summary（返回資料流摘要）:
+  448:  stack+216 -> 1690(max edge) -> range branch -> discard
+  488:  stack+65  -> is_empty -> 1690(max edge) -> path; 6280(Ruler) -> delay branch; discard
+  864:  stack+13  -> is_empty -> 1690(max edge) -> 985(Path::validate); discard
+  1091: stack+25  -> is_empty -> 1690(max edge) -> supply filter; discard
+  1242/1: stack+480  -> is_empty -> candidate selection; discard
+  1242/2: stack+908  -> is_empty -> 6280(Ruler), 5440(iterator scratch+1000) -> UI values; discard
+  1242/3: stack+5104 -> is_empty -> 1690(max edge), 6280(Ruler) -> drag preview; discard
+  1791: stack+17  -> 5440(iterator) -> 1448(subtract from tower+38)
+                   -> stores at 0x10047B,0x100482 into Force+14 (stack+38..44)
+                   -> 1963(send_force) -> chunk events -> applied Force collections
+
+Frame proofs（暫存框架來源）:
+  448:  0x019B8B..0x019B93 global SP - 432 -> local3
+  488:  0x057C6C..0x057C74 global SP - 304 -> local3
+  864:  0x0AFFF7..0x0AFFFF global SP - 64 -> local5
+  1091: 0x0BFE6D..0x0BFE74 global SP - 32 -> local3
+  1242: 0x0CD39F..0x0CD3A8 global SP - 13408 -> local2
+        0x0D7A35..0x0D7A3D global SP - 5408 -> local4
+  1791: 0x10040A..0x100411 global SP - 64 -> local3
+
+Unresolved branches（未解分支）:
+  864 exact source-level call boundary; 1242 first two exact UI expressions.
+  No live-time lifetime or passive-polling claim is made from static disassembly alone.

@@ -1,0 +1,13 @@
+﻿{
+  "incident_id": "renderer-crash-006",
+  "timestamp": "2026-09-28T04:05-04:10",
+  "dump": "afe9abb5-2826-4ee7-9c47-44857816f8d5.dmp",
+  "signature": "SAME_SIGNATURE",
+  "exception": "0xC0000005 read",
+  "instruction": "chrome.dll+0x710E1A7",
+  "instrumentation": "wasm_render_anchor.py --color --samples 24（Debugger 斷點掛渲染函式 1242，3 輪約 72 次 pause/resume）",
+  "last_operations": ["enter-match（上一局 RESULT_SCREEN）", "anchor breakpoint session（新局 m2-1790537230→次局過渡期）"],
+  "match_context": "換局過渡期；錨點 18 穩定塔但報告因 JOINING 拒絕後重錨時崩潰",
+  "sent_actions": 0,
+  "note": "260 分鐘零斷點零崩潰（A/B）vs 斷點會話中崩潰；研究工具活動關聯假說再獲一例"
+}

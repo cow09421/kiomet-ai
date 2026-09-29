@@ -1,0 +1,12 @@
+{
+  "artifact": "GPT_FORCE_FUNCTION_MAP",
+  "create": [{"id": 2031, "name": "Tower::force_units", "role": "produce 7-byte Units"}, {"id": 1791, "name": "Tower::deploy_force", "role": "construct 24-byte Force"}, {"id": 1963, "name": "Tower::send_force", "role": "emit inbound and outbound events"}, {"id": 2023, "name": "ChunkEvent::add_outbound_force", "role": "clone outbound mirror"}],
+  "insert": [{"id": 1393, "name": "World::tick_after_inputs", "role": "choose tower+0 or tower+12 collection"}, {"id": 3241, "name": "unnamed", "role": "Vec<Force> push, 24-byte stride"}, {"id": 573, "name": "Chunk::apply_0", "role": "debug input AddInboundForce path"}],
+  "update": [{"id": 448, "name": "World::tick_before_inputs", "role": "iterate and compact inbound/outbound forces"}, {"id": 1845, "name": "Force::raw_tick", "role": "increase progress and pop path node at arrival"}, {"id": 6128, "name": "unnamed", "role": "outbound retain predicate around raw_tick"}, {"id": 690, "name": "Force::speed", "role": "derive speed from units"}, {"id": 2689, "name": "Force::progress_required", "role": "derive edge duration"}],
+  "render": [{"id": 1242, "name": "unnamed client callback", "role": "iterate tower+0 and tower+12 collections"}, {"id": 563, "name": "unnamed", "role": "draw force"}, {"id": 1861, "name": "Force::interpolated_position", "role": "derive world position"}],
+  "arrival": [{"id": 1845, "name": "Force::raw_tick", "role": "arrival test and path pop"}, {"id": 448, "name": "World::tick_before_inputs", "role": "arrival handling including battle/merge/continuation"}],
+  "remove": [{"id": 448, "name": "World::tick_before_inputs", "role": "compact retained inbound entries"}, {"id": 6128, "name": "unnamed", "role": "outbound remove at arrival"}],
+  "collection_iter": [{"id": 448, "name": "World::tick_before_inputs", "role": "tick collection"}, {"id": 788, "name": "unnamed", "role": "compare opposing force collection"}, {"id": 1242, "name": "unnamed client callback", "role": "render collection"}],
+  "battle_entry": [{"id": 448, "name": "World::tick_before_inputs", "role": "battle branches present; exact Combatants::fight callee unresolved", "confidence": "PARTIAL"}],
+  "utilities": [{"id": 3452, "name": "Force::clone"}, {"id": 1539, "name": "Tower::clone"}, {"id": 4464, "name": "Chunk::index_mut"}, {"id": 4326, "name": "Path::coming_from"}, {"id": 4525, "name": "Path::going_to"}, {"id": 4705, "name": "Path::source"}, {"id": 3006, "name": "Path::destination"}]
+}

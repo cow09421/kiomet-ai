@@ -1,0 +1,2019 @@
+{
+  "artifact": "Round 8 static battle cases",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "case_count": 51,
+  "oracle_limit": "No production WASM invocation. Expected results are local mirror outputs for supported inputs and explicit rejection outputs for unsupported inputs; this checks implementation consistency, not production differential correctness.",
+  "cases": [
+    {
+      "case_id": "neutral_soldier_one_each",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 0,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 0,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "neutral_many_vs_many",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 5,
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 4,
+          "Tank": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 4
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "attacker_morale_plus",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 8
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 8
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 1,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "defender_morale_minus",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 8
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Soldier": 8
+        },
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {
+          "Soldier": 8
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": -3
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "both_aura_cancel",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 6
+        },
+        "defender_units": {
+          "Soldier": 6
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 4
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 3,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "neither_aura",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 1,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "attacker_shield_stripped_before_morale",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shield": 4,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 1,
+          "initial_accumulator": 1
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_shield_counts_in_morale",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 6,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Shield": 6,
+          "Soldier": 2
+        },
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {
+          "Shield": 6,
+          "Soldier": 2
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": -3
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "force_fighter_air",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Fighter": 2
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Fighter": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_fighter_over_capacity_air",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Airfield",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Fighter": 5,
+          "Soldier": 3
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Fighter": 1,
+          "Soldier": 3
+        },
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {
+          "Fighter": 1,
+          "Soldier": 3
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "bomber_air_to_surface",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Bomber": 2
+        },
+        "defender_units": {
+          "Soldier": 5
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Bomber": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "chopper_air_vs_surface",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Chopper": 2
+        },
+        "defender_units": {
+          "Soldier": 5
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Chopper": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tank_damage_three",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "mixed_order",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Fighter": 1,
+          "Bomber": 1,
+          "Tank": 1,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 1,
+          "Fighter": 1,
+          "Tank": 1,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 0,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "shield_normal_combat_unit",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shield": 2,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Tank": 2,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Tank": 2,
+          "Soldier": 2
+        },
+        "new_owner": null,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {
+          "Tank": 2,
+          "Soldier": 2
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "large_count_morale_clamps_three",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 255
+        },
+        "defender_units": {
+          "Soldier": 255
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "headquarters_ranged_rule_not_used_by_ordinary_units",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Headquarters",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 3
+        },
+        "defender_units": {
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "bunker_ranged_rule_not_used_by_ordinary_units",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Bunker",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 4
+        },
+        "defender_units": {
+          "Tank": 3
+        }
+      },
+      "expected_branch": "input_or_relation_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "tower type has no source-order-confirmed production row"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "enemy_tower_owner",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Tank": 3,
+          "Soldier": 3
+        },
+        "defender_units": {
+          "Fighter": 2,
+          "Soldier": 4
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "tower_defender_no_live_capture_unit",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Shield": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 1
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "empty_neutral_no_resolver",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "neutral_empty",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {}
+      },
+      "expected_branch": "neutral_empty_direct_capture_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "neutral empty capture is an arrival branch, not a battle"
+      },
+      "evidence": "Production func 448 direct empty-neutral branch, set_player_id_inner 3571 and reconcile 3107; deliberately outside battle result subset.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "friendly_merge_outside_resolver",
+      "input": {
+        "relation": "friendly",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "friendly_merge_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "friendly/allied relations use separate arrival branches"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "shell_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Shell": 1,
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "emp_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Emp": 1,
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "nuke_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Nuke": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "ruler_callback_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Ruler": 1
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "ruler_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "single_unit_shell_on_defender_excluded",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Shell": 1
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "aura_snapshot_on_enemy_force",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 6
+        },
+        "defender_units": {
+          "Tank": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 1,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "invalid_enemy_owner_pair",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 1,
+        "tower_type": "Mine",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "target_branch": "tower_combat",
+        "attacker_units": {
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "input_or_relation_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "enemy relation conflicts with the supplied owner ids"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_many_vs_many",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 2,
+          "Soldier": 4,
+          "Fighter": 1
+        },
+        "defender_units": {
+          "Tank": 1,
+          "Soldier": 3,
+          "Chopper": 1
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 4
+        },
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 2,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_shield_both_sides",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Shield": 3,
+          "Fighter": 2
+        },
+        "defender_units": {
+          "Shield": 2,
+          "Tank": 1
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Fighter": 2
+        },
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 1,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_attacker_aura",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "attacker_units": {
+          "Soldier": 6,
+          "Tank": 1
+        },
+        "defender_units": {
+          "Soldier": 3,
+          "Tank": 1
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 6
+        },
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 2,
+          "initial_accumulator": 3
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_defender_aura",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "attacker_units": {
+          "Soldier": 3,
+          "Tank": 1
+        },
+        "defender_units": {
+          "Soldier": 6,
+          "Tank": 1
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Soldier": 6
+        },
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 3,
+          "initial_accumulator": -3
+        },
+        "final_accumulator": -1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_air_order",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Fighter": 2,
+          "Bomber": 3,
+          "Soldier": 2
+        },
+        "defender_units": {
+          "Chopper": 3,
+          "Bomber": 2,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Bomber": 2,
+          "Soldier": 2
+        },
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -3,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_contested_equal_tanks",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 1
+        },
+        "defender_units": {
+          "Tank": 1
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "contested",
+        "attacker_survivors": {},
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 0,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 0,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_mixed_surface",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 3,
+          "Soldier": 5
+        },
+        "defender_units": {
+          "Tank": 2,
+          "Soldier": 7
+        }
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against force",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Soldier": 1
+        },
+        "defender_survivors": {},
+        "new_owner": null,
+        "new_owner_relation": "not_applicable",
+        "remaining_tower_units": null,
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_tower_enemy_attacker_wins_owner_changes",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 3
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 1,
+          "defender": 0,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 2,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_tower_enemy_defender_holds_owner",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Soldier": 1
+        },
+        "defender_units": {
+          "Tank": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "defender",
+        "attacker_survivors": {},
+        "defender_survivors": {
+          "Tank": 2
+        },
+        "new_owner": 2,
+        "new_owner_relation": "unchanged",
+        "remaining_tower_units": {
+          "Tank": 2
+        },
+        "special_effects": [],
+        "morale": {
+          "attacker": 0,
+          "defender": 1,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": -2,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_tower_overcapacity_airfield_fighters",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Airfield",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 3,
+          "Fighter": 2
+        },
+        "defender_units": {
+          "Fighter": 5,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 3,
+          "initial_accumulator": 0
+        },
+        "final_accumulator": 3,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_tower_attacker_shield_removed",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": true,
+        "defender_aura": false,
+        "attacker_units": {
+          "Shield": 4,
+          "Tank": 2,
+          "Soldier": 3
+        },
+        "defender_units": {
+          "Shield": 2,
+          "Tank": 1,
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 1,
+          "Soldier": 3
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 2,
+          "defender": 2,
+          "initial_accumulator": 2
+        },
+        "final_accumulator": 1,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_neutral_defended_tower",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Town",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": true,
+        "attacker_units": {
+          "Tank": 4,
+          "Soldier": 5
+        },
+        "defender_units": {
+          "Soldier": 3,
+          "Fighter": 1
+        }
+      },
+      "expected_branch": "ordinary_force_vs_nonempty_tower",
+      "support_status": "SUPPORTED_STATIC_SUBSET",
+      "expected_result": {
+        "status": "PARTIAL_RESULT",
+        "supported": true,
+        "support_status": "SUPPORTED_STATIC_SUBSET",
+        "supported_scope": "ordinary units only; force against nonempty tower",
+        "winner": "attacker",
+        "attacker_survivors": {
+          "Tank": 2,
+          "Soldier": 5
+        },
+        "defender_survivors": {},
+        "new_owner": 1,
+        "new_owner_relation": "changed_to_attacker",
+        "remaining_tower_units": {},
+        "special_effects": [],
+        "morale": {
+          "attacker": 3,
+          "defender": 2,
+          "initial_accumulator": -2
+        },
+        "final_accumulator": 3,
+        "confidence": "STATIC_PRODUCTION_MAPPING; NOT RUNTIME_DIFFERENTIALLY_VALIDATED",
+        "unsupported_reason": null
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_shell_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Shell": 1,
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_emp_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Emp": 1,
+          "Tank": 2
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_nuke_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Headquarters",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Nuke": 1
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "single_use_special_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_ruler_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Ruler": 1,
+          "Tank": 1
+        },
+        "defender_units": {
+          "Soldier": 2
+        }
+      },
+      "expected_branch": "ruler_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "Shell/EMP/Nuke/Ruler callbacks are excluded from this subset"
+      },
+      "evidence": "Production funcs 448/522 call 1347/1348 replacement callbacks; special inputs remain guarded by mirror.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_neutral_empty_not_battle",
+      "input": {
+        "relation": "neutral",
+        "attacker_owner": 1,
+        "tower_owner": null,
+        "tower_type": "Mine",
+        "target_branch": "neutral_empty",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Soldier": 3
+        },
+        "defender_units": {}
+      },
+      "expected_branch": "neutral_empty_direct_capture_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "neutral empty capture is an arrival branch, not a battle"
+      },
+      "evidence": "Production func 448 direct empty-neutral branch, set_player_id_inner 3571 and reconcile 3107; deliberately outside battle result subset.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_friendly_merge_rejected",
+      "input": {
+        "relation": "friendly",
+        "attacker_owner": 1,
+        "tower_owner": 1,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Soldier": 3
+        },
+        "defender_units": {
+          "Tank": 1
+        }
+      },
+      "expected_branch": "friendly_merge_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "friendly/allied relations use separate arrival branches"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_force_collision_empty_defender_rejected",
+      "input": {
+        "relation": "enemy_force",
+        "attacker_owner": 1,
+        "defender_owner": 2,
+        "tower_owner": null,
+        "tower_type": null,
+        "target_branch": "force_collision",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 1
+        },
+        "defender_units": {}
+      },
+      "expected_branch": "force_force_ordinary_or_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "an empty opposing force cannot enter collision combat"
+      },
+      "evidence": "Production func 788 -> 522 -> 1348/2022/3757; public reference chunk.rs force collision and combatants.rs fight. Static only.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_tower_unknown_type_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "UnknownTower",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 3
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "input_or_relation_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "tower type has no source-order-confirmed production row"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_u8_count_overflow_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "attacker_aura": false,
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 256
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "input_or_relation_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "unit counts must be unsigned 8-bit values"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    },
+    {
+      "case_id": "r8_aura_snapshot_missing_rejected",
+      "input": {
+        "relation": "enemy",
+        "attacker_owner": 1,
+        "tower_owner": 2,
+        "tower_type": "Mine",
+        "target_branch": "tower_combat",
+        "defender_aura": false,
+        "attacker_units": {
+          "Tank": 3
+        },
+        "defender_units": {
+          "Soldier": 1
+        }
+      },
+      "expected_branch": "input_or_relation_guard",
+      "support_status": "UNSUPPORTED_CASE",
+      "expected_result": {
+        "status": "UNSUPPORTED_CASE",
+        "supported": false,
+        "unsupported_reason": "aura inputs must be explicit booleans"
+      },
+      "evidence": "Production func 448 combat loop and terminal block; public reference combatants.rs:106-365 and chunk.rs:310-505; not compared against a running build.",
+      "confidence": "STATIC_EXPECTATION_ONLY; NOT DIFFERENTIALLY COMPARED TO A RUNNING PRODUCTION BUILD"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "extracted_at": "2026-09-28",
+  "source": "vendor/kiomet-ref/common/src/tower.rs TowerType prerequisite attributes",
+  "note": "首 token 為降級源；其餘為額外前置。狀態全為 SOURCE_EXPECTED，待 Production UI 驗證。",
+  "edges": [
+    {
+      "from": "Runway",
+      "to": "Airfield",
+      "extras": {
+        "Factory": 2,
+        "Radar": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Barracks",
+      "to": "Armory",
+      "extras": {
+        "Factory": 1,
+        "Mine": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Bunker",
+      "to": "Artillery",
+      "extras": {
+        "Refinery": 2,
+        "Radar": 3
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Mine",
+      "to": "Bunker",
+      "extras": {
+        "Headquarters": 1,
+        "Ews": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Factory",
+      "to": "Centrifuge",
+      "extras": {
+        "Mine": 3
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Town",
+      "to": "City",
+      "extras": {
+        "Quarry": 2,
+        "Reactor": 1,
+        "Town": 3
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Radar",
+      "to": "Ews",
+      "extras": {
+        "Generator": 2
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Village",
+      "to": "Headquarters",
+      "extras": {
+        "Radar": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Airfield",
+      "to": "Helipad",
+      "extras": {
+        "Armory": 2,
+        "Factory": 3
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Rocket",
+      "to": "Launcher",
+      "extras": {
+        "Airfield": 2
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Centrifuge",
+      "to": "Projector",
+      "extras": {
+        "Rampart": 2,
+        "Reactor": 2
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Cliff",
+      "to": "Quarry",
+      "extras": {
+        "Village": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Cliff",
+      "to": "Rampart",
+      "extras": {
+        "Barracks": 2
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Generator",
+      "to": "Reactor",
+      "extras": {
+        "Centrifuge": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Factory",
+      "to": "Refinery",
+      "extras": {
+        "Generator": 3,
+        "Cliff": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Radar",
+      "to": "Rocket",
+      "extras": {
+        "Refinery": 1
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Ews",
+      "to": "Satellite",
+      "extras": {
+        "Rocket": 2,
+        "Generator": 5
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Quarry",
+      "to": "Silo",
+      "extras": {
+        "Centrifuge": 2
+      },
+      "status": "SOURCE_EXPECTED"
+    },
+    {
+      "from": "Village",
+      "to": "Town",
+      "extras": {
+        "Generator": 1,
+        "Village": 3
+      },
+      "status": "SOURCE_EXPECTED"
+    }
+  ]
+}

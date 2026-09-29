@@ -1,0 +1,161 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observation_id",
+    "timestamp",
+    "tick",
+    "player",
+    "towers",
+    "forces",
+    "supply_lines",
+    "source"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "observation_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "number"
+    },
+    "tick": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "player": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "score",
+        "rank",
+        "upgrade_resources"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "score": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rank": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "upgrade_resources": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "towers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "owner",
+          "tower_type",
+          "units",
+          "neighbors",
+          "king",
+          "upgrade_state"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "owner": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tower_type": {
+            "type": "string"
+          },
+          "units": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "neighbors": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "uniqueItems": true
+          },
+          "king": {
+            "type": "boolean"
+          },
+          "upgrade_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "forces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "owner",
+          "source",
+          "destination",
+          "units"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "source": {
+            "type": "integer"
+          },
+          "destination": {
+            "type": "integer"
+          },
+          "units": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "supply_lines": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "source": {
+      "const": "mock"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kiomet-ai:observable-state-v1"
+}

@@ -1,0 +1,845 @@
+{
+  "artifact": "Round 8 battle function map; supersedes Round 7 result-mapping notes",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "functions": [
+    {
+      "production_func": 448,
+      "offset": "0x19b86",
+      "local_func": 2884,
+      "source_match": "chunk.rs:Chunk::tick",
+      "role": "World tick arrival lifecycle: tower aura, neutral capture, Force-vs-Tower combat, terminal owner/survivor writeback, and post-arrival movement/merge",
+      "inputs": "Raw ABI (應用程式二進位介面) is (i32,i32,i32)->nil; world/tick state and caller-provided event closure context. Rust parameter names are stripped.",
+      "outputs": "In-place Tower/Force state mutations and emitted InfoEvent values; no direct return. Tower winner/owner rules are mapped to source; ordinary mirror subset is supported statically.",
+      "reads": "tower inbound/outbound forces, owner, units, aura flag +45, type +46, delay +47, supply line; Force owner/path/progress/fuel/speed/aura +21/units.",
+      "writes": "Tower units/owner/type/delay and Force unit vectors/route collections; 3107 reconcile only on neutral-empty capture, 2195 capacity merge on friendly merge.",
+      "callers": [
+        443,
+        1242
+      ],
+      "callees": [
+        1964,
+        1964,
+        2919,
+        906,
+        4722,
+        2270,
+        2014,
+        4464,
+        5420,
+        4464,
+        1472,
+        1365,
+        6435,
+        4388,
+        2071,
+        4105,
+        2919,
+        4104,
+        2690,
+        4056,
+        3453,
+        2071,
+        4105,
+        2919,
+        4104,
+        2690,
+        4056,
+        3453,
+        6453,
+        6453,
+        3156,
+        4454,
+        2246,
+        2643,
+        6597,
+        2014,
+        2290,
+        2071,
+        3030,
+        1637,
+        3834,
+        1448,
+        708,
+        902,
+        1448,
+        4723,
+        4970,
+        6596,
+        2031,
+        1690,
+        2183,
+        2670,
+        1791,
+        2536,
+        2350,
+        3031,
+        788,
+        6435,
+        788,
+        6435,
+        4704,
+        1845,
+        6128,
+        6435,
+        6128,
+        6435,
+        2127,
+        6596,
+        4199,
+        6596,
+        1888,
+        4704,
+        3571,
+        3107,
+        4969,
+        4969,
+        1778,
+        1778,
+        3449,
+        2408,
+        2408,
+        2408,
+        2827,
+        1347,
+        2022,
+        2408,
+        2827,
+        1347,
+        2022,
+        3757,
+        3757,
+        5202,
+        3449,
+        1888,
+        1888,
+        1347,
+        2022,
+        1347,
+        1347,
+        2022,
+        1347,
+        3571,
+        4723,
+        2127,
+        4704,
+        6596,
+        2183,
+        2670,
+        6435,
+        6596,
+        1637,
+        2195,
+        1448,
+        5906,
+        6280,
+        690,
+        3451,
+        6280,
+        5906,
+        690,
+        1448,
+        1448,
+        4525,
+        4525,
+        4326,
+        4105,
+        2023,
+        2350,
+        4525,
+        4105,
+        2350,
+        4704,
+        6435,
+        2289,
+        2289,
+        6262,
+        777
+      ],
+      "confidence": "HIGH function identity; ordinary combat terminal and owner mapping statically closed; no runtime differential"
+    },
+    {
+      "production_func": 522,
+      "offset": "0x68dbe",
+      "local_func": 2852,
+      "source_match": "chunk.rs:force-vs-force closure + combatants.rs:Combatants::fight",
+      "role": "Force-vs-Force collision resolver called through func788",
+      "inputs": "Collision closure context plus the other Force; ABI (i32,i32)->i32.",
+      "outputs": "Mutates both Units buffers; writes inbound-survival flag; returns true when the outbound/Defender side wins so func788 can retain/remove vectors. No Tower owner output.",
+      "reads": "Force routes/progress/required/speed/units and two Force aura snapshots. Both combat endpoints use Tower sentinel 27.",
+      "writes": "Both Force unit buffers, event callback state, and inbound-survival byte in caller context. Func788 performs vector retention/removal.",
+      "callers": [
+        788
+      ],
+      "callees": [
+        4525,
+        4326,
+        2689,
+        690,
+        2127,
+        1861,
+        4525,
+        4525,
+        4969,
+        4969,
+        1778,
+        1778,
+        3449,
+        2408,
+        2408,
+        2408,
+        2827,
+        1348,
+        2022,
+        2408,
+        2827,
+        1348,
+        2022,
+        3757,
+        3757,
+        5202,
+        3449,
+        1888,
+        1888,
+        1348,
+        2022,
+        1348,
+        1348,
+        2022,
+        1348
+      ],
+      "confidence": "HIGH function identity; winner/retention mapping statically closed; no runtime differential"
+    },
+    {
+      "production_func": 732,
+      "offset": "0x9f412",
+      "local_func": null,
+      "source_match": "tower.rs::TowerType::raw_unit_capacity",
+      "role": "Reads raw tower capacity rows",
+      "inputs": "Static production parameters; see function dump",
+      "outputs": "Unit collection mutation or effect flags",
+      "reads": "See func-732.txt",
+      "writes": "See func-732.txt",
+      "callers": [
+        1242,
+        1346,
+        3834
+      ],
+      "callees": [],
+      "confidence": "HIGH static semantics"
+    },
+    {
+      "production_func": 788,
+      "offset": "0xa70c2",
+      "local_func": 2850,
+      "source_match": "chunk.rs:outbound retain closure",
+      "role": "Scans opposing Force paths for overlap, calls func522, then retains surviving inbound/outbound forces",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "Returns inbound-survival flag; removes losing Force vector entries according to func522 callback result.",
+      "reads": "tower+12 vector, force owner/progress",
+      "writes": "outbound vector compaction",
+      "callers": [
+        448
+      ],
+      "callees": [
+        2689,
+        690,
+        522,
+        6435,
+        522,
+        6435
+      ],
+      "confidence": "HIGH function identity; source closure and func522 return mapping aligned statically"
+    },
+    {
+      "production_func": 902,
+      "offset": "0xb3cbb",
+      "local_func": null,
+      "source_match": "units.rs::Units::add_inner",
+      "role": "Applies per-unit add and capacity/overflow clamp",
+      "inputs": "Static production parameters; see function dump",
+      "outputs": "Unit collection mutation or effect flags",
+      "reads": "See func-902.txt",
+      "writes": "See func-902.txt",
+      "callers": [
+        448,
+        573,
+        2195,
+        5906
+      ],
+      "callees": [
+        3834,
+        1637,
+        3156,
+        3156,
+        5236
+      ],
+      "confidence": "HIGH static semantics"
+    },
+    {
+      "production_func": 1347,
+      "offset": "0xe46dd",
+      "local_func": null,
+      "source_match": "combatants.rs::replace_unit semantics",
+      "role": "Tower-combat replacement/consumption callback; updates selected/previous unit state and one-per-battle special event flags",
+      "inputs": "Static production parameters; see function dump",
+      "outputs": "No return; mutates side Units, last-unit slot and special event flags; forwards typed CombatInfo to event adapter 2193.",
+      "reads": "See func-1347.txt",
+      "writes": "See func-1347.txt",
+      "callers": [
+        448
+      ],
+      "callees": [
+        4277,
+        2193,
+        2193,
+        2193,
+        1448,
+        4277,
+        2193,
+        1448
+      ],
+      "confidence": "HIGH function identity; local callback semantics and event conversion mapped; outer event-consumer/player consequences outside battle scope"
+    },
+    {
+      "production_func": 1348,
+      "offset": "0xe47ef",
+      "local_func": null,
+      "source_match": "combatants.rs::replace_unit semantics",
+      "role": "Force-collision replacement/consumption callback, structurally equivalent to func1347 but using event adapter 2561",
+      "inputs": "Static production parameters; see function dump",
+      "outputs": "No return; mutates side Units, last-unit slot and special event flags; forwards typed CombatInfo to event adapter 2561.",
+      "reads": "See func-1348.txt",
+      "writes": "See func-1348.txt",
+      "callers": [
+        522
+      ],
+      "callees": [
+        4277,
+        2561,
+        2561,
+        2561,
+        1448,
+        4277,
+        2561,
+        1448
+      ],
+      "confidence": "HIGH function identity; local callback semantics and event conversion mapped; outer event-consumer/player consequences outside battle scope"
+    },
+    {
+      "production_func": 1448,
+      "offset": "0xedecc",
+      "local_func": null,
+      "source_match": "units.rs::Units::subtract",
+      "role": "Subtracts up to requested amount of a unit",
+      "inputs": "Static production parameters; see function dump",
+      "outputs": "Unit collection mutation or effect flags",
+      "reads": "See func-1448.txt",
+      "writes": "See func-1448.txt",
+      "callers": [
+        448,
+        631,
+        1347,
+        1348,
+        1791,
+        4969
+      ],
+      "callees": [
+        1637,
+        3156,
+        3156,
+        5236,
+        5236
+      ],
+      "confidence": "HIGH static semantics"
+    },
+    {
+      "production_func": 1778,
+      "offset": "0xffab8",
+      "local_func": null,
+      "source_match": "no counterpart in reference source",
+      "role": "Computes morale from non-single-use unit counts",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "Units counts",
+      "writes": "none",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        5440,
+        5444,
+        4277
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 1791,
+      "offset": "0x100407",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Copies source tower aura into a deployed force",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-1791.txt",
+      "writes": "See func-1791.txt",
+      "callers": [
+        448,
+        573
+      ],
+      "callees": [
+        2031,
+        5440,
+        3825,
+        1448,
+        6262,
+        1963
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 1845,
+      "offset": "0x102bbe",
+      "local_func": 2977,
+      "source_match": "force.rs:Force::raw_tick",
+      "role": "Advances force and detects arrival",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "Force+0..11 path;+14..20 units;+21 flag;+22 progress",
+      "writes": "Force+8 path length;+22 progress",
+      "callers": [
+        448,
+        6128
+      ],
+      "callees": [
+        690,
+        2689,
+        4326,
+        1548,
+        6262
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 1888,
+      "offset": "0x1048e5",
+      "local_func": 2904,
+      "source_match": "units.rs:Units::is_alive",
+      "role": "Tests capture-eligible live units",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "unit counts/types",
+      "writes": "none",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        5440,
+        5444,
+        4277
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2022,
+      "offset": "0x1091da",
+      "local_func": null,
+      "source_match": "combatants.rs:damage_against closure",
+      "role": "Computes signed damage delta and Nuke overflow guard",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "tower type; unit id; previous damage",
+      "writes": "none",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        2970,
+        6072
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2031,
+      "offset": "0x1096f9",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Builds deployable force units",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-2031.txt",
+      "writes": "See func-2031.txt",
+      "callers": [
+        448,
+        488,
+        864,
+        1091,
+        1242,
+        1791
+      ],
+      "callees": [
+        5440,
+        3825,
+        5906
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2195,
+      "offset": "0x10ea28",
+      "local_func": 2902,
+      "source_match": "units.rs:Units::add_units_to_tower",
+      "role": "Merges units into a tower using capacity rules",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "both Units, type",
+      "writes": "tower Units",
+      "callers": [
+        448,
+        3107
+      ],
+      "callees": [
+        1637,
+        4277,
+        902
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2408,
+      "offset": "0x114146",
+      "local_func": null,
+      "source_match": "combatants.rs:next_unit closure",
+      "role": "Selects a combatant unit and field",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "unit counts, capacity/field",
+      "writes": "none",
+      "callers": [
+        448,
+        522,
+        2827
+      ],
+      "callees": [
+        1185,
+        1185
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2689,
+      "offset": "0x11ccbd",
+      "local_func": null,
+      "source_match": "force.rs:Force::progress_required; production extra flag",
+      "role": "Computes aura movement progress modifier",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "Force+4/+8 path;+21 flag",
+      "writes": "none",
+      "callers": [
+        522,
+        788,
+        1845,
+        1861
+      ],
+      "callees": [
+        4326,
+        4525,
+        6263
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2827,
+      "offset": "0x1219ed",
+      "local_func": null,
+      "source_match": "combatants.rs:next_unit_inner plus shield air handling",
+      "role": "Selects a side unit based on accumulator",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "units and field",
+      "writes": "none",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        2408
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 2970,
+      "offset": "0x126c57",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Returns per-unit base damage u8",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-2970.txt",
+      "writes": "See func-2970.txt",
+      "callers": [
+        453,
+        1242,
+        2022,
+        2033
+      ],
+      "callees": [],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 3030,
+      "offset": "0x12805b",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Tests whether ruler tower is same or neighboring",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-3030.txt",
+      "writes": "See func-3030.txt",
+      "callers": [
+        448,
+        985
+      ],
+      "callees": [
+        2194,
+        3401,
+        2986
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 3107,
+      "offset": "0x128f62",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Reconciles tower units after ownership change",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-3107.txt",
+      "writes": "See func-3107.txt",
+      "callers": [
+        448,
+        4970
+      ],
+      "callees": [
+        2195
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 3571,
+      "offset": "0x13b009",
+      "local_func": null,
+      "source_match": "tower.rs:Tower::set_player_id_inner",
+      "role": "Writes tower owner",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "old/new owner",
+      "writes": "owner and supply line",
+      "callers": [
+        448,
+        5631
+      ],
+      "callees": [
+        5420,
+        5236
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 3757,
+      "offset": "0x13ce2d",
+      "local_func": null,
+      "source_match": "combatants.rs:next_unused_unit closure",
+      "role": "Post-fight unit cleanup iterator",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "unit counts",
+      "writes": "none",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        5440,
+        3621,
+        5444,
+        3758
+      ],
+      "confidence": "HIGH function identity; PARTIAL full result mapping"
+    },
+    {
+      "production_func": 3834,
+      "offset": "0x13d8d1",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Reads per-unit tower capacity",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-3834.txt",
+      "writes": "See func-3834.txt",
+      "callers": [
+        448,
+        649,
+        902,
+        1185,
+        1242
+      ],
+      "callees": [
+        732
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 4277,
+      "offset": "0x14170f",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Tests whether unit is ranged/single-use",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-4277.txt",
+      "writes": "See func-4277.txt",
+      "callers": [
+        1242,
+        1347,
+        1348,
+        1702,
+        1778,
+        1888,
+        2195,
+        3758
+      ],
+      "callees": [
+        4260
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 4280,
+      "offset": "0x14178d",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Computes Air/Surface field",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-4280.txt",
+      "writes": "See func-4280.txt",
+      "callers": [
+        1185,
+        2033
+      ],
+      "callees": [],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 4969,
+      "offset": "0x148cc9",
+      "local_func": null,
+      "source_match": "combatants.rs:hack closure",
+      "role": "Removes Shield from force for tower combat",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "tower type",
+      "writes": "enemy Shield count",
+      "callers": [
+        448,
+        522
+      ],
+      "callees": [
+        1448
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 5440,
+      "offset": "0x14e724",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Iterates unit counts including zeros",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-5440.txt",
+      "writes": "See func-5440.txt",
+      "callers": [
+        460,
+        463,
+        563,
+        690,
+        1185,
+        1242,
+        1690,
+        1702,
+        1778,
+        1791,
+        1865,
+        1888,
+        2031,
+        2190,
+        3757
+      ],
+      "callees": [
+        2153
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 5444,
+      "offset": "0x14e77b",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Reads unit count for an enum index",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-5444.txt",
+      "writes": "See func-5444.txt",
+      "callers": [
+        563,
+        649,
+        690,
+        1185,
+        1242,
+        1690,
+        1702,
+        1778,
+        1888,
+        2190,
+        3757,
+        3825
+      ],
+      "callees": [
+        1637
+      ],
+      "confidence": "HIGH function semantics"
+    },
+    {
+      "production_func": 6596,
+      "offset": "0x154cfa",
+      "local_func": null,
+      "source_match": "NONE",
+      "role": "Tests whether Units contains ruler",
+      "inputs": "Static production parameters; see relevant function dump and arithmetic report",
+      "outputs": "See role; callback/result layouts remain partial where noted",
+      "reads": "See func-6596.txt",
+      "writes": "See func-6596.txt",
+      "callers": [
+        448,
+        463,
+        1242,
+        1702,
+        2968
+      ],
+      "callees": [
+        6280
+      ],
+      "confidence": "HIGH function semantics"
+    }
+  ],
+  "critical_unknowns": [
+    "Terminal cleanup and winner/result mapping in inline battle bodies of 448 and 522",
+    "Side-specific special-event callback effects in 1347/1348"
+  ]
+}

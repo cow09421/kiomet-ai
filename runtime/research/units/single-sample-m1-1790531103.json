@@ -1,0 +1,16 @@
+﻿{
+  "sample_id": "single-004",
+  "source": "concurrent soak m1-1790531103 tower 13566225",
+  "match_id": "m1-1790531103",
+  "packed_id": 13566225,
+  "owner": "SELF",
+  "tower_type": "Barracks",
+  "struct_bytes_38_46": [1, 1, 9, 0, 0, 0, 20],
+  "decode": {"tag": 1, "single_count": 1, "single_unit_type": "Ruler", "shield": 20},
+  "ui_evidence": "headings 兵營；Upgrade to 軍械庫；前置 工廠=1/1、礦場=0/1",
+  "units_match_ui": true,
+  "interpretation": "第四個獨立 Single(Ruler,1)；國王所在塔 Units 轉 Single",
+  "confidence": "CANDIDATE_PLUS",
+  "collected_at": "2026-09-28",
+  "context": {"sent_actions": 0, "platform": "concurrent soak"}
+}

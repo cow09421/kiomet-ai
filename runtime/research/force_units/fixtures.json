@@ -1,0 +1,1989 @@
+{
+  "status": "OFFLINE_DERIVED_NOT_RUNTIME_VALIDATED",
+  "production_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "sample_count": 30,
+  "examples": [
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17498402,
+      "tower_ref": 2898912,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2898912,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17498403,
+      "tower_ref": 2898960,
+      "owner": "SELF",
+      "tower_type": "Barracks",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        20,
+        1,
+        3
+      ],
+      "current_counts": {
+        "tower_ref": 2898960,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 12,
+        "shield": 20,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 12,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 12,
+        "tower_type": "Barracks",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "20/20"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "12/12"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/1"
+        },
+        {
+          "unit": "礦場",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17563938,
+      "tower_ref": 2899680,
+      "owner": "SELF",
+      "tower_type": "Artillery",
+      "source_bytes_38_46": [
+        1,
+        1,
+        9,
+        0,
+        0,
+        0,
+        30,
+        1,
+        2
+      ],
+      "current_counts": {
+        "tower_ref": 2899680,
+        "observed_at": null,
+        "units_kind": "SINGLE",
+        "fighter": null,
+        "chopper": null,
+        "bomber": null,
+        "tank": null,
+        "soldier": null,
+        "shield": 30,
+        "single_unit_type": "Ruler",
+        "single_count": 1
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 1
+        },
+        "total": 1,
+        "tower_type": "Artillery",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "INFERRED",
+        "trace": [
+          "Single：Ruler 的目前數量 1 納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "30/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17563939,
+      "tower_ref": 2899728,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2899728,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17432865,
+      "tower_ref": 2898096,
+      "owner": "ENEMY",
+      "tower_type": "Armory",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        25,
+        0,
+        1
+      ],
+      "current_counts": {
+        "tower_ref": 2898096,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 2,
+        "soldier": 0,
+        "shield": 25,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 2,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 2,
+        "tower_type": "Armory",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "25/15"
+        },
+        {
+          "unit": "坦克",
+          "count_text": "2/5"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17432866,
+      "tower_ref": 2898144,
+      "owner": "NEUTRAL",
+      "tower_type": "Generator",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10
+      ],
+      "current_counts": {
+        "tower_ref": 2898144,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Generator",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/10"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17498400,
+      "tower_ref": 2898816,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898816,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17498401,
+      "tower_ref": 2898864,
+      "owner": "ENEMY",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        26,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898864,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 1,
+        "soldier": 2,
+        "shield": 26,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 1,
+          "Soldier": 2,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 3,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "26/30"
+        },
+        {
+          "unit": "坦克",
+          "count_text": "1/2"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "2/4"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17498404,
+      "tower_ref": 2899008,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2899008,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487865.2713199,
+      "round": 1,
+      "tower_id": 17563936,
+      "tower_ref": 2899584,
+      "owner": "ENEMY",
+      "tower_type": "Quarry",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        21,
+        0,
+        16
+      ],
+      "current_counts": {
+        "tower_ref": 2899584,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 21,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Quarry",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "21/10"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17498402,
+      "tower_ref": 2898912,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2898912,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17498403,
+      "tower_ref": 2898960,
+      "owner": "SELF",
+      "tower_type": "Barracks",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        20,
+        1,
+        3
+      ],
+      "current_counts": {
+        "tower_ref": 2898960,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 12,
+        "shield": 20,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 12,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 12,
+        "tower_type": "Barracks",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "20/20"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "12/12"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/1"
+        },
+        {
+          "unit": "礦場",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17563938,
+      "tower_ref": 2899680,
+      "owner": "SELF",
+      "tower_type": "Artillery",
+      "source_bytes_38_46": [
+        1,
+        1,
+        9,
+        0,
+        0,
+        0,
+        30,
+        1,
+        2
+      ],
+      "current_counts": {
+        "tower_ref": 2899680,
+        "observed_at": null,
+        "units_kind": "SINGLE",
+        "fighter": null,
+        "chopper": null,
+        "bomber": null,
+        "tank": null,
+        "soldier": null,
+        "shield": 30,
+        "single_unit_type": "Ruler",
+        "single_count": 1
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 1
+        },
+        "total": 1,
+        "tower_type": "Artillery",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "INFERRED",
+        "trace": [
+          "Single：Ruler 的目前數量 1 納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "30/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17563939,
+      "tower_ref": 2899728,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2899728,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17432865,
+      "tower_ref": 2898096,
+      "owner": "ENEMY",
+      "tower_type": "Armory",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        24,
+        0,
+        1
+      ],
+      "current_counts": {
+        "tower_ref": 2898096,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 4,
+        "soldier": 0,
+        "shield": 24,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 4,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 4,
+        "tower_type": "Armory",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "24/15"
+        },
+        {
+          "unit": "坦克",
+          "count_text": "4/5"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17432866,
+      "tower_ref": 2898144,
+      "owner": "NEUTRAL",
+      "tower_type": "Generator",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10
+      ],
+      "current_counts": {
+        "tower_ref": 2898144,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Generator",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/10"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17498400,
+      "tower_ref": 2898816,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898816,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17498401,
+      "tower_ref": 2898864,
+      "owner": "ENEMY",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898864,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 30,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "30/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17498404,
+      "tower_ref": 2899008,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2899008,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487883.3504448,
+      "round": 2,
+      "tower_id": 17563936,
+      "tower_ref": 2899584,
+      "owner": "ENEMY",
+      "tower_type": "Quarry",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        16
+      ],
+      "current_counts": {
+        "tower_ref": 2899584,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 20,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Quarry",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "20/10"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17498402,
+      "tower_ref": 2898912,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2898912,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17498403,
+      "tower_ref": 2898960,
+      "owner": "SELF",
+      "tower_type": "Barracks",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        20,
+        1,
+        3
+      ],
+      "current_counts": {
+        "tower_ref": 2898960,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 12,
+        "shield": 20,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 12,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 12,
+        "tower_type": "Barracks",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "20/20"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "12/12"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/1"
+        },
+        {
+          "unit": "礦場",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17563938,
+      "tower_ref": 2899680,
+      "owner": "SELF",
+      "tower_type": "Artillery",
+      "source_bytes_38_46": [
+        1,
+        1,
+        9,
+        0,
+        0,
+        0,
+        30,
+        1,
+        2
+      ],
+      "current_counts": {
+        "tower_ref": 2899680,
+        "observed_at": null,
+        "units_kind": "SINGLE",
+        "fighter": null,
+        "chopper": null,
+        "bomber": null,
+        "tank": null,
+        "soldier": null,
+        "shield": 30,
+        "single_unit_type": "Ruler",
+        "single_count": 1
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 1
+        },
+        "total": 1,
+        "tower_type": "Artillery",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "INFERRED",
+        "trace": [
+          "Single：Ruler 的目前數量 1 納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "30/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17563939,
+      "tower_ref": 2899728,
+      "owner": "SELF",
+      "tower_type": "Runway",
+      "source_bytes_38_46": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        15,
+        1,
+        22
+      ],
+      "current_counts": {
+        "tower_ref": 2899728,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 4,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 4,
+        "shield": 15,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 4,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 4,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 8,
+        "tower_type": "Runway",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "15/15"
+        },
+        {
+          "unit": "戰鬥機",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "士兵",
+          "count_text": "4/4"
+        },
+        {
+          "unit": "工廠",
+          "count_text": "0/2"
+        },
+        {
+          "unit": "雷達",
+          "count_text": "0/1"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17432865,
+      "tower_ref": 2898096,
+      "owner": "ENEMY",
+      "tower_type": "Armory",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        24,
+        0,
+        1
+      ],
+      "current_counts": {
+        "tower_ref": 2898096,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 1,
+        "soldier": 0,
+        "shield": 24,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 1,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 1,
+        "tower_type": "Armory",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "24/15"
+        },
+        {
+          "unit": "坦克",
+          "count_text": "1/5"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17432866,
+      "tower_ref": 2898144,
+      "owner": "NEUTRAL",
+      "tower_type": "Generator",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10
+      ],
+      "current_counts": {
+        "tower_ref": 2898144,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Generator",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/10"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17498400,
+      "tower_ref": 2898816,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        1,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898816,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 3,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "3/40"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17498401,
+      "tower_ref": 2898864,
+      "owner": "ENEMY",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2898864,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 30,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "30/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17498404,
+      "tower_ref": 2899008,
+      "owner": "NEUTRAL",
+      "tower_type": "Cliff",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      "current_counts": {
+        "tower_ref": 2899008,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 0,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Cliff",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "0/30"
+        }
+      ]
+    },
+    {
+      "match_id": "m1-1790487672",
+      "timestamp": 1790487900.9123404,
+      "round": 3,
+      "tower_id": 17563936,
+      "tower_ref": 2899584,
+      "owner": "ENEMY",
+      "tower_type": "Quarry",
+      "source_bytes_38_46": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        20,
+        0,
+        16
+      ],
+      "current_counts": {
+        "tower_ref": 2899584,
+        "observed_at": null,
+        "units_kind": "MANY",
+        "fighter": 0,
+        "chopper": 0,
+        "bomber": 0,
+        "tank": 0,
+        "soldier": 0,
+        "shield": 20,
+        "single_unit_type": null,
+        "single_count": null
+      },
+      "mirror": {
+        "counts": {
+          "Shield": 0,
+          "Fighter": 0,
+          "Chopper": 0,
+          "Bomber": 0,
+          "Tank": 0,
+          "Soldier": 0,
+          "Shell": 0,
+          "Emp": 0,
+          "Nuke": 0,
+          "Ruler": 0
+        },
+        "total": 0,
+        "tower_type": "Quarry",
+        "production_rule": "PRODUCTION_PROVEN",
+        "input_evidence": "RUNTIME_VALIDATED",
+        "trace": [
+          "Many：Fighter、Chopper、Bomber、Tank、Soldier 的目前數量原量納入",
+          "非 Projector：Shield 不可移動，保留在塔內"
+        ]
+      },
+      "ui": [
+        {
+          "unit": "護盾",
+          "count_text": "20/10"
+        }
+      ]
+    }
+  ]
+}

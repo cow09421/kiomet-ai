@@ -1,0 +1,38 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+runtime/*
+!runtime/.gitkeep
+!runtime/research/
+runtime/research/*
+!runtime/research/gpt_concurrent/
+runtime/research/gpt_concurrent/dumps/
+!runtime/research/gpt_concurrent/**
+runtime/research/gpt_concurrent/dumps/
+# 敏感資料：瀏覽器設定檔、登入 session、控制憑證一律不進版控
+# （已涵蓋於 runtime/*，此處再次顯式聲明避免誤加）
+runtime/browser-profile/
+runtime/state/control.json
+*.har
+.env
+.env.*
+!.env.example
+# 第三方參考原始碼（AGPL 等）：只讀參考，不進版控
+vendor/kiomet-ref/
+vendor/kodiak-ref/
+
+# Local-only cleanup archive and agent coordination state
+/屎山/
+agent_coordination/coord.db*
+agent_coordination/inbox/
+agent_coordination/snapshots/
+agent_coordination/escalations/
+agent_coordination/decisions/
+agent_coordination/results/
+agent_coordination/status/
+agent_coordination/BOARD.md
+agent_coordination/CURRENT_MILESTONE.md
+agent_coordination/**/__pycache__/

@@ -1,0 +1,15 @@
+﻿{
+  "event_id": "ruler-001",
+  "match_id": "m1-1790539798",
+  "type": "mixed-ruler-flags-same-player",
+  "towers": [
+    {"packed_id": 16580854, "tower_type": "Factory", "flag45": 0,
+     "memory": "Many shield=10", "ui": "護盾=10/10", "boost": false},
+    {"packed_id": 16580855, "tower_type": "Runway", "flag45": 1,
+     "memory": "Many Fighter=4 Soldier=4 Shield=10", "ui": "護盾=10/15 戰鬥機=4/4 士兵=4/4", "boost": true}
+  ],
+  "single_ruler_present": false,
+  "interpretation": "同玩家同時間一塔有加成一塔無；+45 與盾容量為 per-tower 語意。國王可在 Many 塔（帶其他兵力）提供加成，不必轉 Single；Single(Ruler,1) 應為國王單獨駐守狀態",
+  "confidence": "HIGH（UI 雙塔直接驗證）",
+  "sent_actions": 0
+}

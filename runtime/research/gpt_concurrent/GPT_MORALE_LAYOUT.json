@@ -1,0 +1,11 @@
+{
+  "artifact": "Round 6 morale layout",
+  "storage_root": "No stored morale scalar; derived from battle-side Units. Aura derives from server-synchronized Player ruler TowerId.",
+  "fields": [
+    {"name": "derived_morale", "storage_root": "Combatants Units", "offset": null, "width": "i32 return value", "type": "unsigned-valued i32", "range": [0,3], "neutral_value": 0, "update_rule": "min(3, floor(non_single_use_count/2)) computed each battle; no scalar write/reset", "combat_effect": "initial signed accumulated damage only for exclusive aura", "confidence": "HIGH"},
+    {"name": "player_ruler_position", "storage_root": "World player record; 64-byte stride", "offset": 0, "width": "8 bytes", "type": "packed optional TowerId; low-bit presence, upper32 TowerId", "range": "absent or world TowerId; exact server validity unknown", "neutral_value": "absent", "update_rule": "client func460 copies i64 from server PlayerInput, or writes i32 zero in another input branch; server writer unknown", "combat_effect": "indirectly determines nearby tower aura", "confidence": "HIGH client layout; PARTIAL upstream semantics"},
+    {"name": "tower_aura", "storage_root": "Tower", "offset": 45, "width": "1 byte", "type": "u8 Boolean 0/1", "range": [0,1], "neutral_value": 0, "update_rule": "func448 when (tower_index XOR tick)&15==0: owner exists and ruler TowerId is same or neighbor =>1, else 0", "combat_effect": "defender-only aura selects negative M(defender)", "confidence": "HIGH"},
+    {"name": "force_aura", "storage_root": "Force", "offset": 21, "width": "1 byte", "type": "u8 copied Boolean", "range": [0,1], "neutral_value": 0, "update_rule": "func1791 copies Tower+45 on deployment; later reset/write coverage incomplete", "combat_effect": "attacker-only aura selects positive M(attacker); also movement progress effect", "confidence": "HIGH for deployment; PARTIAL full lifetime"},
+    {"name": "battle_damage_initial", "storage_root": "fight local variable", "offset": null, "width": "4 bytes", "type": "signed i32", "range": [-3,3], "neutral_value": 0, "update_rule": "exclusive aura: +M(attacker), -M(defender), or 0; calculated after shield stripping", "combat_effect": "initial accumulator supplied to unit-selection and damage loop", "confidence": "HIGH"}
+  ]
+}

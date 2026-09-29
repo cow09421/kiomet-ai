@@ -1,0 +1,9 @@
+151aec func[5906] <Units::add>:
+ 151aed: 20 00                      | local.get 0
+ 151aef: 20 01                      | local.get 1
+ 151af1: 20 02                      | local.get 2
+ 151af3: 41 1b                      | i32.const 27
+ 151af5: 41 01                      | i32.const 1
+ 151af7: 41 00                      | i32.const 0
+ 151af9: 10 86 07                   | call 902 <Units::add_inner>
+ 151afc: 0b                         | end

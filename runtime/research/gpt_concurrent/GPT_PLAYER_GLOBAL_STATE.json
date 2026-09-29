@@ -1,0 +1,165 @@
+{
+  "artifact": "GPT Round 9 Player Global State Layout（第九輪玩家全域狀態布局）",
+  "layout_policy": "只有來源有證據的欄位才列入。沒有穩定記憶體 ABI 的 Rust 欄位用 offset=null；不要把邏輯欄位偏移猜成正式版位址。",
+  "evidence_roots": [
+    "runtime/research/source-map/kiomet-local/server/src/service.rs",
+    "runtime/research/source-map/kiomet-local/server/src/world.rs",
+    "runtime/research/source-map/kiomet-local/common/src/protocol.rs",
+    "runtime/research/source-map/kiomet-local/common/src/player.rs",
+    "runtime/research/source-map/kiomet-local/common/src/chunk/maintenance.rs",
+    "runtime/research/gpt_concurrent/GPT_MORALE_LAYOUT.json",
+    "runtime/research/gpt_concurrent/GPT_BATTLE_FINAL_FUNCTION_MAP.json"
+  ],
+  "fields": [
+    {
+      "name": "alive",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.alive",
+      "offset": null,
+      "width": "Rust bool；記憶體布局未固定",
+      "type": "bool",
+      "reader": ["TowerService::is_alive", "TowerService::get_score", "TowerService::get_game_update -> NonActor.alive"],
+      "writer": ["on_info_event(GainedTower, Spawned) -> true", "kill_player -> false"],
+      "semantic": "玩家目前是否存活。Ruler death 先排程，kill_player 在下一個 post_update 邊界寫 false。",
+      "confidence": "保存參考服務來源 HIGH；正式版伺服器版本未核對"
+    },
+    {
+      "name": "death_reason",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.death_reason",
+      "offset": null,
+      "width": "Option<DeathReason>；Rust 記憶體布局未固定",
+      "type": "Option<DeathReason::RulerKilled { alias: Option<PlayerAlias>, unit: Unit }>",
+      "reader": ["TowerService::get_game_update -> NonActor.death_reason", "client UI death panel"],
+      "writer": ["on_info_event(LostRuler) 寫 RulerKilled", "spawn_player 成功路徑清為 None"],
+      "semantic": "向客戶端解釋死亡原因；quit 清理不必然建立 RulerKilled。",
+      "confidence": "保存參考服務來源 HIGH"
+    },
+    {
+      "name": "towers",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.towers",
+      "offset": null,
+      "width": "動態 FxHashSet<TowerId>；寬度依元素數及容量而變",
+      "type": "玩家持有塔 ID 集合",
+      "reader": ["每秒玩家掃描", "kill_player 清理後 debug invariant"],
+      "writer": ["on_info_event(GainedTower) insert", "on_info_event(LostTower) remove"],
+      "semantic": "Ruler 淘汰清理透過每塔 LostTower(PlayerKilled) 清空；score 與 tower_counts 從塔集合及世界狀態衍生。",
+      "confidence": "保存參考服務來源 HIGH"
+    },
+    {
+      "name": "score",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.score",
+      "offset": null,
+      "width": "4 bytes logical u32；Rust 記憶體偏移未固定",
+      "type": "u32",
+      "reader": ["TowerService::get_score；alive=false 時回 Score::None"],
+      "writer": ["存活玩家每秒從活動塔 score_weight 飽和加總", "spawn_player 成功路徑寫 0"],
+      "semantic": "分數由活動塔推導且週期刷新；kill_player 不直接將欄位清零。",
+      "confidence": "保存參考服務來源 HIGH"
+    },
+    {
+      "name": "tower_counts",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.tower_counts",
+      "offset": null,
+      "width": "邏輯上 27 × u16 = 54 bytes；不代表 Rust struct 偏移",
+      "type": "TowerArray<u16>",
+      "reader": ["升級前置檢查", "NonActor.tower_counts"],
+      "writer": ["存活玩家每秒按活動塔型飽和計數；升級中的塔不計"],
+      "semantic": "塔型計數是世界狀態的衍生快照，不是玩家永久塔帳本。",
+      "confidence": "保存來源 HIGH；元素數與寬度見 GPT_UPGRADE_ROOT_PATH.json"
+    },
+    {
+      "name": "lifetime",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.lifetime",
+      "offset": null,
+      "width": "Ticks；底層 Rust 布局未在此確認",
+      "type": "飽和 Tick 計數",
+      "reader": ["保存來源中僅服務邏輯使用"],
+      "writer": ["每 tick 存活時 saturating_add(ONE)", "spawn_player 寫 ZERO"],
+      "semantic": "本次存活時長；淘汰路徑不重設，下次 Spawn 重設。",
+      "confidence": "保存參考服務來源 HIGH"
+    },
+    {
+      "name": "alliances",
+      "root_path": "common::World.player[PlayerId]::Player.allies",
+      "offset": null,
+      "width": "動態 FxHashSet<PlayerId>",
+      "type": "單向聯盟關係集合；雙向互含才算 Ally",
+      "reader": ["World::have_alliance", "relationship 判定"],
+      "writer": ["PlayerInput::AddAlly／RemoveAlly", "PlayerInput::Died 清空", "盟友 PlayerMaintainance::RemoveDeadAlly"],
+      "semantic": "沒有單一 Team（隊伍）欄位；聯盟由兩個玩家集合彼此包含表示。",
+      "confidence": "保存參考來源 HIGH"
+    },
+    {
+      "name": "new_alliances",
+      "root_path": "common::World.player[PlayerId]::Player.new_alliances",
+      "offset": null,
+      "width": "動態 FxHashSet<PlayerId>",
+      "type": "本 tick 新成立的聯盟集合",
+      "reader": ["World::tick_before_inputs halt_path"],
+      "writer": ["PlayerInput::NewAlliance 插入", "World tick 開始清空"],
+      "semantic": "用於新聯盟成立時停止穿越相關路徑的部隊；不是長期隊伍狀態。",
+      "confidence": "保存參考來源 HIGH"
+    },
+    {
+      "name": "alerts.ruler_position",
+      "root_path": "server::TowerService.player_data[PlayerId]::PlayerData.alerts.ruler_position",
+      "offset": null,
+      "width": "Option<TowerId>；Rust 記憶體布局未固定",
+      "type": "近似／可選 Ruler 塔位置",
+      "reader": ["client alert overlay"],
+      "writer": ["每秒重設 ephemeral alerts，再掃描玩家 towers；塔內有 Ruler 時記錄該 TowerId"],
+      "semantic": "保存服務來源的警示快照，不足以代表正式版 Player+0 權威位置；可能不涵蓋行進中的 Ruler。",
+      "confidence": "來源程式 HIGH；與正式版 Player+0 對應 UNKNOWN"
+    },
+    {
+      "name": "ruler_position",
+      "root_path": "production client World player record[PlayerId]",
+      "offset": 0,
+      "width": "8 bytes；player record stride 64 bytes",
+      "type": "packed optional TowerId；低 32 位最低位作存在旗標，高 32 位為 TowerId",
+      "reader": ["production func448 更新 Tower+45"],
+      "writer": ["production client func460 複製 PlayerInput+200 的 i64；另一輸入分支將 Player+0 寫為 0；伺服器端 writer 未定位"],
+      "semantic": "光環推導位置來源的客戶端鏡像欄位；不要當作已證明的服務端 PlayerData 欄位。",
+      "confidence": "正式版客戶端布局 HIGH；伺服器來源及死亡清除時序 PARTIAL"
+    }
+  ],
+  "related_world_fields": [
+    {
+      "name": "tower_aura",
+      "root_path": "production Tower",
+      "offset": 45,
+      "width": "1 byte",
+      "type": "u8 Boolean",
+      "reader": ["production func448 tower combat"],
+      "writer": ["production func448；條件是 Ruler 同塔／鄰塔，依 16-tick 排程重算"],
+      "semantic": "Ruler 光環衍生快照，不是 PlayerData 本體欄位。",
+      "confidence": "HIGH static mapping"
+    },
+    {
+      "name": "force_aura_snapshot",
+      "root_path": "production Force",
+      "offset": 21,
+      "width": "1 byte",
+      "type": "u8 Boolean",
+      "reader": ["production func448／func522 battle morale setup", "func2689 movement progress"],
+      "writer": ["production func1791 從來源 Tower+45 複製"],
+      "semantic": "派兵時的光環快照；後續 Ruler 移動不會由鏡像位置自動重算。",
+      "confidence": "部署寫入 HIGH；Force 完整生命週期更新 PARTIAL"
+    },
+    {
+      "name": "emp_delay",
+      "root_path": "production Tower",
+      "offset": 47,
+      "width": "1 byte",
+      "type": "Option<NonZeroU8> 相容的一位元組延遲值",
+      "reader": ["production func448 tower tick"],
+      "writer": ["攻方 EMP 戰鬥事件令 delay=max(delay,240)；每 tick 倒數"],
+      "semantic": "暫停該塔生產／衰減與中立降級；不屬玩家特殊兵庫存。",
+      "confidence": "第八輪正式版靜態映射 HIGH"
+    }
+  ],
+  "not_player_fields": {
+    "special_units": "Shell／EMP／Nuke 庫存位於 Tower 或 Force 的 Units；沒有證據顯示它們是獨立 PlayerData 計數欄位。",
+    "team": "沒有獨立 Team record；只找到 Player.allies 雙向關係。",
+    "global_match_end": "遊戲專用 Info enum 沒有 MatchEnded；保存服務呼叫 tally_victory，但全場結束條件未知。"
+  }
+}

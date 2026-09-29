@@ -1,0 +1,141 @@
+{
+  "artifact": "GPT Round 9 Combat Event Map（第九輪戰鬥事件圖）",
+  "scope": "離線靜態事件生產、派送、消費及可見狀態寫回",
+  "evidence": {
+    "reference_source_root": "runtime/research/source-map/kiomet-local/",
+    "production_client_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "enum_value_policy": "Rust enum 未標 repr；source_variant_ordinal 是依宣告順序推定的序號，不代表已驗證的正式版 ABI（應用程式二進位介面）或線上封包值。",
+    "runtime_validation": "未執行；本輪禁止 Runtime（執行期）連線與遊戲操作。"
+  },
+  "events": [
+    {
+      "event": "Ruler died（國王死亡）",
+      "enum_values": [
+        {"enum": "CombatInfo", "variant": "AttackerLostRuler(Unit)", "source_variant_ordinal": 0, "value_status": "宣告順序推定"},
+        {"enum": "CombatInfo", "variant": "DefenderLostRuler(Unit)", "source_variant_ordinal": 1, "value_status": "宣告順序推定"},
+        {"enum": "Info", "variant": "LostRuler", "source_variant_ordinal": 2, "value_status": "宣告順序推定"},
+        {"enum": "DeathReason", "variant": "RulerKilled", "source_variant_ordinal": 0, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["common/src/combatants.rs:175-202；正式版 func1347（塔戰）與 func1348（部隊碰撞）"],
+      "dispatch": ["正式版 func2193／func2561 → func1943 → 上層事件閉包；公開參考碼 CombatInfo::into_info_event"],
+      "payload": ["被殺玩家 ID", "擊殺方可選 PlayerId", "致命 Unit", "位置"],
+      "consumer": ["server/src/service.rs:502-538 TowerService::on_info_event；post_update 回呼"],
+      "state_writes": ["death_reason=RulerKilled（死亡原因）", "排入 maybe_dead", "有擊殺者時 tally_victory", "下一個 post_update 寫 alive=false 並呼叫 kill_player"],
+      "follow_up_events": ["ChunkMaintenance::KillPlayer", "逐塔 LostTower(reason=PlayerKilled)", "刪除該玩家入／出 Force", "清理雙向聯盟"],
+      "confidence": "保存參考伺服器來源的流程 HIGH；正式版伺服器版本一致性未確認"
+    },
+    {
+      "event": "Ruler moved（國王移動）",
+      "enum_values": [],
+      "producer": ["未找到專用 Info／CombatInfo enum；正式版 client func460 讀伺服器 PlayerInput 的位置值或清零"],
+      "dispatch": ["Player actor 更新與 World player record 更新；正式版伺服器位置欄位寫入端未定位"],
+      "payload": ["可選 TowerId（客戶端 World player record +0，8 bytes）"],
+      "consumer": ["正式版 func448 讀 Player+0，分散重算 Tower+45；func1791 派兵時複製 Tower+45 至 Force+21"],
+      "state_writes": ["Player+0 客戶端鏡像", "各 Tower+45 衍生快照", "新部署 Force+21 快照"],
+      "follow_up_events": ["無獨立 RulerMoved 資訊事件"],
+      "confidence": "客戶端儲存及衍生關係 HIGH；正式版伺服器寫入者與移動中更新 PARTIAL"
+    },
+    {
+      "event": "Tower captured（塔被佔領）",
+      "enum_values": [
+        {"enum": "Info", "variant": "LostTower", "source_variant_ordinal": 3, "value_status": "宣告順序推定"},
+        {"enum": "Info", "variant": "GainedTower", "source_variant_ordinal": 0, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["common/src/chunk.rs:355-395，塔戰後 owner 轉換"],
+      "dispatch": ["InfoEvent(position, info) 經 on_info 閉包到 TowerService::on_info_event"],
+      "payload": ["舊玩家／新玩家", "TowerId", "CapturedBy／CapturedFrom reason"],
+      "consumer": ["server/src/service.rs:508-528, 539-550"],
+      "state_writes": ["舊 PlayerData.towers 移除塔；新 PlayerData.towers 插入塔；下一次每秒存活者掃描更新 tower_counts 與 score"],
+      "follow_up_events": ["客戶端收到塔事件；新主的 score 約於下一次每秒計分掃描重算"],
+      "confidence": "保存參考來源 HIGH；正式版服務端版本一致性未確認"
+    },
+    {
+      "event": "Tower defended（塔被守住）",
+      "enum_values": [],
+      "producer": ["沒有專用 TowerDefended enum；塔戰 winner != attacker 時可能送 Info::LostForce(attacker)，combatants 另可送 LostRuler／特殊事件"],
+      "dispatch": ["塔戰 InfoEvent 閉包"],
+      "payload": ["可能的失敗 Force 玩家 ID；無獨立防守事件 payload"],
+      "consumer": ["TowerService::on_info_event 對 LostForce 落入忽略分支；塔 owner 只在符合終局條件時寫入"],
+      "state_writes": ["保住塔時不更新玩家 towers 集合；LostForce 不直接改 PlayerData"],
+      "follow_up_events": ["若 Ruler 同時死亡，另走 Ruler died 流程"],
+      "confidence": "HIGH；LostForce 是通知事件，不等於每一種 Force 真正移除的通用事件"
+    },
+    {
+      "event": "Force destroyed（部隊被消滅）",
+      "enum_values": [
+        {"enum": "Info", "variant": "LostForce(PlayerId)", "source_variant_ordinal": 1, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["common/src/chunk.rs:346-352（塔戰攻方未勝）、439-444（燃料耗盡）、461-466（擁擠丟棄）；Force 對 Force 的兵力／集合變更不保證另送 LostForce"],
+      "dispatch": ["InfoEvent 閉包；Force 實際集合由 chunk tick 寫回"],
+      "payload": ["PlayerId", "位置"],
+      "consumer": ["TowerService::on_info_event 對 LostForce 不寫 PlayerData；客戶端用於提示／音效"],
+      "state_writes": ["Force 單位及入／出集合依戰鬥／燃料／擁擠分支變更；沒有統一玩家淘汰寫入"],
+      "follow_up_events": ["若消滅的是 Ruler，另發 LostRuler；否則無一般淘汰事件"],
+      "confidence": "HIGH；事件名稱不能當成所有部隊移除的完整帳本"
+    },
+    {
+      "event": "EMP applied（電磁脈衝生效）",
+      "enum_values": [
+        {"enum": "CombatInfo", "variant": "Emp(CombatSide)", "source_variant_ordinal": 2, "value_status": "宣告順序推定"},
+        {"enum": "Info", "variant": "Emp(Option<PlayerId>)", "source_variant_ordinal": 4, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["combatants.rs special-unit replacement callback；Tower combat wrapper 只將 Emp(Attacker) 設 tower_emped"],
+      "dispatch": ["1347→2193→1943 或 1348→2561→1943；塔戰 wrapper 寫 Tower.delay"],
+      "payload": ["發出 EMP 的攻／守側及可選玩家 ID", "位置"],
+      "consumer": ["common/src/chunk.rs:321-344；server/src/service.rs:551-552 wildcard 忽略；client/src/game.rs:912-915 建立動畫"],
+      "state_writes": ["攻方 EMP：Tower.delay=max(existing, 240 ticks)；倒數時該塔不做生產／衰減或中立降級"],
+      "follow_up_events": ["若同戰鬥另有 LostRuler，仍觸發淘汰鏈；客戶端有 EMP 動畫"],
+      "confidence": "參考來源 HIGH；正式版局部欄位已由第八輪映射，無執行期驗證"
+    },
+    {
+      "event": "Nuke used（使用核彈）",
+      "enum_values": [
+        {"enum": "CombatInfo", "variant": "NuclearExplosion", "source_variant_ordinal": 3, "value_status": "宣告順序推定"},
+        {"enum": "Info", "variant": "NuclearExplosion", "source_variant_ordinal": 5, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["combatants.rs 一次性單位回呼；第八輪映射 func1347／1348"],
+      "dispatch": ["戰鬥事件橋接轉為 InfoEvent；塔戰／相撞終局仍由一般 resolver 寫兵力與 owner"],
+      "payload": ["位置；事件本身沒有玩家 ID"],
+      "consumer": ["server/src/service.rs:551-552 忽略；client/src/state.rs 有限長度資訊事件佇列；client/src/game.rs:916-917 播放動畫"],
+      "state_writes": ["局部 Nuke 消耗／戰鬥傷害；沒有直接 PlayerData 寫入"],
+      "follow_up_events": ["若 Ruler 因戰鬥死亡，另有 LostRuler；若塔主改變，走 LostTower／GainedTower"],
+      "confidence": "全域事件消費 HIGH；特殊戰鬥本身仍未納入鏡像"
+    },
+    {
+      "event": "Shell used（使用砲彈）",
+      "enum_values": [
+        {"enum": "CombatInfo", "variant": "ShellExplosion", "source_variant_ordinal": 4, "value_status": "宣告順序推定"},
+        {"enum": "Info", "variant": "ShellExplosion", "source_variant_ordinal": 6, "value_status": "宣告順序推定"}
+      ],
+      "producer": ["combatants.rs 一次性單位回呼；第八輪映射 func1347／1348"],
+      "dispatch": ["戰鬥事件橋接轉為 InfoEvent；一般塔戰 resolver 決定終局塔主／殘兵"],
+      "payload": ["位置；事件本身沒有玩家 ID"],
+      "consumer": ["server/src/service.rs:551-552 忽略；client/src/state.rs 有限長度資訊事件佇列；client/src/game.rs:916-918 播放動畫"],
+      "state_writes": ["局部 Shell 消耗／戰鬥傷害；沒有直接 PlayerData 寫入"],
+      "follow_up_events": ["若 Ruler 因戰鬥死亡，另有 LostRuler；若塔主改變，走 LostTower／GainedTower"],
+      "confidence": "全域事件消費 HIGH；特殊戰鬥本身仍未納入鏡像"
+    },
+    {
+      "event": "Player eliminated（玩家淘汰）",
+      "enum_values": [],
+      "producer": ["TowerService::on_info_event 的 LostRuler consumer；玩家離開也可由 player_quit 排入 maybe_dead"],
+      "dispatch": ["maybe_dead set → 下一個 post_update → kill_player"],
+      "payload": ["PlayerId；死亡原因可為 RulerKilled，離開路徑未必有 DeathReason"],
+      "consumer": ["TowerService::kill_player；所有 chunk 套用 KillPlayer"],
+      "state_writes": ["alive=false；所有 tower ownership／Ruler／Shield／Force 清理；盟友集合清理；get_score 改回 Score::None"],
+      "follow_up_events": ["LostTower(PlayerKilled)；客戶端收到 dead NonActor 並顯示死亡面板；玩家可另行 Spawn"],
+      "confidence": "保存遊戲服務來源 HIGH；不是正式版伺服器產物差分測試"
+    },
+    {
+      "event": "Match ended（整場對局結束）",
+      "enum_values": [],
+      "producer": ["遊戲專用 Info／CombatInfo 列舉中未發現 MatchEnded；Ruler 死亡回呼會呼叫 tally_victory(killer, dead)"],
+      "dispatch": ["遊戲服務把擊殺結果交給 ArenaContext；死亡 NonActor 更新送到該玩家客戶端"],
+      "payload": ["擊殺者與死者的 tally；個別玩家 alive/death_reason"],
+      "consumer": ["保存來源只顯示遊戲服務分數接口與客戶端 dead 面板，未見全場 MatchEnded handler"],
+      "state_writes": ["可證實擊殺 tally 與玩家死狀態；全場勝者／結束時間未由遊戲專用來源確認"],
+      "follow_up_events": ["未知；不要把單一玩家死亡面板等同全場結束"],
+      "confidence": "PARTIAL（部分完成）；通用 Arena 引擎結束規則不在本輪已核對來源"
+    }
+  ]
+}

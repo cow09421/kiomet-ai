@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "kind",
+    "source",
+    "destination",
+    "amount",
+    "upgrade",
+    "reason"
+  ],
+  "properties": {
+    "kind": {
+      "enum": [
+        "MoveForce",
+        "UpgradeTower",
+        "SetSupplyLine",
+        "MoveKing",
+        "Wait"
+      ]
+    },
+    "source": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "destination": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "amount": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "upgrade": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kiomet-ai:action-v1"
+}

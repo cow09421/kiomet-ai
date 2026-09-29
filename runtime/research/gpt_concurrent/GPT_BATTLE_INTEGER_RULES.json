@@ -1,0 +1,137 @@
+{
+  "artifact": "Round 8 Battle Integer Rules（戰鬥整數規則）",
+  "production_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "scope": "只列戰鬥解析與其直接包裝中可由指令確認的型別、轉換與算術；不是執行期觀測。",
+  "rules": [
+    {
+      "name": "unit_counts",
+      "type": "u8",
+      "signed": false,
+      "range": [
+        0,
+        255
+      ],
+      "semantics": "Units 兵種數量以 u8 保存。部分單位類別以 enum-array 或 single-unit slot 表示；合法鏡像輸入限制每類 0..255。",
+      "evidence": "vendor/kiomet-ref/common/src/units.rs: Units arrays and Single(Unit,u8); production 1448 Units::subtract."
+    },
+    {
+      "name": "unit_enum_and_event_flags",
+      "type": "u8",
+      "signed": false,
+      "range": [
+        0,
+        255
+      ],
+      "semantics": "單位列舉值與 Shell／EMP／Nuke／Ruler 分支用 byte 讀取；10 為 None sentinel。特殊事件旗標寫 1，讀回非零視為已發出。",
+      "evidence": "funcs 1347/1348 use load8_u/store8; func 448 scratch offsets 405..407."
+    },
+    {
+      "name": "tower_delay",
+      "type": "u8",
+      "signed": false,
+      "range": [
+        0,
+        255
+      ],
+      "semantics": "448 僅在攻方 EMP 旗標成立時，Tower+47 寫 max(old_delay,240)。延遲倒數期間，該塔跳過兵力生產／衰減及中立塔降級；不直接改 Force 移動欄位。",
+      "evidence": "func 448 0x01b0f1..0x01b10f; source chunk.rs:160-176 and tower.rs:82-90."
+    },
+    {
+      "name": "force_collision_progress",
+      "type": "u16",
+      "signed": false,
+      "range": [
+        0,
+        65535
+      ],
+      "semantics": "788/522 的路徑進度與需求以 load16_u 讀取；交叉乘積進 i32 後有 65535 mask，視為 16 位元無號模數路徑檢查，不屬於傷害累積。",
+      "evidence": "func 522 0x068e08..0x068e67; func 788 0x0a70e4..0x0a7156."
+    },
+    {
+      "name": "tower_capacity_rows",
+      "type": "u32 values",
+      "signed": false,
+      "range": [
+        0,
+        4294967295
+      ],
+      "semantics": "正式版容量資料以 22×10 個 little-endian u32 讀取；映射至參考 TowerType／Unit 後 22/22 數值吻合。計數套容量時取 min(可用空間,要求數量)。",
+      "evidence": "GPT_BATTLE_FINAL_TABLES.json; source Units::space_remaining/add_inner."
+    },
+    {
+      "name": "morale_count",
+      "type": "u32 intermediate; u8 result",
+      "signed": false,
+      "semantics": "N 為 Shield+Fighter+Chopper+Bomber+Tank+Soldier+Ruler 數量；排除 Shell、EMP、Nuke。`floor(N/2)` 用無號右移一位，`min(3, ...)` 封頂。",
+      "evidence": "func 1778; GPT_BATTLE_ARITHMETIC_FINAL.md Round 7 confirmation."
+    },
+    {
+      "name": "base_unit_damage",
+      "type": "u8",
+      "signed": false,
+      "range": [
+        1,
+        31
+      ],
+      "semantics": "2970 回傳 u8 傷害；31 是無限傷害 sentinel。Bunker 以無號整數 d/3，Headquarters 以 (2*d)/3；均向下取整。",
+      "evidence": "func 2022 -> 2970; source Unit::damage and TowerType::ranged_damage."
+    },
+    {
+      "name": "nuke_finite_damage",
+      "type": "i32",
+      "signed": true,
+      "range": [
+        -2147483648,
+        2147483647
+      ],
+      "semantics": "31 sentinel 轉為 INT32_MAX。若 prev_damage * -direction > INT32_MAX/2，當次 d=min(d,1000)。正／負方向乘法與 signed 比較按 WASM i32 執行。",
+      "evidence": "func 2022 constants 31, 2147483647, 1000 and i32.lt_s; Round 7 exact guard."
+    },
+    {
+      "name": "combat_accumulator",
+      "type": "i32",
+      "signed": true,
+      "range": [
+        -2147483648,
+        2147483647
+      ],
+      "semantics": "兩側共用單一 signed accumulator；Production release WASM 的 i32.add/mul/sub 以二補數 32 位元環繞，沒有飽和加法。單位傷害方向為 +1 或 -1。",
+      "evidence": "448/522 inlined loop, func 2022; wasm integer instruction semantics."
+    },
+    {
+      "name": "terminal_comparisons",
+      "type": "i32 signed comparisons",
+      "signed": true,
+      "semantics": "damage 正負及 0 的終端／選兵判斷使用 gt_s、ge_s、le_s、lt_s；單位數量、enum、索引與旗標多用無號或 byte 比較。",
+      "evidence": "funcs 448/522; GPT_BATTLE_ARITHMETIC_FINAL.md."
+    },
+    {
+      "name": "signed_and_unsigned_conversion",
+      "type": "WASM zero-extension and reinterpretation",
+      "signed": null,
+      "semantics": "unit id／旗標由 load8_u 讀入；TowerId、部分進度以 load16_u 讀入。u8 傷害先零擴展到 i32，再按方向轉成有號 i32；負數不是先做浮點或飽和轉換。",
+      "evidence": "funcs 448/522/1347/1348/2022."
+    },
+    {
+      "name": "floor_and_division",
+      "type": "unsigned integer division",
+      "signed": false,
+      "semantics": "N/2 是右移一位；塔型遠程減傷在非負整數上用 div_u，結果等於 floor。沒有戰鬥公式使用浮點除法、ceil 或固定小數。",
+      "evidence": "func 1778 and func 2022 instruction map."
+    },
+    {
+      "name": "saturation_and_clamps",
+      "type": "explicit comparisons/selects",
+      "signed": null,
+      "semantics": "士氣 clamp 到 3；Nuke 特定方向 clamp 到 1000；EMP 延遲用 max；Tower merge/add 受容量限制。這些明確 min/max 不代表 accumulator 飽和。",
+      "evidence": "funcs 1778/2022/448/2195; source Units::add_inner."
+    },
+    {
+      "name": "not_observed",
+      "type": "i8, signed i16, signed u8, floating accumulator",
+      "signed": null,
+      "semantics": "核心戰鬥算術未見 signed i8 或 signed i16 累積，也未見浮點傷害／累積。偏移位址與無符號載入要按實際 load 指令判斷，不能只看 Rust 層可能型別。",
+      "evidence": "static instruction scan of funcs 448/522/1347/1348/1778/2022."
+    }
+  ]
+}
