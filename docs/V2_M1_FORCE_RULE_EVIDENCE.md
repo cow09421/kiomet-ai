@@ -164,3 +164,51 @@ upgrade_candidates is DERIVED prerequisite presentation only; unlock status,
 final command eligibility and cause of a delay remain UNKNOWN. Tower.upgrade
 remains UNKNOWN. Meeting prerequisites never certifies a legal command.
 STATUS: PARTIAL; this limited cohort does not establish 1,000-sample acceptance.
+
+## QUESTION: can force motion be checked against independent normal execution?
+
+EVIDENCE: v2_force_render_compare.py pauses only normal official execution; it
+never invokes a WASM function. Speed entry 0x9896d and return 0x98b8e expose the
+actual result local. Position entry 0x1036c0 and post-store 0x10375f expose the
+official rendered Vec2. A typed, current legal snapshot is obtained before the
+renderer borrows its broker. During the pause, comparison requires the same
+document/player/world revision, active NETWORK mode, clear visibility cache,
+both endpoints currently positive in Visible.refs, and unchanged matched force
+owner/composition/progress/acceleration. The production borrow guard is unchanged.
+Unmatched, hidden-endpoint, dirty or changed-revision cases are excluded.
+
+force-render-comparison-c567fea66f9c: 20/20 normal-render speed reads match;
+these early reads were not yet deduplicated and are reported as raw reads only.
+force-render-comparison-c13b5b9fd217: 37/37 position reads, 30/30 unique force
+world revisions match within 0.001 world coordinate. Maximum deviation was
+0.000128992. Actual compositions included 9 soldiers, 12 soldiers and 5 tanks.
+Unique keys conservatively collapse identical document/epoch/tick/current-leg/
+composition/progress/acceleration records; pointers never become force IDs.
+Rendering interpolation is used for position comparison only, never source age.
+
+The initial dd8225caa135 attempt yielded zero comparisons because paused normal
+rendering held an exclusive broker borrow. It is excluded, not a failed force
+accuracy sample. This led to the pre-pause snapshot plus unchanged-state guard.
+All debugger pauses are explicitly outside performance/freshness cohorts.
+
+CONCLUSION: actual official force motion independently supports the pinned
+derivation for these observed compositions. Mixed transport, complete force
+composition, stable identity, launch time and full coverage are not established.
+STATUS: PARTIAL.
+
+## QUESTION: do rotating independent UI checks reach a useful scale?
+
+EVIDENCE: ui-comparison-95dc42f35a60 performed 717 ordinary tower selections
+over 50 rounds. Same-point mouse down/up opens information only; no dragging,
+upgrading or tactical command is sent. DOM reads are bracketed by matching
+selected tower and unchanged units/type/owner/relation/morale/delay. Own resource
+checks additionally require unchanged own totals. World revision keys prevent
+duplicate field counting. Unit fields: SELF:SINGLE 50/50, SELF:MANY 450/450,
+NEUTRAL:MANY 331/331, ENEMY:MANY 400/400. Total 1,231/1,231. Separately,
+capacities 1,231/1,231, colors 717/717, own prerequisite counts 400/400,
+prerequisite requirements 400/400. Later world revisions are fresh DOM checks
+even when a count remains at capacity; they do not add new entity types.
+
+CONCLUSION: scaled independent tower-field comparisons agree. This is 717
+entity selections, not 1,231 complete states. Ally was absent; force, visibility
+and match-transition strata still require their own evidence. STATUS: PARTIAL.
