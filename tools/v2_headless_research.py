@@ -21,6 +21,7 @@ async def main(args):
         raise RuntimeError('project profile already owned by another browser; close its owner normally first')
     out=ROOT/'runtime/research/v2'
     stop=out/'headless-stop'
+    lease=out/'headless-host.json'
     stop.unlink(missing_ok=True)
     async with async_playwright() as pw:
         context=await pw.chromium.launch_persistent_context(str(profile),
@@ -50,11 +51,15 @@ async def main(args):
                 await page.locator('#play_button').click()
                 await page.locator('#play_button').wait_for(state='hidden',timeout=60000)
             end=time.monotonic()+args.seconds
+            lease.write_text(json.dumps({'pid':os.getpid(),'deadline_monotonic_ms':int(end*1000),
+                                        'profile':str(profile)}),encoding='utf8')
             while time.monotonic()<end and not stop.exists():
                 await asyncio.sleep(10)
                 print(json.dumps({'phase':'alive','play_visible':await page.locator('#play_button').is_visible(),
                                   'time':time.time()}),flush=True)
         finally:
+            if lease.exists() and json.loads(lease.read_text())['pid']==os.getpid():
+                lease.unlink()
             stop.unlink(missing_ok=True)
             await context.close()
 

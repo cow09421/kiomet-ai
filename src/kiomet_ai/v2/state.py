@@ -88,6 +88,7 @@ class Tower:
     # Integer world coordinates; screen coordinates never enter canonical state.
     position: Fact[tuple[int, int]] = field(default_factory=Fact)
     upgrade: Fact[tuple] = field(default_factory=Fact)
+    upgrade_candidates: Fact[tuple] = field(default_factory=Fact)
     effects: Fact[tuple] = field(default_factory=Fact)
     # Delay can be caused by upgrade or EMP; never assume its cause.
     delay_ticks: Fact[int] = field(default_factory=Fact)

@@ -29,6 +29,10 @@ class MatchLifecycle:
             self.invalidated = True
             self.identity = None
         self.last_at = at_ms
+        if raw.get('transport_mode')=='OFFLINE':
+            # Local simulation cannot continue the identity of a network life.
+            self.identity=None
+            self.invalidated=True
         if raw.get("online") is False or raw.get("transport_connected") is False:
             state = Lifecycle.DISCONNECTED
         elif play in ("Play Again", "再玩一次") and not raw.get("active"):

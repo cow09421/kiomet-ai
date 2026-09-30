@@ -1,4 +1,4 @@
-"""Evaluate two pure pinned rule functions OFFLINE, never call live WASM."""
+"""Evaluate pure pinned rule functions OFFLINE, never call live WASM."""
 import hashlib
 import json
 from pathlib import Path
@@ -53,11 +53,13 @@ def evaluate(lines,args,memory):
         elif op=='local.tee':local[parts[1]]=stack[-1]
         elif op=='i32.const':stack.append(int(parts[1])&0xffffffff)
         elif op=='i32.eqz':stack.append(int(pop()==0))
-        elif op in ('i32.and','i32.sub','i32.shl','i32.ne','i32.eq'):
+        elif op in ('i32.and','i32.or','i32.sub','i32.shl','i32.ne','i32.eq'):
             b,a=pop(),pop()
-            stack.append({'i32.and':lambda:a&b,'i32.sub':lambda:(a-b)&0xffffffff,
+            stack.append({'i32.and':lambda:a&b,'i32.or':lambda:a|b,'i32.sub':lambda:(a-b)&0xffffffff,
                 'i32.shl':lambda:(a<<(b&31))&0xffffffff,'i32.ne':lambda:int(a!=b),
                 'i32.eq':lambda:int(a==b)}[op]())
+        elif op=='select':
+            condition,b,a=pop(),pop(),pop();stack.append(a if condition else b)
         elif op=='br_table':
             index=pop();labels=parts[1:];pc=ends[labels[min(index,len(labels)-1)]]+1
         elif op=='br':pc=ends[parts[1]]+1
@@ -84,8 +86,11 @@ def main():
     memory=static_data(data)
     capacity=function('TowerType::raw_unit_capacity')
     generation=function('TowerType::unit_generation')
+    prerequisite=function('TowerType::prerequisite')
     report={'client_sha256':SHA,'provenance':'offline evaluation of pinned pure scalar rule functions; static data only',
-        'capacity':[],'generation_ticks':[]}
+        'capacity':[],'generation_ticks':[], 'prerequisites':[],
+        'downgrade':[memory[1363120+t] if t<26 else 27 for t in range(27)],
+        'delay_ticks':[struct.unpack_from('<H',memory,1363296+t*2)[0] for t in range(27)]}
     for tower in range(27):
         report['capacity'].append([evaluate(capacity,[tower,u],memory)[0] for u in range(10)])
         row=[]
@@ -93,6 +98,7 @@ def main():
             _,w=evaluate(generation,[0,tower,unit],memory)
             row.append(w[2] if w[0] else None)
         report['generation_ticks'].append(row)
+        report['prerequisites'].append([evaluate(prerequisite,[tower,p],memory)[0] for p in range(27)])
     path=OUT/'pinned-rules.json';path.write_text(json.dumps(report,indent=2),encoding='utf8')
     print(json.dumps(report))
 

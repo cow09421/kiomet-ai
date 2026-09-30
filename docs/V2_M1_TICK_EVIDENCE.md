@@ -119,6 +119,42 @@ regression check. Successful short samples 07e379dabfff have 147 accepted /30.16
 4.874 Hz, extraction p95 7.10ms and derived age upper p95 250ms (145 bounded).
 This is not a ten-minute gate cohort and does not establish exact age.
 
+### Source scope and cadence follow-up
+
+The second World tick caller is behind the explicit Transport u64==2 branch
+at 0xcd1e0..0xcd1e8. In NETWORK mode, the displayed world's tick call is within
+ServerState::apply, reached by the normal ClientBroker socket update. Its
+transition window brackets a real client-world application, not a server
+generation time, network RTT, frame time or assumed simulation period. Exact
+updated_at_ms stays UNKNOWN. Only conservative host-monotonic bounds are used.
+
+sampling-f413115a25e6 is an uninterrupted 600.058s network-life cohort with
+one document/derived match epoch: 2,917 accepted snapshots, 4.861Hz, extraction
+p95 9.591ms, 55,011 metadata reads and bounds on all 2,917 snapshots. Upper age
+p95 265ms fails the 250ms threshold. It has 58,499 force progress changes, 1,054
+multi-observation derived tracks, no visibility transitions and no independent
+UI samples. This cannot pass M1.
+
+The observer's new on-update sampler captures each actually changed world
+sequence after its visibility cache is ready, as well as the existing 200ms
+timer. It does not interpolate timestamps or discard unfavorable age samples.
+sampling-c592ecd633ed (30.122s) accepted 238 snapshots /7.901Hz, extraction p95
+7.15ms, 236 bounded ages with upper p95 235ms; this remains a short diagnostic.
+
+reload-reacquisition-7b1063300c33 proves fresh memory ownership after normal
+reload with old reader rejection and two document acquisitions. The numeric
+root address was reused, but the handle was fresh. Automatic official resume
+kept the same Ruler; a new document epoch is not evidence of a new game life.
+An earlier reload attached an empty event-owner collection too early; attach
+now rejects that incomplete initialization, releases handles and retries through
+ObservationSession. It does not retain an empty discovery forever. Global
+navigation events plus a periodic origin check remove redundant per-source-read
+round trips; the synchronous memory task still checks its own document origin.
+
+snapshots-0fa5e8439ec1 was interrupted by the owned host's normal deadline and
+is excluded from acceptance. New samplers preflight host duration and record
+source manifests; closed-browser teardown is best effort and cannot hide results.
+
 The first tick experiment ran on an extra restored official page in the isolated
 task profile. The later result experiment used the recorded BrowserHost page.
 Both were the unmodified official client, but they were separate player sessions;

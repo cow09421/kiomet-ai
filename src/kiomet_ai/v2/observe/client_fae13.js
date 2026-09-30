@@ -208,6 +208,8 @@ function (mode = "world", sockets = [], ownerStates = []) {
     }
   }
   return {...metadata, towers, positive_refs: positiveRefs,
+    // Normal current-player prerequisite presentation; no hidden tower IDs.
+    own_tower_counts: Array.from({length:27},(_,i)=>u16(root+592+i*2)),
     camera_candidate: camera, status: "RESEARCH_CANDIDATE",
     selected_tower: u32(root + 47968) === 1 ? u32(root + 47972) : null,
     match_id: null, updated_at_ms: null,

@@ -43,3 +43,16 @@ def test_conflicting_or_unrecognized_ui_stays_unknown():
     tracker = MatchLifecycle("doc")
     assert tracker.observe(metadata(True,"Play Again"),100)[0] == Lifecycle.UNKNOWN
     assert tracker.observe(metadata(False,None),200)[0] == Lifecycle.UNKNOWN
+
+
+def test_offline_harness_cannot_resume_a_network_match_epoch():
+    tracker=MatchLifecycle('doc')
+    live=metadata(True,None);live['transport_mode']='NETWORK'
+    a=tracker.observe(live,100)[1]
+    offline=metadata(True,None,transport=False);offline['transport_mode']='OFFLINE'
+    assert tracker.observe(offline,200)==(Lifecycle.DISCONNECTED,None)
+    assert tracker.observe(live,300)[1] is None
+    tracker.observe(metadata(),400)
+    tracker.begin_join()
+    b=tracker.observe(live,500)[1]
+    assert b and b!=a

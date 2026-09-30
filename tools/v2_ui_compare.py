@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from kiomet_ai.v2.observe.extractor import ClientExtractor, decode_units, connect_dedicated
 from kiomet_ai.camera import world_to_page
-from kiomet_ai.observe import TOWER_TYPES
+from kiomet_ai.observe import TOWER_TYPES,TOWER_TYPE_ZH
+from kiomet_ai.v2.observe import rules
 from kiomet_ai.ui_parse import UNIT_ZH
 from playwright.async_api import async_playwright
 
@@ -81,22 +82,39 @@ async def main():
                 target = next((t for t in after["towers"] if t["id"] == current["id"]), None)
                 end_target=next((t for t in bracket_end['towers'] if t['id']==current['id']),None)
                 selected = after["selected_tower"] == current["id"] == bracket_end['selected_tower']
-                stable=target is not None and end_target is not None and target['units7']==end_target['units7'] and target['type']==end_target['type']
+                stable=target is not None and end_target is not None and all(
+                    target.get(k)==end_target.get(k) for k in ('units7','type','owner','relation','morale','delay_ticks'))
+                counts_stable=after.get('own_tower_counts')==bracket_end.get('own_tower_counts')
                 units = decode_units(target["units7"]) if target else None
                 counts = dict(units.counts) if units else None
                 expected_fill={'SELF':'#74b9ffff','NEUTRAL':'none','ENEMY':'#c0392bff','ALLY':'#8644fcff'}.get(target['relation']) if target else None
                 relation_check={'ui_fill':dom['heading_fill'],'expected_fill':expected_fill,
                     'coherent':selected and stable,'match':selected and stable and expected_fill is not None and dom['heading_fill']==expected_fill}
                 comparisons = []
+                prerequisite_comparisons=[]
                 for row in dom["rows"]:
                     name = UNIT_ZH.get(row["unit"], row["unit"])
                     if name in UNIT_NAMES and counts is not None and '/' in row['text']:
                         unit = UNIT_NAMES.index(name)
+                        expected_capacity=dict(rules.capacity(target['type'],target['morale']).counts)[unit]
                         comparisons.append({"unit": row["unit"], "ui": int(row["text"].split('/')[0]),
                                             "memory": counts[unit],
                                             "capacity_ui":int(row['text'].split('/')[1]),
+                                            "capacity_memory":expected_capacity,
+                                            "capacity_match":selected and stable and int(row['text'].split('/')[1])==expected_capacity,
                                             "coherent":selected and stable,
                                             "match": selected and stable and int(row["text"].split('/')[0]) == counts[unit]})
+                    elif row['unit'] in TOWER_TYPE_ZH and '/' in row['text'] and target and target['relation']=='SELF':
+                        kind=TOWER_TYPES.index(TOWER_TYPE_ZH[row['unit']])
+                        own_counts=after.get('own_tower_counts')
+                        have,need=map(int,row['text'].split('/'))
+                        expected_needs={rules.PREREQUISITES[t][kind] for t,p in enumerate(rules.DOWNGRADE)
+                                        if p==target['type'] and rules.PREREQUISITES[t][kind]}
+                        coherent=selected and stable and counts_stable and own_counts is not None
+                        prerequisite_comparisons.append({'type':kind,'ui_have':have,'ui_need':need,
+                            'observed_have':own_counts[kind] if own_counts else None,
+                            'coherent':coherent,'count_match':coherent and have==own_counts[kind],
+                            'requirement_match':coherent and need in expected_needs})
                 rows.append({"id": current["id"], "selected_id": after["selected_tower"],
                     "selection_confirmed": selected, "relation": current["relation"],
                     "type": TOWER_TYPES[target["type"]] if target else None,
@@ -107,6 +125,8 @@ async def main():
                     "tick_bracket":[after['tick'],bracket_end['tick']],
                     "sample_bracket":[after['sampled_at_ms'],bracket_end['sampled_at_ms']],
                     "relation_check":relation_check,
+                    "own_tower_counts":after.get('own_tower_counts'),
+                    "prerequisite_comparisons":prerequisite_comparisons,
                     "ui": dom, "comparisons": comparisons})
                 print(json.dumps(rows[-1], ensure_ascii=True), flush=True)
         finally:
@@ -117,6 +137,11 @@ async def main():
         "coherent_fields":sum(c['coherent'] for r in rows for c in r['comparisons']),
         "relation_fields":sum(r['relation_check']['coherent'] for r in rows),
         "matched_relations":sum(r['relation_check']['match'] for r in rows),
+        "coherent_capacity_fields":sum(c['coherent'] for r in rows for c in r['comparisons']),
+        "matched_capacity_fields":sum(c['capacity_match'] for r in rows for c in r['comparisons']),
+        "coherent_prerequisite_fields":sum(c['coherent'] for r in rows for c in r['prerequisite_comparisons']),
+        "matched_prerequisite_counts":sum(c['count_match'] for r in rows for c in r['prerequisite_comparisons']),
+        "matched_prerequisite_requirements":sum(c['requirement_match'] for r in rows for c in r['prerequisite_comparisons']),
         "tactical_commands": 0, "limits": "limited selections, candidate camera, not M1 gate evidence"}
     (out / "ui-comparison.json").write_text(json.dumps(report, indent=2), encoding="utf8")
     (out / f"ui-comparison-{uuid4().hex[:12]}.json").write_text(json.dumps(report,indent=2),encoding='utf8')

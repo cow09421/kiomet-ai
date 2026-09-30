@@ -65,6 +65,13 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
     # Browser epoch time and host monotonic time are different clock domains.
     # Host send time is a conservative lower bound on this synchronous read.
     at = raw["sampled_at_ms"] if sample_started_ms is None else sample_started_ms
+    if raw.get('transport_mode') not in (None,'NETWORK'):
+        raise ValueError('canonical world requires network source mode')
+    own_counts=raw.get('own_tower_counts')
+    if own_counts is not None:
+        if not isinstance(own_counts,list) or len(own_counts)!=27 or any(type(n)is not int or not 0<=n<=65535 for n in own_counts):
+            raise ValueError('invalid own prerequisite tower counts')
+        own_counts=tuple(own_counts)
     towers = []
     for row in raw["towers"]:
         if row.get("visible") is not True or not row.get("visibility_source"):
@@ -95,6 +102,9 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
                 if morale is not None and delay is not None else Fact(),
             effects=observed((('MORALE_BOOST',bool(morale)),),'visible Tower.morale+45; normal UI morale note',at) if morale is not None else Fact(),
             delay_ticks=observed(delay,'Tower.delay+47; upgrade or EMP cause unspecified',at),
+            upgrade_candidates=Fact(rules.upgrade_candidates(typ,own_counts,delay),Knowledge.DERIVED,
+                'pinned normal prerequisite targets/counts; unlock and final command eligibility unknown',at)
+                if relation==Relation.SELF and own_counts is not None and delay is not None else Fact(),
             deployable=Fact(rules.mobile_inventory(typ,units),Knowledge.DERIVED,
                 'pinned Tower::force_units mobile inventory; route/command legality is separate and unverified',at)
                 if relation==Relation.SELF else Fact(),
@@ -127,6 +137,8 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         lifecycle=Fact(lifecycle, Knowledge.DERIVED,
             "official active condition + Play UI + typed owned ClientSession transport state", at) if lifecycle else Fact(),
         player_id=observed(raw["player_id"], "client.player_id", at),
+        upgrade_resources=observed(tuple(enumerate(own_counts)) if own_counts is not None else None,
+            'own NonActor active tower counts; normal upgrade prerequisite UI; no enemy aggregates',at),
         king=king,
         forces=forces,
         towers=tuple(sorted(towers, key=lambda t: t.id)))
@@ -151,6 +163,7 @@ class ClientExtractor:
         self.owner_states_id = None
         self.sockets_checked_at = 0
         self.diagnostic_sockets = diagnostic_sockets
+        self.decoder_source = Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")
 
     async def _refresh_sockets(self):
         proto = (await self.cdp.send("Runtime.evaluate", {
@@ -178,6 +191,12 @@ class ClientExtractor:
             if 'exceptionDetails'in result:
                 raise ValueError('normal event owner discovery failed')
             self.owner_states_id=result['result']['objectId']
+            count=(await self.cdp.send('Runtime.callFunctionOn',{
+                'objectId':self.owner_states_id,'returnByValue':True,
+                'functionDeclaration':'function(){return this.length;}'
+            }))['result']['value']
+            if count==0:
+                raise ValueError('normal event owners not ready')
         finally:
             if objects:
                 await self.cdp.send('Runtime.releaseObject',{'objectId':objects})
@@ -228,7 +247,7 @@ class ClientExtractor:
         result = await self.cdp.send("Runtime.callFunctionOn", {
             "objectId": self.memories_id, "returnByValue": True,
             "arguments": [{"value": mode}, {"value": []}, {"objectId":self.owner_states_id}],
-            "functionDeclaration": Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")})
+            "functionDeclaration": self.decoder_source})
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
         raw = result["result"]["value"]
@@ -286,6 +305,8 @@ class ClientExtractor:
             finally:
                 try:
                     await self.cdp.detach()
+                except Exception:
+                    pass  # Closed documents/browsers have already disposed it.
                 finally:
                     self.cdp = self.memories_id = self.sockets_id = None
                     self.owner_states_id = None
@@ -298,9 +319,24 @@ class ObservationSession:
         self.session_id = uuid4().hex
         self.extractor = None
         self.document_reacquisitions = 0
+        self.document_dirty = True
+        self.last_document_check = 0
+        self._navigation_handler = self._document_navigated
+        self.page.on("framenavigated",self._navigation_handler)
+
+    def _document_navigated(self,frame):
+        if frame == self.page.main_frame:
+            self.document_dirty = True
 
     async def _ensure_document(self):
+        # The memory read itself checks document origin. Browser navigation
+        # events trigger immediate reacquisition; periodic verification is a
+        # fallback, avoiding an extra page round trip on every source read.
+        if self.extractor is not None and not self.document_dirty and time.monotonic()-self.last_document_check<.5:
+            return
         origin = await self.page.evaluate("performance.timeOrigin")
+        self.last_document_check=time.monotonic()
+        self.document_dirty=False
         if self.extractor is not None and origin != self.extractor.time_origin:
             await self.extractor.close()
             self.extractor = None
@@ -319,6 +355,7 @@ class ObservationSession:
         return await self.extractor.sample()
 
     async def close(self):
+        self.page.remove_listener("framenavigated",self._navigation_handler)
         if self.extractor:
             await self.extractor.close()
             self.extractor = None

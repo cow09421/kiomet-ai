@@ -134,6 +134,33 @@ The second caller's source/target and buffering/prediction semantics still need
 confirmation. Do not label the u16 sequence as authoritative milliseconds or
 declare snapshot-age PASS from its transition bounds.
 
-CONCLUSION: document/match boundaries improve; reconnect transport and exact
-source-age authority remain unresolved. STATUS: UNKNOWN for that source-clock
-question. This is the next highest-priority question, not a technical FAIL verdict.
+FOLLOW-UP: a2d6821 resolves the transport ambiguity; see V2_M1_TICK_EVIDENCE.md.
+The second tick caller is guarded by context u64==2 at 0xcd1e0..0xcd1e8 and
+updates OfflineHarness's separate arena world. Network snapshots refuse tag 2.
+HTTP fallback explains closed global WebSockets with advancing displayed state.
+The observed sequence brackets normal network client-world application, not a
+server generation timestamp. Exact source age remains UNKNOWN; conservative
+client-application bounds and their coverage are reported separately.
+
+## QUESTION: what are the player's upgrade resources?
+
+EVIDENCE: public NonActor explicitly defines current-player active tower counts,
+excluding upgrading towers. The pinned normal best-upgrade path func3492
+(0x139d2c) passes context+592 to TowerType::has_prerequisites (0x1148c8), which
+compares 27 u16 counts with TowerType::prerequisite (0xa7292). The latter is
+evaluated only OFFLINE with whitelisted scalar instructions and static data.
+Downgrade edges and nominal delays come from pinned static getter tables.
+Only the player's aggregate counts are exported, never enemy aggregate fields
+or hidden tower IDs. Own totals are not reconstructed from a partial viewport.
+
+ui-comparison-7acdafd9b767: 13 selected towers, 22/22 coherent unit counts,
+22/22 capacities, 13/13 visible relation colors. Eight prerequisite current
+counts and eight requirements agree with the normal UI, including genuine 0/2
+and 1/1 values. Unmapped translated labels are excluded, not silently guessed.
+Single self Barracks [1,1,9,0,0,0,20] has the actual ruler and 20/20 shields.
+
+CONCLUSION: upgrade_resources is OBSERVED typed active own-tower counts.
+upgrade_candidates is DERIVED prerequisite presentation only; unlock status,
+final command eligibility and cause of a delay remain UNKNOWN. Tower.upgrade
+remains UNKNOWN. Meeting prerequisites never certifies a legal command.
+STATUS: PARTIAL; this limited cohort does not establish 1,000-sample acceptance.
