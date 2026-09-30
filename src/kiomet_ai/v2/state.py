@@ -89,6 +89,8 @@ class Tower:
     position: Fact[tuple[int, int]] = field(default_factory=Fact)
     upgrade: Fact[tuple] = field(default_factory=Fact)
     effects: Fact[tuple] = field(default_factory=Fact)
+    # Delay can be caused by upgrade or EMP; never assume its cause.
+    delay_ticks: Fact[int] = field(default_factory=Fact)
 
     def __post_init__(self):
         if type(self.id) is not int or self.id < 0:
@@ -107,8 +109,11 @@ class Force:
     destination: Fact[int] = field(default_factory=Fact)
     units: Fact[Units] = field(default_factory=Fact)
     launch_ms: Fact[int] = field(default_factory=Fact)
+    unit_count: Fact[int] = field(default_factory=Fact)
     eta_ms: Fact[int] = field(default_factory=Fact)
     progress: Fact[int] = field(default_factory=Fact)
+    first_seen_ms: Fact[int] = field(default_factory=Fact)
+    confidence: Fact[str] = field(default_factory=Fact)
 
     def __post_init__(self):
         if self.visibility.value is not True or self.visibility.knowledge != Knowledge.OBSERVED:
@@ -124,6 +129,9 @@ class GameState:
     sampled_at_ms: int
     received_at_ms: int
     client_sha256: str
+    # Capture/update-window/first-seen timestamps share this clock domain.
+    # Browser epoch time is stored separately and must never be subtracted.
+    clock_domain: str = "host_monotonic_ms"
     client_sampled_at_ms: Fact[int] = field(default_factory=Fact)
     # Last confirmed authoritative update, distinct from last memory poll.
     updated_at_ms: Fact[int] = field(default_factory=Fact)

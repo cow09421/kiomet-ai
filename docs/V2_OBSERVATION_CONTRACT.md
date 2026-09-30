@@ -37,6 +37,17 @@ increase only for accepted snapshots. Client observation time, last confirmed ga
 update time and host receipt time are distinct. Polling repeatedly must not refresh
 unchanged/stalled authoritative data. Report update age as UNKNOWN when unavailable.
 
+Snapshot capture, source windows, fact observation and first-seen times use
+`host_monotonic_ms`. Browser epoch milliseconds remain a separate fact. Host
+wall time is excluded from age arithmetic: measured Windows wall-clock steps
+can differ from elapsed time by about 11 ms over short reads. State receipt is
+when normalization/tracking completes, so downstream age includes that work.
+
+The production root locator follows pinned normal-event closure ownership:
+JS closure state -> event Rc capture -> ClientBroker Rc -> boxed context. It
+validates live counts, borrow state and type markers on every read; it does not
+scan game memory for a marker. Document reload reacquires all object handles.
+
 The pinned `World.Singleton.tick` is a u16 world sequence, not a timestamp and
 not a match identifier. Its OBSERVED numeric value does not certify every M1
 semantic/visibility case. The exact `updated_at_ms` remains UNKNOWN without a

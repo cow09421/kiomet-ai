@@ -1,5 +1,6 @@
 """Pinned client observation; no WASM calls, heap writes or command dispatch."""
 import base64
+from dataclasses import replace
 import hashlib
 from pathlib import Path
 import time
@@ -9,6 +10,8 @@ import psutil
 from ..state import Fact, GameState, Knowledge, Relation, Tower, Units
 from .source_clock import SourceClock
 from .lifecycle import MatchLifecycle
+from .forces import ForceTracker
+from . import rules
 
 CLIENT_SHA256 = "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c"
 
@@ -46,9 +49,20 @@ def decode_many(raw):
     return Units(tuple((i, raw[6] if i == 0 else raw[i] if i < 6 else 0) for i in range(10)))
 
 
+def decode_units(raw):
+    """Pinned Units::available: Single count +1, enum +2, shield +6."""
+    many = decode_many(raw)
+    if many is not None:
+        return many
+    count,unit = raw[1],raw[2]
+    if not 6<=unit<=9 or count==0:
+        raise ValueError("invalid Single units")
+    return Units(tuple((i,raw[6] if i==0 else count if i==unit else 0) for i in range(10)))
+
+
 def normalize(raw, session_id, document_id, sequence, received_ms, sample_started_ms=None,
-              update_window=None, match_identity=None, lifecycle=None):
-    # Browser and host wall clocks are different clock domains on Windows.
+              update_window=None, match_identity=None, lifecycle=None, force_tracker=None):
+    # Browser epoch time and host monotonic time are different clock domains.
     # Host send time is a conservative lower bound on this synchronous read.
     at = raw["sampled_at_ms"] if sample_started_ms is None else sample_started_ms
     towers = []
@@ -62,18 +76,44 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         if type(owner) is not int or not 0 <= owner <= 65535:
             raise ValueError("invalid owner")
         relation = Relation(row["relation"]) if row["relation"] is not None else None
+        units=decode_units(row['units7'])
+        morale,delay=row.get('morale'),row.get('delay_ticks')
+        if morale is not None and (type(morale) is not int or morale not in (0,1)):
+            raise ValueError('invalid visible morale flag')
+        if delay is not None and (type(delay) is not int or not 0<=delay<=255):
+            raise ValueError('invalid visible delay')
         towers.append(Tower(row["id"], observed(True, row["visibility_source"], at),
             owner=observed(owner, "Tower.owner+36", at),
-            relation=observed(relation, "client player identity comparison", at),
+            relation=(Fact(relation,Knowledge.DERIVED,'pinned normal Color::new bilateral alliance membership',at)
+                      if relation in (Relation.ALLY,Relation.ENEMY) else observed(relation, "client player identity comparison", at)),
             tower_type=observed(typ, "Tower.type+46", at),
-            units=observed(decode_many(row["units7"]), "Tower.units+38 (Many)", at),
+            units=observed(units, "Tower.units+38; pinned Units::available Many/Single", at),
+            capacity=Fact(rules.capacity(typ,morale),Knowledge.DERIVED,
+                'pinned Units::capacity: raw type table + visible morale shield boost',at) if morale is not None else Fact(),
+            production=Fact(rules.production(typ,units,owner,delay,morale),Knowledge.DERIVED,
+                'potential source-tick generation intervals; pinned type/ruler/delay/morale rules; not guaranteed output',at)
+                if morale is not None and delay is not None else Fact(),
+            effects=observed((('MORALE_BOOST',bool(morale)),),'visible Tower.morale+45; normal UI morale note',at) if morale is not None else Fact(),
+            delay_ticks=observed(delay,'Tower.delay+47; upgrade or EMP cause unspecified',at),
+            deployable=Fact(rules.mobile_inventory(typ,units),Knowledge.DERIVED,
+                'pinned Tower::force_units mobile inventory; route/command legality is separate and unverified',at)
+                if relation==Relation.SELF else Fact(),
             neighbors=(Fact(tuple(sorted(row["neighbors"])), Knowledge.DERIVED,
                             "official neighbor table intersect current Visible.refs", at)
                        if "neighbors" in row else Fact()),
             position=Fact(tuple(row["position"]), Knowledge.DERIVED,
                           "official integer-position offset table", at)))
-    # Match/update time and moving-force coverage have NOT been verified.
-    # Explicitly do not turn the host's inferred match label into an observed ID.
+    forces = Fact()
+    if raw.get("forces") is not None:
+        tracker = force_tracker or ForceTracker()
+        decoded = tracker.update(raw["forces"],towers,match_identity,raw.get("tick"),at,decode_units)
+        forces = observed(decoded,"normal-rendered force vectors after current visibility gate",at)
+    rulers=[('SELF_ALIVE_AT_TOWER',t.id) for t in towers
+            if t.owner.value==raw['player_id'] and dict(t.units.value.counts)[9]>0]
+    for f in forces.value or ():
+        if f.owner.value==raw['player_id'] and dict(f.units.value.counts)[9]>0:
+            rulers.append(('SELF_ALIVE_IN_VISIBLE_FORCE',f.id.value,f.source.value,f.destination.value))
+    king=observed(rulers[0],'currently visible self Ruler units; absence never implies death',at) if len(rulers)==1 else Fact()
     return GameState(session_id, document_id,
         Fact(match_identity, Knowledge.DERIVED,
              "document + player identity + observed lifecycle / official join epoch", at) if match_identity else Fact(),
@@ -86,6 +126,8 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         lifecycle=Fact(lifecycle, Knowledge.DERIVED,
             "official active condition + Play UI + WebSocket readyState", at) if lifecycle else Fact(),
         player_id=observed(raw["player_id"], "client.player_id", at),
+        king=king,
+        forces=forces,
         towers=tuple(sorted(towers, key=lambda t: t.id)))
 
 
@@ -101,9 +143,12 @@ class ClientExtractor:
         self.memories_id = None
         self.time_origin = None
         self.source_clock = SourceClock()
+        self.force_tracker = ForceTracker()
         self.lifecycle = MatchLifecycle(self.document_id)
         self.sockets_id = None
         self.sockets_dirty = True
+        self.owner_states_id = None
+        self.sockets_checked_at = 0
 
     async def _refresh_sockets(self):
         proto = (await self.cdp.send("Runtime.evaluate", {
@@ -115,8 +160,26 @@ class ClientExtractor:
                 await self.cdp.send("Runtime.releaseObject", {"objectId":self.sockets_id})
             self.sockets_id = new
             self.sockets_dirty = False
+            self.sockets_checked_at = time.monotonic()
         finally:
             await self.cdp.send("Runtime.releaseObject", {"objectId":proto})
+
+    async def _attach_owners(self):
+        proto=(await self.cdp.send('Runtime.evaluate',{'expression':'Object.prototype'}))['result']['objectId']
+        objects=None
+        try:
+            objects=(await self.cdp.send('Runtime.queryObjects',{'prototypeObjectId':proto}))['objects']['objectId']
+            result=await self.cdp.send('Runtime.callFunctionOn',{'objectId':objects,
+                'functionDeclaration':'''function(){return this.filter(o=>Object.hasOwn(o,'a')&&
+                    Object.hasOwn(o,'b')&&Object.hasOwn(o,'cnt')&&[1079544,1079504].includes(o.b)&&
+                    Number.isInteger(o.a)&&Number.isInteger(o.cnt)&&o.a>0&&o.cnt>0);}'''})
+            if 'exceptionDetails'in result:
+                raise ValueError('normal event owner discovery failed')
+            self.owner_states_id=result['result']['objectId']
+        finally:
+            if objects:
+                await self.cdp.send('Runtime.releaseObject',{'objectId':objects})
+            await self.cdp.send('Runtime.releaseObject',{'objectId':proto})
 
     async def attach(self):
         if self.cdp is not None:
@@ -139,6 +202,7 @@ class ClientExtractor:
             self.cdp.on("Network.webSocketCreated", lambda _: setattr(self,"sockets_dirty",True))
             await self.cdp.send("Network.enable")
             await self._refresh_sockets()
+            await self._attach_owners()
             self.time_origin = await self.page.evaluate("performance.timeOrigin")
             proto = (await self.cdp.send("Runtime.evaluate", {
                 "expression": "WebAssembly.Memory.prototype"}))["result"]["objectId"]
@@ -154,13 +218,13 @@ class ClientExtractor:
     async def _read(self, mode):
         if self.memories_id is None:
             raise RuntimeError("extractor is not attached")
-        if self.sockets_dirty:
+        if self.sockets_dirty or time.monotonic()-self.sockets_checked_at>=1:
             await self._refresh_sockets()
-        began_ms = time.time_ns() // 1000000
         began_monotonic = time.monotonic_ns() / 1000000
+        began_ms = int(began_monotonic)
         result = await self.cdp.send("Runtime.callFunctionOn", {
             "objectId": self.memories_id, "returnByValue": True,
-            "arguments": [{"value": mode}, {"objectId":self.sockets_id}],
+            "arguments": [{"value": mode}, {"objectId":self.sockets_id}, {"objectId":self.owner_states_id}],
             "functionDeclaration": Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")})
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
@@ -168,7 +232,7 @@ class ClientExtractor:
         if raw["document_time_origin"] != self.time_origin:
             self.source_clock.clear()
             raise ValueError("document changed; discard observer and reattach")
-        received_ms = time.time_ns() // 1000000
+        received_ms = time.monotonic_ns() // 1000000
         life, identity = self.lifecycle.observe(raw, received_ms)
         raw["derived_lifecycle"] = life
         raw["derived_match_id"] = identity
@@ -179,6 +243,7 @@ class ClientExtractor:
                 raw.get("tick"), began_ms, received_ms, began_monotonic)
         else:
             self.source_clock.clear()
+            self.force_tracker.clear()
         return raw, began_ms, received_ms, window
 
     async def metadata(self):
@@ -191,15 +256,20 @@ class ClientExtractor:
             raise ValueError(raw["world_unavailable"])
         state = normalize(raw, self.session_id, self.document_id,
                           self.sequence + 1, received_ms, began_ms, update_window=window,
-                          match_identity=raw["derived_match_id"],lifecycle=raw["derived_lifecycle"])
+                          match_identity=raw["derived_match_id"],lifecycle=raw["derived_lifecycle"],
+                          force_tracker=self.force_tracker)
+        # Timestamp when the complete canonical state becomes available, after
+        # normalization/tracking; never hide that work from downstream age.
+        state=replace(state,received_at_ms=time.monotonic_ns()//1000000)
         self.sequence += 1
         return state, raw
 
     async def close(self):
         self.source_clock.clear()
+        self.force_tracker.clear()
         if self.cdp:
             try:
-                for oid in (self.memories_id,self.sockets_id):
+                for oid in (self.memories_id,self.sockets_id,self.owner_states_id):
                     if oid:
                         try:
                             await self.cdp.send("Runtime.releaseObject", {"objectId":oid})
@@ -215,6 +285,7 @@ class ClientExtractor:
                     await self.cdp.detach()
                 finally:
                     self.cdp = self.memories_id = self.sockets_id = None
+                    self.owner_states_id = None
 
 
 class ObservationSession:

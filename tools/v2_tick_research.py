@@ -12,22 +12,6 @@ sys.path.insert(0, str(ROOT / "src"))
 from kiomet_ai.v2.observe.extractor import ClientExtractor, connect_dedicated
 from playwright.async_api import async_playwright
 
-DISCOVER = """function() {
- const m=this.filter(m=>m.buffer.byteLength>1000000);
- if(m.length!==1)throw Error('ambiguous memory');
- const v=new DataView(m[0].buffer),u32=p=>v.getUint32(p,true);
- const roots=new Set();
- for(let p=1048576;p+4<=v.byteLength;p+=4){
-  if(u32(p)!==1079724)continue;
-  const r=u32(p-4);if(r<=0||r+49040>v.byteLength)continue;
-  const core=u32(r+45828);
-  if(core<=0||core+250>v.byteLength||v.getUint16(core+248,true)===0)continue;
-  roots.add(r);
- }
- if(roots.size!==1)throw Error('root missing or ambiguous');
- return [...roots][0];
-}"""
-
 PROBE = """function(root) {
  const m=this.filter(m=>m.buffer.byteLength>1000000);
  if(m.length!==1)throw Error('ambiguous memory');
@@ -60,12 +44,7 @@ async def main(args):
                     await button.click()
                     await button.wait_for(state="hidden",timeout=60000)
                     await asyncio.sleep(2)
-            found = await extractor.cdp.send("Runtime.callFunctionOn", {
-                "objectId":extractor.memories_id,"returnByValue":True,
-                "functionDeclaration":DISCOVER})
-            if "exceptionDetails" in found:
-                raise ValueError(str(found["exceptionDetails"]))
-            root = found["result"]["value"]
+            root = (await extractor.metadata())['root_candidate']
             for phase, seconds in (("online_before", args.seconds), ("offline", 5), ("online_after", args.seconds)):
                 if args.offline:
                     await page.context.set_offline(phase == "offline")

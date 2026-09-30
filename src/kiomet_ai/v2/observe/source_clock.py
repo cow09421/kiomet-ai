@@ -23,10 +23,11 @@ class SourceClock:
             return None
         changed_domain = key != self.key
         if self.previous_start is not None:
-            wall_elapsed = started_ms - self.previous_start
+            capture_elapsed = started_ms - self.previous_start
             mono_elapsed = monotonic_ms - self.previous_monotonic
-            # A wall-clock discontinuity invalidates timestamp comparisons.
-            changed_domain |= wall_elapsed < 0 or abs(wall_elapsed - mono_elapsed) > 10
+            # Reject callers that mix clock domains or move capture time back.
+            # The live observer uses monotonic capture time, never wall time.
+            changed_domain |= capture_elapsed < 0 or abs(capture_elapsed - mono_elapsed) > 10
         if changed_domain:
             self.clear()
             self.key = key

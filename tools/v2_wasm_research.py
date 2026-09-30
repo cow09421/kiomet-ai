@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 async def main(args):
+    if args.roots or args.references:
+        raise ValueError('Unrestricted memory/root scans retired. Use v2_root_research.py typed ownership metadata only.')
     port = (ROOT / "runtime/browser-profile/DevToolsActivePort").read_text().splitlines()[0]
     async with async_playwright() as pw:
         browser = await pw.chromium.connect_over_cdp(f"http://127.0.0.1:{port}")

@@ -19,7 +19,7 @@ kiomet-ai = "kiomet_ai.app:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"kiomet_ai.v2.observe" = ["*.js"]
+"kiomet_ai.v2.observe" = ["*.js", "*.json"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
