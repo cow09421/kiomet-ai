@@ -40,6 +40,28 @@ function (mode = "world", sockets = [], ownerStates = []) {
   const core = u32(root + 45828);
   const player = u16(core + 248);
   const play = document.querySelector('#play_button');
+  // Transport::new_offline writes tag 2; ClientSession owns the network
+  // transport Vec at +348/+352/+356. Follow only these typed entries.
+  const offline = v.getBigUint64(root,true) === 2n;
+  const transports = [];
+  if (!offline) {
+    const cap=u32(root+348),ptr=u32(root+352),len=u32(root+356);
+    if (len>cap || cap>64 || (len>0 && !range(ptr,len*44)))
+      throw Error("invalid owned transport vector");
+    for (let i=0;i<len;i++) {
+      const e=ptr+i*44,data=u32(e+24),table=u32(e+28);
+      const layout={1115032:["WEBSOCKET",40,4],1114972:["WEBTRANSPORT",77,4],
+                    1115092:["HTTP_POLL",155,8]}[table];
+      if (!layout || !range(data,4)) throw Error("unsupported owned transport type");
+      const rc=u32(data);
+      // func6763 always reads a 32-bit borrow counter; HTTP's +12 is padding.
+      if (!range(rc,layout[1]+1) || u32(rc)===0 || u32(rc+8)!==0)
+        throw Error("owned transport unavailable or borrowed");
+      const state=u8(rc+layout[1]);
+      if (state>2) throw Error("unsupported owned transport state");
+      transports.push({kind:layout[0],state});
+    }
+  }
   const metadata = {sampled_at_ms: Date.now(), document_time_origin: performance.timeOrigin,
     player_id: player, root_candidate: root, root_slot_candidate: roots.get(root),
     tick: u32(root + 45720) === 0x80000000 ? null : u16(root + 45732),
@@ -49,7 +71,9 @@ function (mode = "world", sockets = [], ownerStates = []) {
     // update_visible's second all_visible path is cheats + keyboard B.
     expanded_visibility: u8(core + 105) !== 2 && (u8(core + 104) & 1) !== 0 && u32(root + 46480) !== 0,
     online: navigator.onLine,
-    transport_connected: sockets.some(s => s.readyState === WebSocket.OPEN),
+    transport_mode: offline ? "OFFLINE" : "NETWORK",
+    owned_transports: transports,
+    transport_connected: !offline && transports.some(t=>t.state===1),
     play_text: play?.offsetParent !== null && play ? play.innerText : null};
   if (mode === "metadata") return metadata; // No tower/force payload reads.
   if (!metadata.online || !metadata.transport_connected || !metadata.active || metadata.play_text !== null || player === 0)

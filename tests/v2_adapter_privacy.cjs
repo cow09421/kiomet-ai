@@ -4,6 +4,7 @@ const source=fs.readFileSync('src/kiomet_ai/v2/observe/client_fae13.js','utf8');
 const buffer=new ArrayBuffer(3_000_000),view=new DataView(buffer),reads=[];
 const root=1_470_000,core=1_600_000,env=1_700_000,callback=1_710_000,broker=1_720_000;
 const refs=1_860_000,players=1_870_000,tower=2_000_000;
+const transport=1_740_000,transportData=1_741_000,transportRc=1_742_000;
 const put=(p,n)=>view.setUint32(p,n,true),short=(p,n)=>view.setUint16(p,n,true);
 class ObservedView extends DataView {
   getUint32(p,l){reads.push(p);return super.getUint32(p,l)}
@@ -17,6 +18,9 @@ put(env,callback);put(env+4,1129128);put(callback,1);put(callback+12,broker);
 put(broker,1);put(broker+68,root);put(broker+72,1079724);
 put(root+45828,core);short(core+248,1);view.setUint8(core+105,2);
 put(root+548,3);short(root+45732,10);
+view.setBigUint64(root,1n,true);put(root+348,1);put(root+352,transport);put(root+356,1);
+put(transport+24,transportData);put(transport+28,1115032);
+put(transportData,transportRc);put(transportRc,1);view.setUint8(transportRc+40,1);
 put(root+45760,1);put(root+45764,refs);put(root+45768,1);
 put(root+664,0);put(root+700,tower);short(tower+36,2);
 put(1365232,20_000);view.setUint8(1365236,3);
@@ -46,4 +50,16 @@ assert.equal(r.towers[0].relation,'ENEMY','one-way request is not an alliance');
 setMember(players+64,1_890_000,1);
 r=decode.call(memories,'world',sockets,owners);
 assert.equal(r.towers[0].relation,'ALLY','bilateral membership must produce ally');
+view.setUint8(transportRc+40,2);reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.world_unavailable,'outside active connected match');
+assert(!reads.some(p=>p>=tower&&p<tower+256*48),'orphan OPEN socket must not authorize payload');
+put(transport+28,1115092);view.setUint8(transportRc+155,1);
+put(transportRc+12,0xdeadbeef); // HTTP alignment padding is not its borrow count.
+r=decode.call(memories,'world',[],owners);
+assert.equal(r.transport_connected,true,'owned HTTP polling must count without any WebSocket');
+view.setBigUint64(root,2n,true);reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.transport_mode,'OFFLINE');assert.equal(r.transport_connected,false);
+assert(!reads.some(p=>p>=tower&&p<tower+256*48),'offline simulation must not enter network gate');
 console.log('typed root, fog/dirty gate and bilateral alliance boundaries passed');

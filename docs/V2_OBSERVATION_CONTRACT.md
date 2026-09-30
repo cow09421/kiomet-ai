@@ -67,6 +67,14 @@ official join boundaries and observed menu/result transitions. An unobserved gap
 that could conceal a match transition makes identity UNKNOWN. Pointers never form
 canonical entity identity.
 
+Connection authority follows the pinned ClientSession's owned transport Vec and
+typed WS/WT/HTTP state getters, matching its primary-selection state=1 condition.
+Any global OPEN WebSocket is insufficient: old objects can remain reachable and
+the official session can switch to HTTP polling. Transport tag=2 is OfflineHarness;
+reject it before world payload access and record NETWORK/OFFLINE source_mode.
+An online state alone does not establish freshness; stalled sequences retain old
+age bounds. Network event timing is diagnostic and never a source timestamp.
+
 ## Required state
 
 Match, snapshot sequence, clock/provenance, own identity; visible towers with owner,

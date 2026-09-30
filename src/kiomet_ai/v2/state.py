@@ -136,6 +136,8 @@ class GameState:
     # Last confirmed authoritative update, distinct from last memory poll.
     updated_at_ms: Fact[int] = field(default_factory=Fact)
     tick: Fact[int] = field(default_factory=Fact)
+    # Observed displayed-world sequence; NETWORK and OFFLINE never share a clock.
+    source_mode: Fact[str] = field(default_factory=Fact)
     # Host-clock interval containing the source's last update, never a point time.
     source_update_window_ms: Fact[tuple[int, int]] = field(default_factory=Fact)
     lifecycle: Fact[Lifecycle] = field(default_factory=Fact)

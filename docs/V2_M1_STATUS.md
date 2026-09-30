@@ -11,8 +11,8 @@ M2 / M3 尚未開始；本輪沒有派兵、拖曳、升級或語意遊戲命令
 
 | 必要來源 | 實際能力／限制 |
 |---|---|
-| 世界序號 | OBSERVED u16 World.Singleton.tick；不冒充毫秒或對局 ID。兩條 tick 呼叫路徑與重連期間的來源權威性仍需確認。 |
-| 對局身分 | DERIVED 文件／玩家／加入／選單／結果 epoch；同一局穩定，Result → Menu → 新局與 reload 已實測；重連判定仍有疑問。 |
+| 世界序號 | OBSERVED u16 World.Singleton sequence；NETWORK / OFFLINE 類別另存。已辨識第二條 tick 路徑屬 OfflineHarness，網路模式拒絕本機模擬。不是伺服器時間戳。 |
+| 對局身分 | DERIVED 文件／玩家／加入／選單／結果 epoch；同一局穩定，Result → Menu → 新局與 reload 已實測；連線判定已改為 session 持有的 WS / WT / HTTP 傳輸。 |
 | 資料根 | 正式 WASM 版本鎖定；正常事件回呼 → ClientBroker → context 的型別路徑；不再掃描遊戲記憶體。 |
 | 可見塔 | 即時 Visible.refs 正值才解碼；dirty、非 active、擴張視野均拒絕。道路只輸出已觀察端點。 |
 | 兵種 | Many / Single 的完整型別向量；正式 getter 證明 Single 布局，忽略 union padding。 |
@@ -56,12 +56,14 @@ fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c。
 
 ## 目前最重要問題
 
-重連後的前十秒，觀察器查到的 WebSocket 均不是 OPEN，但 world_sequence
-仍前進。定期刷新 WebSocket 清單沒有解決；正式程式支援 WebTransport，
-稍後只讀查詢沒有找到活躍 WebTransport，且有替代 WebSocket 開啟。
-尚不能證明早先期間是哪種來源／緩衝／預測機制在更新世界。
+重連疑點已找到具體原因：官方 session 會從 WebSocket 切換 HTTP 輪詢。
+transport-research-e0ac23c469ab 的重連 30 秒中，兩個 WebSocket 都 CLOSED，
+但 session 持有 HTTP_POLL state=1，108 次 Fetch 回應／完成，世界序號
+53299 → 53439。舊的「任意 OPEN WebSocket」判定既漏掉 HTTP，也可能被
+無關舊物件誤導；現已由正式型別 ownership 與 state getter 取代。
+本次結果画面資料只算傳輸研究，不能算十分鐘有效對局或 UI 驗收樣本。
 
-先確認 world tick 的來源與 transport 狀態，保留 UNKNOWN；再改善大局面的
+下一個重點是確認網路世界套用區間能支持的來源年齡語意，並改善大局面的
 完整狀態取得與新鮮度，補必要欄位、真實可見性與分層獨立比對。
 沒有降低 M1 Gate。尚未到 18 工程小時硬上限，也未證明技術不可行。
 

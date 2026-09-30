@@ -1,7 +1,7 @@
 """Bounded, read-only M1 sampling of the project's already isolated official page."""
 import argparse
 import asyncio
-from dataclasses import asdict
+from dataclasses import fields, is_dataclass
 import json
 from pathlib import Path
 import statistics
@@ -13,6 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from kiomet_ai.v2.observe.extractor import ObservationSession, connect_dedicated
 from playwright.async_api import async_playwright
+
+
+def snapshot_json(value):
+    # Frozen canonical state needs no recursive deepcopy before serialization.
+    if is_dataclass(value):
+        return {f.name:getattr(value,f.name) for f in fields(value)}
+    raise TypeError(type(value).__name__)
 
 
 async def main(args):
@@ -42,12 +49,13 @@ async def main(args):
         source_latencies=[]
         start = time.perf_counter()
         next_poll = start
+        next_source = start
         try:
             with (out / f"snapshots-{run}.jsonl").open("w", encoding="utf8") as stream:
                 while time.perf_counter() - start < args.seconds:
                     if args.source_hz:
                         while time.perf_counter()<next_poll:
-                            await asyncio.sleep(min(1/args.source_hz,max(0,next_poll-time.perf_counter())))
+                            await asyncio.sleep(max(0,min(next_source,next_poll)-time.perf_counter()))
                             if time.perf_counter()>=next_poll:
                                 break
                             source_began=time.perf_counter()
@@ -57,6 +65,9 @@ async def main(args):
                                 source_latencies.append((time.perf_counter()-source_began)*1000)
                             except Exception as exc:
                                 errors.append('source metadata: '+str(exc)[:260])
+                            next_source += 1/args.source_hz
+                            if next_source<time.perf_counter():
+                                next_source=time.perf_counter()
                     else:
                         await asyncio.sleep(max(0, next_poll - time.perf_counter()))
                     began = time.perf_counter()
@@ -82,7 +93,7 @@ async def main(args):
                                     progress_changes+=1
                                 tracks[f.id.value]={'progress':f.progress.value,'tick':state.tick.value,
                                     'observations':(prior['observations']+1 if prior else 1)}
-                        stream.write(json.dumps(asdict(state), ensure_ascii=False) + "\n")
+                        stream.write(json.dumps(state,default=snapshot_json,ensure_ascii=False) + "\n")
                         if snapshots == 1:
                             (out / "first-raw.json").write_text(json.dumps(raw, indent=2), encoding="utf8")
                             print(json.dumps({"towers": len(state.towers), "player": state.player_id.value,

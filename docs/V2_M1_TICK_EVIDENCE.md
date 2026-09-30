@@ -67,6 +67,58 @@ visible → hidden → visible acceptance matrix.
 
 ## Evidence limits
 
+### 2026-10-01 transport ownership correction
+
+QUESTION: why does the sequence advance after reconnect with closed WebSockets?
+
+EVIDENCE: the pinned Transport supports HTTP polling as well as WS/WT. The
+normal ClientSession::attach (0x114bf6) stores 44-byte owned entries with boxed
+transport data at +24 and vtable +28; the session Vec is context +348/+352/+356.
+Static vtables 1115032 / 1114972 / 1115092 resolve +20 to the actual WS / WT /
+HTTP state getters. Their Rc state bytes are +40 / +77 / +155 respectively.
+HTTP uses an eight-byte aligned RefCell, unlike the four-byte WS/WT RefCell.
+The WS onopen closure 0xc4ebd writes state=1 at borrowed data +28. The HTTP
+constructor also initializes its state=1; failure/close change the state.
+
+transport-research-e0ac23c469ab: online uses owned WEBSOCKET state=1. Five
+seconds offline freezes 53299 and switches the owned entry to HTTP_POLL. During
+30 seconds reconnect, two WS objects close, but 108 Fetch responses/finishes
+and owned HTTP_POLL state=1 accompany sequence 53299 -> 53439. No network
+payload, URL, query credential or other player's private state was recorded.
+This resolves the earlier apparent no-wire-data interval. The row cohort is
+RESULT screen metadata, not an accepted match cohort.
+
+The second World::tick_before_inputs caller at 0xd274e is explicitly within
+OfflineHarness::send/resolve_query/enter_arena processing. It retrieves a
+separate World from its arena map via func3539. Transport::new_offline writes
+the u64 discriminator 2 (0x8d324); the normal network observation gate now
+refuses that mode before any tower or force payload read. Canonical source_mode
+records NETWORK separately, and the source-clock identity includes that mode.
+
+CONCLUSION: the prior global WebSocket.prototype query was not a reliable
+connection authority. The adapter now follows only the current official
+session's typed owned transport state, including HTTP fallback. An orphan OPEN
+socket cannot authorize a world snapshot; HTTP with no WS can do so. Global
+socket discovery is reserved for explicit diagnostics, reducing normal polling
+overhead. Exact server generation time and snapshot age remain UNKNOWN.
+
+STATUS: PASS for this transport discrimination question; M1 remains PARTIAL.
+Synthetic privacy checks cover closed-owned/open-orphan WS, HTTP fallback and
+offline refusal. They do not replace live reconnection or M1 gate evidence.
+
+Live IN_MATCH follow-up transport-research-d09322d9e473: 33 online reads,
+50 offline reads with frozen sequence 55399 and DISCONNECTED, then 338 reconnect
+reads with sequence 55399 -> 55539 and IN_MATCH. All connected reads share one
+derived match epoch. This run resumed the original WS rather than HTTP; 153 total
+received frames, no Fetch requests. Both observed reconnect behaviors now have
+explicit evidence. The earlier 99044354e1d2 attempt failed because an HTTP
+alignment padding word was mistaken for a 64-bit borrow counter; it is excluded.
+The pinned helper func6763 proves the borrow counter is 32-bit for all three
+layouts. A nonzero synthetic HTTP padding word now has its own refusal-boundary
+regression check. Successful short samples 07e379dabfff have 147 accepted /30.160s,
+4.874 Hz, extraction p95 7.10ms and derived age upper p95 250ms (145 bounded).
+This is not a ten-minute gate cohort and does not establish exact age.
+
 The first tick experiment ran on an extra restored official page in the isolated
 task profile. The later result experiment used the recorded BrowserHost page.
 Both were the unmodified official client, but they were separate player sessions;

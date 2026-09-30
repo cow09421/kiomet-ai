@@ -119,12 +119,13 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
              "document + player identity + observed lifecycle / official join epoch", at) if match_identity else Fact(),
         sequence, at, received_ms,
         CLIENT_SHA256, client_sampled_at_ms=observed(raw["sampled_at_ms"], "browser clock (separate domain)", at),
-        tick=observed(raw.get("tick"), "pinned World.Singleton.tick u16; frame-independent world update", at),
+        tick=observed(raw.get("tick"), "pinned displayed World.Singleton sequence u16; transport mode separately verified; server timestamp unknown", at),
+        source_mode=observed(raw.get("transport_mode"),"pinned Transport enum / typed ClientSession ownership",at),
         source_update_window_ms=(Fact(update_window, Knowledge.DERIVED,
             "source tick transition bracketed by previous read start / current read finish; host clock", at)
             if update_window is not None else Fact()),
         lifecycle=Fact(lifecycle, Knowledge.DERIVED,
-            "official active condition + Play UI + WebSocket readyState", at) if lifecycle else Fact(),
+            "official active condition + Play UI + typed owned ClientSession transport state", at) if lifecycle else Fact(),
         player_id=observed(raw["player_id"], "client.player_id", at),
         king=king,
         forces=forces,
@@ -134,7 +135,7 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
 class ClientExtractor:
     """One document-bound CDP observer. Reattach after any document change."""
 
-    def __init__(self, page, session_id=None):
+    def __init__(self, page, session_id=None, diagnostic_sockets=False):
         self.page = page
         self.session_id = session_id or uuid4().hex
         self.document_id = uuid4().hex
@@ -149,6 +150,7 @@ class ClientExtractor:
         self.sockets_dirty = True
         self.owner_states_id = None
         self.sockets_checked_at = 0
+        self.diagnostic_sockets = diagnostic_sockets
 
     async def _refresh_sockets(self):
         proto = (await self.cdp.send("Runtime.evaluate", {
@@ -201,7 +203,8 @@ class ClientExtractor:
             await self.cdp.send("Debugger.disable")
             self.cdp.on("Network.webSocketCreated", lambda _: setattr(self,"sockets_dirty",True))
             await self.cdp.send("Network.enable")
-            await self._refresh_sockets()
+            if self.diagnostic_sockets:
+                await self._refresh_sockets()
             await self._attach_owners()
             self.time_origin = await self.page.evaluate("performance.timeOrigin")
             proto = (await self.cdp.send("Runtime.evaluate", {
@@ -218,13 +221,13 @@ class ClientExtractor:
     async def _read(self, mode):
         if self.memories_id is None:
             raise RuntimeError("extractor is not attached")
-        if self.sockets_dirty or time.monotonic()-self.sockets_checked_at>=1:
+        if self.diagnostic_sockets and (self.sockets_dirty or time.monotonic()-self.sockets_checked_at>=1):
             await self._refresh_sockets()
         began_monotonic = time.monotonic_ns() / 1000000
         began_ms = int(began_monotonic)
         result = await self.cdp.send("Runtime.callFunctionOn", {
             "objectId": self.memories_id, "returnByValue": True,
-            "arguments": [{"value": mode}, {"objectId":self.sockets_id}, {"objectId":self.owner_states_id}],
+            "arguments": [{"value": mode}, {"value": []}, {"objectId":self.owner_states_id}],
             "functionDeclaration": Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")})
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
@@ -239,7 +242,7 @@ class ClientExtractor:
         window = None
         if identity:
             window = self.source_clock.observe(
-                (self.document_id, identity, raw["root_candidate"], raw["player_id"]),
+                (self.document_id, identity, raw["root_candidate"], raw["player_id"],raw.get("transport_mode")),
                 raw.get("tick"), began_ms, received_ms, began_monotonic)
         else:
             self.source_clock.clear()
