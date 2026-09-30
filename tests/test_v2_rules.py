@@ -1,5 +1,5 @@
 from kiomet_ai.v2.observe.extractor import decode_units,normalize
-from kiomet_ai.v2.observe.rules import capacity,production,mobile_inventory,upgrade_candidates
+from kiomet_ai.v2.observe.rules import capacity,production,mobile_inventory,player_mobile_inventory,upgrade_candidates
 import pytest
 from kiomet_ai.v2.state import Knowledge
 
@@ -34,7 +34,11 @@ def test_absent_king_and_absent_rule_metadata_remain_unknown():
     state=normalize(raw,'s','d',2,102,101)
     assert state.towers[0].capacity.knowledge==Knowledge.DERIVED
     assert state.towers[0].effects.value==(('MORALE_BOOST',True),)
-    assert state.towers[0].upgrade.knowledge==Knowledge.UNKNOWN
+    assert state.towers[0].upgrade.value==(('in_progress',False),)
+    raw['towers'][0]['delay_ticks']=60
+    delayed=normalize(raw,'s','d',3,103,102)
+    assert delayed.towers[0].upgrade.knowledge==Knowledge.UNKNOWN
+    assert delayed.towers[0].delay_ticks.value==60
 
 
 def test_observed_own_prerequisites_do_not_certify_unlock_or_upgrade_cause():
@@ -52,7 +56,7 @@ def test_observed_own_prerequisites_do_not_certify_unlock_or_upgrade_cause():
     assert dict(state.upgrade_resources.value)[9]==1
     assert dict(state.upgrade_resources.value)[10]==0  # A real observed zero.
     assert state.towers[0].upgrade_candidates.value==candidates
-    assert state.towers[0].upgrade.knowledge==Knowledge.UNKNOWN
+    assert state.towers[0].upgrade.value==(('in_progress',False),)
     raw['towers'][0].update(owner=8,relation='ENEMY')
     assert normalize(raw,'s','d',2,102,101).towers[0].upgrade_candidates.knowledge==Knowledge.UNKNOWN
     del raw['own_tower_counts']
@@ -61,3 +65,30 @@ def test_observed_own_prerequisites_do_not_certify_unlock_or_upgrade_cause():
         raw['own_tower_counts']=malformed
         with pytest.raises(ValueError,match='prerequisite tower counts'):
             normalize(raw,'s','d',4,104,103)
+
+
+def test_known_source_ownership_zero_differs_from_missing_player_identity():
+    units=decode_units([0,0,0,0,0,12,20])
+    assert dict(player_mobile_inventory(3,units,7,7).counts)[5]==12
+    for owner in (0,8):
+        assert all(n==0 for _,n in player_mobile_inventory(3,units,owner,7).counts)
+    assert player_mobile_inventory(3,units,7,None) is None
+    assert player_mobile_inventory(3,units,7,0) is None
+
+
+def test_owned_unlock_zero_and_empty_are_known_but_missing_is_unknown():
+    raw={'sampled_at_ms':500,'player_id':7,'towers':[]}
+    missing=normalize(raw,'s','d',1,101,100)
+    assert missing.upgrade_keys.knowledge==Knowledge.UNKNOWN
+    assert missing.unlocked_tower_types.knowledge==Knowledge.UNKNOWN
+    raw['own_unlocks']={'keys':0,'unlocked_types':[]}
+    known=normalize(raw,'s','d',2,102,101)
+    assert known.upgrade_keys.value==0
+    assert known.upgrade_keys.knowledge==Knowledge.OBSERVED
+    assert known.unlocked_tower_types.value==()
+    assert known.unlocked_tower_types.knowledge==Knowledge.OBSERVED
+    for bad in ({'keys':-1,'unlocked_types':[]},{'keys':3,'unlocked_types':[1,1]},
+                {'keys':3,'unlocked_types':[27]}):
+        raw['own_unlocks']=bad
+        with pytest.raises(ValueError,match='persistent unlock'):
+            normalize(raw,'s','d',3,103,102)

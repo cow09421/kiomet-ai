@@ -101,6 +101,9 @@ def test_source_clock_requires_a_real_transition_and_bounds_uncertainty():
     assert state.age_ms(510) is None
     assert state.age_bounds_ms(510) == (195,310)
     assert "freshness" in state.readiness_gaps(510)
+    # A recent client application cannot certify server-state freshness.
+    assert state.age_bounds_ms(400)==(85,200)
+    assert "freshness" in state.readiness_gaps(400)
 
 
 def test_source_clock_resets_for_identity_clock_discontinuity_and_long_gap():

@@ -87,6 +87,11 @@ async def main(args):
                       return {headings:[...document.querySelectorAll('h2')].map(e=>e.innerText),
                       heading_fill:svg.match(/fill=['\"]([^'\"]+)['\"]/)?.[1]??null,
                       rows:[...document.querySelectorAll('p[title]')].map(e=>({unit:e.title,text:e.innerText})),
+                      upgrade_buttons:[...document.querySelectorAll('div[title]')]
+                        .filter(e=>/^(Upgrade|Downgrade) to /.test(e.title)&&e.getBoundingClientRect().width>0)
+                        .map(e=>({title:e.title,cursor:getComputedStyle(e).cursor,filter:getComputedStyle(e).filter,
+                          lock_glyph:e.innerText.includes('🔒'),
+                          icon_visibility:[...e.querySelectorAll('img')].map(i=>getComputedStyle(i).visibility)})),
                       titles:[...document.querySelectorAll('[title]')].filter(e=>e.getBoundingClientRect().width>0)
                         .map(e=>({tag:e.tagName,title:e.title,text:e.innerText})).slice(0,80)}}""")
                     _, bracket_end=await sample_ready()
@@ -103,6 +108,7 @@ async def main(args):
                         'coherent':selected and stable,'match':selected and stable and expected_fill is not None and dom['heading_fill']==expected_fill}
                     comparisons = []
                     prerequisite_comparisons=[]
+                    upgrade_ui_comparisons=[]
                     for row in dom["rows"]:
                         name = UNIT_ZH.get(row["unit"], row["unit"])
                         if name in UNIT_NAMES and counts is not None and '/' in row['text']:
@@ -126,6 +132,23 @@ async def main(args):
                                 'observed_have':own_counts[kind] if own_counts else None,
                                 'coherent':coherent,'count_match':coherent and have==own_counts[kind],
                                 'requirement_match':coherent and need in expected_needs})
+                    for button in dom['upgrade_buttons']:
+                        label=button['title'].split(' to ',1)[1]
+                        name=TOWER_TYPE_ZH.get(label,label)
+                        if name not in TOWER_TYPES or target is None or target['relation']!='SELF':
+                            continue
+                        kind=TOWER_TYPES.index(name)
+                        dimmed=button['filter']=='brightness(0.7)'
+                        disabled=True if dimmed and button['cursor']=='auto' else False if not dimmed and button['cursor']=='pointer' else None
+                        visible_icons=button['icon_visibility']
+                        locked=True if button['lock_glyph'] and 'hidden' in visible_icons else False if not button['lock_glyph'] and visible_icons and all(v=='visible' for v in visible_icons) else None
+                        own_counts=after.get('own_tower_counts')
+                        expected=all(have>=need for have,need in zip(own_counts,rules.PREREQUISITES[kind])) if own_counts is not None else None
+                        coherent=selected and stable and counts_stable and own_counts is not None and disabled is not None
+                        upgrade_ui_comparisons.append({'target_type':kind,'ui_disabled':disabled,
+                            'ui_locked':locked,'prerequisites_met':expected,'coherent':coherent,
+                            'disabled_match':coherent and disabled==(not expected),
+                            'command_eligibility':'UNKNOWN'})
                     rows.append({"id": current["id"], "selected_id": after["selected_tower"],
                         "selection_confirmed": selected, "relation": current["relation"],
                         "type": TOWER_TYPES[target["type"]] if target else None,
@@ -138,6 +161,9 @@ async def main(args):
                         "relation_check":relation_check,
                         "own_tower_counts":after.get('own_tower_counts'),
                         "prerequisite_comparisons":prerequisite_comparisons,
+                        'upgrade_ui_comparisons':upgrade_ui_comparisons,
+                        'document_time_origin':after['document_time_origin'],
+                        'player_id':after['player_id'],'client_sha256':before_state.client_sha256,
                         "ui": dom, "comparisons": comparisons})
                     rows[-1]['match_epoch']=first_state.match_id.value
                     rows[-1]['round']=round_index
@@ -184,6 +210,9 @@ async def main(args):
         "coherent_prerequisite_fields":sum(c['coherent'] for r in rows for c in r['prerequisite_comparisons']),
         "matched_prerequisite_counts":sum(c['count_match'] for r in rows for c in r['prerequisite_comparisons']),
         "matched_prerequisite_requirements":sum(c['requirement_match'] for r in rows for c in r['prerequisite_comparisons']),
+        'coherent_upgrade_ui_fields':sum(c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
+        'matched_upgrade_ui_fields':sum(c['disabled_match'] for r in rows for c in r['upgrade_ui_comparisons']),
+        'observed_upgrade_lock_fields':sum(c['ui_locked'] is not None and c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
         "tactical_commands": 0, "limits": "limited selections, candidate camera, not M1 gate evidence"}
     (out / "ui-comparison.json").write_text(json.dumps(report, indent=2), encoding="utf8")
     (out / f"ui-comparison-{uuid4().hex[:12]}.json").write_text(json.dumps(report,indent=2),encoding='utf8')

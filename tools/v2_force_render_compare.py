@@ -20,6 +20,7 @@ from playwright.async_api import async_playwright
 POINTS = {
     'speed': (0x9896d, 0x98b8e),
     'position': (0x1036c0, 0x10375f),
+    'units': (0x9896d, 0x98b8e),
 }
 
 
@@ -54,6 +55,7 @@ async def main(args):
         cdp.on('Debugger.scriptParsed', lambda event: scripts.append(event))
         cdp.on('Debugger.paused', lambda event: pauses.put_nowait(event))
         bp = None
+        getter_bp = None
         paused = False
         started = time.monotonic()
         breakpoint_locations = {}
@@ -80,20 +82,35 @@ async def main(args):
                     # Obtain typed ownership and a coherent legal payload before
                     # the normal renderer acquires its exclusive RefCell borrow.
                     _, raw = await ex.sample()
+                    eligible = [f for f in raw['forces'] if f['source'] is not None and f['destination'] is not None
+                        and (args.unit_type is None or dict(decode_units(f['units7']).counts)[args.unit_type])]
+                    if not eligible:
+                        await asyncio.sleep(.15)
+                        continue
+                    target = eligible[len(unique)%len(eligible)]
                     bp = await breakpoint(entry)
                     event = await asyncio.wait_for(pauses.get(), 2)
                     paused = True
-                    values = await locals_at(cdp, event['callFrames'][0], {'$var0', '$var1', '$var2'})
-                    # A speed called by simulation is not normal-render evidence.
-                    render = args.mode == 'position' or any(
-                        'Force::interpolated_position' in f['functionName'] for f in event['callFrames'])
-                    force_ptr = values['$var0'] if args.mode == 'speed' else values['$var1']
-                    if not render:
-                        continue
-                    force = next((f for f in raw['forces'] if f['research_ref'] == force_ptr), None)
-                    if force is None:
-                        continue
-                    if force['source'] is None or force['destination'] is None:
+                    # Keep the entry breakpoint through this frame while seeking
+                    # the preselected legal target. Re-arming only once per frame
+                    # would repeatedly select its first force and bias coverage.
+                    for _ in range(64):
+                        values = await locals_at(cdp, event['callFrames'][0], {'$var0', '$var1', '$var2'})
+                        render = args.mode == 'position' or any(
+                            'Force::interpolated_position' in f['functionName'] or
+                            f['functionName']=='$func1861' for f in event['callFrames'])
+                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']
+                        if render and force_ptr==target['research_ref']:
+                            force=target
+                            break
+                        await resume()
+                        event = await asyncio.wait_for(pauses.get(), 2)
+                        paused = True
+                        if time.monotonic()-started>=args.seconds:
+                            break
+                    else:
+                        raise ValueError('bounded renderer seek did not find preselected visible force')
+                    if not render or force_ptr!=target['research_ref']:
                         continue
                     # Never relax the production observer's borrow guard. While
                     # paused in normal rendering, only reuse the prior payload if
@@ -134,9 +151,33 @@ async def main(args):
                         continue
                     await cdp.send('Debugger.removeBreakpoint', {'breakpointId': bp})
                     bp = await breakpoint(exit_offset)
+                    official_counts = {}
+                    getter_consistent = True
+                    if args.mode == 'units':
+                        getter_bp = await breakpoint(0xf92c2)
                     await resume()
                     end = await asyncio.wait_for(pauses.get(), 2)
                     paused = True
+                    if args.mode == 'units':
+                        for _ in range(32):
+                            if end['callFrames'][0]['location']['columnNumber'] == exit_offset:
+                                break
+                            if end['callFrames'][0]['location']['columnNumber'] != 0xf92c2:
+                                raise ValueError('unexpected official unit getter stop')
+                            if not any(0x9896d <= f['location']['columnNumber'] <= 0x98b97
+                                and f['location']['scriptId']==wasm['scriptId'] for f in end['callFrames'][1:]):
+                                raise ValueError('unit getter escaped captured force speed execution')
+                            getter = await locals_at(cdp, end['callFrames'][0], {'$var1', '$var3'})
+                            unit, count = getter['$var1'] & 255, getter['$var3'] & 255
+                            if not 0 <= unit < 10:
+                                raise ValueError('invalid normal getter unit')
+                            getter_consistent &= unit not in official_counts or official_counts[unit] == count
+                            official_counts[unit] = count
+                            await resume()
+                            end = await asyncio.wait_for(pauses.get(), 2)
+                            paused = True
+                        else:
+                            raise ValueError('too many getters in one force speed invocation')
                     end_values = await locals_at(cdp, end['callFrames'][0], {'$var0', '$var1', '$var2'})
                     # The captured invocation must reach its normal return.
                     if args.mode == 'position' and end_values['$var0'] != values['$var0']:
@@ -151,6 +192,13 @@ async def main(args):
                     if args.mode == 'speed':
                         actual = end_values['$var2'] & 255
                         row.update(official_speed=actual, match=actual == speed)
+                    elif args.mode == 'units':
+                        expected_counts = dict(units.counts)
+                        row.update(official_unit_counts=sorted(official_counts.items()),
+                            derived_unit_counts=[(unit,expected_counts[unit]) for unit in sorted(official_counts)],
+                            complete_vector=len(official_counts)==10,
+                            match=bool(official_counts) and getter_consistent and all(
+                                expected_counts[unit]==count for unit,count in official_counts.items()))
                     else:
                         result = await cdp.send('Runtime.callFunctionOn', {
                             'objectId': ex.memories_id, 'returnByValue': True,
@@ -182,6 +230,9 @@ async def main(args):
                         if bp:
                             await cdp.send('Debugger.removeBreakpoint', {'breakpointId': bp})
                             bp = None
+                        if getter_bp:
+                            await cdp.send('Debugger.removeBreakpoint', {'breakpointId': getter_bp})
+                            getter_bp = None
                     finally:
                         await resume()
                 await asyncio.sleep(.15)
@@ -189,6 +240,8 @@ async def main(args):
             try:
                 if bp:
                     await cdp.send('Debugger.removeBreakpoint', {'breakpointId': bp})
+                if getter_bp:
+                    await cdp.send('Debugger.removeBreakpoint', {'breakpointId': getter_bp})
             finally:
                 try:
                     await resume()
@@ -198,6 +251,8 @@ async def main(args):
                 'fields': len(rows), 'matched': sum(r['match'] for r in rows), 'errors': errors,
                 'unique_fields':len(unique),'unique_matched':sum(unique.values()),
                 'breakpoint_locations':breakpoint_locations,
+                'unit_getter_fields':sum(len(r.get('official_unit_counts',())) for r in rows),
+                'requested_positive_unit_type':args.unit_type,
                 'debugger_pauses': True, 'performance_cohort': False, 'tactical_commands': 0,
                 'limits': 'normal rendered visible forces only; no stable force ID or launch-time proof'}
             path = ROOT / 'runtime/research/v2' / f'force-render-comparison-{uuid4().hex[:12]}.json'
@@ -211,7 +266,11 @@ if __name__ == '__main__':
     parser.add_argument('--mode', choices=POINTS, default='speed')
     parser.add_argument('--samples', type=int, default=30)
     parser.add_argument('--seconds', type=int, default=60)
+    parser.add_argument('--unit-type',type=int,default=None,
+        help='Stratify only currently visible forces with a positive count of this enum; never select by match outcome')
     args = parser.parse_args()
     if not 1 <= args.samples <= 100 or not 1 <= args.seconds <= 120:
         parser.error('samples 1..100 and seconds 1..120 required')
+    if args.unit_type is not None and not 0 <= args.unit_type < 10:
+        parser.error('unit type must be 0..9')
     asyncio.run(main(args))

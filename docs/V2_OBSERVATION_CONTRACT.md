@@ -53,11 +53,14 @@ not a match identifier. Its OBSERVED numeric value does not certify every M1
 semantic/visibility case. The exact `updated_at_ms` remains UNKNOWN without a
 real point-time source. Consecutive reads that observe a sequence transition may
 produce a DERIVED `source_update_window_ms = (previous_read_start, current_read_finish)`.
-This interval contains the update; it is not the update's exact time. Report
+This interval contains the client world application; server generation and
+transport delay are outside its scope. It is not the update's exact time. Report
 `age_bounds_ms` and their conservative upper percentile separately. No assumed
 250 ms period or interpolation clock may shrink that uncertainty. A stalled
 sequence ages its existing window. Document/match/clock discontinuity invalidates
 the window; a first sample cannot claim known source age.
+An application-age bound alone cannot clear canonical decision readiness's
+freshness requirement while authoritative update time remains UNKNOWN.
 
 Reject current world payload while the official visibility cache is pending, while
 the official active-state condition is false, or while expanded visibility is

@@ -1,8 +1,8 @@
 // Independent read-only decoder for one pinned official client version.
 // Root/type discovery remains a RESEARCH CANDIDATE until cross-match validation.
 // Tower payload decoding/export occurs only after live Visible.refs is positive.
-function (mode = "world", sockets = [], ownerStates = []) {
-  if (!["world", "metadata"].includes(mode)) throw Error("invalid observation mode");
+function (mode = "world", watchedIds = [], ownerStates = []) {
+  if (!["world", "metadata", "visibility"].includes(mode)) throw Error("invalid observation mode");
   const memories = this.filter(m => m.buffer.byteLength > 1000000);
   if (memories.length !== 1) throw Error("ambiguous official client memory");
   const memory = memories[0];
@@ -80,6 +80,20 @@ function (mode = "world", sockets = [], ownerStates = []) {
     return {...metadata, world_unavailable: "outside active connected match"};
   if (metadata.visible_pending) return {...metadata, world_unavailable: "current visibility cache pending"};
   if (metadata.expanded_visibility) return {...metadata, world_unavailable: "expanded visibility prohibited"};
+  if (mode === "visibility") {
+    // Sensor truth for previously observed IDs; never follow a hidden actor.
+    // The research caller supplies only IDs from its legal observation history.
+    if (!Array.isArray(watchedIds) || watchedIds.length > 4096 ||
+        watchedIds.some(id => !Number.isInteger(id) || id < 0 || id > 0xffffffff ||
+          (id & 65535) >= 512 || (id >>> 16) >= 512)) throw Error("invalid watched visibility IDs");
+    const map=root+45760,ptr=u32(map+4),len=u32(map+8);
+    const x0=u16(map+12),y0=u16(map+14),x1=u16(map+16),y1=u16(map+18),width=x1-x0+1;
+    return {...metadata, watched_visibility: watchedIds.map(id => {
+      const x=id&65535,y=id>>>16;
+      return {id, visible:len>0 && x>=x0 && y>=y0 && x<=x1 && y<=y1 &&
+        u16(ptr+2*(x-x0+(y-y0)*width))>0};
+    })};
+  }
   const relationCache = new Map();
   const playerEntry = id => {
     const ptr=u32(root+652),len=u32(root+656);
@@ -207,7 +221,22 @@ function (mode = "world", sockets = [], ownerStates = []) {
       }
     }
   }
-  return {...metadata, towers, positive_refs: positiveRefs,
+  // Own persistent Unlocks copied by the normal UI props builder. This is not
+  // the effective ad/rank-dependent lock policy or permission to issue commands.
+  const ownUnlocks = (() => {
+    const p=root+46240,ctrl=u32(p),mask=u32(p+4),len=u32(p+12),size=mask+1;
+    if (size>64 || (size&(size-1))!==0 || len>27 || len>size || !range(ctrl,size)) return null;
+    const kinds=[];
+    for (let slot=0;slot<size;slot++) if (u8(ctrl+slot)<128) {
+        if (!range(ctrl-size,size)) return null;
+        const kind=u8(ctrl-slot-1);
+        if (kind>=27 || kinds.includes(kind)) return null;
+        kinds.push(kind);
+    }
+    if (kinds.length!==len) return null;
+    return {keys:u32(p+32),unlocked_types:kinds.sort((a,b)=>a-b)};
+  })();
+  return {...metadata, towers, positive_refs: positiveRefs, own_unlocks:ownUnlocks,
     // Normal current-player prerequisite presentation; no hidden tower IDs.
     own_tower_counts: Array.from({length:27},(_,i)=>u16(root+592+i*2)),
     camera_candidate: camera, status: "RESEARCH_CANDIDATE",

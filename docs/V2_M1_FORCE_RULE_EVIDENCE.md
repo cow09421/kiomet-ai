@@ -212,3 +212,52 @@ even when a count remains at capacity; they do not add new entity types.
 CONCLUSION: scaled independent tower-field comparisons agree. This is 717
 entity selections, not 1,231 complete states. Ally was absent; force, visibility
 and match-transition strata still require their own evidence. STATUS: PARTIAL.
+
+## QUESTION: can official normal getters independently check force composition?
+
+EVIDENCE: during a previously validated, currently visible Force::speed invocation,
+the read-only tool stops at Units::available return 0xf92c2. Unit enum is local
+$var1 and actual returned count is local $var3. It resumes through the same
+normal speed invocation until return 0x98b8e; no live WASM call is injected.
+Actual breakpoint locations must equal the requested pinned instruction offsets.
+Later probes also check that each getter remains nested inside Force::speed.
+
+a9d60c91270f: 30 distinct world revisions of a currently visible five-tank force,
+30 complete ten-unit vectors, 300/300 independently returned count fields agree.
+No duplicate force world revisions occurred in this cohort. This proves the
+observed Many composition, including actual zeros; it does not prove all Many/
+Single force cases. A follow-up soldier filter initially produced zero cases;
+entry re-arming favored the first rendered tank force. The tool now preselects a
+visible target and seeks within the same frame before comparing any outcomes.
+
+CONCLUSION: actual official normal getter results can independently validate
+composition for legal visible forces. STATUS: PARTIAL, further strata pending.
+
+## QUESTION: is non-owned deployable inventory unknown or a known zero?
+
+EVIDENCE: pinned normal drag rendering at 0xd9d53..0xd9d66 rejects zero owner
+or an owner different from ClientCore.player_id before Tower::force_units at
+0xd9d70. Public ordinary manual drag has the same source ownership restriction.
+The pinned mobile-inventory getter remains separate from route legality.
+
+CONCLUSION: with a positive observed player ID, a currently observed neutral,
+enemy or ally tower permits zero units belonging to this player's source action.
+Unknown/missing player identity remains UNKNOWN. Own source stock uses the pinned
+getter. Delay does not arbitrarily zero existing units; route validity, ranged
+distance and command timing remain separate unresolved eligibility checks.
+STATUS: PASS for source ownership distinction; full deployable-route semantics PARTIAL.
+
+## QUESTION: can own persistent upgrade resources be distinguished from unknown?
+
+EVIDENCE: pinned UI props builders at 0xd6991/0xd699a and 0xd776a/0xd7771
+clone own Unlocks at root+46240. Unlocks::clone (0x14d9db) copies keys+32 and
+clones the byte-enum set. Contains (0xec716) addresses keys at ctrl-(slot+1);
+normal full slots have control byte <128. The adapter validates bounded power-of-two
+capacity, set count, enum range and uniqueness, and does not read random hash seeds.
+Live 412e589d030d observed keys=3 and an empty owned unlock set. Synthetic privacy
+checks distinguish known zero/empty from invalid storage and count disagreement.
+
+CONCLUSION: own persistent keys and unlocked types are OBSERVED resources. They
+are separate from ad/rank-dependent effective lock policy and final command legality.
+Zero Tower.delay proves no active delay-based upgrade, while nonzero delay remains
+UNKNOWN in cause because EMP can produce it. STATUS: PASS for these narrow sources.

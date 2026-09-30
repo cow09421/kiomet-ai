@@ -44,3 +44,16 @@ def mobile_inventory(tower_type,units):
     """Composition eligible for force formation, before route validity checks."""
     return Units(tuple((unit,n if unit!=0 or tower_type==15 else 0)
                        for unit,n in units.counts))
+
+
+def player_mobile_inventory(tower_type,units,owner,player):
+    """Own source inventory; a known non-owned source permits zero own units.
+
+    Unknown player identity remains unknown. Route validity and command timing
+    are separate; inactivity is not assumed to forbid existing troop movement.
+    """
+    if type(player) is not int or not 0 < player <= 65535:
+        return None
+    if owner != player:
+        return Units(tuple((unit,0) for unit,_ in units.counts))
+    return mobile_inventory(tower_type,units)

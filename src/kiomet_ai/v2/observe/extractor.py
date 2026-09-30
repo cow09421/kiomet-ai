@@ -72,6 +72,13 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         if not isinstance(own_counts,list) or len(own_counts)!=27 or any(type(n)is not int or not 0<=n<=65535 for n in own_counts):
             raise ValueError('invalid own prerequisite tower counts')
         own_counts=tuple(own_counts)
+    own_unlocks=raw.get('own_unlocks')
+    if own_unlocks is not None:
+        keys,kinds=own_unlocks.get('keys'),own_unlocks.get('unlocked_types')
+        if (type(keys) is not int or not 0<=keys<=0xffffffff or not isinstance(kinds,list)
+                or any(type(k) is not int or not 0<=k<27 for k in kinds)
+                or kinds!=sorted(set(kinds))):
+            raise ValueError('invalid own persistent unlock resources')
     towers = []
     for row in raw["towers"]:
         if row.get("visible") is not True or not row.get("visibility_source"):
@@ -89,6 +96,7 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
             raise ValueError('invalid visible morale flag')
         if delay is not None and (type(delay) is not int or not 0<=delay<=255):
             raise ValueError('invalid visible delay')
+        own_inventory=rules.player_mobile_inventory(typ,units,owner,raw.get('player_id'))
         towers.append(Tower(row["id"], observed(True, row["visibility_source"], at),
             owner=observed(owner, "Tower.owner+36", at),
             relation=(Fact(relation,Knowledge.DERIVED,'pinned normal Color::new bilateral alliance membership',at)
@@ -102,12 +110,15 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
                 if morale is not None and delay is not None else Fact(),
             effects=observed((('MORALE_BOOST',bool(morale)),),'visible Tower.morale+45; normal UI morale note',at) if morale is not None else Fact(),
             delay_ticks=observed(delay,'Tower.delay+47; upgrade or EMP cause unspecified',at),
+            upgrade=Fact((('in_progress',False),),Knowledge.DERIVED,
+                'Tower.delay==0: no active delay-based upgrade; queued commands are not observed',at)
+                if delay==0 else Fact(),
             upgrade_candidates=Fact(rules.upgrade_candidates(typ,own_counts,delay),Knowledge.DERIVED,
                 'pinned normal prerequisite targets/counts; unlock and final command eligibility unknown',at)
                 if relation==Relation.SELF and own_counts is not None and delay is not None else Fact(),
-            deployable=Fact(rules.mobile_inventory(typ,units),Knowledge.DERIVED,
-                'pinned Tower::force_units mobile inventory; route/command legality is separate and unverified',at)
-                if relation==Relation.SELF else Fact(),
+            deployable=Fact(own_inventory,Knowledge.DERIVED,
+                'normal source-owner restriction + pinned Tower::force_units mobile inventory; route/command legality is separate',at)
+                if own_inventory is not None else Fact(),
             neighbors=(Fact(tuple(sorted(row["neighbors"])), Knowledge.DERIVED,
                             "official neighbor table intersect current Visible.refs", at)
                        if "neighbors" in row else Fact()),
@@ -139,6 +150,10 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         player_id=observed(raw["player_id"], "client.player_id", at),
         upgrade_resources=observed(tuple(enumerate(own_counts)) if own_counts is not None else None,
             'own NonActor active tower counts; normal upgrade prerequisite UI; no enemy aggregates',at),
+        upgrade_keys=observed(own_unlocks['keys'] if own_unlocks is not None else None,
+            'own Unlocks.keys+32 copied by pinned normal UI props; effective lock policy separate',at),
+        unlocked_tower_types=observed(tuple(own_unlocks['unlocked_types']) if own_unlocks is not None else None,
+            'own Unlocks byte-enum set copied by normal UI props; not command eligibility',at),
         king=king,
         forces=forces,
         towers=tuple(sorted(towers, key=lambda t: t.id)))
@@ -237,7 +252,7 @@ class ClientExtractor:
             await self.close()
             raise
 
-    async def _read(self, mode):
+    async def _read(self, mode, watched_ids=()):
         if self.memories_id is None:
             raise RuntimeError("extractor is not attached")
         if self.diagnostic_sockets and (self.sockets_dirty or time.monotonic()-self.sockets_checked_at>=1):
@@ -246,7 +261,7 @@ class ClientExtractor:
         began_ms = int(began_monotonic)
         result = await self.cdp.send("Runtime.callFunctionOn", {
             "objectId": self.memories_id, "returnByValue": True,
-            "arguments": [{"value": mode}, {"value": []}, {"objectId":self.owner_states_id}],
+            "arguments": [{"value": mode}, {"value": list(watched_ids)}, {"objectId":self.owner_states_id}],
             "functionDeclaration": self.decoder_source})
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
@@ -271,6 +286,17 @@ class ClientExtractor:
     async def metadata(self):
         """Only normal-client lifecycle/tick metadata; no world payload."""
         return (await self._read("metadata"))[0]
+
+    async def visibility(self, previously_observed_ids):
+        """Current own sensor references only; no tower/force payload reads.
+
+        Research tools pass only IDs from their legal observation history.
+        Unavailable lifecycle/dirty/offline states never become false visibility.
+        """
+        raw=(await self._read('visibility',previously_observed_ids))[0]
+        if raw.get('world_unavailable'):
+            raise ValueError(raw['world_unavailable'])
+        return raw
 
     async def sample(self):
         raw, began_ms, received_ms, window = await self._read("world")

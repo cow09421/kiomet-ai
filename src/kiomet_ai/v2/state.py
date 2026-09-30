@@ -139,7 +139,8 @@ class GameState:
     tick: Fact[int] = field(default_factory=Fact)
     # Observed displayed-world sequence; NETWORK and OFFLINE never share a clock.
     source_mode: Fact[str] = field(default_factory=Fact)
-    # Host-clock interval containing the source's last update, never a point time.
+    # Host-clock interval containing the client's last world application.
+    # It does not bound server generation or prior network delay.
     source_update_window_ms: Fact[tuple[int, int]] = field(default_factory=Fact)
     lifecycle: Fact[Lifecycle] = field(default_factory=Fact)
     player_id: Fact[int] = field(default_factory=Fact)
@@ -147,6 +148,8 @@ class GameState:
     forces: Fact[tuple[Force, ...]] = field(default_factory=Fact)
     king: Fact[tuple] = field(default_factory=Fact)
     upgrade_resources: Fact[tuple] = field(default_factory=Fact)
+    upgrade_keys: Fact[int] = field(default_factory=Fact)
+    unlocked_tower_types: Fact[tuple[int, ...]] = field(default_factory=Fact)
     ranking: Fact[tuple] = field(default_factory=Fact)
     coverage: str = "PARTIAL"
 
@@ -193,7 +196,7 @@ class GameState:
             if getattr(self, name).knowledge == Knowledge.UNKNOWN:
                 gaps.append(name)
         bounds = self.age_bounds_ms(now_ms)
-        if bounds is None or bounds[1] > max_age_ms:
+        if self.updated_at_ms.knowledge == Knowledge.UNKNOWN or bounds is None or bounds[1] > max_age_ms:
             gaps.append("freshness")
         if self.coverage != "PLAYER_VISIBLE_COMPLETE":
             gaps.append("coverage")
