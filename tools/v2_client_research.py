@@ -39,6 +39,11 @@ async def main(args):
         print(json.dumps({"phase": "loaded", "url": page.url,
                           "guard": host.guard(),
                           "text": (await page.locator("body").inner_text())[:1800]}), flush=True)
+        # Chromium session restore can finish after BrowserHost's startup cleanup.
+        # All these pages belong to this task's profile and isolated desktop.
+        for other in list(host.context.pages):
+            if other != page and other != host.probe_page and other.url.startswith("https://kiomet.com/"):
+                await other.close()
         cdp = await page.context.new_cdp_session(page)
         scripts = []
         cdp.on("Debugger.scriptParsed", lambda event: scripts.append(event))

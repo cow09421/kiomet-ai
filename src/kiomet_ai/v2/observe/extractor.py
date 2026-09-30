@@ -7,6 +7,8 @@ from uuid import uuid4
 import psutil
 
 from ..state import Fact, GameState, Knowledge, Relation, Tower, Units
+from .source_clock import SourceClock
+from .lifecycle import MatchLifecycle
 
 CLIENT_SHA256 = "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c"
 
@@ -44,7 +46,8 @@ def decode_many(raw):
     return Units(tuple((i, raw[6] if i == 0 else raw[i] if i < 6 else 0) for i in range(10)))
 
 
-def normalize(raw, session_id, document_id, sequence, received_ms, sample_started_ms=None):
+def normalize(raw, session_id, document_id, sequence, received_ms, sample_started_ms=None,
+              update_window=None, match_identity=None, lifecycle=None):
     # Browser and host wall clocks are different clock domains on Windows.
     # Host send time is a conservative lower bound on this synchronous read.
     at = raw["sampled_at_ms"] if sample_started_ms is None else sample_started_ms
@@ -71,8 +74,17 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
                           "official integer-position offset table", at)))
     # Match/update time and moving-force coverage have NOT been verified.
     # Explicitly do not turn the host's inferred match label into an observed ID.
-    return GameState(session_id, document_id, Fact(), sequence, at, received_ms,
+    return GameState(session_id, document_id,
+        Fact(match_identity, Knowledge.DERIVED,
+             "document + player identity + observed lifecycle / official join epoch", at) if match_identity else Fact(),
+        sequence, at, received_ms,
         CLIENT_SHA256, client_sampled_at_ms=observed(raw["sampled_at_ms"], "browser clock (separate domain)", at),
+        tick=observed(raw.get("tick"), "pinned World.Singleton.tick u16; frame-independent world update", at),
+        source_update_window_ms=(Fact(update_window, Knowledge.DERIVED,
+            "source tick transition bracketed by previous read start / current read finish; host clock", at)
+            if update_window is not None else Fact()),
+        lifecycle=Fact(lifecycle, Knowledge.DERIVED,
+            "official active condition + Play UI + WebSocket readyState", at) if lifecycle else Fact(),
         player_id=observed(raw["player_id"], "client.player_id", at),
         towers=tuple(sorted(towers, key=lambda t: t.id)))
 
@@ -88,6 +100,23 @@ class ClientExtractor:
         self.cdp = None
         self.memories_id = None
         self.time_origin = None
+        self.source_clock = SourceClock()
+        self.lifecycle = MatchLifecycle(self.document_id)
+        self.sockets_id = None
+        self.sockets_dirty = True
+
+    async def _refresh_sockets(self):
+        proto = (await self.cdp.send("Runtime.evaluate", {
+            "expression": "WebSocket.prototype"}))["result"]["objectId"]
+        try:
+            new = (await self.cdp.send("Runtime.queryObjects", {
+                "prototypeObjectId":proto}))["objects"]["objectId"]
+            if self.sockets_id:
+                await self.cdp.send("Runtime.releaseObject", {"objectId":self.sockets_id})
+            self.sockets_id = new
+            self.sockets_dirty = False
+        finally:
+            await self.cdp.send("Runtime.releaseObject", {"objectId":proto})
 
     async def attach(self):
         if self.cdp is not None:
@@ -107,6 +136,9 @@ class ClientExtractor:
             if digest != CLIENT_SHA256:
                 raise ValueError("unsupported official client version: " + digest)
             await self.cdp.send("Debugger.disable")
+            self.cdp.on("Network.webSocketCreated", lambda _: setattr(self,"sockets_dirty",True))
+            await self.cdp.send("Network.enable")
+            await self._refresh_sockets()
             self.time_origin = await self.page.evaluate("performance.timeOrigin")
             proto = (await self.cdp.send("Runtime.evaluate", {
                 "expression": "WebAssembly.Memory.prototype"}))["result"]["objectId"]
@@ -119,29 +151,100 @@ class ClientExtractor:
             await self.close()
             raise
 
-    async def sample(self):
+    async def _read(self, mode):
         if self.memories_id is None:
             raise RuntimeError("extractor is not attached")
+        if self.sockets_dirty:
+            await self._refresh_sockets()
         began_ms = time.time_ns() // 1000000
+        began_monotonic = time.monotonic_ns() / 1000000
         result = await self.cdp.send("Runtime.callFunctionOn", {
             "objectId": self.memories_id, "returnByValue": True,
+            "arguments": [{"value": mode}, {"objectId":self.sockets_id}],
             "functionDeclaration": Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")})
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
         raw = result["result"]["value"]
         if raw["document_time_origin"] != self.time_origin:
+            self.source_clock.clear()
             raise ValueError("document changed; discard observer and reattach")
+        received_ms = time.time_ns() // 1000000
+        life, identity = self.lifecycle.observe(raw, received_ms)
+        raw["derived_lifecycle"] = life
+        raw["derived_match_id"] = identity
+        window = None
+        if identity:
+            window = self.source_clock.observe(
+                (self.document_id, identity, raw["root_candidate"], raw["player_id"]),
+                raw.get("tick"), began_ms, received_ms, began_monotonic)
+        else:
+            self.source_clock.clear()
+        return raw, began_ms, received_ms, window
+
+    async def metadata(self):
+        """Only normal-client lifecycle/tick metadata; no world payload."""
+        return (await self._read("metadata"))[0]
+
+    async def sample(self):
+        raw, began_ms, received_ms, window = await self._read("world")
+        if raw.get("world_unavailable"):
+            raise ValueError(raw["world_unavailable"])
         state = normalize(raw, self.session_id, self.document_id,
-                          self.sequence + 1, time.time_ns() // 1000000, began_ms)
+                          self.sequence + 1, received_ms, began_ms, update_window=window,
+                          match_identity=raw["derived_match_id"],lifecycle=raw["derived_lifecycle"])
         self.sequence += 1
         return state, raw
 
     async def close(self):
+        self.source_clock.clear()
         if self.cdp:
             try:
-                if self.memories_id:
-                    await self.cdp.send("Runtime.releaseObject", {"objectId": self.memories_id})
-                await self.cdp.send("Debugger.disable")
+                for oid in (self.memories_id,self.sockets_id):
+                    if oid:
+                        try:
+                            await self.cdp.send("Runtime.releaseObject", {"objectId":oid})
+                        except Exception:
+                            pass  # The old document may already have destroyed its handles.
+                for command in ("Network.disable","Debugger.disable"):
+                    try:
+                        await self.cdp.send(command)
+                    except Exception:
+                        pass
             finally:
-                await self.cdp.detach()
-                self.cdp = self.memories_id = None
+                try:
+                    await self.cdp.detach()
+                finally:
+                    self.cdp = self.memories_id = self.sockets_id = None
+
+
+class ObservationSession:
+    """Reacquire a pinned observer after a real document reload; never send input."""
+    def __init__(self,page):
+        self.page = page
+        self.session_id = uuid4().hex
+        self.extractor = None
+        self.document_reacquisitions = 0
+
+    async def _ensure_document(self):
+        origin = await self.page.evaluate("performance.timeOrigin")
+        if self.extractor is not None and origin != self.extractor.time_origin:
+            await self.extractor.close()
+            self.extractor = None
+        if self.extractor is None:
+            ex = ClientExtractor(self.page,self.session_id)
+            await ex.attach()
+            self.extractor = ex
+            self.document_reacquisitions += 1
+
+    async def metadata(self):
+        await self._ensure_document()
+        return await self.extractor.metadata()
+
+    async def sample(self):
+        await self._ensure_document()
+        return await self.extractor.sample()
+
+    async def close(self):
+        if self.extractor:
+            await self.extractor.close()
+            self.extractor = None

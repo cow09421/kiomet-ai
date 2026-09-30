@@ -1,9 +1,8 @@
 // Independent read-only decoder for one pinned official client version.
 // Root/type discovery remains a RESEARCH CANDIDATE until cross-match validation.
 // The only tower reads occur AFTER the live Visible.refs entry is positive.
-function () {
-  if (document.querySelector('#play_button')?.offsetParent !== null &&
-      document.querySelector('#play_button')) throw Error("outside active match");
+function (mode = "world", sockets = []) {
+  if (!["world", "metadata"].includes(mode)) throw Error("invalid observation mode");
   const memories = this.filter(m => m.buffer.byteLength > 1000000);
   if (memories.length !== 1) throw Error("ambiguous official client memory");
   const memory = memories[0];
@@ -23,18 +22,36 @@ function () {
     const cap = u32(m), ptr = u32(m + 4), len = u32(m + 8);
     const x0 = u16(m + 12), y0 = u16(m + 14), x1 = u16(m + 16), y1 = u16(m + 18);
     const area = (x1 - x0 + 1) * (y1 - y0 + 1);
-    if (x1 >= 512 || y1 >= 512 || x1 < x0 || y1 < y0 || len !== area ||
-        len > cap || len === 0 || !range(ptr, 2 * len)) continue;
+    if (len > cap || (len > 0 && (x1 >= 512 || y1 >= 512 || x1 < x0 ||
+        y1 < y0 || len !== area || !range(ptr, 2 * len)))) continue;
     const core = u32(root + 45828);
-    if (!range(core, 250) || u16(core + 248) === 0) continue;
+    if (!range(core, 256)) continue;
     roots.add(root);
   }
   if (roots.size !== 1) throw Error("context root missing or ambiguous: " + roots.size);
   const root = [...roots][0];
+  const core = u32(root + 45828);
+  const player = u16(core + 248);
+  const play = document.querySelector('#play_button');
+  const metadata = {sampled_at_ms: Date.now(), document_time_origin: performance.timeOrigin,
+    player_id: player, root_candidate: root,
+    tick: u32(root + 45720) === 0x80000000 ? null : u16(root + 45732),
+    // Pinned update_visible/Color::new use exactly this active-state condition.
+    active: u32(root + 548) === 3,
+    visible_pending: u8(root + 45784) !== 0,
+    // update_visible's second all_visible path is cheats + keyboard B.
+    expanded_visibility: u8(core + 105) !== 2 && (u8(core + 104) & 1) !== 0 && u32(root + 46480) !== 0,
+    online: navigator.onLine,
+    transport_connected: sockets.some(s => s.readyState === WebSocket.OPEN),
+    play_text: play?.offsetParent !== null && play ? play.innerText : null};
+  if (mode === "metadata") return metadata; // No tower/force payload reads.
+  if (!metadata.online || !metadata.transport_connected || !metadata.active || metadata.play_text !== null || player === 0)
+    return {...metadata, world_unavailable: "outside active connected match"};
+  if (metadata.visible_pending) return {...metadata, world_unavailable: "current visibility cache pending"};
+  if (metadata.expanded_visibility) return {...metadata, world_unavailable: "expanded visibility prohibited"};
   const map = root + 45760, refs = u32(map + 4);
   const bounds = [u16(map + 12), u16(map + 14), u16(map + 16), u16(map + 18)];
   const width = bounds[2] - bounds[0] + 1;
-  const player = u16(u32(root + 45828) + 248);
   const camera = [v.getFloat32(root + 48080, true), v.getFloat32(root + 48084, true), v.getFloat32(root + 48100, true)];
   const offsetPtr = u32(1365232);
   if (u8(1365236) !== 3 || !range(offsetPtr, 512 * 512)) throw Error("position table unavailable");
@@ -84,10 +101,9 @@ function () {
   for (const t of towers) for (const neighbor of t.neighbors) {
     if (!towerById.get(neighbor).neighbors.includes(t.id)) throw Error("asymmetric visible road graph");
   }
-  return {sampled_at_ms: Date.now(), document_time_origin: performance.timeOrigin,
-    player_id: player, towers, positive_refs: positiveRefs,
-    root_candidate: root, camera_candidate: camera, status: "RESEARCH_CANDIDATE",
+  return {...metadata, towers, positive_refs: positiveRefs,
+    camera_candidate: camera, status: "RESEARCH_CANDIDATE",
     selected_tower: u32(root + 47968) === 1 ? u32(root + 47972) : null,
-    match_id: null, updated_at_ms: null, tick: null,
+    match_id: null, updated_at_ms: null,
     forces: null, coverage: "PARTIAL"};
 }

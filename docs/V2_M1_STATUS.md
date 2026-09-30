@@ -4,6 +4,21 @@ CURRENT MILESTONE: M0 / M1
 
 STATUS: PARTIAL（部分完成）；M1 未通過。
 
+## 第二施工階段／長任務進度
+
+`55ee71e` 已依使用者新指令推送到 `origin/v2-rebuild`；main 未動。
+已接入正式 WASM 的 OBSERVED world_sequence（世界序號），並以正常更新、
+可見兵力生產變化、結果畫面、短暫斷線／重連驗證。它在結果畫面仍更新，
+因此不能作為對局 ID，也不能換算成時間戳。精確 source_updated_at 與
+snapshot age p95 仍 UNKNOWN。
+
+新增 DERIVED 更新時間區間，對來源年齡提供上下界；不把讀取時間冒充更新時間。
+5 Hz 初測的保守來源年齡上界 p95 為 400–416 ms，尚未達 250 ms Gate。
+已補官方 active／visibility-dirty／expanded-visibility 拒絕條件。
+對局身分加入文件／玩家／官方加入與結果邊界的推導；完整真實切局、重載
+驗證仍在進行，沒有提前宣稱通過。詳見 `V2_M1_TICK_EVIDENCE.md`。
+本階段 v2 契約與生命週期測試 12 項通過；沒有處理 v1 測試失敗。
+
 ## 本輪完成
 
 - 在原工作目錄恢復遺失的 Git 歷史；建立 `v2-rebuild`，基底與判決的

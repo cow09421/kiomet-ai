@@ -49,6 +49,15 @@ class Relation(StrEnum):
     ENEMY = "ENEMY"
 
 
+class Lifecycle(StrEnum):
+    MENU = "MENU"
+    JOINING = "JOINING"
+    IN_MATCH = "IN_MATCH"
+    RESULT = "RESULT"
+    DISCONNECTED = "DISCONNECTED"
+    UNKNOWN = "UNKNOWN"
+
+
 @dataclass(frozen=True, slots=True)
 class Units:
     # Complete typed vector, including known zero counts. Stable enum IDs.
@@ -119,6 +128,9 @@ class GameState:
     # Last confirmed authoritative update, distinct from last memory poll.
     updated_at_ms: Fact[int] = field(default_factory=Fact)
     tick: Fact[int] = field(default_factory=Fact)
+    # Host-clock interval containing the source's last update, never a point time.
+    source_update_window_ms: Fact[tuple[int, int]] = field(default_factory=Fact)
+    lifecycle: Fact[Lifecycle] = field(default_factory=Fact)
     player_id: Fact[int] = field(default_factory=Fact)
     towers: tuple[Tower, ...] = ()
     forces: Fact[tuple[Force, ...]] = field(default_factory=Fact)
@@ -134,6 +146,12 @@ class GameState:
             raise ValueError("missing snapshot identity")
         if self.received_at_ms < self.sampled_at_ms:
             raise ValueError("receipt predates sample")
+        window = self.source_update_window_ms.value
+        if window is not None and (len(window) != 2 or
+                any(type(t) is not int or t < 0 for t in window) or
+                window[0] > window[1] or window[1] > self.received_at_ms or
+                self.tick.value is None):
+            raise ValueError("invalid source update window")
         if not isinstance(self.towers, tuple) or not all(isinstance(t, Tower) for t in self.towers):
             raise TypeError("towers must be an immutable tuple")
         ids = {t.id for t in self.towers}
@@ -151,13 +169,20 @@ class GameState:
             return None
         return max(0, now_ms - self.updated_at_ms.value)
 
+    def age_bounds_ms(self, now_ms: int) -> tuple[int, int] | None:
+        window = self.source_update_window_ms.value
+        if window is None:
+            age = self.age_ms(now_ms)
+            return None if age is None else (age, age)
+        return (max(0, now_ms - window[1]), max(0, now_ms - window[0]))
+
     def readiness_gaps(self, now_ms: int, max_age_ms: int = 250) -> tuple[str, ...]:
         gaps = []
         for name in ("match_id", "tick", "player_id", "forces", "king", "upgrade_resources"):
             if getattr(self, name).knowledge == Knowledge.UNKNOWN:
                 gaps.append(name)
-        age = self.age_ms(now_ms)
-        if age is None or age > max_age_ms:
+        bounds = self.age_bounds_ms(now_ms)
+        if bounds is None or bounds[1] > max_age_ms:
             gaps.append("freshness")
         if self.coverage != "PLAYER_VISIBLE_COMPLETE":
             gaps.append("coverage")

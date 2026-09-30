@@ -31,7 +31,7 @@ async def main(args):
                 await button.wait_for(state="hidden", timeout=60000)
                 await asyncio.sleep(2)
         extractor = ClientExtractor(pages[0])
-        latencies, errors, snapshots = [], [], 0
+        latencies, errors, snapshots, upper_ages = [], [], 0, []
         start = time.perf_counter()
         next_poll = start
         try:
@@ -45,6 +45,9 @@ async def main(args):
                         elapsed = (time.perf_counter() - began) * 1000
                         latencies.append(elapsed)
                         snapshots += 1
+                        bounds = state.age_bounds_ms(state.received_at_ms)
+                        if bounds is not None:
+                            upper_ages.append(bounds[1])
                         stream.write(json.dumps(asdict(state), ensure_ascii=False) + "\n")
                         if snapshots == 1:
                             (out / "first-raw.json").write_text(json.dumps(raw, indent=2), encoding="utf8")
@@ -65,6 +68,8 @@ async def main(args):
         report = {"status": "PARTIAL", "seconds": duration, "snapshots": snapshots,
             "accepted_poll_hz": snapshots / duration, "poll_latency_p95_ms": p95,
             "authoritative_update_age_p95_ms": None, "independent_ui_comparisons": 0,
+            "derived_update_age_upper_p95_ms": sorted(upper_ages)[max(0,int(len(upper_ages)*.95)-1)] if upper_ages else None,
+            "bounded_age_snapshots":len(upper_ages),
             "error_count": len(errors), "errors": errors[:5],
             "snapshot_file": f"snapshots-{run}.jsonl",
             "note": "Poll latency is not game-state age. Root adapter is research candidate."}

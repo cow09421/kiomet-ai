@@ -37,6 +37,25 @@ increase only for accepted snapshots. Client observation time, last confirmed ga
 update time and host receipt time are distinct. Polling repeatedly must not refresh
 unchanged/stalled authoritative data. Report update age as UNKNOWN when unavailable.
 
+The pinned `World.Singleton.tick` is a u16 world sequence, not a timestamp and
+not a match identifier. Its OBSERVED numeric value does not certify every M1
+semantic/visibility case. The exact `updated_at_ms` remains UNKNOWN without a
+real point-time source. Consecutive reads that observe a sequence transition may
+produce a DERIVED `source_update_window_ms = (previous_read_start, current_read_finish)`.
+This interval contains the update; it is not the update's exact time. Report
+`age_bounds_ms` and their conservative upper percentile separately. No assumed
+250 ms period or interpolation clock may shrink that uncertainty. A stalled
+sequence ages its existing window. Document/match/clock discontinuity invalidates
+the window; a first sample cannot claim known source age.
+
+Reject current world payload while the official visibility cache is pending, while
+the official active-state condition is false, or while expanded visibility is
+enabled. Metadata-only lifecycle observation may continue; it exports no tower or
+force payload. A derived match epoch combines document identity, player identity,
+official join boundaries and observed menu/result transitions. An unobserved gap
+that could conceal a match transition makes identity UNKNOWN. Pointers never form
+canonical entity identity.
+
 ## Required state
 
 Match, snapshot sequence, clock/provenance, own identity; visible towers with owner,

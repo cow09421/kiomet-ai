@@ -3,6 +3,7 @@ import pytest
 
 from kiomet_ai.v2.state import Fact, GameState, Knowledge, Tower, Units
 from kiomet_ai.v2.observe.extractor import decode_many, normalize
+from kiomet_ai.v2.observe.source_clock import SourceClock
 
 
 def fact(value):
@@ -81,3 +82,37 @@ def test_malformed_and_duplicate_towers_do_not_enter_state():
         normalize(payload, "s", "d", 1, 101)
     with pytest.raises(ValueError, match="receipt"):
         normalize(raw(), "s", "d", 1, 99)
+
+
+def test_source_clock_requires_a_real_transition_and_bounds_uncertainty():
+    clock = SourceClock()
+    key = ("doc", 400, 7)
+    assert clock.observe(key, 55, 100, 110, 1000) is None
+    assert clock.observe(key, 55, 200, 210, 1100) is None
+    assert clock.observe(key, 56, 300, 315, 1200) == (200, 315)
+    # Polling a frozen world must age its prior source update, not refresh it.
+    assert clock.observe(key, 56, 500, 510, 1400) == (200, 315)
+    payload = raw()
+    payload["tick"] = 56
+    state = normalize(payload, "s", "d", 1, 510, 500, update_window=(200,315))
+    assert state.tick.knowledge == Knowledge.OBSERVED
+    assert state.source_update_window_ms.knowledge == Knowledge.DERIVED
+    assert state.updated_at_ms.knowledge == Knowledge.UNKNOWN
+    assert state.age_ms(510) is None
+    assert state.age_bounds_ms(510) == (195,310)
+    assert "freshness" in state.readiness_gaps(510)
+
+
+def test_source_clock_resets_for_identity_clock_discontinuity_and_long_gap():
+    clock = SourceClock()
+    a = ("d1",400,7)
+    clock.observe(a,65535,100,101,1000)
+    assert clock.observe(a,0,200,201,1100) == (100,201)
+    assert clock.observe(a,0,1500,1501,2400) is None
+    assert clock.observe(a,1,1600,1601,2500) == (1500,1601)
+    assert clock.observe(("d2",400,7),2,1700,1701,2600) is None
+    assert clock.observe(("d2",400,8),3,1800,1801,2700) is None
+    assert clock.observe(("d2",400,8),4,2800,2801,2800) is None
+    with pytest.raises(ValueError,match="window"):
+        GameState("s","d",Fact(),1,100,101,"v",tick=fact(1),
+                  source_update_window_ms=fact((100,102)))
