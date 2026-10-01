@@ -236,7 +236,14 @@ function (mode = "world", watchedIds = [], ownerStates = []) {
     if (kinds.length!==len) return null;
     return {keys:u32(p+32),unlocked_types:kinds.sort((a,b)=>a-b)};
   })();
+  // Normal Ctw props clone uses RewardedAd at context+48964. CoreState::rank
+  // reads its direct enum at core+255; tag 0 uses a claims lookup which is not
+  // read here. Preserve that path as UNKNOWN and never inspect claim storage.
+  const adTag=u32(root+48964),rankTag=u8(core+255);
+  const ownUpgradePolicy={rewarded_ad_available:adTag<=3 ? adTag!==0 : null,
+    rank_requires_unlocks:rankTag>=1 && rankTag<=7 ? rankTag<3 || rankTag===7 : null};
   return {...metadata, towers, positive_refs: positiveRefs, own_unlocks:ownUnlocks,
+    own_upgrade_policy:ownUpgradePolicy,
     // Normal current-player prerequisite presentation; no hidden tower IDs.
     own_tower_counts: Array.from({length:27},(_,i)=>u16(root+592+i*2)),
     camera_candidate: camera, status: "RESEARCH_CANDIDATE",

@@ -264,3 +264,26 @@ CONCLUSION / STATUS: FAIL for both of these particular timestamp hypotheses.
 This typed decode/use proof is stronger than absence of a timestamp name, but
 does not by itself establish that every other legal source is absent. The
 canonical server-generation time and authoritative snapshot age stay UNKNOWN.
+
+### QUESTION: what is the remaining scalar in the direct Game actor update?
+
+The pinned decoder's Game branch begins at 0x4d832. At 0x4d848 it reads an
+Option presence byte; when present it decodes a u32 at 0x4d862 into stack+324,
+and stores the 0/1 discriminator at stack+320 (0x4d86f). The nine subsequent
+8-byte collection descriptors occupy stack+328 through +399; their conversion
+helpers have explicit element sizes 12, 36, 2, 44, 24, 2, 2, 12 and 0.
+The resulting actor update is 80 bytes, followed by the 136-byte NonActor.
+
+Normal ServerState::apply copies this actor update to stack+640. Its optional
+scalar tag is checked at 0x10422..0x10431, a world-derived value is accumulated
+from actor content and the Singleton tick, and 0x105a1..0x105ac compares the
+result with the decoded u32 at stack+644. This establishes checksum semantics,
+not time semantics. The generated public ActorUpdate macro also defines only
+checksum plus completes/inboxes/removals collections for each actor, consistent
+with the production layout; the exact current decoder/use path is the primary
+evidence because the reference checksum type differs from the old Kiomet source.
+
+CONCLUSION / STATUS: FAIL for interpreting the remaining direct Game scalar
+as generation time. No direct Game wrapper timestamp is present in this decoded
+layout. This does not promote receipt time, RTT or an actor tick into one, and
+does not assert complete absence across every transport or UI metadata path.

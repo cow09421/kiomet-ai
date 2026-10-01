@@ -20,6 +20,48 @@ def upgrade_candidates(tower_type,counts,delay):
                  for target,parent in enumerate(DOWNGRADE) if parent==tower_type)
 
 
+def locked_for_target(target,policy,unlocked_types):
+    """Normal UI predicate; unavailable inputs are not false.
+
+    TowerType::level is zero exactly when it has no prerequisite or downgrade.
+    The lock condition is an AND, so a proven false term resolves the result
+    even when an irrelevant term is unavailable.
+    """
+    if DOWNGRADE[target]==27 and not any(PREREQUISITES[target]):
+        return False
+    if unlocked_types is not None and target in unlocked_types:
+        return False
+    if policy is None:
+        return None
+    available=policy.get('rewarded_ad_available')
+    restricted=policy.get('rank_requires_unlocks')
+    if available is False or restricted is False:
+        return False
+    if available is True and restricted is True and unlocked_types is not None:
+        return True
+    return None
+
+
+def upgrade_locks(tower_type,delay,policy,unlocked_types):
+    """Lock flags for normal own active upgrade/basis-downgrade buttons."""
+    if delay is None:
+        return None
+    if delay:
+        return ()
+    targets=[t for t,parent in enumerate(DOWNGRADE) if parent==tower_type]
+    basis=tower_type
+    seen=set()
+    while DOWNGRADE[basis]!=27:
+        if basis in seen:
+            raise ValueError('invalid pinned downgrade cycle')
+        seen.add(basis)
+        basis=DOWNGRADE[basis]
+    if basis!=tower_type:
+        targets.append(basis)
+    result=tuple((t,locked_for_target(t,policy,unlocked_types)) for t in targets)
+    return None if any(locked is None for _,locked in result) else result
+
+
 def capacity(tower_type,morale):
     return Units(tuple((unit,n+(10 if unit==0 and morale else 0))
                        for unit,n in enumerate(CAPACITY[tower_type])))

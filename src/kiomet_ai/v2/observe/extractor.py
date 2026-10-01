@@ -81,6 +81,12 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
                 or any(type(k) is not int or not 0<=k<27 for k in kinds)
                 or kinds!=sorted(set(kinds))):
             raise ValueError('invalid own persistent unlock resources')
+    own_policy=raw.get('own_upgrade_policy')
+    if own_policy is not None:
+        if not isinstance(own_policy,dict) or any(own_policy.get(k) is not None and
+                type(own_policy.get(k)) is not bool for k in
+                ('rewarded_ad_available','rank_requires_unlocks')):
+            raise ValueError('invalid own upgrade lock policy')
     towers = []
     for row in raw["towers"]:
         if row.get("visible") is not True or not row.get("visibility_source"):
@@ -99,6 +105,8 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         if delay is not None and (type(delay) is not int or not 0<=delay<=255):
             raise ValueError('invalid visible delay')
         own_inventory=rules.player_mobile_inventory(typ,units,owner,raw.get('player_id'))
+        locks=rules.upgrade_locks(typ,delay,own_policy,
+            own_unlocks['unlocked_types'] if own_unlocks is not None else None) if relation==Relation.SELF else None
         towers.append(Tower(row["id"], observed(True, row["visibility_source"], at),
             owner=observed(owner, "Tower.owner+36", at),
             relation=(Fact(relation,Knowledge.DERIVED,'pinned normal Color::new bilateral alliance membership',at)
@@ -118,6 +126,9 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
             upgrade_candidates=Fact(rules.upgrade_candidates(typ,own_counts,delay),Knowledge.DERIVED,
                 'pinned normal prerequisite targets/counts; unlock and final command eligibility unknown',at)
                 if relation==Relation.SELF and own_counts is not None and delay is not None else Fact(),
+            upgrade_locks=Fact(locks,Knowledge.DERIVED,
+                'pinned normal UI ad/rank/level/unlock predicate; includes basis downgrade; not final command eligibility',at)
+                if locks is not None else Fact(),
             deployable=Fact(own_inventory,Knowledge.DERIVED,
                 'normal source-owner restriction + pinned Tower::force_units mobile inventory; route/command legality is separate',at)
                 if own_inventory is not None else Fact(),

@@ -88,6 +88,11 @@ Match, snapshot sequence, clock/provenance, own identity; visible towers with ow
 relation, type, typed units, deployability, capacity, production, visible graph,
 position and visibility; visible moving forces with identity/path/owner/typed units,
 launch/ETA and provenance; king, upgrade resources/state, ranking, effects/aura/EMP.
+Own currently visible upgrade_locks may be DERIVED from the pinned normal UI
+ad/rank/level/permanent-unlock predicate, including its optional basis downgrade.
+Claims-backed rank remains UNKNOWN without reading account claims. A proven false
+AND term may resolve an unlocked flag; unresolved targets stay UNKNOWN. UI lock,
+prerequisite satisfaction and final command eligibility are separate facts.
 Unavailable fields remain UNKNOWN. Readiness requires verified match/update identity,
 graph, units and command-relevant fields; partial state cannot silently enter search.
 PLAYER_VISIBLE_COMPLETE is a derived entity-coverage certificate: every current

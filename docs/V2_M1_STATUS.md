@@ -172,7 +172,7 @@ camera-visibility-84402eb3385c 以普通左右鏡頭鍵向右並返回，正常�
 root bracket 與 source manifest 檢查，不回填為舊程序已測欄位。
 
 新場景的 fca86e13b9ad 已取得加強 pause guard 的 live 控制證據：10 個去重
-世界版本完整十兵種向量，100/100 欄位一致；實際是四坦克，不擴張為 Single
+世界版本完整十兵種向量，100/100 欄位一致；實際是四士兵（enum 5），不擴張為 Single
 覆蓋。來源端不可見仍不輸出其 ID／幾何。87214e834f0e 正常資訊框另有
 59/59 兵數／容量、42/42 顏色／塔型／delay 進度條，18/18 本方前置需求。
 
@@ -203,11 +203,11 @@ actor 解碼數完全相等，且正常 active／NETWORK／連線／非 expanded
 門控成立，才有 DERIVED coverage_evidence 與 PLAYER_VISIBLE_COMPLETE。
 缺任一目前 actor 仍 PARTIAL；這不是全世界完整性，也不清除 UNKNOWN 欄位
 或 freshness。真實短測有 41/41 sensor slots，已移除固定 coverage 缺口。
-26 項 v2 測試與 Node 隱私邊界通過。d4a9b156ae26 新直升機分層取得
+26 項 v2 測試與 Node 隱私邊界通過。d4a9b156ae26 坦克（enum 4）分層取得
 10 個完整十兵種向量、100/100 欄位一致；除錯暫停排除於效能驗收。
 
 直接 getter 的 83d3f2a9f42b 遇到自然終局，沒有有效案例；356d561ee6e5
-雖在真正直升機場景命中正式 entry 0xf9203，但 bounded caller／address seek
+雖在真正坦克場景命中正式 entry 0xf9203，但 bounded caller／address seek
 未找到可核對目標，仍為零案例。已新增有限 caller 名稱／地址是否吻合的布林
 診斷；後續靜態 proof 已確認 iterator 呼叫 Units::clone，getter 参数地址無法
 回推原 Force 指標，因此已退役未驗證直接模式，保留已成功的 captured
@@ -220,3 +220,16 @@ NETWORK，1 次 dirty 拒絕；無除錯暫停或資訊框操作。4,797/4,797 �
 29 個正值 sensor slots 與 29 個 generated actors，coverage evidence 數量全符。
 來源 manifest 含當次 sampler 雜湊；authoritative age 仍 UNKNOWN，不能列為
 M1 PASS 或把這些集合一致性檢查當成獨立 UI 正確率。
+
+本方正常 UI 的 ad／rank／level／永久解鎖 AND 政策已加入 upgrade_locks。
+只在必要條件均成立或存在已證明的 false 條件時推導；直接 rank tag=0 的
+claims 路徑維持 UNKNOWN，不讀 account claims。正常 UI root clone 與
+4 個目前本方資訊框計算吻合；44f67d1ba854 有 6/6 獨立 DOM 鎖头比較，
+全為 ad 不可用場景的未鎖定。locked=true／廣告可用的 live 分層尚未取得。
+前置條件、鎖定與最終命令資格仍分開，沒有升級或降級動作。
+
+新版 sampling-c1448a90cbb2 為 60.025 秒、480 筆／7.997 Hz、擷取 p95
+9.096 ms、客戶端套用年齡上界 p95 204 ms；只是短診斷。1,920 個本方塔
+列有 DERIVED upgrade_locks，13,440 個非本方塔列維持 UNKNOWN，零越權
+推導。28 項 v2 測試及 Node 隱私檢查通過。先前 fca／d4a 的兵種名稱已
+依原始 enum 更正；數值比較不變，不再宣稱尚未取得的直升機分層。

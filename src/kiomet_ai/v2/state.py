@@ -89,6 +89,9 @@ class Tower:
     position: Fact[tuple[int, int]] = field(default_factory=Fact)
     upgrade: Fact[tuple] = field(default_factory=Fact)
     upgrade_candidates: Fact[tuple] = field(default_factory=Fact)
+    # Normal UI lock policy, including its optional basis downgrade target.
+    # This does not establish final command eligibility.
+    upgrade_locks: Fact[tuple[tuple[int, bool], ...]] = field(default_factory=Fact)
     effects: Fact[tuple] = field(default_factory=Fact)
     # Delay can be caused by upgrade or EMP; never assume its cause.
     delay_ticks: Fact[int] = field(default_factory=Fact)

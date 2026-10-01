@@ -92,3 +92,37 @@ def test_owned_unlock_zero_and_empty_are_known_but_missing_is_unknown():
         raw['own_unlocks']=bad
         with pytest.raises(ValueError,match='persistent unlock'):
             normalize(raw,'s','d',3,103,102)
+
+
+def test_upgrade_lock_predicate_preserves_missing_terms_and_short_circuits_proven_false():
+    from kiomet_ai.v2.observe.rules import locked_for_target,upgrade_locks
+    # Armory is an upgraded type. A missing policy or claims-backed rank does
+    # not silently become permission; an unavailable ad independently removes
+    # the normal UI lock. Keys do not substitute for permanent unlock membership.
+    assert locked_for_target(1,None,[]) is None
+    assert locked_for_target(1,{'rewarded_ad_available':True,'rank_requires_unlocks':None},[]) is None
+    assert locked_for_target(1,{'rewarded_ad_available':False,'rank_requires_unlocks':None},None) is False
+    assert locked_for_target(1,{'rewarded_ad_available':True,'rank_requires_unlocks':True},[]) is True
+    assert locked_for_target(1,{'rewarded_ad_available':True,'rank_requires_unlocks':True},None) is None
+    assert locked_for_target(1,None,[1]) is False
+    assert locked_for_target(14,None,None) is False  # Mine is level zero.
+    assert upgrade_locks(2,0,None,None)==((14,False),)  # Artillery's basis, not its direct parent.
+
+
+def test_lock_facts_are_own_current_ui_policy_not_enemy_permission_or_unknown_empty():
+    raw={'sampled_at_ms':500,'player_id':7,'towers':[{'id':3,'visible':True,
+        'visibility_source':'test visibility','owner':7,'relation':'SELF','type':3,
+        'units7':[0,0,0,0,0,12,20],'position':[2,3],'delay_ticks':0}]}
+    assert normalize(raw,'s','d',1,101,100).towers[0].upgrade_locks.knowledge==Knowledge.UNKNOWN
+    raw['own_upgrade_policy']={'rewarded_ad_available':False,'rank_requires_unlocks':None}
+    known=normalize(raw,'s','d',2,102,101).towers[0]
+    assert known.upgrade_locks.value==((1,False),)
+    assert known.upgrade_locks.knowledge==Knowledge.DERIVED
+    assert known.upgrade_candidates.knowledge==Knowledge.UNKNOWN  # Prerequisite counts absent.
+    raw['towers'][0].update(owner=8,relation='ENEMY')
+    assert normalize(raw,'s','d',3,103,102).towers[0].upgrade_locks.knowledge==Knowledge.UNKNOWN
+    raw['towers'][0].update(owner=7,relation='SELF',delay_ticks=20)
+    assert normalize(raw,'s','d',4,104,103).towers[0].upgrade_locks.value==()
+    raw['own_upgrade_policy']['rewarded_ad_available']=0
+    with pytest.raises(ValueError,match='upgrade lock policy'):
+        normalize(raw,'s','d',5,105,104)

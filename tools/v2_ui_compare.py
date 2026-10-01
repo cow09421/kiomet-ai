@@ -172,9 +172,15 @@ async def main(args):
                         own_counts=after.get('own_tower_counts')
                         expected=all(have>=need for have,need in zip(own_counts,rules.PREREQUISITES[kind])) if own_counts is not None else None
                         coherent=selected and stable and counts_stable and own_counts is not None and disabled is not None
+                        expected_lock=rules.locked_for_target(kind,after.get('own_upgrade_policy'),
+                            after.get('own_unlocks',{}).get('unlocked_types') if after.get('own_unlocks') is not None else None)
+                        lock_coherent=selected and stable and before.get('own_upgrade_policy')==after.get('own_upgrade_policy') and \
+                            before.get('own_unlocks')==after.get('own_unlocks') and expected_lock is not None and locked is not None
                         upgrade_ui_comparisons.append({'target_type':kind,'ui_disabled':disabled,
                             'ui_locked':locked,'prerequisites_met':expected,'coherent':coherent,
                             'disabled_match':coherent and disabled==(not expected),
+                            'derived_locked':expected_lock,'lock_coherent':lock_coherent,
+                            'lock_match':lock_coherent and locked==expected_lock,
                             'command_eligibility':'UNKNOWN'})
                     rows.append({"id": current["id"], "selected_id": after["selected_tower"],
                         "selection_confirmed": selected, "relation": current["relation"],
@@ -242,6 +248,8 @@ async def main(args):
         "matched_prerequisite_requirements":sum(c['requirement_match'] for r in rows for c in r['prerequisite_comparisons']),
         'coherent_upgrade_ui_fields':sum(c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
         'matched_upgrade_ui_fields':sum(c['disabled_match'] for r in rows for c in r['upgrade_ui_comparisons']),
+        'coherent_upgrade_lock_fields':sum(c['lock_coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
+        'matched_upgrade_lock_fields':sum(c['lock_match'] for r in rows for c in r['upgrade_ui_comparisons']),
         'observed_upgrade_lock_fields':sum(c['ui_locked'] is not None and c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
         'coherent_delay_progress_fields':sum(r['progress_check']['coherent'] for r in rows),
         'matched_delay_progress_fields':sum(r['progress_check']['match'] for r in rows),

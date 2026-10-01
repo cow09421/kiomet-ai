@@ -82,6 +82,24 @@ view.setUint8(unlockCtrl+5,9);view.setUint8(unlockCtrl-6,19);
 reads.length=0;r=decode.call(memories,'world',[],owners);
 assert.deepEqual(JSON.parse(JSON.stringify(r.own_unlocks)),{keys:3,unlocked_types:[1,19]});
 assert(!reads.some(p=>p>=unlock+16&&p<unlock+32),'private unlock hash seeds were read');
+// Claims-backed rank remains unknown. Do not traverse account claim storage.
+view.setUint8(core+255,0);put(root+48964,0);reads.length=0;
+r=decode.call(memories,'world',[],owners);
+assert.deepEqual(JSON.parse(JSON.stringify(r.own_upgrade_policy)),
+  {rewarded_ad_available:false,rank_requires_unlocks:null});
+assert(!reads.some(p=>p>=core+112&&p<core+152),'account claims were read');
+view.setUint8(core+255,7);put(root+48964,1);
+r=decode.call(memories,'world',[],owners);
+assert.deepEqual(JSON.parse(JSON.stringify(r.own_upgrade_policy)),
+  {rewarded_ad_available:true,rank_requires_unlocks:true});
+view.setUint8(core+255,4);
+r=decode.call(memories,'world',[],owners);
+assert.equal(r.own_upgrade_policy.rank_requires_unlocks,false);
+view.setUint8(core+255,200);put(root+48964,200);
+r=decode.call(memories,'world',[],owners);
+assert.deepEqual(JSON.parse(JSON.stringify(r.own_upgrade_policy)),
+  {rewarded_ad_available:null,rank_requires_unlocks:null});
+view.setUint8(core+255,0);put(root+48964,0);
 put(unlock+12,0);put(unlock+32,0);
 r=decode.call(memories,'world',[],owners);
 assert.equal(r.own_unlocks,null,'set length disagreement must remain unknown');

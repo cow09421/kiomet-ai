@@ -307,4 +307,40 @@ the unvalidated direct-getter mode; retain the validated units mode, which first
 captures a legal Force::speed invocation and observes nested getter returns
 only inside that invocation. No claim of new live Single coverage follows from
 this static proof. d4a9b156ae26 independently verifies ten distinct source ticks
-with two/four choppers, ten complete vectors and 100/100 getter fields.
+with two/four tanks (enum 4), ten complete vectors and 100/100 getter fields.
+The earlier prose called them choppers incorrectly; the original vectors remain
+unchanged. fca86e13b9ad contains four soldiers (enum 5), not four tanks. These
+label corrections do not change getter agreement or establish chopper coverage.
+
+## QUESTION: can current own upgrade locks be derived without reading claims?
+
+Normal context UI props construction clones RewardedAd from context+48964 at
+0x143e4. 061948430c72 and eda82062a40e verify that normal clone's context equals
+the pinned typed root. Normal TowerOverlay at 0x32341/0x32350 computes rank
+restriction and ad availability, and its target button at 0x59b52..0x59bba uses
+ad_available AND target.level>0 AND !Unlocks.contains(target) AND rank_restricted.
+Four current own TowerOverlay copies in eda82062a40e match the raw ad predicate;
+the UI CoreState Rc equals the source CoreState Rc. The direct rank enum at
+core+255 is 0 in this live scene, taking a claims lookup in CoreState::rank.
+That lookup and its claim storage are not read, so the normal adapter preserves
+rank restriction as UNKNOWN. Its proven false ad predicate independently resolves
+the AND to false. Other sufficient false terms are base level zero, membership
+in the validated permanent unlock set, or a known unrestricted direct rank.
+
+Canonical upgrade_locks applies only to currently observed own towers. It covers
+the normal direct upgrade targets and optional lowest-basis downgrade target;
+delay!=0 has no active UI choices. Any unresolved target keeps the whole field
+UNKNOWN. Level is zero exactly when both downgrade and prerequisite set are empty,
+as the pinned TowerType::level recursion confirms. No keys are treated as an unlock.
+
+44f67d1ba854 has 6/6 independent coherent DOM lock comparisons, all unlocked in
+this ad-unavailable scene, and 6/6 prerequisite-disabled comparisons. The earlier
+b5e90741bb89 separately observes an enabled Airfield-to-Runway downgrade and a
+disabled Runway upgrade. It is not an enabled upgrade or locked=true cohort.
+No final command eligibility, active ad state or locked=true live case is claimed.
+The first 58dc254a1fca probe had one guarded row and three excluded errors;
+d4b89d205904 had zero rows. Later probes correct selection/pause ordering.
+
+CONCLUSION / STATUS: PASS for the demonstrated unlocked predicate and own-state
+scope; complete lock strata remain PARTIAL. 28 v2 tests and Node privacy checks
+cover claims non-traversal and invalid enums becoming UNKNOWN.
