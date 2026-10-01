@@ -1,0 +1,389 @@
+{
+  "source_head": "a21aeede1571eb2ca721b45a2ea5614d5d5bafd8",
+  "purpose": "Final M1 evidence receipt; original cohort PARTIAL is preserved. This receipt is not a PASS.",
+  "final_cohort": {
+    "status": "PARTIAL",
+    "seconds": 600.0734020001255,
+    "snapshots": 4004,
+    "accepted_poll_hz": 6.672517039839008,
+    "poll_latency_p95_ms": 6.997600197792053,
+    "authoritative_update_age_p95_ms": null,
+    "independent_ui_comparisons": 0,
+    "derived_update_age_upper_p95_ms": 204,
+    "bounded_age_snapshots": 369,
+    "source_metadata_reads": 54472,
+    "source_metadata_latency_p95_ms": 2.3008999414741993,
+    "force_snapshots": 2678,
+    "derived_force_tracks": 0,
+    "force_progress_changes": 0,
+    "force_tracks_multiple_observations": 0,
+    "lifecycle_states": [
+      "IN_MATCH"
+    ],
+    "visibility_losses": 3,
+    "visibility_gains": 0,
+    "document_reacquisitions": 1,
+    "distinct_match_ids": 2,
+    "distinct_documents": 1,
+    "source_modes": [
+      "NETWORK"
+    ],
+    "observer_source_manifest": {
+      "src\\kiomet_ai\\v2\\__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+      "src\\kiomet_ai\\v2\\observe\\__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+      "src\\kiomet_ai\\v2\\observe\\client_fae13.js": "10f0877d3310be2026a3bc5a858687c0efee0ae50300606606672638a51a8b18",
+      "src\\kiomet_ai\\v2\\observe\\extractor.py": "a6a24cb9a065f5b3a7274b2b7873a749245c4a702b7d78048c9560098492c521",
+      "src\\kiomet_ai\\v2\\observe\\forces.py": "ee0db0578722c6247fad948421b4a2aace8bc3de9f98812f55c883711ce84a02",
+      "src\\kiomet_ai\\v2\\observe\\lifecycle.py": "937306f36ed9c603dc506eee0dbb56adec4e059841f5738b72f6cdc0db61c580",
+      "src\\kiomet_ai\\v2\\observe\\rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+      "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+      "src\\kiomet_ai\\v2\\observe\\source_clock.py": "8112822c37de31f5ecbdf057ff513ee23dd4a6a23ee234c0fce22cb8a4c36872",
+      "src\\kiomet_ai\\v2\\observe\\upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+      "src\\kiomet_ai\\v2\\state.py": "85c1c8c7344cbcb39be20139d64c359a0f591c86657fafeec04ec2b09e971c98",
+      "tools\\v2_observe.py": "f126c91086b469adb4ea6ff38d4eb90bf15fa60465e1cf41cfa95a53602236af"
+    },
+    "accepted_span_seconds": 599.5708606999833,
+    "browser_closed": false,
+    "sampling_mode": "on_visible_world_update_and_150ms_timer",
+    "poll_interval_ms": 150,
+    "single_match_cohort": false,
+    "error_count": 56,
+    "errors": [
+      "current visibility cache pending",
+      "current visibility cache pending",
+      "current visibility cache pending",
+      "current visibility cache pending",
+      "current visibility cache pending"
+    ],
+    "snapshot_file": "snapshots-f3f22dae0791.jsonl",
+    "note": "Poll latency is not game-state age. Root adapter is research candidate."
+  },
+  "final_offline_audit": {
+    "question": "Does the final current-source cohort preserve unknown epoch and positive visibility, and have its owned processes closed?",
+    "scope": "finite offline audit of existing cohort; not new live validation or a performance PASS",
+    "snapshot_file": "snapshots-f3f22dae0791.jsonl",
+    "snapshot_sha256": "0ee08466bf5c9ae8ce127139960397741c7400677c4dd8a6e7691cd40314c1d1",
+    "counts": {
+      "snapshots": 4004,
+      "known_match": 371,
+      "unknown_match": 3633
+    },
+    "coverage": {
+      "PARTIAL": 4004
+    },
+    "first_epoch_invalidation": {
+      "previous_sequence": 371,
+      "previous_tick": 40092,
+      "previous_received_at_ms": 1142348437,
+      "sequence": 372,
+      "tick": 40092,
+      "received_at_ms": 1142348593,
+      "last_observed_advance_at_ms": 1142347531,
+      "milliseconds_since_last_observed_advance": 1062
+    },
+    "force_facts": 4179,
+    "known_force_ids": 0,
+    "known_force_first_seen": 0,
+    "violations": {},
+    "owned_profile_browser_pids": [],
+    "headless_lease_exists": false,
+    "tool_sha256": "5aee8b63411972c4f97b45e7f301fad1dbdbac6fa23a2cedbeac09a6e4252930"
+  },
+  "source_manifest_matches_current_files": {
+    "src\\kiomet_ai\\v2\\__init__.py": true,
+    "src\\kiomet_ai\\v2\\observe\\__init__.py": true,
+    "src\\kiomet_ai\\v2\\observe\\client_fae13.js": true,
+    "src\\kiomet_ai\\v2\\observe\\extractor.py": true,
+    "src\\kiomet_ai\\v2\\observe\\forces.py": true,
+    "src\\kiomet_ai\\v2\\observe\\lifecycle.py": true,
+    "src\\kiomet_ai\\v2\\observe\\rules.py": true,
+    "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": true,
+    "src\\kiomet_ai\\v2\\observe\\source_clock.py": true,
+    "src\\kiomet_ai\\v2\\observe\\upgrades.py": true,
+    "src\\kiomet_ai\\v2\\state.py": true,
+    "tools\\v2_observe.py": true
+  },
+  "strict_ui_inventory": {
+    "status": "PARTIAL",
+    "reports": [
+      {
+        "file": "ui-comparison-0a2e70d05651.json",
+        "sha256": "6ad926f193d5469716bbe93da434cbd94c8744bde882f9972a4d43ed41ccc2e9",
+        "rows": 100,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-1685ce99da90.json",
+        "sha256": "efa37e99ebd49bd7b3b79517f214b761cf3053c4a7849695911cb0ea1abd5aa6",
+        "rows": 10,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-189fbcf4ef5f.json",
+        "sha256": "e3fbac1be2b5d68a9c0216c091c1aafd326f3894bf804e3e55cee1665f6260b9",
+        "rows": 12,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-24f789499eb4.json",
+        "sha256": "58bdaf5506054311c987bd0aa816a29dec64a308df6a78638875ab9aa96fd07e",
+        "rows": 0,
+        "errors": [
+          "outside active connected match"
+        ],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-2a1e69665cca.json",
+        "sha256": "5e7eee8119fdde11f6c6e2ba4417180ffdc36d8e7b04d183695e867d403aee87",
+        "rows": 15,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-32f3180246b6.json",
+        "sha256": "ed1d6636def1e1f23e930884fe8a00598ad7a239ecbceeca0de3a32c24ad9c43",
+        "rows": 30,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-345eee7264c9.json",
+        "sha256": "f6031b9add4d2d3beb065e319be5057180568ee1859353e8f675f215345e52e9",
+        "rows": 30,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-44f67d1ba854.json",
+        "sha256": "26b53ffecb7caf1e5fe2bd29e9c6c75c5d68cabb17f7bb4f3a0ff5166e27b250",
+        "rows": 41,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-70a2b03ea4e8.json",
+        "sha256": "94d975b88b8c11b050355403027d86131df2026af2a040f9d7358a0a5d30f683",
+        "rows": 20,
+        "errors": [],
+        "source_manifest_present": true
+      },
+      {
+        "file": "ui-comparison-7acdafd9b767.json",
+        "sha256": "2056c5c351e123f28d1ff9bfe842f704e417f8ec43244b44813c5dd8bb63215e",
+        "rows": 13,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-87214e834f0e.json",
+        "sha256": "0a69324d5f1e64e1c569f4fdf97bc00f1ce4123cd069f6880562f894439c8f57",
+        "rows": 42,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-8a52e26a523b.json",
+        "sha256": "9771b0c747241a7548783df177f6a263dd3ea4969b1bb3d86d4fd8b06ab30de7",
+        "rows": 25,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-95dc42f35a60.json",
+        "sha256": "9b85f2647b30e8c49990f073a850ab515bc15ac2ccc2aff6869e194ea33e4913",
+        "rows": 717,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-9f8a743e9d1d.json",
+        "sha256": "e6c0995e5e7d450b79051812b1417b9d2b5fa5599bf3a3485501a45e2e39f117",
+        "rows": 1000,
+        "errors": [],
+        "source_manifest_present": true
+      },
+      {
+        "file": "ui-comparison-a84933df9cb7.json",
+        "sha256": "13b03fa42480016850fa5c1d215f42f725d0452c212f12fca2ddfb9fae8af977",
+        "rows": 60,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-b5e90741bb89.json",
+        "sha256": "7964e58e2f02fbd02e5f5a6e112b3af097c6b44cc1d28bdfa917c90042ed60c8",
+        "rows": 9,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-b64690264b9c.json",
+        "sha256": "60b7fcfc953c8dcc68d0e40aaa65a6d0e7a3128216d51e8087d5867fc543eaea",
+        "rows": 433,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-df9c5cc9565d.json",
+        "sha256": "2d4f0b1b780bb893c3fb3e0774c77367932299ef12f0b65a36e2d3d5a8145421",
+        "rows": 15,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-e68f3686914c.json",
+        "sha256": "a9896a25d5247b30b7bd6ad9cd666ed536f9f76967e01cc5c804a4407f551163",
+        "rows": 27,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-e7529295de16.json",
+        "sha256": "fbd9a591f7693dbe2a1e295da81346f65b3799ffadf326a12161d116e1ea1e65",
+        "rows": 13,
+        "errors": [],
+        "source_manifest_present": false
+      },
+      {
+        "file": "ui-comparison-f68d8de6f7b7.json",
+        "sha256": "8f7638f4c522ba548be11d79aa7e592656f12355a75ec1243d1af58dd1190db7",
+        "rows": 15,
+        "errors": [],
+        "source_manifest_present": false
+      }
+    ],
+    "eligible_rows": 1373,
+    "unique_selections": 1365,
+    "excluded": {
+      "missing_scope_or_epoch": 1248,
+      "incoherent:tower_type": 142,
+      "incoherent:delay_progress": 59,
+      "unverified_source_or_selection": 6,
+      "incoherent:unit_count": 36,
+      "incoherent:capacity": 36,
+      "incoherent:relation": 17,
+      "incoherent:upgrade_lock": 34,
+      "incoherent:upgrade_disabled": 75
+    },
+    "families": {
+      "unit_count": {
+        "unique": 2147,
+        "matched": 2147,
+        "conflicting_repeats": 0,
+        "reads": 2147
+      },
+      "capacity": {
+        "unique": 2147,
+        "matched": 2147,
+        "conflicting_repeats": 0,
+        "reads": 2147
+      },
+      "relation": {
+        "unique": 1356,
+        "matched": 1356,
+        "conflicting_repeats": 0,
+        "reads": 1356
+      },
+      "tower_type": {
+        "unique": 1231,
+        "matched": 1231,
+        "conflicting_repeats": 0,
+        "reads": 1231
+      },
+      "delay_progress": {
+        "unique": 1314,
+        "matched": 1314,
+        "conflicting_repeats": 0,
+        "reads": 1314
+      },
+      "prerequisite_count": {
+        "unique": 554,
+        "matched": 554,
+        "conflicting_repeats": 0,
+        "reads": 554
+      },
+      "prerequisite_requirement_flag": {
+        "unique": 554,
+        "matched": 554,
+        "conflicting_repeats": 0,
+        "reads": 554
+      },
+      "upgrade_disabled": {
+        "unique": 235,
+        "matched": 235,
+        "conflicting_repeats": 0,
+        "reads": 235
+      },
+      "upgrade_lock": {
+        "unique": 276,
+        "matched": 276,
+        "conflicting_repeats": 0,
+        "reads": 276
+      }
+    },
+    "unit_strata": {
+      "ENEMY:MANY": {
+        "unique": 897,
+        "matched": 897
+      },
+      "SELF:SINGLE": {
+        "unique": 104,
+        "matched": 104
+      },
+      "SELF:MANY": {
+        "unique": 541,
+        "matched": 541
+      },
+      "NEUTRAL:MANY": {
+        "unique": 601,
+        "matched": 601
+      },
+      "ENEMY:SINGLE": {
+        "unique": 4,
+        "matched": 4
+      }
+    },
+    "limits": "Independent DOM field pairs only; no whole-state accuracy, server age, fog-cycle, moving-force or lifecycle coverage implied. Single layout strata do not prove every Single unit's count; only actual DOM rows count.",
+    "tool_sha256": "011c32e980cd5ca90b35063369c4f644cff304444c8b7f6aca7f4aa3c5c56787"
+  },
+  "cleanup": {
+    "research_host_exit_code": 0,
+    "sampling_exit_code": 0,
+    "dedicated_profile_browser_pids": [],
+    "headless_lease_exists": false,
+    "research_python_residuals": [],
+    "retained_application_tool_service": {
+      "pid": 7552,
+      "kind": "node.exe",
+      "script": "cua-repl.mjs",
+      "reason": "Codex-managed computer-use tool runtime; not a research browser/probe. Left running."
+    }
+  },
+  "artifact_storage": "Raw runtime evidence stays local and gitignored; this receipt preserves source manifests and SHA-256 hashes.",
+  "artifact_hashes": {
+    "sampling-f3f22dae0791.json": "d00e89fd78f7def46ab8c9d3df920546168ef8b8fb9ffead5dfdee6627e3f1e9",
+    "final-evidence-audit-f3f22dae0791.json": "5549148e00f35d0f67463b213c8609e19d7ade79c149d831c25b7fa94cad6dfc",
+    "validation-inventory.json": "ea940762a207cfb3bc140efaf9388e784e5392ee2359c3840c7138b30386daf0",
+    "session-date-16da48fa952b.json": "6c33d56f0d2da31fc74b0bd431a6393bb39dcfcf3af506415f6a0d26d2c99520",
+    "force-render-comparison-e5cd08fc8ab1.json": "1fb99c3d9cbb554831aae800cae5c4fa9ad5618118e3a8bac1937e8a2f8b02b7",
+    "natural-force-gap-03d032d57e5b.json": "df7c75f11fe98b54c8dd181e9c83c03869849710ebe7d1dc50a958a227a8e432",
+    "readiness-force-03d032d57e5b.json": "efea6ebfeda758862ae54a7a5cc2aa2fc6f7a0e9354c384e2aecdc2f55323b20",
+    "process-cleanup-check.json": "1e24fe2ae7d2beb39d28dd5a1163b3fbd132aecb2ca9d41d672d4e338ec8de1b",
+    "snapshots-f3f22dae0791.jsonl": "0ee08466bf5c9ae8ce127139960397741c7400677c4dd8a6e7691cd40314c1d1"
+  },
+  "m1_decision": {
+    "status": "FAIL",
+    "reason": "approximately 18 engineering-hour ceiling",
+    "decided_at": "2026-10-01T14:28:02+08:00",
+    "last_active_goal_seconds": 43540,
+    "estimated_pre_goal_seconds": 21120,
+    "estimated_total_seconds_at_last_check": 64660,
+    "legal_technical_impossibility_proven": false,
+    "m2_started": false,
+    "m3_started": false
+  }
+}

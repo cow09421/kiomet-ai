@@ -2,7 +2,12 @@
 
 CURRENT MILESTONE: M1 Observation / State
 
-STATUS: PARTIAL；M1 = NOT YET。2026-10-01 Asia/Taipei。
+STATUS: FAIL；M1 = FAIL。2026-10-01 Asia/Taipei。
+
+依約 18 工程小時硬上限停止核心開發；必要伺服器生成時間／可信年齡
+來源仍 UNKNOWN。M2／M3 未開始。正式結論見 [V2_M1_FAILURE.md](V2_M1_FAILURE.md)，
+可覆核摘要見 [V2_M1_FINAL_EVIDENCE.json](V2_M1_FINAL_EVIDENCE.json)。
+下方 PARTIAL／NOT YET 是按時間保留的歷史研究檢查點，不取代此停止判定。
 
 START HEAD: 55ee71e。重要研究檢查點只提交／推送 v2-rebuild；main 封存。
 M2 / M3 尚未開始；本輪沒有派兵、拖曳、升級或語意遊戲命令。
@@ -363,3 +368,20 @@ sensor cycle。這條支線沒有增加所需覆蓋，不再延長同場景輪�
 但 generation age 901 ms，必須拒絕就緒。案例時間全部是合成隔離資料，
 不算 live 年齡證據。完整 v2 回歸 36 項通過；真實 updated_at_ms 與年齡
 p95 仍 UNKNOWN。既有 application bound 指標仍分開記錄。
+
+## 最終目前版本十分鐘驗證與停止判定
+
+`f3f22dae0791`：600.073 秒、4,004 筆、6.673 Hz，擷取 p95 6.998 ms；
+權威年齡 p95 UNKNOWN。只有 369 筆有客戶端 application bounds，上界
+p95 204 ms 僅屬該子集。56 次拒讀／錯誤；全 4,004 筆 coverage PARTIAL。
+371 筆 DERIVED epoch、3,633 筆 UNKNOWN；自然來源停滯 1,062 ms 後撤銷
+身分，不能當作完整同局 PASS。4,179 force facts 的 ID 與 first-seen 均
+UNKNOWN，無跨 gap 復用；該 cohort 追蹤數 0，不能宣稱穩定追蹤成功。
+
+最終嚴格 UI inventory：1,373 eligible rows、1,365 unique selections；
+2,147/2,147 兵數與容量、1,356/1,356 關係、1,231/1,231 塔型、
+1,314/1,314 delay 進度、554/554 前置數、235/235 disabled、276/276 lock。
+完整決策欄位 >=99%、真實 sensor hidden→visible、完整分層未通過。
+36 項 v2 回歸通過，不補足 live 驗收。M1 FAIL 是時間上限結論，
+不是所有合法方案都不可能的證明。研究 host／sampler 正常退出；專用
+Chromium 及研究 Python／Playwright Node 清理完成。Codex 工具服務 Node 保留。
