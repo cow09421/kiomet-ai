@@ -1,0 +1,34 @@
+{
+  "status": "MEASURED_SUPPORTED_SCOPE_ONLY",
+  "input_cases": 868,
+  "complete_transitions": 302064,
+  "elapsed_seconds": 6.0252869999967515,
+  "complete_transitions_per_second": 50409.00997885909,
+  "rate_statistic": "median of three trials, each >=100000 complete transitions",
+  "trials": [
+    {
+      "complete_transitions": 100688,
+      "elapsed_seconds": 1.958790099946782,
+      "complete_transitions_per_second": 51403.159533395425
+    },
+    {
+      "complete_transitions": 100688,
+      "elapsed_seconds": 2.069076200015843,
+      "complete_transitions_per_second": 48663.26334391601
+    },
+    {
+      "complete_transitions": 100688,
+      "elapsed_seconds": 1.9974207000341266,
+      "complete_transitions_per_second": 50409.00997885909
+    }
+  ],
+  "scope": "Full Python step over all visible towers and forces, no conversion/IO in timing; input restored and every full output checked before timing. Pure movement cache warmed by validation. No combat PASS.",
+  "corpus_sha256": "c5a8d447dc0c4a6bfc13b36384bdb33e5a02ddb58b4e7be492548c592082f14a",
+  "source_manifest": {
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "357ba985be7e3c5d2f3521dbe436933aa5398ac37940b8dcff608439152aa8d8",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "db5a867a097cfe7b1f857cf5dcfc67c6eab6f6b6681197c1352c5592d12f0e1b",
+    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  },
+  "profile": "         65326 function calls in 0.028 seconds\n\n   Ordered by: cumulative time\n   List reduced from 19 to 18 due to restriction <18>\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n      868    0.018    0.000    0.030    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:40(step)\n    26564    0.005    0.000    0.005    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:28(phase)\n    27432    0.002    0.000    0.002    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:148(<genexpr>)\n      868    0.001    0.000    0.001    0.000 <string>:2(__init__)\n      120    0.000    0.000    0.001    0.000 C:\\Users\\cow09\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\dataclasses.py:1540(replace)\n     2184    0.001    0.000    0.001    0.000 {built-in method builtins.any}\n      868    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}\n     1320    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}\n      753    0.000    0.000    0.000    0.000 {built-in method builtins.min}\n      868    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}\n      753    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}\n      868    0.000    0.000    0.000    0.000 {built-in method builtins.len}\n      868    0.000    0.000    0.000    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:45(<genexpr>)\n      457    0.000    0.000    0.000    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:50(<genexpr>)\n      120    0.000    0.000    0.000    0.000 C:\\Users\\cow09\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\dataclasses.py:1296(_is_dataclass_instance)\n      174    0.000    0.000    0.000    0.000 {built-in method builtins.max}\n      120    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}\n      120    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}\n\n\n"
+}

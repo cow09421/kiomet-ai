@@ -1,0 +1,1106 @@
+{
+  "status": "IN_PROGRESS",
+  "validation_split": "development",
+  "tick_duration_ms": 250.0,
+  "trajectory_ticks": 20,
+  "trajectory_duration_ms": 5000.0,
+  "selection": "First observation per tick; nonoverlapping complete consecutive chains, same scope; no intermediate canonical reset. All mismatches retained, not counted as success.",
+  "counts": {
+    "exclude:NOT_READY": 4102,
+    "exclude:fewer_than_two_events": 78,
+    "exclude:PRODUCTION_SUPPLY_LINE": 273,
+    "complete_matched_trajectories": 1,
+    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 23,
+    "exclude:ACTIVE_UPGRADE_OR_EMP": 201,
+    "exclude:NEUTRAL_UNIT_DECAY": 6,
+    "intermediate_mismatches": 12,
+    "exclude:NEUTRAL_DOWNGRADE": 1,
+    "exclude:UNVERIFIED_NORMAL_COMBAT": 2,
+    "exclude:SPECIAL_PRODUCTION": 4,
+    "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 3
+  },
+  "cohorts": [
+    {
+      "cohort": "fe678ebb30ce",
+      "raw_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+      "counts": {
+        "exclude:NOT_READY": 37,
+        "exclude:fewer_than_two_events": 78,
+        "exclude:PRODUCTION_SUPPLY_LINE": 38,
+        "complete_matched_trajectories": 1,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 1
+      },
+      "failures": []
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "raw_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "counts": {
+        "exclude:NOT_READY": 1948,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 195,
+        "exclude:NEUTRAL_UNIT_DECAY": 2,
+        "exclude:PRODUCTION_SUPPLY_LINE": 19,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 3,
+        "intermediate_mismatches": 1
+      },
+      "failures": [
+        {
+          "cohort": "03d032d57e5b",
+          "start": 1093,
+          "at": 1105,
+          "ticks": 6,
+          "predicted_signature_sha256": "d6d754ae3c64e7848cf9f8e180205784f7d34f337f7c9a5f9eb77284757ea512",
+          "observed_signature_sha256": "e8ffd303bdcf47017b41cb6c7c12b69f60348d7324f6d318aa15008231698d7d",
+          "tower_differences": [
+            {
+              "id": 13893863,
+              "predicted": [
+                13893863,
+                10,
+                1,
+                [
+                  13,
+                  0,
+                  0,
+                  0,
+                  1,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                13893863,
+                10,
+                1,
+                [
+                  13,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [
+              [
+                10,
+                13762794,
+                13762795,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  6,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                18
+              ],
+              [
+                10,
+                13828326,
+                13893863,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                43
+              ]
+            ],
+            "observed": [
+              [
+                10,
+                13762794,
+                13762795,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  6,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                18
+              ],
+              [
+                10,
+                13828326,
+                13893863,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                43
+              ],
+              [
+                10,
+                13893863,
+                13828326,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        }
+      ]
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "raw_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "counts": {
+        "exclude:NOT_READY": 1321,
+        "exclude:PRODUCTION_SUPPLY_LINE": 87,
+        "exclude:NEUTRAL_DOWNGRADE": 1,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 15,
+        "exclude:UNVERIFIED_NORMAL_COMBAT": 2,
+        "exclude:SPECIAL_PRODUCTION": 4,
+        "intermediate_mismatches": 8,
+        "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 1
+      },
+      "failures": [
+        {
+          "cohort": "daf86d0544b7",
+          "start": 445,
+          "at": 451,
+          "ticks": 3,
+          "predicted_signature_sha256": "226f51d95b9f43461a9105e74a14487c0069f36a3c665793fb990bfe7e59c257",
+          "observed_signature_sha256": "bbf696b78de90fe620927003828a28459f111c3b7527ae76813cbb9866db0bf8",
+          "tower_differences": [
+            {
+              "id": 17236238,
+              "predicted": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17236238,
+                17236237,
+                [
+                  0,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 637,
+          "at": 639,
+          "ticks": 1,
+          "predicted_signature_sha256": "d98de84ce8336c0312fc257191be4ad4e5f5c7ce81cfdb987f937e9d530dc168",
+          "observed_signature_sha256": "66d863e7625d4bd36d71e09b3b8a2ca90f5f11cceab81f5a1178fc7fa23e80e6",
+          "tower_differences": [
+            {
+              "id": 17301773,
+              "predicted": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ],
+              "observed": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17301773,
+                17301772,
+                [
+                  0,
+                  0,
+                  0,
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 757,
+          "at": 773,
+          "ticks": 8,
+          "predicted_signature_sha256": "7545e15d42f40f61c0d928460c9ef8e4320cb56aeb8f7ac09e0035226aba50bc",
+          "observed_signature_sha256": "5a1af505a41df262c9244df166cff9389d3f34b1cb0523230819f46c1e45fb79",
+          "tower_differences": [
+            {
+              "id": 17236237,
+              "predicted": [
+                17236237,
+                24,
+                19,
+                [
+                  16,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17236237,
+                24,
+                19,
+                [
+                  16,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17236237,
+                17301773,
+                [
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 973,
+          "at": 987,
+          "ticks": 7,
+          "predicted_signature_sha256": "e20ab6f9c96a1d94f21fc1f31c6d0da5c8dc7af053baade10d02ba9450c62018",
+          "observed_signature_sha256": "c782ecdb28ee7b36fb72d06024235b12ed2b1944d4bf600ae2ab6b3b5aedf0e1",
+          "tower_differences": [
+            {
+              "id": 17236238,
+              "predicted": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17236238,
+                17236237,
+                [
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 1357,
+          "at": 1369,
+          "ticks": 6,
+          "predicted_signature_sha256": "977a7367f1d6a80f61cdee05ab53313e7bd9e25cdb06274aea89f04578c993f2",
+          "observed_signature_sha256": "f9ef0c7ea2069aa468e1bb390fec7f8345de808ac01eb08941cf942eab4cb239",
+          "tower_differences": [
+            {
+              "id": 17236238,
+              "predicted": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17236238,
+                17236237,
+                [
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 1549,
+          "at": 1565,
+          "ticks": 8,
+          "predicted_signature_sha256": "7eb2882ada60c4fa45753f3387e3540d9f9789de117581f5e9617e788cc2bde6",
+          "observed_signature_sha256": "9b07cd5ce027d058686162d080c4645526be797542d5516b12ebf5b6fb67aeec",
+          "tower_differences": [
+            {
+              "id": 17301773,
+              "predicted": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ],
+              "observed": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17301773,
+                17367309,
+                [
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 1693,
+          "at": 1699,
+          "ticks": 3,
+          "predicted_signature_sha256": "f9bcc1b16d158aeebed7e5b3cb9490e4a6c1e66ebcc590e9e5cca7c7bb42129e",
+          "observed_signature_sha256": "f60e6647ad54e4251a466f5d89900a0c5c782fe3f75c184e77347388c1635075",
+          "tower_differences": [
+            {
+              "id": 17301773,
+              "predicted": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ],
+              "observed": [
+                17301773,
+                24,
+                0,
+                [
+                  20,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                true
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [
+              [
+                30,
+                17367313,
+                17367312,
+                [
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                27
+              ]
+            ],
+            "observed": [
+              [
+                24,
+                17301773,
+                17301772,
+                [
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ],
+              [
+                30,
+                17367313,
+                17367312,
+                [
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                27
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "daf86d0544b7",
+          "start": 1827,
+          "at": 1831,
+          "ticks": 2,
+          "predicted_signature_sha256": "613618c43255531fe3570e72ffab5bbb47ce816db7e8041bbf17f32f805bc1c0",
+          "observed_signature_sha256": "bdd19565baf76e20fd7854abfa6c0f34edcb1eb366686d5a49db817926fc146c",
+          "tower_differences": [
+            {
+              "id": 17236238,
+              "predicted": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17236238,
+                24,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                24,
+                17236238,
+                17236237,
+                [
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        }
+      ]
+    },
+    {
+      "cohort": "85391858b5d8",
+      "raw_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "counts": {
+        "exclude:PRODUCTION_SUPPLY_LINE": 129,
+        "exclude:NEUTRAL_UNIT_DECAY": 4,
+        "exclude:NOT_READY": 796,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 4,
+        "intermediate_mismatches": 3,
+        "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 2,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 6
+      },
+      "failures": [
+        {
+          "cohort": "85391858b5d8",
+          "start": 1378,
+          "at": 1392,
+          "ticks": 7,
+          "predicted_signature_sha256": "d3e21c9bee692b0958ae6d6bd242bf5d3038ff039326e6ae8803057d895a396a",
+          "observed_signature_sha256": "af83303b2f372473b698a4f275d1f2f9664b2d57bc7e020feecaf72e02c4ec4f",
+          "tower_differences": [
+            {
+              "id": 15204568,
+              "predicted": [
+                15204568,
+                43,
+                22,
+                [
+                  5,
+                  2,
+                  0,
+                  0,
+                  0,
+                  5,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                15204568,
+                43,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                43,
+                15204568,
+                15139033,
+                [
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  5,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "85391858b5d8",
+          "start": 2242,
+          "at": 2244,
+          "ticks": 1,
+          "predicted_signature_sha256": "1ee1f51a34693115e01187248a272cbd40e2cb89b16e690d73d7531b1b0e8bd2",
+          "observed_signature_sha256": "a015985547c33820978b4803949fa35d862293d4d7e95551acce96f0512bd366",
+          "tower_differences": [
+            {
+              "id": 15204568,
+              "predicted": [
+                15204568,
+                43,
+                22,
+                [
+                  5,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                15204568,
+                43,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                43,
+                15204568,
+                15204569,
+                [
+                  0,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        },
+        {
+          "cohort": "85391858b5d8",
+          "start": 2338,
+          "at": 2342,
+          "ticks": 2,
+          "predicted_signature_sha256": "c53b3f06be9d778b18caa42317eb10ab196195f3e79ab29949ce54bead25265d",
+          "observed_signature_sha256": "1737a5fb27166b5429da4463cd04e24f9ca5bcd061a71ebb65aaacc40359437b",
+          "tower_differences": [
+            {
+              "id": 15073496,
+              "predicted": [
+                15073496,
+                43,
+                22,
+                [
+                  5,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                15073496,
+                43,
+                22,
+                [
+                  5,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [],
+            "observed": [
+              [
+                43,
+                15073496,
+                15073497,
+                [
+                  0,
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ]
+            ]
+          },
+          "ruler_difference": null
+        }
+      ]
+    }
+  ],
+  "matched_trajectories": [
+    {
+      "cohort": "fe678ebb30ce",
+      "start": 3097,
+      "end": 3137,
+      "ticks": 20,
+      "event_ticks": 20
+    }
+  ],
+  "source_manifest": {
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "357ba985be7e3c5d2f3521dbe436933aa5398ac37940b8dcff608439152aa8d8",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "57e1a7e2867ae90ea74373f70fffb24bee910894836e911a4c696a434c391d11",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "014e00507cb8f6fc3915dd02236027cb7a59ed98b968bffee93dff56494dc88f",
+    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  }
+}

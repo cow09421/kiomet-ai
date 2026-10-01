@@ -1,0 +1,56 @@
+{
+  "status": "IN_PROGRESS",
+  "scope": "complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario",
+  "ground_combat_reference_enabled": false,
+  "validation_split": "holdout",
+  "selection": "one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura/force count changes. Counts never used to select correctness.",
+  "limitations": "Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.",
+  "counts": {
+    "world_transitions": 2398,
+    "exclude:no_production_or_movement_event": 1102,
+    "exclude:PRODUCTION_SUPPLY_LINE": 129,
+    "cases": 338,
+    "matched": 338,
+    "production_cases": 105,
+    "exclude:NEUTRAL_UNIT_DECAY": 4,
+    "exclude:NOT_READY": 808,
+    "movement_cases": 233,
+    "exclude:external_owner_type_delay_aura_change": 5,
+    "exclude:external_force_birth_or_arrival": 3,
+    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 1,
+    "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 2,
+    "exclude:ACTIVE_UPGRADE_OR_EMP": 6
+  },
+  "cohorts": [
+    {
+      "cohort": "85391858b5d8",
+      "snapshot_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "counts": {
+        "world_transitions": 2398,
+        "exclude:no_production_or_movement_event": 1102,
+        "exclude:PRODUCTION_SUPPLY_LINE": 129,
+        "cases": 338,
+        "matched": 338,
+        "production_cases": 105,
+        "exclude:NEUTRAL_UNIT_DECAY": 4,
+        "exclude:NOT_READY": 808,
+        "movement_cases": 233,
+        "exclude:external_owner_type_delay_aura_change": 5,
+        "exclude:external_force_birth_or_arrival": 3,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 1,
+        "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 2,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 6
+      },
+      "failures": []
+    }
+  ],
+  "corpus_file": "runtime\\research\\v2\\m2a-holdout-transition-corpus.jsonl",
+  "corpus_sha256": "8cd8bc9cdbb26e8df25d5284b6cf68f02d2cafadba390e3f8d78f7b50ba53c76",
+  "tool_sha256": "7dfeb5756fd15341e771a85e085481727d32f1b8847ae50bb7ac5beecca4afa6",
+  "source_manifest": {
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "357ba985be7e3c5d2f3521dbe436933aa5398ac37940b8dcff608439152aa8d8",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "cce4ced9798e12f5f96116c285b59cc93505235b3c1783d4488b49f4552b2a98",
+    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  }
+}

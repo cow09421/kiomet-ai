@@ -1,28 +1,30 @@
 {
-  "status": "IN_PROGRESS",
-  "scope": "complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario",
-  "ground_combat_reference_enabled": false,
-  "validation_split": "development",
+  "status": "HYPOTHESIS_ONLY_INITIAL_MISMATCH_RETAINED",
+  "scope": "production/current-segment only; no live commands; explicit no-exogenous-action fixed-morale scenario",
+  "ground_combat_reference_enabled": true,
+  "validation_split": "hypothesis",
   "selection": "one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura/force count changes. Counts never used to select correctness.",
   "limitations": "Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.",
   "counts": {
     "world_transitions": 7189,
     "exclude:NOT_READY": 3230,
     "exclude:no_production_or_movement_event": 2614,
-    "cases": 868,
+    "cases": 869,
     "matched": 868,
     "production_cases": 295,
-    "exclude:PRODUCTION_SUPPLY_LINE": 142,
-    "movement_cases": 573,
+    "exclude:PRODUCTION_SUPPLY_LINE": 143,
+    "movement_cases": 574,
     "exclude:external_owner_type_delay_aura_change": 9,
     "exclude:ACTIVE_UPGRADE_OR_EMP": 197,
     "exclude:NEUTRAL_UNIT_DECAY": 2,
-    "exclude:external_force_birth_or_arrival": 27,
+    "exclude:unrecorded_external_launch": 12,
     "exclude:multi_tick_or_backward": 1,
     "exclude:isolation": 89,
+    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 16,
+    "exclude:UNKNOWN_PAIR_RELATION": 1,
     "exclude:SPECIAL_PRODUCTION": 4,
     "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 1,
-    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 5
+    "exclude:AIR_OR_SPECIAL_COMBAT": 1
   },
   "cohorts": [
     {
@@ -56,7 +58,7 @@
         "production_cases": 4,
         "movement_cases": 162,
         "exclude:external_owner_type_delay_aura_change": 3,
-        "exclude:external_force_birth_or_arrival": 2,
+        "exclude:unrecorded_external_launch": 2,
         "exclude:multi_tick_or_backward": 1,
         "exclude:isolation": 89
       },
@@ -68,28 +70,91 @@
       "counts": {
         "world_transitions": 2398,
         "exclude:NOT_READY": 1328,
-        "cases": 431,
+        "cases": 432,
         "matched": 431,
-        "movement_cases": 376,
-        "exclude:PRODUCTION_SUPPLY_LINE": 85,
+        "movement_cases": 377,
+        "exclude:PRODUCTION_SUPPLY_LINE": 86,
         "exclude:external_owner_type_delay_aura_change": 5,
-        "exclude:external_force_birth_or_arrival": 25,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 16,
+        "exclude:UNKNOWN_PAIR_RELATION": 1,
         "exclude:no_production_or_movement_event": 514,
         "production_cases": 55,
         "exclude:SPECIAL_PRODUCTION": 4,
+        "exclude:unrecorded_external_launch": 10,
         "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 1,
-        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 5
+        "exclude:AIR_OR_SPECIAL_COMBAT": 1
       },
-      "failures": []
+      "failures": [
+        {
+          "before_sequence": 125,
+          "tick": 23737,
+          "tower_differences": [
+            {
+              "tower": 17301775,
+              "kind": 3,
+              "owner": 83,
+              "morale": true,
+              "units_before": [
+                20,
+                0,
+                0,
+                0,
+                0,
+                12,
+                0,
+                0,
+                0,
+                0
+              ],
+              "predicted": [
+                20,
+                0,
+                0,
+                0,
+                0,
+                12,
+                0,
+                0,
+                0,
+                0
+              ],
+              "expected": [
+                19,
+                0,
+                0,
+                0,
+                0,
+                12,
+                0,
+                0,
+                0,
+                0
+              ],
+              "production": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  5,
+                  12
+                ]
+              ],
+              "phase": 27850
+            }
+          ],
+          "force_match": true
+        }
+      ]
     }
   ],
-  "corpus_file": "runtime\\research\\v2\\m2a-development-transition-corpus.jsonl",
-  "corpus_sha256": "c5a8d447dc0c4a6bfc13b36384bdb33e5a02ddb58b4e7be492548c592082f14a",
-  "tool_sha256": "7dfeb5756fd15341e771a85e085481727d32f1b8847ae50bb7ac5beecca4afa6",
+  "corpus_file": "runtime/research/v2/m2a-ground-candidate-transition-corpus.jsonl",
+  "corpus_sha256": "91bcc99d241e13bdd969ad6daba0fe7df863e5978ac92df98165fc8870f3e3df",
+  "tool_sha256": "335b2e214ed6a4d0eb91a4cd62d57ed2412e4ab8268bb30987dd104c834361ef",
   "source_manifest": {
-    "src\\kiomet_ai\\v2\\sim\\combat.py": "357ba985be7e3c5d2f3521dbe436933aa5398ac37940b8dcff608439152aa8d8",
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "5df8a098c22173c5ea561f8d7206d9425277eddeebbe4cf9d1be8288ca5db41d",
     "src\\kiomet_ai\\v2\\sim\\model.py": "57e1a7e2867ae90ea74373f70fffb24bee910894836e911a4c696a434c391d11",
-    "src\\kiomet_ai\\v2\\sim\\step.py": "014e00507cb8f6fc3915dd02236027cb7a59ed98b968bffee93dff56494dc88f",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "2192ef0eae96ee87959e0e7b8c51990ed68479492ae74c8cc09b61acb00c65c1",
     "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
   }
 }

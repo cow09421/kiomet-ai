@@ -3,6 +3,8 @@ import math
 from statistics import median
 from ..control import control_readiness_gaps
 from ..observe.rules import DOWNGRADE
+from ..observe.forces import motion
+from ..state import Units
 
 
 class UnsupportedState(ValueError):
@@ -39,6 +41,7 @@ class SimTower:
     position: tuple[int,int]
     delay: int
     morale: bool
+    relation: str | None=None
 
 
 @dataclass(frozen=True, slots=True)
@@ -49,6 +52,9 @@ class SimForce:
     units: tuple[int,...]
     progress: int
     accelerated: bool | None
+    relation: str | None=None
+    terminal: bool | None=None
+    fuel: int | None=None
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,11 +73,15 @@ class SimulationState:
             (f.owner,'force',f.source,f.destination) for f in self.forces if f.units[9])
 
 
-def unit_tuple(fact):
+def unit_tuple(fact, allow_stationary_special=False):
     if fact.value is None: raise UnsupportedState('UNKNOWN_UNITS')
     counts=dict(fact.value.counts)
     if set(counts)!=set(range(10)): raise UnsupportedState('INCOMPLETE_UNIT_VECTOR')
-    if any(counts[i] for i in (6,7,8)): raise UnsupportedState('SPECIAL_UNITS')
+    if sum(bool(counts[i]) for i in range(6,10))>1 or (
+        any(counts[i] for i in range(6,10)) and any(counts[i] for i in range(1,6))):
+        raise UnsupportedState('INVALID_UNIT_CATEGORY')
+    if not allow_stationary_special and any(counts[i] for i in (6,7,8)):
+        raise UnsupportedState('SPECIAL_UNITS')
     return tuple(counts[i] for i in range(10))
 
 
@@ -80,22 +90,33 @@ def from_canonical(state, now_ms=None):
     if gaps: raise UnsupportedState('NOT_READY: '+','.join(gaps[:12]))
     towers=[]
     for tower in state.towers:
-        units=unit_tuple(tower.units)
+        # Stationary special inventory is preserved exactly. Any actual
+        # special production, dispatch or combat remains unsupported.
+        units=unit_tuple(tower.units,allow_stationary_special=True)
         cap=tuple(dict(tower.capacity.value.counts)[i] for i in range(10))
-        if any(n>cap[i] for i,n in enumerate(units)): raise UnsupportedState('OVERFLOW_DECAY')
         if tower.delay_ticks.value: raise UnsupportedState('ACTIVE_UPGRADE_OR_EMP')
         periods=tower.production.value
-        if any(unit in (6,7,8) for unit,period in periods): raise UnsupportedState('SPECIAL_PRODUCTION')
         effects=dict(tower.effects.value)
         if set(effects)-{'MORALE_BOOST'}: raise UnsupportedState('COMPLEX_AURA')
         if 'MORALE_BOOST' not in effects: raise UnsupportedState('UNKNOWN_MORALE')
         towers.append(SimTower(tower.id,tower.owner.value,tower.tower_type.value,units,cap,
-            periods,tower.neighbors.value,tower.position.value,tower.delay_ticks.value,effects['MORALE_BOOST']))
+            periods,tower.neighbors.value,tower.position.value,tower.delay_ticks.value,effects['MORALE_BOOST'],tower.relation.value))
     forces=[]
     for force in state.forces.value or ():
         units=unit_tuple(force.units)
         if sum(units)!=force.unit_count.value: raise UnsupportedState('INCONSISTENT_FORCE_COUNT')
+        if not force.owner.value: raise UnsupportedState('ZOMBIE_FORCE')
+        accelerated=force.accelerated.value
+        if accelerated is None and force.eta_ms.value is not None and 'pinned current-leg' in force.eta_ms.source:
+            # The historical ETA fact was computed from the actual boost flag.
+            # Invert only a unique match of that pinned estimator; never treat
+            # ambiguous ETA or unavailable geometry as false acceleration.
+            positions={t.id:t.position for t in towers}
+            candidates=[boost for boost in (False,True) if motion(Units(tuple(enumerate(units))),
+                positions[force.source.value],positions[force.destination.value],boost,
+                force.progress.value)[2]==force.eta_ms.value]
+            if len(candidates)==1: accelerated=candidates[0]
         forces.append(SimForce(force.owner.value,force.source.value,force.destination.value,units,
-                               force.progress.value,force.accelerated.value))
+                               force.progress.value,accelerated,force.relation.value))
     return SimulationState(state.tick.value,state.player_id.value,state.match_id.value,
                            state.document_id,tuple(towers),tuple(forces))
