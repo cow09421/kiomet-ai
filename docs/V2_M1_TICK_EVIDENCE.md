@@ -287,3 +287,24 @@ CONCLUSION / STATUS: FAIL for interpreting the remaining direct Game scalar
 as generation time. No direct Game wrapper timestamp is present in this decoded
 layout. This does not promote receipt time, RTT or an actor tick into one, and
 does not assert complete absence across every transport or UI metadata path.
+
+### QUESTION: can an ACK supply a causal generation-age bound for each Game?
+
+Pinned Frame::write at 0xc9d5e branches separately into data and control
+variants. Data calls write_data at 0xc9da2/0xc9db6/0xc9dca with a kind, pointer
+and length. write_data (0x14b8d3..0x14b8ea) writes only the varint header
+(length<<2)|kind and copies the specified bytes. The control ACK branch
+0xc9e23..0xc9e96 writes a control code, optional acknowledgement sequence,
+optional state byte and a rounded/saturated processing-duration byte. The
+duration is encoded as min(255, min(65535, duration+2)>>2), not a generation
+timestamp or Game identity. Receive separates control with header&3==3 and
+parses data length with header>>2 (0x47c00 onward). Its ACK handling at
+0x47f17..0x48039 matches a send sequence to a local send-time entry and updates
+the previously documented RTT estimate.
+
+CONCLUSION / STATUS: FAIL for treating this ACK as a per-Game generation-age
+certificate. Its echoed send sequence and processing interval do not identify
+which Game was generated after that send, even when frames share a transport
+delivery. No causal association between that ACK and a specific Game generation
+has been established. No raw packet or hidden actor bytes were read for this
+proof. Other lawful source hypotheses remain possible; server age stays UNKNOWN.

@@ -233,3 +233,14 @@ claims 路徑維持 UNKNOWN，不讀 account claims。正常 UI root clone 與
 列有 DERIVED upgrade_locks，13,440 個非本方塔列維持 UNKNOWN，零越權
 推導。28 項 v2 測試及 Node 隱私檢查通過。先前 fca／d4a 的兵種名稱已
 依原始 enum 更正；數值比較不變，不再宣稱尚未取得的直升機分層。
+
+新增正常部隊 glyph layout 核對，先以合法原 Force invocation 定位，再觀察
+其正常十兵種 getter，不以 iterator clone 地址倒推原部隊。控制 ae28d4ab333d
+有 10 組完整向量、100/100 欄位；positive Chopper(enum 2) 的 5189c3d1eabf
+有 30 組完整向量、300/300 欄位。兩次 visibility pending 在讀取門控時拒絕。
+第一批 de94e037b79e 的查詢上限不足，零有效案例，沒有納入一致率。
+這補上直升機真實分層；不等同 Single 移動部隊或效能驗收。
+
+已完成傳輸 ACK 假設的型別編碼檢查：資料 frame 只有 length/kind 與 payload，
+ACK 另有送出序號及量化處理耗時，沒有已證明的特定 Game 生成因果關聯。
+因此無法用這條支線建立 per-Game snapshot age；仍維持 UNKNOWN。

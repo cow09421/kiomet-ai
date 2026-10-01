@@ -21,6 +21,7 @@ POINTS = {
     'speed': (0x9896d, 0x98b8e),
     'position': (0x1036c0, 0x10375f),
     'units': (0x9896d, 0x98b8e),
+    'layout_units': (0x77d77, 0x781d3),
 }
 
 
@@ -43,6 +44,7 @@ async def locals_at(cdp, frame, names):
 
 
 async def main(args):
+    unit_mode = args.mode in ('units', 'layout_units')
     rows, errors = [], []
     unique = {}
     async with async_playwright() as pw:
@@ -97,10 +99,13 @@ async def main(args):
                     # would repeatedly select its first force and bias coverage.
                     for _ in range(64):
                         values = await locals_at(cdp, event['callFrames'][0], {'$var0', '$var1', '$var2'})
-                        render = args.mode == 'position' or any(
+                        render = (any(f['location']['scriptId'] == wasm['scriptId'] and
+                            0xdd543 <= f['location']['columnNumber'] <= 0xdd58a
+                            for f in event['callFrames'][1:]) if args.mode == 'layout_units' else
+                            args.mode == 'position' or any(
                             'Force::interpolated_position' in f['functionName'] or
-                            f['functionName']=='$func1861' for f in event['callFrames'])
-                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']
+                            f['functionName']=='$func1861' for f in event['callFrames']))
+                        force_ptr = values['$var1'] if args.mode in ('position', 'layout_units') else values['$var0']
                         if render and force_ptr==target['research_ref']:
                             force=target
                             break
@@ -134,20 +139,25 @@ async def main(args):
                     bp = await breakpoint(exit_offset)
                     official_counts = {}
                     getter_consistent = True
-                    if args.mode == 'units':
+                    if unit_mode:
                         getter_bp = await breakpoint(0xf92c2)
                     await resume()
                     end = await asyncio.wait_for(pauses.get(), 2)
                     paused = True
-                    if args.mode == 'units':
-                        for _ in range(32):
+                    if unit_mode:
+                        caller_low, caller_high = ((0x77d77, 0x781db) if args.mode == 'layout_units'
+                            else (0x9896d, 0x98b97))
+                        # Layout also calls interpolated_position -> speed before
+                        # its three bounded ten-type iterators. Keep a finite
+                        # ceiling covering those nested normal getter calls.
+                        for _ in range(64 if args.mode == 'layout_units' else 32):
                             if end['callFrames'][0]['location']['columnNumber'] == exit_offset:
                                 break
                             if end['callFrames'][0]['location']['columnNumber'] != 0xf92c2:
                                 raise ValueError('unexpected official unit getter stop')
-                            if not any(0x9896d <= f['location']['columnNumber'] <= 0x98b97
+                            if not any(caller_low <= f['location']['columnNumber'] <= caller_high
                                 and f['location']['scriptId']==wasm['scriptId'] for f in end['callFrames'][1:]):
-                                raise ValueError('unit getter escaped captured force speed execution')
+                                raise ValueError('unit getter escaped captured force render execution')
                             getter = await locals_at(cdp, end['callFrames'][0], {'$var1', '$var3'})
                             unit, count = getter['$var1'] & 255, getter['$var3'] & 255
                             if not 0 <= unit < 10:
@@ -158,7 +168,7 @@ async def main(args):
                             end = await asyncio.wait_for(pauses.get(), 2)
                             paused = True
                         else:
-                            raise ValueError('too many getters in one force speed invocation')
+                            raise ValueError('too many getters in one force render invocation')
                     end_values = await locals_at(cdp, end['callFrames'][0], {'$var0', '$var1', '$var2'})
                     # The captured invocation must reach its normal return.
                     if args.mode == 'position' and end_values['$var0'] != values['$var0']:
@@ -173,7 +183,7 @@ async def main(args):
                     if args.mode == 'speed':
                         actual = end_values['$var2'] & 255
                         row.update(official_speed=actual, match=actual == speed)
-                    elif args.mode == 'units':
+                    elif unit_mode:
                         expected_counts = dict(units.counts)
                         row.update(official_unit_counts=sorted(official_counts.items()),
                             derived_unit_counts=[(unit,expected_counts[unit]) for unit in sorted(official_counts)],

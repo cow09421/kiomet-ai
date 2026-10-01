@@ -344,3 +344,28 @@ d4b89d205904 had zero rows. Later probes correct selection/pause ordering.
 CONCLUSION / STATUS: PASS for the demonstrated unlocked predicate and own-state
 scope; complete lock strata remain PARTIAL. 28 v2 tests and Node privacy checks
 cover claims non-traversal and invalid enums becoming UNKNOWN.
+
+## QUESTION: can normal glyph layout validate chopper composition independently?
+
+Force::speed takes a shortcut for positive Chopper(enum 2), so its nested
+iterator cannot supply the full ten-type vector in that stratum. Pinned normal
+force glyph helper func563 receives the original Force in var1 at 0x77d77;
+GameRender calls it for inbound/outbound forces at 0xdd543/0xdd587. It first
+calls interpolated_position (and speed), then builds three Units::iter_with_zeros
+iterators at 0x77e7d, 0x77edb and 0x77fab. Each enumerates at most ten types.
+The normal return is 0x781d3. layout_units captures this invocation only after
+the existing current-visibility/vector-membership guard, and records getter
+returns only under that helper. It reads no path or hidden endpoint geometry.
+
+The first de94e037b79e attempt excluded every row because the old 32-getter
+ceiling omitted the nested interpolated-position/speed calls. Its 98 errors
+provide zero validation cases. A finite 64-stop ceiling covers the nested
+speed queries plus the three bounded iterators; repeated type results must
+agree. ae28d4ab333d then obtained ten complete vectors, 100/100 getter fields,
+zero errors. The positive-chopper cohort 5189c3d1eabf obtained thirty distinct
+complete vectors and 300/300 fields; two current-visibility-pending reads were
+excluded before capture. Debugger cohorts remain outside performance evidence.
+
+CONCLUSION / STATUS: PASS for these independent normal-render composition
+comparisons, including the previously missing positive Chopper stratum. This
+does not establish Single-moving-force coverage or authoritative age.
