@@ -1,0 +1,71 @@
+{
+  "status": "PARTIAL",
+  "scope": "production/current-segment only; no live commands; explicit no-exogenous-action fixed-morale scenario",
+  "selection": "one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura/force count changes. Counts never used to select correctness.",
+  "limitations": "Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.",
+  "counts": {
+    "world_transitions": 4791,
+    "exclude:NOT_READY": 1901,
+    "exclude:no_production_or_movement_event": 2100,
+    "cases": 440,
+    "matched": 440,
+    "production_cases": 283,
+    "movement_cases": 157,
+    "exclude:UNKNOWN_ARRIVAL_ACCELERATION": 49,
+    "exclude:external_owner_type_delay_aura_change": 4,
+    "exclude:ACTIVE_UPGRADE_OR_EMP": 197,
+    "exclude:NEUTRAL_UNIT_DECAY": 2,
+    "exclude:OVERFLOW_DECAY": 6,
+    "exclude:external_force_birth_or_arrival": 2,
+    "exclude:multi_tick_or_backward": 1,
+    "exclude:isolation": 89
+  },
+  "cohorts": [
+    {
+      "cohort": "fe678ebb30ce",
+      "snapshot_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+      "counts": {
+        "world_transitions": 2398,
+        "exclude:NOT_READY": 38,
+        "exclude:no_production_or_movement_event": 2050,
+        "cases": 302,
+        "matched": 302,
+        "production_cases": 274,
+        "movement_cases": 28,
+        "exclude:UNKNOWN_ARRIVAL_ACCELERATION": 7,
+        "exclude:external_owner_type_delay_aura_change": 1
+      },
+      "failures": []
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "snapshot_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "counts": {
+        "world_transitions": 2393,
+        "exclude:NOT_READY": 1863,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 197,
+        "exclude:NEUTRAL_UNIT_DECAY": 2,
+        "exclude:no_production_or_movement_event": 50,
+        "cases": 138,
+        "matched": 138,
+        "production_cases": 9,
+        "movement_cases": 129,
+        "exclude:OVERFLOW_DECAY": 6,
+        "exclude:UNKNOWN_ARRIVAL_ACCELERATION": 42,
+        "exclude:external_owner_type_delay_aura_change": 3,
+        "exclude:external_force_birth_or_arrival": 2,
+        "exclude:multi_tick_or_backward": 1,
+        "exclude:isolation": 89
+      },
+      "failures": []
+    }
+  ],
+  "corpus_file": "runtime\\research\\v2\\m2a-transition-corpus.jsonl",
+  "corpus_sha256": "780124277953da81c4c9269722bc47be769ccf0808155d541e9627616ebb991e",
+  "tool_sha256": "183f11afd00a40a57074c8e56625f31624ef227a3925e6a0cff1ef0d4de14fe3",
+  "source_manifest": {
+    "src\\kiomet_ai\\v2\\sim\\model.py": "99eebf4b86b8751e199dfa06366033a8dd541cd69915cf46c7e38609a654ac83",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "ef952f6ca43158444f617e19adc3f78e7e8fc774b424d59863d7f629a4158c10",
+    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  }
+}
