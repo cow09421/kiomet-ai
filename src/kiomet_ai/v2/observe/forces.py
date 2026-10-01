@@ -103,6 +103,7 @@ class ForceTracker:
                 unit_count=known(sum(n for _,n in c['units'].counts),
                     'sum of complete visible typed force vector',at,Knowledge.DERIVED),
                 progress=known(row['progress'],'visible Force.path_progress+22',at),
+                accelerated=known(bool(row['accelerated']),'visible Force.accelerated+21; normal renderer',at),
                 first_seen_ms=known(first_seen,'first observation in this unique track; not launch time',at),
                 confidence=known(confidence,'conservative unique tick/progress continuation',at,Knowledge.DERIVED),
                 eta_ms=known(c['model'][2] if c['model'] else None,

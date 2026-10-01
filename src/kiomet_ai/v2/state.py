@@ -118,6 +118,7 @@ class Force:
     progress: Fact[int] = field(default_factory=Fact)
     first_seen_ms: Fact[int] = field(default_factory=Fact)
     confidence: Fact[str] = field(default_factory=Fact)
+    accelerated: Fact[bool] = field(default_factory=Fact)
 
     def __post_init__(self):
         if self.visibility.value is not True or self.visibility.knowledge != Knowledge.OBSERVED:
@@ -157,6 +158,7 @@ class GameState:
     ranking: Fact[tuple] = field(default_factory=Fact)
     coverage: str = "PARTIAL"
     coverage_evidence: Fact[tuple] = field(default_factory=Fact)
+    world_sequence_observed_at_ms: Fact[int] = field(default_factory=Fact)
 
     def __post_init__(self):
         if any(type(v) is not int or v < 0 for v in (self.sequence, self.sampled_at_ms, self.received_at_ms)):
@@ -172,6 +174,9 @@ class GameState:
             # A browser/server epoch cannot masquerade as a host-clock point.
             # Generation precedes receipt; conversion uncertainty stays unknown.
             raise ValueError("invalid authoritative update time in host clock")
+        observed = self.world_sequence_observed_at_ms.value
+        if observed is not None and (type(observed) is not int or observed < 0 or observed > self.received_at_ms):
+            raise ValueError("invalid world sequence observation time")
         window = self.source_update_window_ms.value
         if window is not None and (len(window) != 2 or
                 any(type(t) is not int or t < 0 for t in window) or

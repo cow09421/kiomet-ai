@@ -126,3 +126,19 @@ Target: three 10-minute matches, >=4Hz and p95 update age <=250ms; >=1,000 strat
 critical-field comparisons >=99% agreement; zero hidden-info contamination.
 Offline fixtures and adapter unit tests verify contracts only. No PASS without the
 complete live evidence. Stop at 18 engineering hours / three working days if unmet.
+
+## M1B amendment — explicit 2026-10-01 user instruction
+
+The historical M1 result and its three failure/evidence documents remain unchanged.
+The new M1B gate uses observed world order, first host observation of a sequence,
+complete extraction time, derived match epoch, document and network continuity.
+Absolute server generation time remains UNKNOWN and is not a simulator prerequisite.
+`control_readiness_gaps` is separate from historical M1 readiness. Repeated polls
+do not refresh sequence observation time; backwards/ambiguous u16 order, gaps,
+unavailable match identity and incomplete visible coverage reject control readiness.
+Permanent force identity and launch/ETA timestamps are optional for a current-leg
+simulation. Unknown segment endpoints, composition, count, progress or ownership
+still reject a minimum simulation. Each simulator must also reject unsupported
+mechanics, uncertain future routes, unobserved actions and missing required inputs.
+This amendment changes the control-time gate only; visibility, provenance, input
+isolation, version pinning and unknown semantics continue to apply in full.

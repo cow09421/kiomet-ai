@@ -59,6 +59,11 @@ class MatchLifecycle:
             self.last_live_at = None
             self.last_live_source = None
         elif state == Lifecycle.IN_MATCH:
+            if self.last_live_source is not None and self.last_live_source[:2] == (key, raw.get('transport_mode')):
+                delta=(raw['tick']-self.last_live_source[2]) % 65536
+                if delta >= 32768:
+                    self.identity=None
+                    self.invalidated=True
             if self.key is not None and self.key != key:
                 self.identity = None
                 self.invalidated = False

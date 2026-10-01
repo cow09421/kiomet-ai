@@ -340,7 +340,9 @@ class ClientExtractor:
                           force_tracker=self.force_tracker,upgrade_tracker=self.upgrade_tracker)
         # Timestamp when the complete canonical state becomes available, after
         # normalization/tracking; never hide that work from downstream age.
-        state=replace(state,received_at_ms=time.monotonic_ns()//1000000)
+        state=replace(state,received_at_ms=time.monotonic_ns()//1000000,
+            world_sequence_observed_at_ms=observed(self.source_clock.observed_at_ms,
+                'first host observation of current displayed sequence; repeated polls do not refresh',received_ms))
         self.sequence += 1
         return state, raw
 

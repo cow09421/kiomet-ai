@@ -3,6 +3,7 @@ import argparse
 import asyncio
 from dataclasses import fields, is_dataclass
 import json
+from collections import Counter
 import hashlib
 from pathlib import Path
 import statistics
@@ -13,6 +14,7 @@ from uuid import uuid4
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from kiomet_ai.v2.observe.extractor import ObservationSession, connect_dedicated
+from kiomet_ai.v2.control import control_readiness_gaps
 from playwright.async_api import async_playwright
 
 
@@ -49,6 +51,8 @@ async def main(args):
                 await asyncio.sleep(2)
         extractor = ObservationSession(pages[0])
         latencies, errors, snapshots, upper_ages = [], [], 0, []
+        observation_to_complete=[]
+        control_status=Counter()
         force_snapshots=0
         tracks={}
         progress_changes=0
@@ -96,6 +100,9 @@ async def main(args):
                         elapsed = (time.perf_counter() - began) * 1000
                         latencies.append(elapsed)
                         snapshots += 1
+                        control_status['ready' if not control_readiness_gaps(state,state.received_at_ms) else 'not_ready']+=1
+                        if state.world_sequence_observed_at_ms.value is not None:
+                            observation_to_complete.append(state.received_at_ms-state.world_sequence_observed_at_ms.value+1)
                         last_accepted=time.perf_counter()
                         if first_accepted is None:first_accepted=last_accepted
                         bounds = state.age_bounds_ms(state.received_at_ms)
@@ -139,6 +146,9 @@ async def main(args):
         duration = time.perf_counter() - start
         p95 = sorted(latencies)[max(0, int(len(latencies) * .95) - 1)] if latencies else None
         report = {"status": "PARTIAL", "seconds": duration, "snapshots": snapshots,
+            "m1b_control_counts":dict(control_status),
+            "sequence_observation_to_extraction_complete_p95_ms":sorted(observation_to_complete)[max(0,int(len(observation_to_complete)*.95)-1)] if observation_to_complete else None,
+            "sequence_observation_latency_samples":len(observation_to_complete),
             "accepted_poll_hz": snapshots / duration, "poll_latency_p95_ms": p95,
             "authoritative_update_age_p95_ms": None, "independent_ui_comparisons": 0,
             "derived_update_age_upper_p95_ms": sorted(upper_ages)[max(0,int(len(upper_ages)*.95)-1)] if upper_ages else None,

@@ -1,0 +1,342 @@
+{
+  "status": "REVIEW",
+  "question": "Do three existing pinned live cohorts preserve M1B safety, order and measured rate/latency?",
+  "limits": "Offline audit of previously recorded live data; not new live sampling, not whole-state correctness. Missing fields remain unknown.",
+  "cohorts": [
+    {
+      "cohort": "fe678ebb30ce",
+      "recorded_benchmark": {
+        "status": "PARTIAL",
+        "seconds": 600.1199719998986,
+        "snapshots": 4797,
+        "accepted_poll_hz": 7.993401692688226,
+        "poll_latency_p95_ms": 8.247600169852376,
+        "authoritative_update_age_p95_ms": null,
+        "independent_ui_comparisons": 0,
+        "derived_update_age_upper_p95_ms": 189,
+        "bounded_age_snapshots": 4795,
+        "source_metadata_reads": 55075,
+        "source_metadata_latency_p95_ms": 2.82959989272058,
+        "force_snapshots": 144,
+        "derived_force_tracks": 2,
+        "force_progress_changes": 70,
+        "force_tracks_multiple_observations": 2,
+        "lifecycle_states": [
+          "IN_MATCH"
+        ],
+        "visibility_losses": 0,
+        "visibility_gains": 0,
+        "document_reacquisitions": 1,
+        "distinct_match_ids": 1,
+        "distinct_documents": 1,
+        "source_modes": [
+          "NETWORK"
+        ],
+        "observer_source_manifest": {
+          "src\\kiomet_ai\\v2\\__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+          "src\\kiomet_ai\\v2\\observe\\__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+          "src\\kiomet_ai\\v2\\observe\\client_fae13.js": "865aab6f4d361a6cec124f6470a431ec10a4e0f6dc00603f21b65af8a224337d",
+          "src\\kiomet_ai\\v2\\observe\\extractor.py": "72b6fc27f7e891a5ddc78f6712aa5bb280c92b8d283692433ba4b146c15a088f",
+          "src\\kiomet_ai\\v2\\observe\\forces.py": "ee0db0578722c6247fad948421b4a2aace8bc3de9f98812f55c883711ce84a02",
+          "src\\kiomet_ai\\v2\\observe\\lifecycle.py": "dcd389545c33494d6258f1a296b0c4bc6c5cdd8a97c8953b3a38a6c4fdbd982b",
+          "src\\kiomet_ai\\v2\\observe\\rules.py": "9ecfbd82b2370b1d8adddf8048ca6e18449277dfedf2371e9e606e3f32733b46",
+          "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+          "src\\kiomet_ai\\v2\\observe\\source_clock.py": "8112822c37de31f5ecbdf057ff513ee23dd4a6a23ee234c0fce22cb8a4c36872",
+          "src\\kiomet_ai\\v2\\observe\\upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+          "src\\kiomet_ai\\v2\\state.py": "af8250f75042de850527249e247112d13da6f1eabea795fc08b9a9928e8a56b9",
+          "tools\\v2_observe.py": "f126c91086b469adb4ea6ff38d4eb90bf15fa60465e1cf41cfa95a53602236af"
+        },
+        "accepted_span_seconds": 599.5707640999462,
+        "browser_closed": false,
+        "sampling_mode": "on_visible_world_update_and_150ms_timer",
+        "poll_interval_ms": 150,
+        "single_match_cohort": true,
+        "error_count": 1,
+        "errors": [
+          "current visibility cache pending"
+        ],
+        "snapshot_file": "snapshots-fe678ebb30ce.jsonl",
+        "note": "Poll latency is not game-state age. Root adapter is research candidate."
+      },
+      "snapshot_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+      "audit_counts": {
+        "snapshots": 4797,
+        "not_ready": 74,
+        "complete_visible": 4797,
+        "control_ready": 4723
+      },
+      "rejection_fields": {
+        "source_continuity": 2,
+        "force:0:source": 72
+      },
+      "faults": {},
+      "runtime_tick_model": {
+        "knowledge": "DERIVED",
+        "scope": "observed client world cadence, not server wall time",
+        "advance_events": 2398,
+        "tick_steps": 2398,
+        "observed_ms_per_tick": 249.9674728940784,
+        "median_event_ms_per_tick": 250.0
+      }
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "recorded_benchmark": {
+        "status": "PARTIAL",
+        "seconds": 600.0880452001002,
+        "snapshots": 4767,
+        "accepted_poll_hz": 7.9438343058649625,
+        "poll_latency_p95_ms": 7.7454999554902315,
+        "authoritative_update_age_p95_ms": null,
+        "independent_ui_comparisons": 0,
+        "derived_update_age_upper_p95_ms": 204,
+        "bounded_age_snapshots": 4622,
+        "source_metadata_reads": 55039,
+        "source_metadata_latency_p95_ms": 2.4072001688182354,
+        "force_snapshots": 4503,
+        "derived_force_tracks": 297,
+        "force_progress_changes": 13485,
+        "force_tracks_multiple_observations": 297,
+        "lifecycle_states": [
+          "IN_MATCH"
+        ],
+        "visibility_losses": 0,
+        "visibility_gains": 0,
+        "document_reacquisitions": 1,
+        "distinct_match_ids": 2,
+        "distinct_documents": 1,
+        "source_modes": [
+          "NETWORK"
+        ],
+        "observer_source_manifest": {
+          "src\\kiomet_ai\\v2\\__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+          "src\\kiomet_ai\\v2\\observe\\__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+          "src\\kiomet_ai\\v2\\observe\\client_fae13.js": "10f0877d3310be2026a3bc5a858687c0efee0ae50300606606672638a51a8b18",
+          "src\\kiomet_ai\\v2\\observe\\extractor.py": "a6a24cb9a065f5b3a7274b2b7873a749245c4a702b7d78048c9560098492c521",
+          "src\\kiomet_ai\\v2\\observe\\forces.py": "ee0db0578722c6247fad948421b4a2aace8bc3de9f98812f55c883711ce84a02",
+          "src\\kiomet_ai\\v2\\observe\\lifecycle.py": "937306f36ed9c603dc506eee0dbb56adec4e059841f5738b72f6cdc0db61c580",
+          "src\\kiomet_ai\\v2\\observe\\rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+          "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+          "src\\kiomet_ai\\v2\\observe\\source_clock.py": "8112822c37de31f5ecbdf057ff513ee23dd4a6a23ee234c0fce22cb8a4c36872",
+          "src\\kiomet_ai\\v2\\observe\\upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+          "src\\kiomet_ai\\v2\\state.py": "f5ec48a9edebddf58a74edcb37db1bbf2693de355c2ece08f1327bce4243ab2a",
+          "tools\\v2_observe.py": "f126c91086b469adb4ea6ff38d4eb90bf15fa60465e1cf41cfa95a53602236af"
+        },
+        "accepted_span_seconds": 599.5346915000118,
+        "browser_closed": false,
+        "sampling_mode": "on_visible_world_update_and_150ms_timer",
+        "poll_interval_ms": 150,
+        "single_match_cohort": false,
+        "error_count": 7,
+        "errors": [
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending"
+        ],
+        "snapshot_file": "snapshots-03d032d57e5b.jsonl",
+        "note": "Poll latency is not game-state age. Root adapter is research candidate."
+      },
+      "snapshot_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "audit_counts": {
+        "snapshots": 4767,
+        "not_ready": 3876,
+        "complete_visible": 4767,
+        "control_ready": 891
+      },
+      "rejection_fields": {
+        "source_continuity": 145,
+        "force:0:source": 979,
+        "force:0:destination": 1162,
+        "force:1:source": 551,
+        "force:1:destination": 965,
+        "force:2:destination": 1011,
+        "force:2:source": 240,
+        "force:3:destination": 1189,
+        "force:3:source": 79,
+        "force:4:destination": 1383,
+        "force:5:destination": 917,
+        "force:6:destination": 1075,
+        "force:7:destination": 630,
+        "force:8:destination": 414,
+        "force:9:destination": 246,
+        "force:8:source": 122,
+        "force:7:source": 187,
+        "force:6:source": 168,
+        "force:5:source": 112,
+        "force:9:source": 123,
+        "force:10:source": 136,
+        "force:11:source": 50,
+        "force:10:destination": 193,
+        "force:11:destination": 161,
+        "force:12:destination": 92,
+        "force:4:source": 34,
+        "force:13:source": 48,
+        "force:12:source": 55,
+        "force:13:destination": 4,
+        "force:14:source": 4,
+        "match_id": 143
+      },
+      "faults": {},
+      "runtime_tick_model": {
+        "knowledge": "DERIVED",
+        "scope": "observed client world cadence, not server wall time",
+        "advance_events": 2304,
+        "tick_steps": 2305,
+        "observed_ms_per_tick": 250.14229934924077,
+        "median_event_ms_per_tick": 250.0
+      }
+    },
+    {
+      "cohort": "f3f22dae0791",
+      "recorded_benchmark": {
+        "status": "PARTIAL",
+        "seconds": 600.0734020001255,
+        "snapshots": 4004,
+        "accepted_poll_hz": 6.672517039839008,
+        "poll_latency_p95_ms": 6.997600197792053,
+        "authoritative_update_age_p95_ms": null,
+        "independent_ui_comparisons": 0,
+        "derived_update_age_upper_p95_ms": 204,
+        "bounded_age_snapshots": 369,
+        "source_metadata_reads": 54472,
+        "source_metadata_latency_p95_ms": 2.3008999414741993,
+        "force_snapshots": 2678,
+        "derived_force_tracks": 0,
+        "force_progress_changes": 0,
+        "force_tracks_multiple_observations": 0,
+        "lifecycle_states": [
+          "IN_MATCH"
+        ],
+        "visibility_losses": 3,
+        "visibility_gains": 0,
+        "document_reacquisitions": 1,
+        "distinct_match_ids": 2,
+        "distinct_documents": 1,
+        "source_modes": [
+          "NETWORK"
+        ],
+        "observer_source_manifest": {
+          "src\\kiomet_ai\\v2\\__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+          "src\\kiomet_ai\\v2\\observe\\__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+          "src\\kiomet_ai\\v2\\observe\\client_fae13.js": "10f0877d3310be2026a3bc5a858687c0efee0ae50300606606672638a51a8b18",
+          "src\\kiomet_ai\\v2\\observe\\extractor.py": "a6a24cb9a065f5b3a7274b2b7873a749245c4a702b7d78048c9560098492c521",
+          "src\\kiomet_ai\\v2\\observe\\forces.py": "ee0db0578722c6247fad948421b4a2aace8bc3de9f98812f55c883711ce84a02",
+          "src\\kiomet_ai\\v2\\observe\\lifecycle.py": "937306f36ed9c603dc506eee0dbb56adec4e059841f5738b72f6cdc0db61c580",
+          "src\\kiomet_ai\\v2\\observe\\rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+          "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+          "src\\kiomet_ai\\v2\\observe\\source_clock.py": "8112822c37de31f5ecbdf057ff513ee23dd4a6a23ee234c0fce22cb8a4c36872",
+          "src\\kiomet_ai\\v2\\observe\\upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+          "src\\kiomet_ai\\v2\\state.py": "85c1c8c7344cbcb39be20139d64c359a0f591c86657fafeec04ec2b09e971c98",
+          "tools\\v2_observe.py": "f126c91086b469adb4ea6ff38d4eb90bf15fa60465e1cf41cfa95a53602236af"
+        },
+        "accepted_span_seconds": 599.5708606999833,
+        "browser_closed": false,
+        "sampling_mode": "on_visible_world_update_and_150ms_timer",
+        "poll_interval_ms": 150,
+        "single_match_cohort": false,
+        "error_count": 56,
+        "errors": [
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending",
+          "current visibility cache pending"
+        ],
+        "snapshot_file": "snapshots-f3f22dae0791.jsonl",
+        "note": "Poll latency is not game-state age. Root adapter is research candidate."
+      },
+      "snapshot_sha256": "0ee08466bf5c9ae8ce127139960397741c7400677c4dd8a6e7691cd40314c1d1",
+      "audit_counts": {
+        "snapshots": 4004,
+        "not_ready": 4004,
+        "partial_visible": 4004
+      },
+      "rejection_fields": {
+        "source_continuity": 3635,
+        "coverage": 4004,
+        "match_id": 3633,
+        "force:0:source": 1169,
+        "force:0:destination": 646,
+        "force:1:destination": 266,
+        "force:2:destination": 141,
+        "force:2:source": 44,
+        "force:1:source": 200
+      },
+      "faults": {},
+      "runtime_tick_model": {
+        "knowledge": "DERIVED",
+        "scope": "observed client world cadence, not server wall time",
+        "advance_events": 180,
+        "tick_steps": 181,
+        "observed_ms_per_tick": 250.34806629834253,
+        "median_event_ms_per_tick": 250.0
+      }
+    }
+  ],
+  "tool_sha256": "01a2c707b5a3a07540777af073c8ea4ea0767a532e85eec5c532d191c08fd3da",
+  "current_short_confirmation": {
+    "status": "PARTIAL",
+    "seconds": 60.05245009995997,
+    "snapshots": 476,
+    "m1b_control_counts": {
+      "not_ready": 476
+    },
+    "sequence_observation_to_extraction_complete_p95_ms": 189,
+    "sequence_observation_latency_samples": 476,
+    "accepted_poll_hz": 7.9264043216834095,
+    "poll_latency_p95_ms": 10.964300017803907,
+    "authoritative_update_age_p95_ms": null,
+    "independent_ui_comparisons": 0,
+    "derived_update_age_upper_p95_ms": 204,
+    "bounded_age_snapshots": 474,
+    "source_metadata_reads": 5359,
+    "source_metadata_latency_p95_ms": 3.139900043606758,
+    "force_snapshots": 476,
+    "derived_force_tracks": 51,
+    "force_progress_changes": 1945,
+    "force_tracks_multiple_observations": 51,
+    "lifecycle_states": [
+      "IN_MATCH"
+    ],
+    "visibility_losses": 0,
+    "visibility_gains": 0,
+    "document_reacquisitions": 1,
+    "distinct_match_ids": 1,
+    "distinct_documents": 1,
+    "source_modes": [
+      "NETWORK"
+    ],
+    "observer_source_manifest": {
+      "src\\kiomet_ai\\v2\\__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+      "src\\kiomet_ai\\v2\\control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+      "src\\kiomet_ai\\v2\\observe\\__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+      "src\\kiomet_ai\\v2\\observe\\client_fae13.js": "10f0877d3310be2026a3bc5a858687c0efee0ae50300606606672638a51a8b18",
+      "src\\kiomet_ai\\v2\\observe\\extractor.py": "2b2e6e9ee94aadea90a8fe0e6311f85a95105e8c44ed0a46f90021b87ef0ba60",
+      "src\\kiomet_ai\\v2\\observe\\forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+      "src\\kiomet_ai\\v2\\observe\\lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+      "src\\kiomet_ai\\v2\\observe\\rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+      "src\\kiomet_ai\\v2\\observe\\rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+      "src\\kiomet_ai\\v2\\observe\\source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+      "src\\kiomet_ai\\v2\\observe\\upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+      "src\\kiomet_ai\\v2\\serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+      "src\\kiomet_ai\\v2\\state.py": "27ba1a17f3822ac74f8720a939bfb104e25a0bae7ab8dabc02bc6555ff8ee37c",
+      "tools\\v2_observe.py": "4f051409348c65c3ac3e6a99ae78493390b4647c1edf8cc9b8e2f24e3b0e4e70"
+    },
+    "accepted_span_seconds": 59.37983790016733,
+    "browser_closed": false,
+    "sampling_mode": "on_visible_world_update_and_150ms_timer",
+    "poll_interval_ms": 150,
+    "single_match_cohort": true,
+    "error_count": 1,
+    "errors": [
+      "current visibility cache pending"
+    ],
+    "snapshot_file": "snapshots-0b5d10bffb15.jsonl",
+    "note": "Poll latency is not game-state age. Root adapter is research candidate."
+  },
+  "current_short_confirmation_sha256": "ac9407b4c41d5ecd2431572efc2584d56157f9266ae6c7a1fcd17453fcd5bc55",
+  "new_m1b": "PASS",
+  "old_m1": "FAIL"
+}

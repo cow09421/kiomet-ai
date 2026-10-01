@@ -13,9 +13,11 @@ class SourceClock:
     previous_start: int | None = None
     previous_monotonic: float | None = None
     window: tuple[int, int] | None = None
+    observed_at_ms: int | None = None
 
     def clear(self):
         self.key = self.previous_tick = self.previous_start = self.previous_monotonic = self.window = None
+        self.observed_at_ms = None
 
     def observe(self, key, tick, started_ms, finished_ms, monotonic_ms):
         if type(tick) is not int or not 0 <= tick <= 65535 or finished_ms < started_ms:
@@ -31,11 +33,16 @@ class SourceClock:
         if changed_domain:
             self.clear()
             self.key = key
+            self.observed_at_ms = finished_ms
         elif tick != self.previous_tick:
+            if (tick-self.previous_tick) % 65536 >= 32768:
+                self.clear()
+                return None
             # The last read was during [previous_start, previous_finish].
             # The new update must be after its START and before this FINISH.
             # Includes delayed/catch-up updates and u16 wrap; no period assumed.
             self.window = (self.previous_start, finished_ms)
+            self.observed_at_ms = finished_ms
         elif self.previous_start is not None and started_ms - self.previous_start > 1000:
             # A long unobserved gap could hide a reset or a complete counter wrap.
             self.window = None
