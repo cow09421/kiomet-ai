@@ -266,3 +266,27 @@ Date 是一般回應日期，Game association 仍 UNKNOWN。缺 x-held 的回應
 0a2e70d05651 的有限資訊框比對有 100 次選取、157/157 兵數與容量欄位、
 100/100 顏色／塔型／delay 進度條。當時鏡頭中只選到 ENEMY:MANY；
 未取得新的本方 Single 或升級政策分層，不能把這批擴張為全面正確率。
+
+### 修正 metadata 輪詢誤延長對局連續性的缺口
+
+舊 tracker 只計算兩次 observe 呼叫的間隔：若斷線或 UNKNOWN 期間持續
+輪詢，間隔一直小於一秒，可能沿用失去來源前的對局 epoch。現在另追蹤
+實際在線世界序號的變更；metadata 輪詢、連線仍開啟但世界停滯、未知狀態
+均不能延長來源連續性。超過原本的一秒保守視窗就使舊 epoch 失效。
+同 scope 後續恢復更新仍維持 UNKNOWN，直到正常 Menu／Result／Join
+或新文件／玩家來源證據可建立新 observation epoch。這不是毫秒世界時鐘。
+
+identity-gap-ed2336d158aa 在傳輸過渡 enum 被原門控拒絕後中斷，零完整
+回歸案例；没有放寬傳輸解碼。工具改成固定 phase 期限內重試拒絕結果。
+identity-gap-5aad71227572 實測 baseline 3 秒、offline 3 秒、reconnect
+15 秒：正常 baseline 身分穩定，重連後同文件／玩家且世界繼續更新，舊
+epoch 不復用；Canonical match_id UNKNOWN 且 readiness 留下 match_id
+缺口。正常 reload 取得新文件 epoch 與新 memory handle。當時移動部隊
+為零，因此其 force ID 布林檢查沒有提供非空 live 案例，不能宣稱部隊 ID
+實測通過；新的工具會明確輸出該項 UNKNOWN。非空部隊在 match UNKNOWN
+時清除 ID／first-seen 而保留合法庫存，由回歸測試驗證。
+
+source 改動後 sampling-b192f03bc401 的 60.014 秒診斷：479 筆、7.981 Hz、
+擷取 p95 8.659 ms、客戶端套用年齡上界 p95 204 ms，5,465 metadata reads、
+零錯誤，一文件／一 epoch／NETWORK。沒有移動部隊，不列完整 M1 驗收。
+31 項 v2 回歸與 Node 隱私門控通過；authoritative age 仍 UNKNOWN。

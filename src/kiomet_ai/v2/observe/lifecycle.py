@@ -12,6 +12,8 @@ class MatchLifecycle:
         self.join_pending = False
         self.invalidated = False
         self.last_at = None
+        self.last_live_at = None
+        self.last_live_source = None
 
     def begin_join(self):
         """Called immediately before an explicitly authorized official Play click."""
@@ -20,12 +22,17 @@ class MatchLifecycle:
         self.join_pending = True
         self.invalidated = False
         self.state = Lifecycle.JOINING
+        self.last_live_at = None
+        self.last_live_source = None
 
     def observe(self, raw, at_ms):
         play = (raw.get("play_text") or "").strip()
         key = (raw.get("document_time_origin"),raw.get("player_id"))
-        if self.last_at is not None and at_ms - self.last_at > 1000 and self.identity:
+        if self.identity and (
+            self.last_at is not None and at_ms - self.last_at > 1000 or
+            self.last_live_at is not None and at_ms - self.last_live_at > 1000):
             # A missed terminal transition cannot be ruled out from two live polls.
+            # Polling unavailable metadata does not extend world continuity.
             self.invalidated = True
             self.identity = None
         self.last_at = at_ms
@@ -49,6 +56,8 @@ class MatchLifecycle:
         if state in (Lifecycle.MENU,Lifecycle.RESULT):
             self.identity = self.key = None
             self.invalidated = False
+            self.last_live_at = None
+            self.last_live_source = None
         elif state == Lifecycle.IN_MATCH:
             if self.key is not None and self.key != key:
                 self.identity = None
@@ -58,5 +67,11 @@ class MatchLifecycle:
                 self.identity = f"{self.document_id}:p{raw['player_id']}:{uuid4().hex}"
             self.key = key
             self.join_pending = False
+            live_source = (key, raw.get('transport_mode'), raw['tick'])
+            if live_source != self.last_live_source:
+                # A connected socket and repeated active metadata do not prove
+                # that another world update was actually observed.
+                self.last_live_at = at_ms
+                self.last_live_source = live_source
         self.state = state
         return state, self.identity if state == Lifecycle.IN_MATCH else None

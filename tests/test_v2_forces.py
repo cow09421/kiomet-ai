@@ -55,3 +55,15 @@ def test_ambiguous_forces_and_visibility_loss_never_fabricate_continuity():
     hidden=row(8);hidden['source']=99
     with pytest.raises(ValueError,match='hidden'):
         tracker.update([hidden],towers(),'m1',59,900,decode_units)
+
+
+def test_unknown_match_removes_force_identity_without_erasing_visible_inventory():
+    tracker = ForceTracker()
+    prior = tracker.update([row(0)],towers(),'m1',55,100,decode_units)[0]
+    uncertain = tracker.update([row(2)],towers(),None,56,300,decode_units)[0]
+    assert uncertain.id.knowledge == Knowledge.UNKNOWN and uncertain.id.value is None
+    assert uncertain.first_seen_ms.value is None
+    assert uncertain.units.knowledge == Knowledge.OBSERVED
+    assert dict(uncertain.units.value.counts)[5] == 3
+    renewed = tracker.update([row(4)],towers(),'m2',57,500,decode_units)[0]
+    assert renewed.id.value != prior.id.value and renewed.first_seen_ms.value == 500

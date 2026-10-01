@@ -45,6 +45,40 @@ def test_conflicting_or_unrecognized_ui_stays_unknown():
     assert tracker.observe(metadata(False,None),200)[0] == Lifecycle.UNKNOWN
 
 
+def test_continuous_unavailable_metadata_cannot_extend_match_continuity():
+    for unavailable in (metadata(True,None,online=False), metadata(False,None)):
+        tracker = MatchLifecycle('doc')
+        live = metadata(True,None)
+        prior = tracker.observe(live,100)[1]
+        for at in range(200,1800,100):
+            assert tracker.observe(unavailable,at)[1] is None
+        assert tracker.observe(live,1800) == (Lifecycle.IN_MATCH,None)
+        assert tracker.observe(live,1900)[1] is None
+        tracker.observe(metadata(),2000)
+        tracker.begin_join()
+        renewed = tracker.observe(live,2100)[1]
+        assert renewed and renewed != prior
+
+
+def test_connected_stalled_world_cannot_be_kept_alive_by_polling():
+    tracker = MatchLifecycle('doc')
+    live = metadata(True,None)
+    prior = tracker.observe(live,100)[1]
+    assert prior
+    for at in range(200,1200,100):
+        assert tracker.observe(live,at)[1] == prior
+    assert tracker.observe(live,1200)[1] is None
+    live['tick'] += 1
+    assert tracker.observe(live,1300)[1] is None
+    tracker.observe(metadata(),1400)
+    tracker.begin_join()
+    renewed = tracker.observe(live,1500)[1]
+    assert renewed and renewed != prior
+    for at in range(1600,3600,100):
+        live['tick'] += 1
+        assert tracker.observe(live,at)[1] == renewed
+
+
 def test_offline_harness_cannot_resume_a_network_match_epoch():
     tracker=MatchLifecycle('doc')
     live=metadata(True,None);live['transport_mode']='NETWORK'
