@@ -269,3 +269,13 @@ def test_terminal_friendly_arrival_requires_independent_no_supply_line_premise()
     assert not result.forces and result.towers[1].units[5]==3
     with pytest.raises(UnsupportedState,match='INVALID_SUPPLY_LINE_SCENARIO'):
         step(state,scenario=Scenario(no_supply_line_towers=(99,)))
+
+
+def test_scenario_validation_does_not_lose_bool_int_aliases_in_sets():
+    state=empty_world()
+    state=replace(state,towers=(replace(state.towers[0],id=1),state.towers[1]))
+    with pytest.raises(UnsupportedState,match='INVALID_SUPPLY_LINE_SCENARIO'):
+        step(state,scenario=Scenario(no_supply_line_towers=(1,True)))
+    force=SimForce(7,1,4,(0,0,0,0,0,3,0,0,0,0),0,False)
+    with pytest.raises(UnsupportedState,match='INVALID_TERMINAL_SCENARIO'):
+        step(replace(state,forces=(force,)),scenario=Scenario(terminal_forces=(0,False)))

@@ -50,12 +50,14 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
     towers={tower.id:tower for tower in state.towers}
     if len(towers)!=len(state.towers): raise UnsupportedState('DUPLICATE_TOWER_IDS')
     forces=list(state.forces)
-    terminals=set(scenario.terminal_forces)
-    no_supply_lines=set(scenario.no_supply_line_towers)
-    if any(type(i) is not int or i not in towers for i in no_supply_lines):
+    if scenario.no_supply_line_towers and any(type(i) is not int or i not in towers for i in scenario.no_supply_line_towers):
         raise UnsupportedState('INVALID_SUPPLY_LINE_SCENARIO')
-    if any(type(i) is not int or not 0<=i<len(forces) for i in terminals):
+    if scenario.terminal_forces and any(type(i) is not int or not 0<=i<len(forces) for i in scenario.terminal_forces):
         raise UnsupportedState('INVALID_TERMINAL_SCENARIO')
+    # Empty default premises need no per-step set allocation. Validate before
+    # deduplicating: Python bool/int aliases must not hide invalid input types.
+    terminals=set(scenario.terminal_forces) if scenario.terminal_forces else ()
+    no_supply_lines=set(scenario.no_supply_line_towers) if scenario.no_supply_line_towers else ()
     sequence=(state.world_sequence+1)&65535
     if len(forces)>1:
         for i,force in enumerate(forces[:-1]):
@@ -64,7 +66,7 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
                 raise UnsupportedState('OPPOSED_FORCE_COMBAT')
     for tower in state.towers:
         key=tower.id
-        clock=phase(sequence,tower.id)
+        clock=(sequence+phase_offset(tower.id)) & 65535
         if not tower.owner and DOWNGRADE[tower.kind]!=27 and clock%240==0:
             raise UnsupportedState('NEUTRAL_DOWNGRADE')
         if not tower.owner and clock%40==0 and any(tower.units):
@@ -95,7 +97,6 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
     remaining=[]
     for index,force in enumerate(forces):
         src,dst=towers[force.source],towers[force.destination]
-        same_owner_before_arrival=dst.owner==force.owner
         speed,required=movement_parameters(force.units,src.position,dst.position)
         if force.accelerated is None:
             earliest=max(1,required*4//5)
@@ -107,6 +108,7 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             remaining.append(SimForce(force.owner,force.source,force.destination,force.units,
                                       progress,force.accelerated,force.relation,force.terminal,force.fuel))
             continue
+        same_owner_before_arrival=dst.owner==force.owner
         if dst.owner!=force.owner and (dst.owner or any(dst.units)):
             if not (scenario.ground_combat or scenario.ordinary_combat): raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
             known_enemy=(dst.owner==state.player and force.relation=='ENEMY' or

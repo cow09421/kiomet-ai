@@ -39,5 +39,5 @@ unknown tower IDs refuse. Both real ground-defense fixtures still match and do
 not require this premise because the attacking force is destroyed first.
 
 Luna arrival review supplied a read-only candidate; Sol checked source ordering,
-re-read the pinned offsets, implemented the guard, and ran all 68 v2 tests plus
+re-read the pinned offsets, implemented the guard, and ran all 69 v2 tests plus
 formal and isolated candidate corpora. No milestone or live-reinforcement PASS.

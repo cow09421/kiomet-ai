@@ -13,14 +13,15 @@ categories are not additional cases. All formal outputs contain actual visible
 changes. Before-input event selection never depends on after-state agreement.
 
 RETRACTION: historical 440, 868/338/1206 and subsequent 1340 counts included
-at-capacity stationary production attempts. The six-cohort 1340 denominator
-contained 347 unchanged cases; these are removed. New cohorts supply the current
-1052 genuine events. Historical Git and runtime before-event-tightening receipts
+at-capacity stationary production attempts. The five-cohort 1340 denominator
+contained 347 unchanged cases; these are removed. Those same five cohorts now
+contain 993 genuine events; the new b1 cohort adds 59, yielding 1052. Historical
+Git and runtime before-event-tightening receipts
 remain available; their counts and static-weighted performance are superseded.
 The root agent identified and corrected this accounting error.
 
-Ground candidate: 1054/1054 overall, only TWO actual ground combat events, 2/2
-complete-world matches. The daf development event and independent 7d event are
+Ground candidate: 1054/1054 overall, only TWO before-classified ground-arrival
+candidate transitions, 2/2 complete-world matches. The daf development case and independent 7d case are
 retained as full-state fixtures. Default ground/ordinary combat flags remain OFF.
 
 Ordinary Air/Surface candidate: 593/594 complete-world matches. Actual ground
@@ -85,6 +86,15 @@ REWORKED: event denominator, miner EOF/target provenance, complete combat fixtur
 source manifests and whole-state failure reporting. Original candidate report
 SHA and old M1 failure documents are preserved.
 
+Latest read-only reviews: arrival relay refusal corroborated by Sol's own pinned
+offset inspection; corpus arithmetic reconciles 1340-347+59=1052, correcting the
+historical five/six-cohort wording. Combat selector review found no bounded
+counterexample; Sol subsequently traced the iterator bytes [1,0] and scratch+415
+pointer through func2408, proving the static Air-phase second-pass gate (see
+V2_M2A_COMBAT_CALLER.md). The complete fight still remains a hypothesis. Direct helper
+capacity validation is narrower than canonical Units validation; no additional
+combat acceptance or milestone claim follows from this review.
+
 SOL DIRECT WORK: pinned rule/dataflow tracing; compact-state/world ordering;
 combat candidate integration; event selection correction; new independent ground
 fixture; terminal reinforcement supply-line guard; complete-state differential,
@@ -92,7 +102,7 @@ trajectory and performance verification; bounded Python optimization.
 
 ## Verification and performance
 
-68 v2 regression tests pass. Performance inputs are all 611 development genuine
+69 v2 regression tests pass. Performance inputs are all 611 development genuine
 event states, each restored from original canonical records and independently
 checked against its complete expected visible state before timing. Every measured
 step includes all visible towers and forces; conversion/IO is outside timing.
@@ -101,8 +111,13 @@ Quiet baseline before phase caching: 47058 / 46973 / 46749 transitions/sec,
 median 46973. Bounded pure phase-offset caching and direct immutable input-tower
 iteration produced 50149 / 50940 / 51357, median 50940 before the latest relay guard.
 Caches contain only immutable rule inputs, never actor facts. Duplicate tower IDs
-are rejected. Latest source-specific rerun is V2_M2A_PERFORMANCE.json:
-43963 / 46759 / 52314, median 46759 complete transitions/sec, below target. All trials,
+are rejected. The initial relay-guard rerun was 43963 / 46759 / 52314,
+median 46759, below target; its complete receipt remains in runtime and Git.
+Root then removed the phase helper call in the tower hot loop, allocated premise
+sets only when nonempty, validated their original elements before deduplication
+(bool/int aliases must not hide invalid types), and delayed the same-owner check
+until arrival. Latest source-specific rerun is V2_M2A_PERFORMANCE.json:
+54796 / 56884 / 57403, median 56884 complete transitions/sec. All trials,
 including below-target trials, remain reported. This limited-scope measurement
 is not full M2/M2B PASS. No native rewrite or GPU work has started.
 
