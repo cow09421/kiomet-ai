@@ -1,0 +1,395 @@
+{
+  "status": "STOPPED_UNSUPPORTED",
+  "formal_credit": 0,
+  "trajectory_credit": 0,
+  "validation_class": "CALIBRATION_ONLY_TEMPORAL_ALIGNMENT",
+  "matched_intermediate_ticks": [
+    65156,
+    65157,
+    65158,
+    65159,
+    65160,
+    65161,
+    65162,
+    65163,
+    65164,
+    65165,
+    65166,
+    65167,
+    65168,
+    65169,
+    65170,
+    65171,
+    65172,
+    65173,
+    65174,
+    65175,
+    65176,
+    65177,
+    65178,
+    65179,
+    65180,
+    65181,
+    65182,
+    65183,
+    65184,
+    65185
+  ],
+  "first_divergence": null,
+  "terminal_path": "UNKNOWN",
+  "classification": "UNSUPPORTED",
+  "input_basis": "LEGACY_MANUAL_UI_REINTERPRETED_WITH_PINNED_RULE_CALIBRATION_ONLY",
+  "observed_birth_analysis": {
+    "eligible": true,
+    "candidates": [
+      {
+        "id": "6cdb50b3e18d42dfbafb5c7a4d7a8cf2:p25:55d91b71c04c48e985a2eca5311b707a:f:e2fad5cd52914d79857283b532badbcc",
+        "owner": 25,
+        "source": 14090505,
+        "destination": 14090504,
+        "birth_tick": 65157,
+        "birth_progress": 0,
+        "birth_confidence": "NEW_TRACK",
+        "birth_units": [
+          [
+            5,
+            4
+          ]
+        ],
+        "later_observations": [
+          {
+            "tick": 65158,
+            "progress": 2,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65159,
+            "progress": 4,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65160,
+            "progress": 6,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65161,
+            "progress": 8,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65162,
+            "progress": 10,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65163,
+            "progress": 12,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65164,
+            "progress": 14,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65165,
+            "progress": 16,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65166,
+            "progress": 18,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65167,
+            "progress": 20,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65168,
+            "progress": 22,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65169,
+            "progress": 24,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65170,
+            "progress": 26,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65171,
+            "progress": 28,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65172,
+            "progress": 30,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65173,
+            "progress": 32,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65174,
+            "progress": 34,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65175,
+            "progress": 36,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65176,
+            "progress": 38,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65177,
+            "progress": 40,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65178,
+            "progress": 42,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65179,
+            "progress": 44,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65180,
+            "progress": 46,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65181,
+            "progress": 48,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65182,
+            "progress": 50,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65183,
+            "progress": 52,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65184,
+            "progress": 54,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          },
+          {
+            "tick": 65185,
+            "progress": 56,
+            "confidence": "UNIQUE_CONTINUATION",
+            "units": [
+              [
+                5,
+                4
+              ]
+            ]
+          }
+        ],
+        "ambiguous": false
+      }
+    ],
+    "ambiguity_reasons": []
+  },
+  "application_displayed_tick": 65157,
+  "server_application_time": "UNKNOWN",
+  "predicted_newborn": {
+    "units": [
+      [
+        5,
+        4
+      ]
+    ],
+    "progress": 0,
+    "accelerated": true,
+    "fuel": 150
+  },
+  "birth_vector_equal": true,
+  "first_unsupported_tick": 65186,
+  "reason": "UNKNOWN_POST_ARRIVAL_PATH",
+  "manifest": {
+    "recording_sha256": "0854dc24aa326fd2b6b027195582bedb368d97e96c752843265a9a813bd62d3b",
+    "auditor_sha256": "af9e1e7277c0dea10c82924ebd81ad351e5196ecbf15482edf904a71bb5fa4b1",
+    "simulator_sha256": "548911631642b0c22c7a63f4d068ecd6284c16e1b989d83772e970488818366f"
+  }
+}

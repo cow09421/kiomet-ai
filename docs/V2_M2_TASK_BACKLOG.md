@@ -71,6 +71,31 @@ the bounded immediate capture case, with zero formal long-trajectory credit.
 See V2_M2A_CONTROLLED_CAPTURE_VALIDATION.json. The three-worker cap is internal;
 the next ready work is friendly arrival evidence and dynamic capture-aura closure.
 
+Follow-up input closure: LaunchAll is implemented and independently rule-reviewed;
+the capture builder's quantity-independent newborn recorder is accepted. Root
+completed the offline no-reset auditor and the stronger local-coverage route
+certificate after three later worker tasks reported service usage limits before
+editing. Their independent static rule reviews remain useful; unfinished worker
+implementation/review tasks are not marked complete. The root additions are
+diagnostic tools with zero automatic formal credit. Current regression: 182 pass.
+The original-before LaunchAll audit matches 30 complete worlds then refuses unknown
+arrival path at 65186. Four additional finite preflight hosts sent zero troops;
+margin, partial actor coverage and foreign endpoint gaps remain exclusions.
+
+Latest checkpoint resumes Luna-first text review; local file tool availability
+remains limited by automatic approval usage quota. Independent text review accepted
+the original single capture, diagnostic causal audit and evidence accounting.
+The reusable certificate now requires coherent fact times and explicit selection
+evidence and claims BEFORE_SNAPSHOT_ONLY, never implicit gesture continuity.
+
+Ready P0: prove pinned mouseup handler ordering and obtain an atomic before-handler
+read-only snapshot or independently establish route-predicate stability across a
+real gesture. Then obtain an independently recorded own, no-line terminal reinforcement
+with that route evidence, and compare the complete visible arrival
+world and next tick. Keep bounded experiment questions and retry ineligible
+cohorts without weakening observation readiness. Ready P1: pin dynamic morale
+refresh and the player ruler-cache synchronization needed for long rollouts.
+
 M2A ORDINARY WORLD COMPLETE: NO (qualified arrival/capture inventory 1/100,
 new formal multi-event trajectories 0; historical matched trajectories 2).
 Do not count launch/transit frames from the controlled recording toward the 100.

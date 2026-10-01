@@ -74,3 +74,59 @@ clock? Save a new before intent and ten seconds of complete visible states.
 The match remains capped at six ordinary gestures; no enemy, Ruler, upgrade or
 supply-line edit is added. Unknown route qualification still excludes formal
 accuracy credit. This tests a new P0 rule rather than padding movement cases.
+
+## Next finite reinforcement cohort (after checkpoint 361d2a4)
+
+QUESTION: does a normal deselected-source manual drag dispatch the full ordinary
+mobile inventory at its application phase, then merge into an owned, relay-free
+ordinary destination with the pinned Tank +5 / Soldier +10 allowances?
+
+BEFORE: one isolated official-client match, at most 300 seconds. Inspect one
+complete visible preflight; use one explicit own source/destination pair only.
+Both endpoints must have positively false own supply-line flags. Exclude Ruler,
+special inventory, active delays, occupied-neutral combat, hidden endpoints and
+source inventory rejected by the existing bounded recorder. Prefer Soldier-only
+non-ranged sources and a before-only direct-path certificate. No eligible pair
+means zero troop commands and normal host teardown.
+
+ACTION: at most one normal page mouse drag, with selected-source Option confirmed
+absent immediately beforehand. The operation is ALL_CURRENT_DEPLOYABLE; the
+panel and typed before vector are observations, not a fixed command quantity.
+
+EXPECTED: post-cleanup/post-production force_units becomes the newborn vector;
+progress 0, fuel 150, source morale copied. At a certified terminal arrival with
+no destination supply line, owned ordinary merge clips incoming Tank/Soldier to
+normal capacity plus 5/10 while retaining existing stock. Record ten seconds of
+complete distinct visible ticks and any next-tick production/cleanup effects.
+
+OBSERVED / SIMULATED / DIFF / VERDICT: pending the finite run. Detect the unique
+progress-zero birth without using observed quantity as a selector. A separate
+offline auditor starts from the original before state and applies LaunchAll at
+that independently observed displayed birth tick; it never resets intermediate
+states or derives command quantity from later units. Unknown path, dynamic aura,
+gaps or external inputs remain exclusions, and all original failure receipts
+remain preserved. This cohort adds no automatic formal accuracy credit.
+
+The sixth finite preflight had a legal Cliff-to-Village pair but its lease was
+too short when code review finished. The recorder's 30+15-second margin guard
+refused before connection or mouse input; the host expired normally, zero troops.
+The seventh finite preflight found two owned Barracks, but an observed moving
+force had an unknown source endpoint. Complete readiness remained false in both
+saved preflights, so zero troops were sent and the 300-second host ended normally.
+
+Next separate cohort: at most two fresh 180-second preflight matches, one ordinary
+gesture per eligible match. Same arrival question and all before/expected/audit
+rules apply; prefer own reinforcement, otherwise one empty-neutral capture may
+test the remaining independently qualified arrival/capture inventory. Explicitly
+choose the pair from a ready complete before view. No eligible ready pair means
+zero input. The recorder now durably includes a sufficient before-only route
+certificate when all local adjacent cells and the strict-minimum frontier are
+known; missing proof remains UNKNOWN. No Ruler, weapons, upgrades, relay edits,
+enemy attacks or persistent gameplay is introduced by this cohort.
+
+This two-match cohort has ended: hosts eight and nine sent zero troops because
+complete coverage/foreign endpoint readiness did not hold. The new pure certificate
+has BEFORE_SNAPSHOT_ONLY scope, coherent timestamps and explicit None-selection
+evidence. Actual mouseup continuity remains separate; prove handler ordering before
+adding any atomic before-handler observer. Auditor validation is always
+CALIBRATION_ONLY_TEMPORAL_ALIGNMENT with zero formal/trajectory credit.

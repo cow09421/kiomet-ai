@@ -1,0 +1,157 @@
+{
+  "scope": "four excluded finite player-visible preflight hosts; no formal event credit",
+  "troop_gestures_sent": 0,
+  "formal_case_credit": 0,
+  "formal_trajectory_credit": 0,
+  "hosts": [
+    {
+      "host": "sixth",
+      "status": "ENDED_NORMALLY_ZERO_TROOPS",
+      "exclusion": "LEASE_MARGIN_REFUSED",
+      "troop_gestures_sent": 0,
+      "observations": [
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-sixth.json",
+          "sha256": "c411f9ed5837e921a88c9c3296d743024d8774ee161a148e9111fb1a053ad24a",
+          "document": "64c8b434885d4fd8b8efffce411fef19",
+          "match": "64c8b434885d4fd8b8efffce411fef19:p7:3d61cc8b52aa4366885319c131ee9cd3",
+          "tick": 11495,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 27,
+          "visible_forces": 0,
+          "readiness_gaps": [],
+          "input_sent": false
+        }
+      ]
+    },
+    {
+      "host": "seventh",
+      "status": "ENDED_NORMALLY_ZERO_TROOPS",
+      "exclusion": "UNKNOWN_FORCE_ENDPOINT",
+      "troop_gestures_sent": 0,
+      "observations": [
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790872810460275400.json",
+          "sha256": "57b42f54f7fdef9646ed4efa185aa065d86e012478358dcdd9a07ace6886c27b",
+          "document": "3bbaf19b1402404cab4b1adcd5247277",
+          "match": "3bbaf19b1402404cab4b1adcd5247277:p7:c93fffdb30ba4e2cb2fa7997c401e7df",
+          "tick": 13442,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 26,
+          "visible_forces": 1,
+          "readiness_gaps": [
+            "force:0:source"
+          ],
+          "input_sent": false
+        },
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790872845868347400.json",
+          "sha256": "44f56f113a10b4c9ce67591b6fe444eaace77db677a63cd89f78ec38126c6ddf",
+          "document": "8f94db099e7e41aa9d75d86ee88359c0",
+          "match": "8f94db099e7e41aa9d75d86ee88359c0:p7:647d953ed3b54379a1fd44283a26a71a",
+          "tick": 13584,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 26,
+          "visible_forces": 1,
+          "readiness_gaps": [
+            "force:0:source"
+          ],
+          "input_sent": false
+        }
+      ]
+    },
+    {
+      "host": "eighth",
+      "status": "ENDED_NORMALLY_ZERO_TROOPS",
+      "exclusion": "PARTIAL_VISIBLE_COVERAGE",
+      "troop_gestures_sent": 0,
+      "observations": [
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790888053983736900.json",
+          "sha256": "983557d4ae7bc6c546af276f45298e3c0268620c619421ccd06a3972f2fa3f9e",
+          "document": "ccf4c6a4ec52416fb85798beca3eb81c",
+          "match": "ccf4c6a4ec52416fb85798beca3eb81c:p13:515884c45c594e8687e5dd425fd5968a",
+          "tick": 8883,
+          "coverage": "PARTIAL",
+          "visible_towers": 36,
+          "visible_forces": 0,
+          "readiness_gaps": [
+            "coverage"
+          ],
+          "input_sent": false
+        },
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790888086323808700.json",
+          "sha256": "687bf5f553e8eb7d64e52b0e63e8a2351b1e0c88c789110c7ea2d12e449e43ff",
+          "document": "6d4997664b1f464db8cf21cd7c6f6424",
+          "match": "6d4997664b1f464db8cf21cd7c6f6424:p13:58f25fee73da413090dc61b2d62398e8",
+          "tick": 9012,
+          "coverage": "PARTIAL",
+          "visible_towers": 36,
+          "visible_forces": 0,
+          "readiness_gaps": [
+            "coverage"
+          ],
+          "input_sent": false
+        }
+      ]
+    },
+    {
+      "host": "ninth",
+      "status": "ENDED_NORMALLY_ZERO_TROOPS",
+      "exclusion": "UNKNOWN_FORCE_ENDPOINT",
+      "troop_gestures_sent": 0,
+      "observations": [
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790888154962559900.json",
+          "sha256": "0cab28cbf9c5d53590e2da372635d054e87b9ce2d9c2d541958cfaebb66e7fe2",
+          "document": "b397ec528b314d47923f86f3cf392721",
+          "match": "b397ec528b314d47923f86f3cf392721:p15:e78ef061d51940e6aeb9933a9f3ae347",
+          "tick": 9287,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 32,
+          "visible_forces": 2,
+          "readiness_gaps": [
+            "force:0:source",
+            "force:1:destination"
+          ],
+          "input_sent": false
+        },
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790888232526472400.json",
+          "sha256": "bbff44debb2d680ed4ea79a9014d513b9149746b0caa2569ac76a8052744181d",
+          "document": "5c11b7a6ffae41d9b2ec27ba2954a822",
+          "match": "5c11b7a6ffae41d9b2ec27ba2954a822:p15:f3c258124ef84d06a5a15b2feebfd06d",
+          "tick": 9597,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 32,
+          "visible_forces": 1,
+          "readiness_gaps": [
+            "force:0:source"
+          ],
+          "input_sent": false
+        },
+        {
+          "path": "runtime/research/v2/mainline-reinforcement-preflight-1790888279222224700.json",
+          "sha256": "06469a6f1958796d2f270044c9b35fd294a2a3bfed0435d3f5babc8f1257033a",
+          "document": "01c84bfbe94a417a895359635370dc4a",
+          "match": "01c84bfbe94a417a895359635370dc4a:p15:40f8b5843a0e46fca700366eacbb7d60",
+          "tick": 9784,
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "visible_towers": 32,
+          "visible_forces": 7,
+          "readiness_gaps": [
+            "force:0:source",
+            "force:1:source",
+            "force:2:source",
+            "force:3:source",
+            "force:4:destination",
+            "force:5:destination",
+            "force:6:destination"
+          ],
+          "input_sent": false
+        }
+      ]
+    }
+  ]
+}

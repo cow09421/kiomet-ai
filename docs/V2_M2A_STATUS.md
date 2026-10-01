@@ -24,10 +24,47 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **148 passed, 1363 deselected** after integrating the
-portable capture-simulation fixture. No performance rerun was
+Current v2 regression run: **182 passed, 1363 deselected** after integrating
+LaunchAll, quantity-independent newborn recording, before-only route certificates
+and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
+passing tests. No performance rerun was
 needed for the changed launch/arrival paths; the performance figures below retain
 their historical source/conditions. M2A ORDINARY WORLD COMPLETE remains NO.
+
+Manual ALL_CURRENT_DEPLOYABLE is now modeled at the actual input boundary after
+cleanup and production, without replacing the historical explicit-unit Launch.
+Normal Shield stays at the source except Projector; special/Ruler inventory and
+unestablished post-production packed counts fail closed. Recorded newborn identity
+uses owner/endpoints/new progress-zero track, never a quantity match as a selector.
+The separate offline auditor reproduces thirty complete intermediate worlds from
+the original before input using LaunchAll and no resets, then refuses the first
+arrival at 65186 with UNKNOWN_POST_ARRIVAL_PATH. This audit adds zero formal credit;
+the separately qualified single-capture receipt above remains the authority.
+
+The reusable before-only direct route certificate requires coherent fact times,
+explicit same-snapshot selection evidence and all valid adjacent
+grid cells to be positive visible actors, because canonical neighbors otherwise
+contain only the filtered visible road graph. It proves only a two-node stored
+path for that snapshot, with gesture continuity UNKNOWN and destination
+relay/combat/aura gates separate. The original frozen
+capture satisfies the stronger local-coverage check. See V2_M2A_DIRECT_ROUTE_RULE.md.
+
+Four later finite preflight hosts sent zero troop commands: one expired its
+recording-margin window, one had unknown foreign force endpoints, and the last
+two retained partial visible coverage or unknown foreign endpoints. Their hosts
+ended normally. Their exclusions are retained, never counted as arrival cases.
+No active live control loop is left running. Supplemental preflight audit:
+V2_M2A_CONTROLLED_PREFLIGHT_AUDIT.json.
+
+Luna-first dispatch has resumed for bounded text reviews: capture_morale_review
+accepted the existing single arrival's before/first-post route-predicate stability;
+ordinary_combat_closure accepted the LaunchAll causal audit with explicit
+CALIBRATION_ONLY_TEMPORAL_ALIGNMENT; controlled_capture_builder reconciled the
+nonadditive counts. Root integrated their time/selection guard requests. Luna
+local file access was rejected by automatic approval's usage limit, so those
+reviews used already supplied source and evidence only. The quota does not cancel
+Luna-first scheduling; tool availability will be rechecked at natural checkpoints.
+Maximum remains three Luna workers; actual dispatch follows available bounded work.
 
 Formal production/current-leg movement: 1052/1052 genuine one-tick complete
 visible-state transitions: development 611/611 (38 production-only, 573 movement),

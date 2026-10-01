@@ -19,11 +19,13 @@ from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT))
 
 from kiomet_ai.camera import world_to_page
 from kiomet_ai.v2.control import control_readiness_gaps
 from kiomet_ai.v2.state import Lifecycle, Relation
 from kiomet_ai.observe import TOWER_TYPES, TOWER_TYPE_ZH
+from tools.v2_direct_route_certificate import direct_route_certificate
 
 
 ALLOWED_UNITS = frozenset(range(6))  # shields through soldiers; no weapons/Ruler.
@@ -121,8 +123,9 @@ def validate_fresh_intent(state, source_id, destination_id, typed_deployable,
     checked = validate_scenario(state, source_id, destination_id)
     if isinstance(checked, str):
         return checked
-    if checked["typed_deployable"] != tuple(typed_deployable):
-        return "typed_deployable_changed_before_gesture"
+    # ``typed_deployable`` is retained as a call-site compatibility parameter.
+    # The UI deploys all currently deployable units at input time, so this
+    # earlier observation is baseline evidence rather than a fixed quantity.
     if selected_tower is not None:
         return "selection_not_none_before_force_gesture"
     if checked["source"].supply_line_present.value is not False:
@@ -281,6 +284,107 @@ def collect_new_force_lineage(states, source_id, destination_id, expected_counts
     return [row for ident, row in candidates.items() if ident not in ambiguous_ids]
 
 
+def collect_new_force_births(states, source_id, destination_id, prior_ids, player_id):
+    """Identify unique zero-progress own newborns without quantity filtering.
+
+    Return every independently identified birth plus an explicit eligibility
+    result. The actual observed vector is evidence to compare later; it never
+    determines which force is treated as the launch.
+    """
+    candidates, reasons, orphan_continuations = {}, [], set()
+    ambiguous_ids, ambiguous_signatures = set(), set()
+    if not states:
+        return {"eligible": False, "candidates": [], "ambiguity_reasons": ["no_observed_ticks"]}
+    for state in states:
+        if state.coverage != "PLAYER_VISIBLE_COMPLETE" or state.forces.value is None:
+            return {"eligible": False, "candidates": [],
+                    "ambiguity_reasons": ["force_coverage_incomplete"]}
+        forces = state.forces.value
+        signatures = []
+        for force in forces:
+            if force.source.value == source_id and force.destination.value == destination_id:
+                units_value = force.units.value
+                unit_counts = (tuple(sorted((kind, amount) for kind, amount in units_value.counts if amount))
+                               if units_value is not None else None)
+                signatures.append((force.owner.value, force.source.value,
+                                   force.destination.value, unit_counts))
+        for signature in signatures:
+            if signatures.count(signature) > 1:
+                ambiguous_signatures.add((state.tick.value, signature))
+        for force in forces:
+            if force.source.value != source_id or force.destination.value != destination_id:
+                continue
+            ident = force.id.value
+            owner = force.owner.value
+            confidence = force.confidence.value
+            units_value = force.units.value
+            unit_counts = (tuple(sorted((kind, amount) for kind, amount in units_value.counts if amount))
+                           if units_value is not None else None)
+            signature = (owner, force.source.value, force.destination.value, unit_counts)
+            is_ambiguous = ((state.tick.value, signature) in ambiguous_signatures or
+                            confidence == "AMBIGUOUS")
+            if owner != player_id:
+                reasons.append("matching_endpoint_force_has_wrong_owner")
+                if ident:
+                    ambiguous_ids.add(ident)
+                continue
+            if not ident:
+                reasons.append("matching_endpoint_force_id_unknown")
+                continue
+            if ident in prior_ids:
+                reasons.append("matching_endpoint_force_id_was_present_before_intent")
+                ambiguous_ids.add(ident)
+                continue
+            if is_ambiguous:
+                reasons.append("matching_endpoint_force_lineage_ambiguous")
+                ambiguous_ids.add(ident)
+                continue
+            if confidence not in ("NEW_TRACK", "UNIQUE_CONTINUATION"):
+                reasons.append("matching_endpoint_force_confidence_unknown")
+                ambiguous_ids.add(ident)
+                continue
+            if confidence == "NEW_TRACK":
+                if ident not in candidates:
+                    if force.progress.value != 0:
+                        reasons.append("new_track_first_seen_after_progress_zero")
+                        ambiguous_ids.add(ident)
+                        continue
+                    if unit_counts is None:
+                        reasons.append("newborn_unit_vector_unknown")
+                        ambiguous_ids.add(ident)
+                    candidates[ident] = {"id": ident, "owner": owner,
+                        "source": source_id, "destination": destination_id,
+                        "birth_tick": state.tick.value, "birth_progress": force.progress.value,
+                        "birth_confidence": confidence, "birth_units": unit_counts,
+                        "later_observations": []}
+                else:
+                    # A second NEW_TRACK for the same identity makes the birth
+                    # record internally inconsistent, even if its vector agrees.
+                    reasons.append("force_identity_repeated_as_new_track")
+                    ambiguous_ids.add(ident)
+            elif ident in candidates:
+                if unit_counts is None:
+                    reasons.append("continuation_unit_vector_unknown")
+                    ambiguous_ids.add(ident)
+                candidates[ident]["later_observations"].append({
+                    "tick": state.tick.value, "progress": force.progress.value,
+                    "confidence": confidence, "units": unit_counts})
+            elif ident not in prior_ids:
+                orphan_continuations.add(ident)
+    if orphan_continuations:
+        reasons.append("continuation_without_observed_new_track_birth")
+    if len(candidates) > 1:
+        reasons.append("multiple_distinct_new_force_ids")
+        ambiguous_ids.update(candidates)
+    if not candidates and not reasons:
+        reasons.append("no_matching_new_force_birth")
+    rows = [dict(row, ambiguous=(ident in ambiguous_ids))
+            for ident, row in candidates.items()]
+    unique = len(rows) == 1 and not rows[0]["ambiguous"] and not reasons
+    return {"eligible": unique, "candidates": rows,
+            "ambiguity_reasons": list(dict.fromkeys(reasons))}
+
+
 def force_lineage_credit(rows, supply_line_guard):
     """Credit only one unambiguous own force with the exact intended vector."""
     return (len(rows) == 1 and supply_line_guard and
@@ -405,6 +509,8 @@ async def run(args):
                        for p in sorted((ROOT / "src/kiomet_ai/v2").rglob("*"))
                        if p.is_file() and p.suffix in (".py", ".js", ".json")}
     source_manifest[str(Path(__file__).resolve().relative_to(ROOT))] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    route_tool = Path(__file__).with_name('v2_direct_route_certificate.py')
+    source_manifest[str(route_tool.relative_to(ROOT))] = hashlib.sha256(route_tool.read_bytes()).hexdigest()
     ui_rule = ROOT / "docs/V2_M2A_UI_INPUT_RULE.md"
     if ui_rule.is_file():
         source_manifest[str(ui_rule.relative_to(ROOT))] = hashlib.sha256(ui_rule.read_bytes()).hexdigest()
@@ -443,7 +549,9 @@ async def run(args):
                             "scenario_ineligible_reasons": initial_check["scenario_ineligible_reasons"],
                             "match_id": initial_check["match_id"], "source": args.source,
                             "destination": args.destination,
-                            "typed_deployable": initial_check["typed_deployable"], "input_sent": False}
+                            "quantity_policy": "ALL_CURRENT_DEPLOYABLE",
+                            "observed_deployable_baseline": initial_check["typed_deployable"],
+                            "input_sent": False}
                         stream.write(json.dumps(plan, ensure_ascii=False) + "\n")
                         stream.flush()
                     events.append(plan)
@@ -491,6 +599,9 @@ async def run(args):
                         selected_source = next(t for t in selected.towers if t.id == source.id)
                         if selected_source.supply_line_present.value is not False:
                             raise ValueError("source supply-line flag changed or became unknown during selection")
+                        selected_typed = _typed_deployable(selected_source)
+                        if selected_typed is None:
+                            raise ValueError("selected_source_typed_deployable_unknown")
                         source_type = TOWER_TYPES[selected_source.tower_type.value]
                         expected_heading = next((label for label, value in TOWER_LABELS.items()
                                                   if value == source_type), None)
@@ -512,15 +623,14 @@ async def run(args):
                         }""", expected_heading)
                         if dom.get("heading_match_count") != 1:
                             raise ValueError("selected_source_panel_heading_not_unique")
-                        ui = _ui_quantity_evidence(dom, checked["typed_deployable"],
+                        ui = _ui_quantity_evidence(dom, selected_typed,
                             selected_source.tower_type.value, checked["morale_boost"])
                         if ui is None:
                             exclusions.append({"reason": "selected_ui_quantity_unknown_ambiguous_or_mismatched", "ui_rows": dom})
                             raise ValueError("selected_ui_quantity_unknown_ambiguous_or_mismatched")
-                        if _typed_deployable(selected_source) != checked["typed_deployable"]:
-                            raise ValueError("typed_deployable_changed_during_selection")
                         durable_before(stream, {"kind": "SELECTION_CONFIRMED", "source": source.id,
                             "selected_tower": selected_raw["selected_tower"], "ui_evidence": ui,
+                            "observed_deployable": selected_typed,
                             "state": selected})
                         # Clicking the selected source again is the pinned ordinary toggle-to-none.
                         # A drag is permitted only after normal readback proves no source is selected.
@@ -532,20 +642,24 @@ async def run(args):
                             "supply_line_before": selected_source.supply_line_present.value})
                         await page.mouse.click(sx, sy)
                         deselected, deselected_raw = await _sample_ready(ex)
-                        if deselected_raw.get("selected_tower") is not None:
+                        if "selected_tower" not in deselected_raw or deselected_raw["selected_tower"] is not None:
                             raise ValueError("ordinary deselection was not confirmed; force gesture withheld")
                         source_now = next((t for t in deselected.towers if t.id == source.id), None)
                         if source_now is None or source_now.supply_line_present.value is not False:
                             raise ValueError("source disappeared or supply-line guard failed after deselection")
-                        if _typed_deployable(source_now) != checked["typed_deployable"]:
-                            raise ValueError("typed_deployable_changed_during_deselection")
+                        deselected_typed = _typed_deployable(source_now)
+                        if deselected_typed is None:
+                            raise ValueError("typed_deployable_unknown_after_deselection")
                         durable_before(stream, {"kind": "DESELECTION_CONFIRMED", "source": source.id,
                             "selected_tower": deselected_raw.get("selected_tower"),
-                            "supply_line_after": source_now.supply_line_present.value, "state": deselected})
+                            "supply_line_after": source_now.supply_line_present.value,
+                            "observed_deployable": deselected_typed, "state": deselected})
 
                         # Fresh state, fresh camera, both endpoint hit-tests, and readiness are
                         # checked after deselection and immediately before durable command intent.
                         before, before_raw = await _sample_ready(ex)
+                        if "selected_tower" not in before_raw:
+                            raise ValueError("fresh selection evidence missing; force gesture withheld")
                         fresh = validate_fresh_intent(before, source.id, destination.id,
                             checked["typed_deployable"], before_raw.get("selected_tower"),
                             time.monotonic_ns() // 1_000_000)
@@ -583,13 +697,14 @@ async def run(args):
                                 "destination": destination.id,
                                 "source_owner": fresh["source"].owner.value,
                                 "destination_owner": fresh["destination"].owner.value,
-                                "typed_deployable": fresh["typed_deployable"],
+                                "observed_deployable_baseline": fresh["typed_deployable"],
                                 "selected_tower_none_confirmed": True,
                                 "source_supply_line_present": fresh["source"].supply_line_present.value,
                                 "destination_supply_line_present": fresh["destination"].supply_line_present.value},
                             "ACTION": {"operation": "ordinary_official_ui_manual_deploy_force",
                                 "source": source.id, "destination": destination.id,
-                                "typed_deployable": fresh["typed_deployable"],
+                                "semantics": "ALL_CURRENT_DEPLOYABLE",
+                                "before_observed_deployable_baseline": fresh["typed_deployable"],
                                 "gesture": "canvas mouse drag with source deselected; pinned DeployForce UI branch"},
                             "EXPECTED": {"manual_newborn": {"progress": 0,
                                     "accelerated": fresh["morale_boost"], "fuel": 150,
@@ -608,9 +723,20 @@ async def run(args):
                             "destination_supply_line_present": fresh["destination"].supply_line_present.value,
                             "selected_tower_none_confirmed": True,
                             "ui_command_branch_proof": "docs/V2_M2A_UI_INPUT_RULE.md; normal selected Option absent selects deploy_force_from_path branch",
-                            "typed_deployable": fresh["typed_deployable"], "ui_quantity_evidence": ui,
+                            "before_observed_deployable": fresh["typed_deployable"], "ui_quantity_evidence": ui,
+                            "before_selection_evidence": {
+                                "confirmed": "selected_tower" in before_raw,
+                                "selected_tower": before_raw.get("selected_tower"),
+                                "tick": before.tick.value, "sampled_at_ms": before.sampled_at_ms},
+                            "before_only_route_certificate": direct_route_certificate(
+                                before, source.id, destination.id,
+                                client_sha256=before.client_sha256,
+                                selected_tower=before_raw.get("selected_tower"),
+                                selection_confirmed="selected_tower" in before_raw,
+                                selection_tick=before.tick.value,
+                                selection_sampled_at_ms=before.sampled_at_ms),
                             "state": before, "input_sent": False,
-                            "intent_quantity_basis": "typed deployable confirmed in pinned official selected panel before deselection; fresh typed vector revalidated"}
+                            "quantity_policy": "ALL_CURRENT_DEPLOYABLE at official input handling; displayed pre-gesture vectors are observations, not a fixed dispatched quantity"}
                         mouse_down = False
                         async def ordinary_drag():
                             nonlocal mouse_down
@@ -665,15 +791,19 @@ async def run(args):
                         for poll_error in poll_errors:
                             errors.append(poll_error)
                         observed_states = [state for _, state in tick_states]
-                        lineage_rows = collect_new_force_lineage(observed_states, source.id, destination.id,
-                            fresh["typed_deployable"], before_ids, before.player_id.value)
+                        birth_analysis = collect_new_force_births(observed_states, source.id, destination.id,
+                            before_ids, before.player_id.value)
+                        for candidate in birth_analysis["candidates"]:
+                            candidate["matches_pre_gesture_observation"] = (
+                                candidate["birth_units"] == fresh["typed_deployable"])
                         line_guard = supply_line_guard_passed(observed_states, source.id, destination.id,
                             fresh["scenario"] == "friendly_reinforcement")
-                        credited = force_lineage_credit(lineage_rows, line_guard)
+                        unique_birth_observed = birth_analysis["eligible"] and line_guard
                         first_change = next((row for row in states
                             if _world_signature(row["state"]) != _world_signature(before)), None)
                         result = {"kind": "COMMAND_RESULT", "command_index": 1,
-                            "OBSERVED": {"lineage": lineage_rows, "arrival_cue": arrival_cue,
+                            "OBSERVED": {"new_force_birth_analysis": birth_analysis,
+                                "arrival_cue": arrival_cue,
                                 "distinct_world_ticks": [s["tick"] for s in states],
                                 "completion_reason": completion},
                             "SIMULATED": "UNKNOWN; no eligible simulation comparison was performed",
@@ -684,12 +814,12 @@ async def run(args):
                                 "tick": first_change["tick"]} if first_change else None),
                             "first_simulation_divergence": "UNKNOWN",
                             "simulation_divergence_reason": "scenario is capture-only or route/fuel rules are not proved",
-                            "observed_force_lineage": lineage_rows,
+                            "observed_force_birth_analysis": birth_analysis,
                             "supply_line_guard_passed": line_guard,
                             "arrival_cue": arrival_cue, "completion_reason": completion,
                             "distinct_world_ticks_captured": [s["tick"] for s in states],
-                            "acceptance": "FORCE_LINEAGE_AND_QUANTITY_OBSERVED" if credited else "NO_FORCE_LINEAGE_CREDIT",
-                            "source_quantity_alone_is_not_acceptance": True}
+                            "acceptance": "UNIQUE_NEWBORN_OBSERVED" if unique_birth_observed else "NO_UNAMBIGUOUS_NEWBORN",
+                            "pre_gesture_quantity_is_baseline_only": True}
                         durable_before(stream, result)
                         events.append(result)
             except Exception as exc:

@@ -57,3 +57,36 @@ observations expose the current segment, not the remaining Path or fuel.
 The supporting WASM has SHA-256
 `fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c` in
 `runtime/research/v2/client-version.json`.
+
+## All-current-deployables input
+
+`LaunchAll` models a caller-qualified own-side manual `DeployForce` whose
+quantity is not specified separately from the source Tower. The pinned
+`Tower::force_units` function (function 2031,
+`runtime/research/v2/Tower__force_units.txt`, `0x1096f9-0x10977d`) iterates
+the current tower inventory and adds every unit for which
+`Unit::is_mobile(Some(tower_type))` is true. In the pinned unit ordering,
+ordinary Many units occupy slots 1 through 5 and are mobile on every tower;
+Shield in slot 0 is mobile only for Projector kind 15. The simulator therefore
+materializes those ordinary slots from the already modeled post-cleanup,
+post-production source state, adds slot 0 only for kind 15, subtracts exactly
+that vector, and uses it for the new force. It rejects any source containing
+slots 6 through 9 because this simulator's launch scope excludes special units
+and Rulers; it does not silently omit them from a purported all-units action.
+An empty deployable vector is also rejected.
+
+The quantity in this action is derived from the pre-input simulation state,
+not from a later observation. If production occurs during the tick, it is
+included; if a modeled owned-overflow cleanup occurs first, the cleaned value
+is used. Existing explicit-unit `Launch` remains unchanged for historical
+fixtures and scenarios. `LaunchAll.terminal` defaults to unknown and is
+carried on the new force. A caller may launch with unknown terminal status;
+the existing arrival guard then refuses to simulate arrival until the route
+status is known.
+
+`LaunchAll` denotes a manual `DeployForce` command already identified by its
+caller. It does not infer whether an arbitrary drag was interpreted as
+`SetSupplyLine`. It makes no claim about automatic dispatch, future paths,
+or opponent launch quantities. Existing pre-input production and overflow
+guards remain in force, including rejection when a due mobile-overflow cleanup
+could change the source inventory but the supply-line state is unknown.

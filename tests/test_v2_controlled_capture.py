@@ -10,7 +10,8 @@ from types import SimpleNamespace as NS
 
 from kiomet_ai.v2.state import Lifecycle, Relation
 from tools.v2_controlled_transition_capture import (
-    _ui_quantity_evidence, capture_distinct_ticks, collect_new_force_lineage,
+    _ui_quantity_evidence, capture_distinct_ticks, collect_new_force_births,
+    collect_new_force_lineage,
     durable_before, force_lineage_credit, is_project_headless_browser_process,
     record_before_gesture, supply_line_guard_passed, validate_fresh_intent,
     validate_scenario,
@@ -108,7 +109,8 @@ def test_fresh_deployable_change_or_selected_source_refuses_dispatch(monkeypatch
     changed_source = tower(1, 7, Relation.SELF, neighbor=(2,), mobile={"fighter": 2},
                            inventory={"fighter": 2})
     changed = state(source=changed_source)
-    assert validate_fresh_intent(changed, 1, 2, ((1, 3),), None, 1000) == "typed_deployable_changed_before_gesture"
+    fresh = validate_fresh_intent(changed, 1, 2, ((1, 3),), None, 1000)
+    assert isinstance(fresh, dict) and fresh["typed_deployable"] == ((1, 2),)
     assert validate_fresh_intent(base, 1, 2, ((1, 3),), 1, 1000) == "selection_not_none_before_force_gesture"
 
 
@@ -135,6 +137,68 @@ def test_lineage_aggregates_arrived_before_last_sample_and_rejects_ambiguity():
     assert len(multiple) == 2 and not force_lineage_credit(multiple, True)
     wrong_owner = NS(tick=fact(6), forces=fact((force("NEW_TRACK", owner=8),)))
     assert collect_new_force_lineage([wrong_owner], 1, 2, ((1, 3),), set(), 7) == []
+
+
+def test_birth_detection_is_quantity_independent_and_retains_continuations():
+    def force(ident, *, confidence="NEW_TRACK", owner=7, count=5, progress=0):
+        return NS(id=fact(ident), source=fact(1), destination=fact(2),
+                  owner=fact(owner), units=units(fighter=count), progress=fact(progress),
+                  confidence=fact(confidence), first_seen_ms=fact(100))
+
+    first = state()
+    first.tick = fact(10)
+    first.forces = fact((force("match-A:f:new"),))
+    continuation = state()
+    continuation.tick = fact(11)
+    continuation.forces = fact((force("match-A:f:new", confidence="UNIQUE_CONTINUATION",
+                                      count=5, progress=4),))
+    # A prior UI typed observation of three units is deliberately not supplied
+    # as a candidate filter: the actual birth vector is retained as evidence.
+    analysis = collect_new_force_births([first, continuation], 1, 2, set(), 7)
+    assert analysis["eligible"] and not analysis["ambiguity_reasons"]
+    assert len(analysis["candidates"]) == 1
+    birth = analysis["candidates"][0]
+    assert birth["birth_tick"] == 10 and birth["birth_progress"] == 0
+    assert birth["birth_units"] == ((1, 5),)
+    assert birth["later_observations"] == [{"tick": 11, "progress": 4,
+        "confidence": "UNIQUE_CONTINUATION", "units": ((1, 5),)}]
+    unknown_continuation = state()
+    unknown_continuation.tick = fact(12)
+    unknown_force = force("match-A:f:new", confidence="UNIQUE_CONTINUATION", progress=5)
+    unknown_force.units = fact(None)
+    unknown_continuation.forces = fact((unknown_force,))
+    incomplete = collect_new_force_births([first, unknown_continuation], 1, 2, set(), 7)
+    assert not incomplete["eligible"]
+    assert "continuation_unit_vector_unknown" in incomplete["ambiguity_reasons"]
+
+
+def test_birth_detection_rejects_multiple_ambiguous_wrong_owner_prior_and_incomplete():
+    def force(ident, *, confidence="NEW_TRACK", owner=7, count=5):
+        return NS(id=fact(ident), source=fact(1), destination=fact(2),
+                  owner=fact(owner), units=units(fighter=count), progress=fact(0),
+                  confidence=fact(confidence), first_seen_ms=fact(100))
+
+    def observed(*forces, tick=10, coverage="PLAYER_VISIBLE_COMPLETE"):
+        item = state()
+        item.tick = fact(tick)
+        item.forces = fact(tuple(forces))
+        item.coverage = coverage
+        return item
+
+    multiple = collect_new_force_births([observed(force("new-1", count=5), force("new-2", count=4))],
+                                        1, 2, set(), 7)
+    assert not multiple["eligible"] and len(multiple["candidates"]) == 2
+    assert "multiple_distinct_new_force_ids" in multiple["ambiguity_reasons"]
+
+    ambiguous = collect_new_force_births([observed(force("new", confidence="AMBIGUOUS"))],
+                                         1, 2, set(), 7)
+    assert not ambiguous["eligible"] and not ambiguous["candidates"]
+    wrong_owner = collect_new_force_births([observed(force("new", owner=8))], 1, 2, set(), 7)
+    assert not wrong_owner["eligible"] and "matching_endpoint_force_has_wrong_owner" in wrong_owner["ambiguity_reasons"]
+    prior = collect_new_force_births([observed(force("old"))], 1, 2, {"old"}, 7)
+    assert not prior["eligible"] and "matching_endpoint_force_id_was_present_before_intent" in prior["ambiguity_reasons"]
+    incomplete = collect_new_force_births([observed(force("new"), coverage="PARTIAL")], 1, 2, set(), 7)
+    assert not incomplete["eligible"] and incomplete["ambiguity_reasons"] == ["force_coverage_incomplete"]
 
 
 def test_tick_capture_records_after_arrival_until_deadline():

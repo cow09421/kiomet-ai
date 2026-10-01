@@ -17,6 +17,15 @@ class Launch:
 
 
 @dataclass(frozen=True,slots=True)
+class LaunchAll:
+    """Manual own-side DeployForce using current deployable source inventory."""
+    source: int
+    destination: int
+    terminal: bool | None=None
+    owner: int | None=None
+
+
+@dataclass(frozen=True,slots=True)
 class Scenario:
     # Explicit scenario assumptions, not observations of hidden opponents.
     fixed_morale: bool=True
@@ -70,7 +79,25 @@ def _merge_arriving_units(existing,incoming,capacity,error_reason):
     return tuple(result)
 
 
-def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenario=Scenario()):
+def _validate_launch_all(action, state, towers):
+    if type(action.source) is not int or type(action.destination) is not int:
+        raise UnsupportedState('INVALID_LAUNCH_ENDPOINT')
+    if action.owner is not None and (type(action.owner) is not int or action.owner<=0):
+        raise UnsupportedState('INVALID_LAUNCH_OWNER')
+    if type(state.player) is not int or state.player<=0:
+        raise UnsupportedState('INVALID_LAUNCH_OWNER')
+    if action.owner not in (None,state.player):
+        raise UnsupportedState('FOREIGN_ACTION_OWNER')
+    if action.terminal is not None and type(action.terminal) is not bool:
+        raise UnsupportedState('INVALID_LAUNCH_TERMINAL')
+    if action.source not in towers or action.destination not in towers:
+        raise UnsupportedState('HIDDEN_ACTION_ENDPOINT')
+    units=towers[action.source].units
+    if type(units) is not tuple or len(units)!=10 or any(type(n) is not int or not 0<=n<=255 for n in units):
+        raise UnsupportedState('INVALID_DEPLOYMENT_INVENTORY')
+
+
+def step(state: SimulationState, actions: tuple[Launch|LaunchAll,...]=(), scenario: Scenario=Scenario()):
     if not scenario.fixed_morale: raise UnsupportedState('DYNAMIC_MORALE_AURA')
     towers={tower.id:tower for tower in state.towers}
     if len(towers)!=len(state.towers): raise UnsupportedState('DUPLICATE_TOWER_IDS')
@@ -79,6 +106,10 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
         raise UnsupportedState('INVALID_SUPPLY_LINE_SCENARIO')
     if scenario.terminal_forces and any(type(i) is not int or not 0<=i<len(forces) for i in scenario.terminal_forces):
         raise UnsupportedState('INVALID_TERMINAL_SCENARIO')
+    for action in actions:
+        if isinstance(action,LaunchAll): _validate_launch_all(action,state,towers)
+    if any(isinstance(action,LaunchAll) for action in scenario.opponent_launches):
+        raise UnsupportedState('OPPONENT_LAUNCH_ALL_UNSUPPORTED')
     # Empty default premises need no per-step set allocation. Validate before
     # deduplicating: Python bool/int aliases must not hide invalid input types.
     terminals=set(scenario.terminal_forces) if scenario.terminal_forces else ()
@@ -191,17 +222,30 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
         owner=action.owner if is_opponent else state.player
         if not owner or tower.owner!=owner or action.destination not in tower.neighbors:
             raise UnsupportedState('ILLEGAL_VISIBLE_LAUNCH')
-        if not is_opponent and action.owner not in (None,state.player): raise UnsupportedState('FOREIGN_ACTION_OWNER')
-        if len(action.units)!=10 or any(type(n) is not int or n<0 for n in action.units) or not any(action.units):
+        if isinstance(action,LaunchAll):
+            if (type(tower.units) is not tuple or len(tower.units)!=10 or
+                    any(type(n) is not int or not 0<=n<=255 for n in tower.units)):
+                raise UnsupportedState('INVALID_DEPLOYMENT_INVENTORY')
+            units=list(tower.units)
+            if any(units[i] for i in (6,7,8,9)):
+                raise UnsupportedState('SPECIAL_OR_RULER_LAUNCH')
+            if tower.kind!=15: units[0]=0
+            if not any(units): raise UnsupportedState('INVALID_LAUNCH_UNITS')
+            force_units=tuple(units)
+        else:
+            if not is_opponent and action.owner not in (None,state.player): raise UnsupportedState('FOREIGN_ACTION_OWNER')
+            units=action.units
+            force_units=action.units
+        if len(units)!=10 or any(type(n) is not int or n<0 for n in units) or not any(units):
             raise UnsupportedState('INVALID_LAUNCH_UNITS')
-        if any(action.units[i] for i in (6,7,8,9)): raise UnsupportedState('SPECIAL_OR_RULER_LAUNCH')
-        if action.units[0] and tower.kind!=15: raise UnsupportedState('IMMOBILE_SHIELDS')
-        if any(n>tower.units[i] for i,n in enumerate(action.units)): raise UnsupportedState('INSUFFICIENT_UNITS')
-        towers[tower.id]=replace(tower,units=tuple(n-action.units[i] for i,n in enumerate(tower.units)))
+        if any(units[i] for i in (6,7,8,9)): raise UnsupportedState('SPECIAL_OR_RULER_LAUNCH')
+        if units[0] and tower.kind!=15: raise UnsupportedState('IMMOBILE_SHIELDS')
+        if any(n>tower.units[i] for i,n in enumerate(units)): raise UnsupportedState('INSUFFICIENT_UNITS')
+        towers[tower.id]=replace(tower,units=tuple(n-units[i] for i,n in enumerate(tower.units)))
         # Manual DeployForce reaches Tower::deploy_force (Chunk::apply_0 0x7d542).
         # It copies Tower.morale to Force+21 and initializes progress/fuel via
         # 0x9600 at Force+22/+23; see V2_M2A_LAUNCH_RULE.md.
-        remaining.append(SimForce(owner,action.source,action.destination,action.units,0,tower.morale,
+        remaining.append(SimForce(owner,action.source,action.destination,force_units,0,tower.morale,
                                   'SELF' if owner==state.player else tower.relation,action.terminal,150))
     return SimulationState(sequence,state.player,state.match_epoch,state.document,
                            tuple(towers[key] for key in sorted(towers)),tuple(remaining),
