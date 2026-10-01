@@ -373,3 +373,25 @@ CONCLUSION / STATUS: FAIL for using Date or x-held directly as Game generation
 time. UNKNOWN for a causal per-Game age bound: neither this client-side duration
 use nor response metadata establishes the necessary generation/wakeup mapping.
 No measured header is promoted into canonical updated_at_ms or snapshot age.
+
+### QUESTION: does the current production SessionCreated dateCreated supply Game time?
+
+The pinned binary still contains the ordinary dateCreated setting, unlike a
+conclusion based only on the old public schema. Data-section parsing maps the
+literal to memory constant 1201834. CommonSettings::load reads that key at
+0x12567/0x12597; ClientBroker::socket_update writes it through BrowserStorage::set
+at 0x2bd99..0x2bdb5. The session-created branch loads its date value from its
+decoded temporary +200 at 0x2bc65 and stores it to context+45936 at 0x2bdbd.
+This is a normal settings field, not a Session ID/token/other-player value.
+
+session-date-16da48fa952b makes 92 bounded normal reads in ten seconds. Every
+candidate classifies as nonzero Unix milliseconds in 2010..2040, and the value
+is unchanged while the displayed world advances through 41 revisions
+(26372..26412). No debugger pauses or actor payload reads; the numeric date and
+credentials are omitted from the report. The dedicated tool reads only this
+exact proven setting with the pinned context and document guards.
+
+CONCLUSION / STATUS: FAIL for using dateCreated as each Game's generation time.
+It is session metadata with no established per-Game causal mapping. UNKNOWN
+for any stronger generation bound; canonical updated_at_ms remains UNKNOWN.
+This does not prove all other encodings or private server sources impossible.

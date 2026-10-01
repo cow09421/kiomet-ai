@@ -5,6 +5,7 @@ only after the current observer visibility gate, and only for matched forces.
 """
 import argparse
 import asyncio
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -22,6 +23,7 @@ POINTS = {
     'position': (0x1036c0, 0x10375f),
     'units': (0x9896d, 0x98b8e),
     'layout_units': (0x77d77, 0x781d3),
+    'required': (0x11ccc0, 0x11cd14),
 }
 
 
@@ -46,6 +48,11 @@ async def locals_at(cdp, frame, names):
 async def main(args):
     unit_mode = args.mode in ('units', 'layout_units')
     rows, errors = [], []
+    manifest = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted((ROOT/'src/kiomet_ai/v2').rglob('*'))
+        if p.is_file() and p.suffix in ('.py', '.js', '.json')}
+    for p in (Path(__file__).resolve(), ROOT/'tools/v2_force_guard.js'):
+        manifest[str(p.relative_to(ROOT))] = hashlib.sha256(p.read_bytes()).hexdigest()
     unique = {}
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
@@ -84,7 +91,7 @@ async def main(args):
                     # Obtain typed ownership and a coherent legal payload before
                     # the normal renderer acquires its exclusive RefCell borrow.
                     _, raw = await ex.sample()
-                    eligible = [f for f in raw['forces'] if (args.mode!='position' or
+                    eligible = [f for f in raw['forces'] if (args.mode not in ('position', 'required') or
                         f['source'] is not None and f['destination'] is not None)
                         and (args.unit_type is None or dict(decode_units(f['units7']).counts)[args.unit_type])]
                     if not eligible:
@@ -133,7 +140,7 @@ async def main(args):
                     units = decode_units(force['units7'])
                     speed, required, eta = motion(units, positions.get(force['source']),
                         positions.get(force['destination']), force['accelerated'], force['progress'])
-                    if args.mode == 'position' and required is None:
+                    if args.mode in ('position', 'required') and required is None:
                         continue
                     await cdp.send('Debugger.removeBreakpoint', {'breakpointId': bp})
                     bp = await breakpoint(exit_offset)
@@ -183,6 +190,16 @@ async def main(args):
                     if args.mode == 'speed':
                         actual = end_values['$var2'] & 255
                         row.update(official_speed=actual, match=actual == speed)
+                    elif args.mode == 'required':
+                        # At the normal merged return, var1 contains the capped
+                        # base value; the accelerated branch leaves var0 as its
+                        # 4/5 result. Restrict to the >1 branch so the final
+                        # max(1, result) cannot be inferred by mirroring Python.
+                        actual = end_values['$var0'] if force['accelerated'] else end_values['$var1']
+                        if not isinstance(actual, int) or not 1 < actual <= 255:
+                            raise ValueError('normal required return outside independently observable branch')
+                        row.update(official_required=actual, match=actual == required,
+                            required_return_basis='pinned merged return local, strictly greater than one')
                     elif unit_mode:
                         expected_counts = dict(units.counts)
                         row.update(official_unit_counts=sorted(official_counts.items()),
@@ -245,6 +262,7 @@ async def main(args):
                 'unit_getter_fields':sum(len(r.get('official_unit_counts',())) for r in rows),
                 'requested_positive_unit_type':args.unit_type,
                 'debugger_pauses': True, 'performance_cohort': False, 'tactical_commands': 0,
+                'observer_source_manifest': manifest,
                 'limits': 'normal rendered visible forces only; no stable force ID or launch-time proof'}
             path = ROOT / 'runtime/research/v2' / f'force-render-comparison-{uuid4().hex[:12]}.json'
             path.write_text(json.dumps(report, indent=2), encoding='utf8')

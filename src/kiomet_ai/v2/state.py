@@ -215,4 +215,11 @@ class GameState:
             for name in ("owner", "relation", "tower_type", "units", "deployable", "capacity", "production", "neighbors", "position", "upgrade", "effects"):
                 if getattr(tower, name).knowledge == Knowledge.UNKNOWN:
                     gaps.append(f"tower:{tower.id}:{name}")
+        for index, force in enumerate(self.forces.value or ()):
+            # An observed collection does not certify its members' fields.
+            # Index labels locate a gap in this snapshot; they are not entity IDs.
+            for name in ("id", "owner", "relation", "source", "destination", "units",
+                         "unit_count", "eta_ms", "progress"):
+                if getattr(force, name).knowledge == Knowledge.UNKNOWN:
+                    gaps.append(f"force:{index}:{name}")
         return tuple(gaps)

@@ -369,3 +369,44 @@ excluded before capture. Debugger cohorts remain outside performance evidence.
 CONCLUSION / STATUS: PASS for these independent normal-render composition
 comparisons, including the previously missing positive Chopper stratum. This
 does not establish Single-moving-force coverage or authoritative age.
+
+## QUESTION: does the nominal ETA's required-progress formula match normal execution?
+
+The exact production Force::progress_required starts at 0x11ccbd, computes
+min(255, TowerId::distance * 180 / 10), then uses max(1, capped * 4 / 5) when
+byte +21 equals one. The normal merged return is 0x11cd14. The new `required`
+mode captures entry 0x11ccc0 and that return only under normal interpolation,
+after the existing current-visibility/vector-membership/revision guard. Both
+segment endpoints must currently be exported visible towers. At return var1
+holds the capped unboosted value, or var0 the boost calculation; only the >1
+return branch is accepted, so its final clamp is not mirrored from Python.
+
+force-render-comparison-e5cd08fc8ab1 has 38 reads, 30 distinct source revisions
+and 30/30 deduplicated matches. All are ENEMY, accelerated=0, required=72;
+13 pending-visibility reads were rejected. Breakpoints resolved to the exact
+requested instructions. Observer/tool/guard source hashes are preserved.
+
+CONCLUSION / STATUS: PASS for this unboosted, same-distance formula stratum.
+Boosted/capped/minimum branches remain without live coverage. This validates a
+component of nominal current-leg ETA, not actual arrival time or server age.
+All debugger pauses are excluded from performance cohorts.
+
+## QUESTION: can an observed force collection hide unavailable member fields from readiness?
+
+It could: readiness previously checked collection knowledge, without traversing
+its members. It now checks identity, owner/relation, visible segment endpoints,
+typed units/count, progress and nominal ETA. Gap indexes locate diagnostics in
+this snapshot only; they do not become entity identities. Launch time is still
+explicit UNKNOWN, not replaced by first-seen, and remains an M1 source limitation.
+
+readiness-force-03d032d57e5b rehydrates preserved real canonical snapshots,
+without promoting a timestamp or collecting new live cases. At sequence 4624
+the 14-member OBSERVED collection has 2 unknown sources, 5 unknown destinations
+and 7 unknown ETAs; each now appears in readiness. At 4625 all 14 unknown IDs
+are additionally reported after the natural continuity gap. Freshness remains
+UNKNOWN in both cases. Two regression tests isolate the original failure using
+otherwise-ready synthetic data, distinguish known-empty from unavailable forces,
+and do not certify any real age. The full v2 suite has 33 passing tests.
+
+CONCLUSION / STATUS: PASS for closing this concrete partial-state admission gap.
+M1 remains NOT YET; none of the unavailable force fields has become known.

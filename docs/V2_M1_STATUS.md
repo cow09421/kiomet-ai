@@ -327,3 +327,26 @@ sampling-03d032d57e5b 在 lifecycle 修正後跑足 600.088 s：4,767 筆、
 後續 143 快照共 1,412 個合法部隊 facts 都未復用 ID。證據保存為
 natural-force-gap-03d032d57e5b，來自原始快照（SHA 隨報告）；是非空
 自然來源缺口驗證，不能宣稱受控斷線或真正伺服器換局。停滯原因 UNKNOWN。
+
+### Session 日期、ETA 核對與部隊就緒修正
+
+現行 WASM 的 dateCreated 已找到正常 SessionCreated 保存路徑。十秒中
+92 次讀取均為有效 Unix ms 類別，世界有 41 個版本，日期不變；直接用於
+Game 生成時間的假設 FAIL。數字只在工具內暫存，未寫入證據檔或讀憑證。
+沒有每份 Game 的因果對應，伺服器快照年齡仍 UNKNOWN。
+
+正常 Force::progress_required 的 30 個去重版本，30/30 與所需節拍公式吻合；
+這批全為未加速、required=72，同距離分層。加速／255 cap／最小值沒有
+新的 live 覆蓋，不代表抵達時刻驗收。13 次 visibility pending 拒絕；排除
+全部 debugger 暫停，不混入頻率或年齡資料。
+
+已修正 readiness 只檢查 OBSERVED 部隊集合、卻忽略集合內 UNKNOWN 欄位
+的漏檢。原始 03d032d57e5b 的 14 支部隊，在身分失效前已有 2 個未知來源、
+5 個未知目的地、7 個未知 ETA；現在明確阻擋這些缺口。失效後另阻擋 14
+個未知 ID。資料仍合法保留、未知值仍為未知。完整 v2 回歸 33 項通過。
+
+普通縮放的 966c9efabdb6 發生在自然淘汰後，零有效 Game rows；原門控
+拒絕全部實體讀取，不列驗證樣本。工具補上各 phase 的 active 判定後，
+普通 Play Again 新局的 bfc0d4968952 有 132 rows、8 次 dirty 拒絕，畫面
+縮放 18.125→22.836→18.125，actor 數全程 23，沒有特殊 Single 或新的
+sensor cycle。這條支線沒有增加所需覆蓋，不再延長同場景輪詢。

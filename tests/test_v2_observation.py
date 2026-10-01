@@ -94,6 +94,43 @@ def test_browser_clock_skew_does_not_reorder_host_capture():
     assert state.age_ms(1001) is None
 
 
+def ready_force_fixture():
+    # Synthetic readiness isolation, never a live age/coverage certificate.
+    payload = raw()
+    payload['towers'][0].update(owner=7, relation='SELF', units7=[1,1,9,0,0,0,6],
+        morale=1, delay_ticks=0, neighbors=[4])
+    payload['towers'].append(dict(payload['towers'][0], id=4, owner=0,
+        relation='NEUTRAL', units7=[0,0,0,0,0,0,0], position=[105,200],
+        morale=0, neighbors=[3]))
+    payload.update(tick=55, coverage='PLAYER_VISIBLE_COMPLETE', positive_refs=2,
+        transport_mode='NETWORK', active=True, visible_pending=False, online=True,
+        transport_connected=True, expanded_visibility=False, play_text=None,
+        own_tower_counts=[0]*27, forces=[dict(visible=True, visibility_source='test-only',
+            owner=7, relation='SELF', source=3, destination=4,
+            units7=[0,0,0,0,0,3,0], progress=0, accelerated=0)])
+    state = normalize(payload, 's', 'd', 1, 101, match_identity='test-epoch')
+    return replace(state, updated_at_ms=fact(100))
+
+
+def test_observed_force_collection_does_not_clear_unknown_member_fields():
+    state = ready_force_fixture()
+    assert state.readiness_gaps(101) == ()
+    force = state.forces.value[0]
+    assert force.launch_ms.knowledge == Knowledge.UNKNOWN  # Never invent a launch clock.
+    partial = replace(force, source=Fact(), eta_ms=Fact())
+    gaps = replace(state, forces=fact((partial,))).readiness_gaps(101)
+    assert 'force:0:source' in gaps and 'force:0:eta_ms' in gaps
+    assert 'forces' not in gaps  # The collection is observed; its geometry is unavailable.
+    ambiguous = replace(force, id=Fact(), first_seen_ms=Fact())
+    assert 'force:0:id' in replace(state, forces=fact((ambiguous,))).readiness_gaps(101)
+
+
+def test_observed_empty_forces_and_unavailable_forces_have_different_readiness():
+    state = ready_force_fixture()
+    assert replace(state, forces=fact(())).readiness_gaps(101) == ()
+    assert 'forces' in replace(state, forces=Fact()).readiness_gaps(101)
+
+
 def test_malformed_and_duplicate_towers_do_not_enter_state():
     payload = raw()
     payload["towers"].append(dict(payload["towers"][0]))
