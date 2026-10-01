@@ -90,6 +90,29 @@ r=decode.call(memories,'world',[],owners);
 assert.deepEqual(JSON.parse(JSON.stringify(r.own_unlocks)),{keys:0,unlocked_types:[]});
 put(unlock,0);r=decode.call(memories,'world',[],owners);
 assert.equal(r.own_unlocks,null,'invalid unlock storage must remain unknown');
+const guardSource=fs.readFileSync('tools/v2_force_guard.js','utf8');
+const guard=vm.runInNewContext('('+guardSource+')',{DataView:ObservedView,
+  performance:{timeOrigin:7},navigator:{onLine:true},document:{querySelector:()=>null}});
+const fp=2_100_000,path=2_200_000;
+put(tower,1);put(tower+4,fp);put(tower+8,1);
+put(fp+4,path);short(fp+12,2);view.setUint8(fp+22,9);
+const raw={root_candidate:root,root_slot_candidate:broker+72,
+  document_time_origin:7,player_id:1,tick:10,towers:[{id:0,research_ref:tower}]};
+const f={source:null,destination:0,research_ref:fp,owner:2,progress:9,
+  accelerated:0,units7:[0,0,0,0,0,0,0],visibility_source:'normal renderer: visible tower inbound'};
+reads.length=0;
+assert.equal(guard.call(memories,raw,f),true,'legal normal inbound anchor supports composition without a hidden source');
+assert(!reads.includes(fp+4)&&!reads.some(p=>p>=path&&p<path+20),'guard read hidden endpoint/path');
+short(refs,0);reads.length=0;
+assert.equal(guard.call(memories,raw,f),false);
+assert(!reads.some(p=>p>=fp&&p<fp+24),'lost anchor read force payload');
+short(refs,1);put(tower+8,0);reads.length=0;
+assert.equal(guard.call(memories,raw,f),false,'a force outside the current rendering vector is unavailable');
+assert(!reads.some(p=>p>=fp&&p<fp+24),'unowned vector read force payload');
+put(tower+8,1);view.setUint8(transportRc+155,2);reads.length=0;
+assert.equal(guard.call(memories,raw,f),false);
+assert(!reads.some(p=>p>=fp&&p<fp+24),'disconnected session read force payload');
+view.setUint8(transportRc+155,1);
 view.setBigUint64(root,2n,true);reads.length=0;
 r=decode.call(memories,'world',sockets,owners);
 assert.equal(r.transport_mode,'OFFLINE');assert.equal(r.transport_connected,false);

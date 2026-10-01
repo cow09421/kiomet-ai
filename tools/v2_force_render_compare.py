@@ -21,6 +21,7 @@ POINTS = {
     'speed': (0x9896d, 0x98b8e),
     'position': (0x1036c0, 0x10375f),
     'units': (0x9896d, 0x98b8e),
+    'getter': (0xf9203, 0xf92c2),
 }
 
 
@@ -82,7 +83,8 @@ async def main(args):
                     # Obtain typed ownership and a coherent legal payload before
                     # the normal renderer acquires its exclusive RefCell borrow.
                     _, raw = await ex.sample()
-                    eligible = [f for f in raw['forces'] if f['source'] is not None and f['destination'] is not None
+                    eligible = [f for f in raw['forces'] if (args.mode!='position' or
+                        f['source'] is not None and f['destination'] is not None)
                         and (args.unit_type is None or dict(decode_units(f['units7']).counts)[args.unit_type])]
                     if not eligible:
                         await asyncio.sleep(.15)
@@ -99,8 +101,13 @@ async def main(args):
                         render = args.mode == 'position' or any(
                             'Force::interpolated_position' in f['functionName'] or
                             f['functionName']=='$func1861' for f in event['callFrames'])
-                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']
-                        if render and force_ptr==target['research_ref']:
+                        if args.mode=='getter':
+                            render=any(f['functionName']=='$func1242' for f in event['callFrames']) and not any(
+                                any(n in f['functionName'] for n in ('ServerState::apply','World::tick','Chunk::apply'))
+                                for f in event['callFrames'])
+                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']-14 if args.mode=='getter' else values['$var0']
+                        correct_unit=args.mode!='getter' or values['$var1']==args.unit_type
+                        if render and correct_unit and force_ptr==target['research_ref']:
                             force=target
                             break
                         await resume()
@@ -110,37 +117,17 @@ async def main(args):
                             break
                     else:
                         raise ValueError('bounded renderer seek did not find preselected visible force')
-                    if not render or force_ptr!=target['research_ref']:
+                    if not render or not correct_unit or force_ptr!=target['research_ref']:
                         continue
                     # Never relax the production observer's borrow guard. While
                     # paused in normal rendering, only reuse the prior payload if
-                    # its exact document/revision and both current visible refs
+                    # its exact document/revision and normal rendering anchor
                     # remain valid and the matched force bytes remain unchanged.
+                    # Composition/speed do not require a hidden endpoint position.
                     guard = await cdp.send('Runtime.callFunctionOn', {
                         'objectId': ex.memories_id, 'returnByValue': True,
                         'arguments': [{'value': raw}, {'value': force}],
-                        'functionDeclaration': '''function(raw,f){
-                          const m=this.filter(x=>x.buffer.byteLength>1000000);
-                          if(m.length!==1)return false;const v=new DataView(m[0].buffer),r=raw.root_candidate;
-                          const u32=p=>v.getUint32(p,true),u16=p=>v.getUint16(p,true),u8=p=>v.getUint8(p);
-                          if(performance.timeOrigin!==raw.document_time_origin||!navigator.onLine||
-                            v.getBigUint64(r,true)===2n||u32(r+548)!==3||u8(r+45784)||
-                            u16(r+45732)!==raw.tick||u32(r+45720)===0x80000000||
-                            document.querySelector('#play_button')?.offsetParent!=null)return false;
-                          const c=u32(r+45828);
-                          if(u16(c+248)!==raw.player_id||
-                            (u8(c+105)!==2&&(u8(c+104)&1)&&u32(r+46480)))return false;
-                          const b=r+45760,p=u32(b+4),n=u32(b+8),x0=u16(b+12),y0=u16(b+14),
-                            x1=u16(b+16),y1=u16(b+18),w=x1-x0+1;
-                          if(n!==w*(y1-y0+1)||n>u32(b)||p+2*n>v.byteLength)return false;
-                          for(const id of [f.source,f.destination]){
-                            const x=id&65535,y=id>>>16;
-                            if(x<x0||y<y0||x>x1||y>y1||!u16(p+2*(x-x0+(y-y0)*w)))return false;
-                          }
-                          const q=f.research_ref;
-                          return u16(q+12)===f.owner&&u8(q+22)===f.progress&&u8(q+21)===f.accelerated&&
-                            f.units7.every((value,i)=>u8(q+14+i)===value);
-                        }'''})
+                        'functionDeclaration': (ROOT/'tools/v2_force_guard.js').read_text(encoding='utf8')})
                     if not guard['result'].get('value'):
                         continue
                     positions = {t['id']: tuple(t['position']) for t in raw['towers']}
@@ -192,6 +179,12 @@ async def main(args):
                     if args.mode == 'speed':
                         actual = end_values['$var2'] & 255
                         row.update(official_speed=actual, match=actual == speed)
+                    elif args.mode == 'getter':
+                        count=(await locals_at(cdp,end['callFrames'][0],{'$var1','$var3'}))['$var3']&255
+                        expected_counts=dict(units.counts)
+                        row.update(queried_unit=args.unit_type,official_unit_counts=[(args.unit_type,count)],
+                            derived_unit_counts=[(args.unit_type,expected_counts[args.unit_type])],
+                            complete_vector=False,match=count==expected_counts[args.unit_type])
                     elif args.mode == 'units':
                         expected_counts = dict(units.counts)
                         row.update(official_unit_counts=sorted(official_counts.items()),
@@ -273,4 +266,6 @@ if __name__ == '__main__':
         parser.error('samples 1..100 and seconds 1..120 required')
     if args.unit_type is not None and not 0 <= args.unit_type < 10:
         parser.error('unit type must be 0..9')
+    if args.mode=='getter' and args.unit_type is None:
+        parser.error('direct getter comparison requires the explicitly queried unit type')
     asyncio.run(main(args))

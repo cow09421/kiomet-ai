@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import time
+import itertools
 from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,12 +18,15 @@ from kiomet_ai.ui_parse import UNIT_ZH
 from playwright.async_api import async_playwright
 
 UNIT_NAMES = ("Shield", "Fighter", "Chopper", "Bomber", "Tank", "Soldier", "Shell", "Emp", "Nuke", "Ruler")
+# Exact normal UI labels; unsupported labels remain outside the denominator.
+TOWER_LABELS={**TOWER_TYPE_ZH,'雷達':'Radar','投射器':'Projector'}
 
 
 async def main(args):
     out = ROOT / "runtime/research/v2"
     rows = []
     errors=[]
+    deadline=time.monotonic()+args.seconds if args.seconds else None
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
         page = next(p for p in browser.contexts[0].pages if p.url == "https://kiomet.com/")
@@ -47,9 +51,12 @@ async def main(args):
             cam = first["camera_candidate"]
             if not all(isinstance(v, (int, float)) for v in cam) or not 2 < cam[2] < 150:
                 raise ValueError("camera candidate invalid")
-            for round_index in range(args.rounds):
+            for round_index in itertools.count() if deadline else range(args.rounds):
+                if deadline and (time.monotonic()>=deadline or len(rows)>=args.max_selections):
+                    break
                 if round_index:
-                    await asyncio.sleep(.2)
+                    if not args.delayed_only:
+                        await asyncio.sleep(.2)
                     _, first = await sample_ready()
                 cam = first['camera_candidate']
                 projected = []
@@ -60,12 +67,17 @@ async def main(args):
                 # Stratify limited diagnostic comparisons by owner; no PASS claim.
                 chosen = []
                 for relation in ("SELF", "NEUTRAL", "ENEMY", "ALLY", None):
-                    candidates=[t for t in projected if t[0]["relation"] == relation]
+                    candidates=[t for t in projected if t[0]["relation"] == relation and
+                                (not args.delayed_only or t[0]['delay_ticks']>0)]
                     candidates.sort(key=lambda t:t[0]['units7'][0]!=1)
                     if candidates:
                         start=round_index*5%len(candidates)
                         chosen += [candidates[(start+i)%len(candidates)] for i in range(min(5,len(candidates)))]
+                if args.delayed_only and not chosen:
+                    await asyncio.sleep(.05)
                 for initial, _, _ in chosen:
+                    if deadline and (time.monotonic()>=deadline or len(rows)>=args.max_selections):
+                        break
                     before_state, before = await sample_ready()
                     if before_state.match_id.value!=first_state.match_id.value:
                         raise ValueError('observed match epoch changed; comparison cohort ended')
@@ -78,13 +90,15 @@ async def main(args):
                     clear = await page.evaluate("([x,y])=>document.elementFromPoint(x,y)?.tagName==='CANVAS'", [x, y])
                     if not clear:
                         continue
-                    await page.mouse.click(x, y)
+                    if before['selected_tower']!=current['id']:
+                        await page.mouse.click(x, y)
                     await asyncio.sleep(.15)
-                    _, after = await sample_ready()
+                    after_state, after = await sample_ready()
                     dom = await page.evaluate("""() => {const img=document.querySelector('h2 img');let svg='';
                       if(img?.src.startsWith('data:image/svg+xml;base64,'))svg=atob(img.src.split(',')[1]);
                       else if(img?.src.startsWith('data:image/svg+xml'))svg=decodeURIComponent(img.src.split(',').slice(1).join(','));
                       return {headings:[...document.querySelectorAll('h2')].map(e=>e.innerText),
+                      progress_width:document.querySelector('h2')?.parentElement?.parentElement?.lastElementChild?.style.width??null,
                       heading_fill:svg.match(/fill=['\"]([^'\"]+)['\"]/)?.[1]??null,
                       rows:[...document.querySelectorAll('p[title]')].map(e=>({unit:e.title,text:e.innerText})),
                       upgrade_buttons:[...document.querySelectorAll('div[title]')]
@@ -101,11 +115,24 @@ async def main(args):
                     stable=target is not None and end_target is not None and all(
                         target.get(k)==end_target.get(k) for k in ('units7','type','owner','relation','morale','delay_ticks'))
                     counts_stable=after.get('own_tower_counts')==bracket_end.get('own_tower_counts')
+                    progress_width=dom['progress_width']
+                    progress_ui=float(progress_width[:-1]) if progress_width and progress_width.endswith('%') else None
+                    nominal=rules.UPGRADE_DELAY[target['type']] if target else None
+                    expected_progress=0.0 if target and target['delay_ticks']==0 else (
+                        (1-target['delay_ticks']/nominal)*100 if target and nominal else None)
+                    progress_coherent=selected and stable and progress_ui is not None and expected_progress is not None
+                    progress_check={'ui_percent':progress_ui,'expected_percent':expected_progress,
+                        'coherent':progress_coherent,'match':progress_coherent and abs(progress_ui-expected_progress)<.00002,
+                        'cause':'UNKNOWN unless a separate consecutive visible type transition proves upgrade'}
                     units = decode_units(target["units7"]) if target else None
                     counts = dict(units.counts) if units else None
                     expected_fill={'SELF':'#74b9ffff','NEUTRAL':'none','ENEMY':'#c0392bff','ALLY':'#8644fcff'}.get(target['relation']) if target else None
                     relation_check={'ui_fill':dom['heading_fill'],'expected_fill':expected_fill,
                         'coherent':selected and stable,'match':selected and stable and expected_fill is not None and dom['heading_fill']==expected_fill}
+                    ui_type=next((TOWER_LABELS.get(h,h) for h in dom['headings'] if TOWER_LABELS.get(h,h) in TOWER_TYPES),None)
+                    type_coherent=selected and stable and ui_type is not None
+                    type_check={'ui_type':ui_type,'expected_type':TOWER_TYPES[target['type']] if target else None,
+                        'coherent':type_coherent,'match':type_coherent and ui_type==TOWER_TYPES[target['type']]}
                     comparisons = []
                     prerequisite_comparisons=[]
                     upgrade_ui_comparisons=[]
@@ -156,9 +183,12 @@ async def main(args):
                         "units7":target['units7'] if target else None,
                         "morale":target['morale'] if target else None,
                         "delay_ticks":target['delay_ticks'] if target else None,
+                        'derived_upgrade':next((t.upgrade.value for t in after_state.towers if t.id==current['id']),None),
                         "tick_bracket":[after['tick'],bracket_end['tick']],
                         "sample_bracket":[after['sampled_at_ms'],bracket_end['sampled_at_ms']],
                         "relation_check":relation_check,
+                        'type_check':type_check,
+                        'progress_check':progress_check,
                         "own_tower_counts":after.get('own_tower_counts'),
                         "prerequisite_comparisons":prerequisite_comparisons,
                         'upgrade_ui_comparisons':upgrade_ui_comparisons,
@@ -213,15 +243,24 @@ async def main(args):
         'coherent_upgrade_ui_fields':sum(c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
         'matched_upgrade_ui_fields':sum(c['disabled_match'] for r in rows for c in r['upgrade_ui_comparisons']),
         'observed_upgrade_lock_fields':sum(c['ui_locked'] is not None and c['coherent'] for r in rows for c in r['upgrade_ui_comparisons']),
+        'coherent_delay_progress_fields':sum(r['progress_check']['coherent'] for r in rows),
+        'matched_delay_progress_fields':sum(r['progress_check']['match'] for r in rows),
+        'coherent_type_fields':sum(r['type_check']['coherent'] for r in rows),
+        'matched_type_fields':sum(r['type_check']['match'] for r in rows),
         "tactical_commands": 0, "limits": "limited selections, candidate camera, not M1 gate evidence"}
     (out / "ui-comparison.json").write_text(json.dumps(report, indent=2), encoding="utf8")
-    (out / f"ui-comparison-{uuid4().hex[:12]}.json").write_text(json.dumps(report,indent=2),encoding='utf8')
-    print(json.dumps({k: v for k, v in report.items() if k != 'rows'}), flush=True)
+    path=out / f"ui-comparison-{uuid4().hex[:12]}.json"
+    path.write_text(json.dumps(report,indent=2),encoding='utf8')
+    print(json.dumps({'file':str(path),**{k: v for k, v in report.items() if k != 'rows'}}), flush=True)
 
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--rounds',type=int,default=1)
+    parser.add_argument('--delayed-only',action='store_true',help='Only currently visible delayed towers; does not assume upgrade cause')
+    parser.add_argument('--seconds',type=int,default=0,help='Bounded waiting for actual delayed UI cases')
+    parser.add_argument('--max-selections',type=int,default=30)
     args=parser.parse_args()
     if not 1<=args.rounds<=50:parser.error('rounds must be 1..50')
+    if not 0<=args.seconds<=600 or not 1<=args.max_selections<=1000:parser.error('seconds 0..600, max selections 1..1000')
     asyncio.run(main(args))

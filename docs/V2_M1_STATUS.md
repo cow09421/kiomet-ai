@@ -22,7 +22,7 @@ M2 / M3 尚未開始；本輪沒有派兵、拖曳、升級或語意遊戲命令
 | 國王 | 看見自己的 Ruler 才標目前存活／位置；找不到不推論死亡。 |
 | 可派兵量 | DERIVED force_units 可移動庫存；尚未證明路徑／命令合法性。 |
 | 敵盟關係 | 正式正常顏色路徑的雙向盟友 membership；敵方已有限 UI 核對，真實盟友未覆蓋。 |
-| 升級／特殊效果 | 自己的有效塔數是 OBSERVED 升級前置資源，候選前置需求 DERIVED；delay 與士氣已觀察。本方永久 keys／解鎖種類已觀察；delay=0 可推導無進行中延遲式升級。非零 delay 的原因、有效 UI 解鎖政策／命令合法性、EMP 等仍 UNKNOWN。 |
+| 升級／特殊效果 | 自己的有效塔數是 OBSERVED 升級前置資源，候選前置需求 DERIVED；delay 與士氣已觀察。本方永久 keys／解鎖種類已觀察；delay=0 可推導無進行中延遲式升級。連續可見直接升級轉型＋正式 delay 倒數可保守追蹤進行中升級；未見起始原因、EMP 中斷、有效 UI 解鎖政策／命令合法性仍 UNKNOWN。 |
 | 可見性切換 | 正式門控與合成防洩漏檢查成立；真實 visible → hidden → visible 驗收尚未完成。 |
 
 ## 真實數據
@@ -71,7 +71,7 @@ ENEMY:MANY 400。另有容量 1,231/1,231、顏色 717/717、自己的前置塔�
 目前不存在完整關鍵欄位 >=99% 的 M1 驗收結論。
 
 三段完整十分鐘都沒有實際視野失去／重新取得；不得以合成測試代替此項驗收。
-23 項 v2 Python 測試通過；Node 合成記憶體檢查也通過資料根、霧／dirty gate
+25 項 v2 Python 測試通過；Node 合成記憶體檢查也通過資料根、霧／dirty gate
 與單向／雙向結盟邊界。未清理封存 v1 測試，也沒有把離線結果標成 live PASS。
 
 ## 目前最重要問題
@@ -83,7 +83,7 @@ transport-research-e0ac23c469ab 的重連 30 秒中，兩個 WebSocket 都 CLOSE
 無關舊物件誤導；現已由正式型別 ownership 與 state getter 取代。
 本次結果画面資料只算傳輸研究，不能算十分鐘有效對局或 UI 驗收樣本。
 
-新世界更新觸發已完成三段 600 秒单局，分別 4,747／4,766／4,777 筆，7.911／7.943／7.961 Hz、
+新世界更新觸發已完成三段 600 秒單局，分別 4,747／4,766／4,777 筆，7.911／7.943／7.961 Hz、
 套用年齡上界 p95 均 235 ms。每個來源變更仍由實際序號觀察證明，不用插值或預設
 250 ms 假造更新。三段頻率數值證據已齊；下一個重點是來源時間、決策欄位、
 真實可見性與部隊的獨立分層比對。不能只靠增加塔兵數欄位宣稱 M1 PASS。
@@ -128,3 +128,39 @@ visibility-research-498d23c31a2b：120.079 秒，474 coherent sensor brackets，
 決策 readiness 現在拒絕用客戶端 application age 清除 authoritative freshness
 缺口；updated_at_ms UNKNOWN 時 freshness 必留。RTT、frame 時間與輪詢時間
 均未拿來填造伺服器 snapshot age。
+
+### 連續可見升級與新版實測
+
+UpgradeTracker 只接受同 epoch、同正值 owner、相鄰一次 source tick、
+prior delay=0、正式 direct-upgrade 塔型轉換及新型 nominal delay。只在倒數
+精確吻合時續接；EMP 式延遲跳變、owner／epoch 改變、可見性失去、
+未觀察更新或超過 1 秒間隔均失去原因證據，回到 UNKNOWN。
+
+upgrade-history-79047ae0c5ea 對原始合法 live 紀錄離線重新處理：15 個
+升級起始、2,868 筆倒數、333 筆仍未知的 delay。這不是新增 live 驗收。
+新的 ui-comparison-a84933df9cb7 則有真實 Village→Headquarters 起始，
+52/52 coherent 正常進度條一致；32f3180246b6 另有 Reactor 29/29 delay
+進度條一致，但未見其起始，不能只憑進度條判定原因。
+
+e68f3686914c：獨立塔型標籤 25/25，兵數／容量 47/47，顏色 27/27；
+其中 ENEMY:SINGLE 有 4 個兵種欄位，實際 Silo 的 Single Nuke=1、Shield=20
+與正式資訊框一致。沒有把未支持的中文標籤放進塔型分母。
+正常 force getter 新 strata：9ac718c8fdb9 30 個十二士兵完整向量，300/300；
+06d675aad308 30 個四轟炸機完整向量，300/300。除錯暫停仍不計效能。
+
+新版完整單局 sampling-005d91726c30：600.067 秒、4,748 快照、7.912 Hz、
+有效跨度 599.364 秒、p95 擷取 14.602 ms、客戶端 application age 上界
+p95 250 ms（4,747 筆有區間）。一文件／一 epoch／NETWORK，18 次 dirty
+拒絕，含普通資訊框操作的實際負載；全部保留，不刪慢樣本。來源 manifest
+包含 UpgradeTracker 與本方 Unlocks。後加 document_time_origin_ms 僅供
+跨 observer 文件核對，不用於 game age，這一舊程序的輸出尚不含該新增欄位。
+
+visibility-research-0662272c4f3f：450.078 秒、1,812 coherent sensor brackets；
+f5ec73cea14a：600.109 秒、2,438 coherent brackets。兩次都無 loss／recovery，
+不能宣稱同局 fog cycle 通過。相同靜態視野的重複輪詢已停止。
+
+部隊除錯核對的 pause guard 現在重驗 owned transport、當前 sensor 及正常
+renderer 的 inbound/outbound vector membership；合法 anchor 通過前不讀
+force payload，也不讀 path pointer 或隱藏端點資料。合成邊界檢查已通過。
+ea293294b9f0 額外控制未取得有效部隊樣本，0 個獨立核對；不能當成新 guard
+的 live 成功證據。之後的合法短讀當時有 36 座可見塔、沒有移動部隊。

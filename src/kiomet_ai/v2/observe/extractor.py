@@ -11,6 +11,7 @@ from ..state import Fact, GameState, Knowledge, Relation, Tower, Units
 from .source_clock import SourceClock
 from .lifecycle import MatchLifecycle
 from .forces import ForceTracker
+from .upgrades import UpgradeTracker
 from . import rules
 
 CLIENT_SHA256 = "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c"
@@ -61,7 +62,8 @@ def decode_units(raw):
 
 
 def normalize(raw, session_id, document_id, sequence, received_ms, sample_started_ms=None,
-              update_window=None, match_identity=None, lifecycle=None, force_tracker=None):
+              update_window=None, match_identity=None, lifecycle=None, force_tracker=None,
+              upgrade_tracker=None):
     # Browser epoch time and host monotonic time are different clock domains.
     # Host send time is a conservative lower bound on this synchronous read.
     at = raw["sampled_at_ms"] if sample_started_ms is None else sample_started_ms
@@ -124,6 +126,7 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
                        if "neighbors" in row else Fact()),
             position=Fact(tuple(row["position"]), Knowledge.DERIVED,
                           "official integer-position offset table", at)))
+    towers=(upgrade_tracker or UpgradeTracker()).update(towers,match_identity,raw.get('tick'),at)
     forces = Fact()
     if raw.get("forces") is not None:
         tracker = force_tracker or ForceTracker()
@@ -140,6 +143,8 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
              "document + player identity + observed lifecycle / official join epoch", at) if match_identity else Fact(),
         sequence, at, received_ms,
         CLIENT_SHA256, client_sampled_at_ms=observed(raw["sampled_at_ms"], "browser clock (separate domain)", at),
+        document_time_origin_ms=observed(raw.get('document_time_origin'),
+            'browser performance.timeOrigin; cross-observer document cue only, never game time',at),
         tick=observed(raw.get("tick"), "pinned displayed World.Singleton sequence u16; transport mode separately verified; server timestamp unknown", at),
         source_mode=observed(raw.get("transport_mode"),"pinned Transport enum / typed ClientSession ownership",at),
         source_update_window_ms=(Fact(update_window, Knowledge.DERIVED,
@@ -172,6 +177,7 @@ class ClientExtractor:
         self.time_origin = None
         self.source_clock = SourceClock()
         self.force_tracker = ForceTracker()
+        self.upgrade_tracker = UpgradeTracker()
         self.lifecycle = MatchLifecycle(self.document_id)
         self.sockets_id = None
         self.sockets_dirty = True
@@ -281,6 +287,7 @@ class ClientExtractor:
         else:
             self.source_clock.clear()
             self.force_tracker.clear()
+            self.upgrade_tracker.clear()
         return raw, began_ms, received_ms, window
 
     async def metadata(self):
@@ -305,7 +312,7 @@ class ClientExtractor:
         state = normalize(raw, self.session_id, self.document_id,
                           self.sequence + 1, received_ms, began_ms, update_window=window,
                           match_identity=raw["derived_match_id"],lifecycle=raw["derived_lifecycle"],
-                          force_tracker=self.force_tracker)
+                          force_tracker=self.force_tracker,upgrade_tracker=self.upgrade_tracker)
         # Timestamp when the complete canonical state becomes available, after
         # normalization/tracking; never hide that work from downstream age.
         state=replace(state,received_at_ms=time.monotonic_ns()//1000000)
@@ -315,6 +322,7 @@ class ClientExtractor:
     async def close(self):
         self.source_clock.clear()
         self.force_tracker.clear()
+        self.upgrade_tracker.clear()
         if self.cdp:
             try:
                 for oid in (self.memories_id,self.sockets_id,self.owner_states_id):

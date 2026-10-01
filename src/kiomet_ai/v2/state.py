@@ -134,6 +134,7 @@ class GameState:
     # Browser epoch time is stored separately and must never be subtracted.
     clock_domain: str = "host_monotonic_ms"
     client_sampled_at_ms: Fact[int] = field(default_factory=Fact)
+    document_time_origin_ms: Fact[float] = field(default_factory=Fact)
     # Last confirmed authoritative update, distinct from last memory poll.
     updated_at_ms: Fact[int] = field(default_factory=Fact)
     tick: Fact[int] = field(default_factory=Fact)

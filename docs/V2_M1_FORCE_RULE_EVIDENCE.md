@@ -75,7 +75,7 @@ now use the pinned Many/Single decoder. A visible self ruler proves current
 life/location; absence never proves ruler death. Production facts describe
 potential intervals, not guaranteed output at capacity or under unit priority.
 Deployable currently means the verified mobile inventory from `Tower::force_units`;
-it does not certify path/command legality. Upgrade state/resources remain UNKNOWN.
+it does not certify path/command legality. At that checkpoint upgrade state/resources remained UNKNOWN; the later narrow sources below supersede that result.
 
 CONCLUSION: morale, capacity, potential generation, Single and visible ruler facts
 are supported, with explicit remaining limits. STATUS: PARTIAL.
@@ -261,3 +261,31 @@ CONCLUSION: own persistent keys and unlocked types are OBSERVED resources. They
 are separate from ad/rank-dependent effective lock policy and final command legality.
 Zero Tower.delay proves no active delay-based upgrade, while nonzero delay remains
 UNKNOWN in cause because EMP can produce it. STATUS: PASS for these narrow sources.
+
+## QUESTION: can a visible upgrade cause be tracked without conflating EMP?
+
+EVIDENCE: pinned Chunk::apply_0 0x7d4de writes the new type+46, calls
+TowerType::delay at 0x7d4e5, and writes nominal delay+47 at 0x7d4e8. Generation
+sets delay=0 (0x7d609); neutral decay/capture walk downgrade types; the normal
+EMP branch writes max(existing,240) at 0x1b10c and does not change type.
+Tracker requires a direct upgrade transition across one observed revision, a
+positive unchanged owner, prior zero delay and new nominal delay. Only consecutive
+matching countdowns retain the cause. Visibility, missed revisions, ownership,
+identity, clock gap and abnormal delay invalidate it. It never reads actor inputs.
+
+Offline reprocessing of three original legal capture files (79047ae0c5ea) found
+15 starts and retained 2,868 delay facts; 333 remain unknown. These are not new
+live independent comparisons. Live a84933df9cb7 captured Village(26) to
+Headquarters(11), start tick 15472. Across 52 coherent normal info-panel reads,
+the direct child progress bar's actual width matched (1-delay/nominal)*100,
+within 0.00002 percentage points. A Reactor cohort (32f3180246b6) had 29/29
+progress comparisons with unknown initial cause, which remains unknown.
+
+CONCLUSION: observed type transition plus exact countdown provides a conservative
+DERIVED active-upgrade fact. A progress bar by itself proves delay visualization,
+not cause. STATUS: PASS for these demonstrated transitions, full effects coverage PARTIAL.
+
+Further independent normal Force::speed nested getter cohorts: 9ac718c8fdb9
+contains 30 distinct twelve-soldier vectors, 300/300 getter fields; 06d675aad308
+contains 30 distinct four-bomber vectors, 300/300. No injected live WASM call,
+no hidden endpoint reads, and no debugger samples in performance cohorts.

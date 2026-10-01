@@ -166,3 +166,27 @@ replacement experiment owns its browser and streams evidence before teardown.
 No force was launched, no game commands were injected, no memory was written,
 and no physical desktop input was used. Runtime evidence files are ignored by
 Git under `runtime/research/v2/`; this compact summary is the committed evidence.
+
+### QUESTION: can transport/session metadata certify server state age?
+
+The production ClientSession::receive at 0x47f9a..0x48039 measures a local
+receive-minus-local-send duration, subtracts a server processing duration and
+stores a 3/4 old + 1/4 new RTT estimate. This is an EWMA, not a worst-case bound
+for the creation/transmission of a particular World update. The pinned WS
+rtt_ms trait implementation at 0x154d96 stores None. Normal ServerState::apply
+receives only state/update pointers; its interpolation correction (0x10745)
+continues to be excluded. Static production metadata did not reveal timestamp
+field names or a NonActor formatter; absence of a name alone is not proof of
+absence of all possible sources. This hypothesis produced no new timestamp source.
+
+Public engine reference commit 83f62d2aacd94647dbc97d1bd4764fbfc17cdf55
+[CommonUpdate schema](https://github.com/SoftbearStudios/kodiak/blob/83f62d2aacd94647dbc97d1bd4764fbfc17cdf55/common/src/protocol/updates.rs)
+has Game(GU) without an outer creation timestamp. Its SessionCreated.date_created
+is session metadata, not a per-game-update clock. The production client framework
+contains newer ClientSession functions than that public reference, so this public
+schema alone does not establish complete current-production absence.
+
+CONCLUSION / STATUS: UNKNOWN for a legally observable server-generation timestamp.
+Client application bounds and EWMA/receipt/frame/session clocks cannot clear
+canonical authoritative freshness readiness. No source was promoted based on
+these unsuccessful alternatives; M1 remains PARTIAL.
