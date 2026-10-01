@@ -1,0 +1,12 @@
+{
+  "QUESTION": "Can ordinary zoom-out load the player's sensed region through the official viewport path, retaining strict complete-visible coverage, so a Soldier-only friendly reinforcement can be captured?",
+  "BEFORE": "Pinned official private headless network match. Record the original canonical coverage/camera; observer installed before page creation but DISARMED. No unknown cell is inferred empty.",
+  "ACTION": "At most two finite 180-second private hosts. Per host, at most two ordinary page-local wheel events of deltaY=240 at canvas center before arming; bounded read-only warm/preflight. At most one explicit normal friendly drag if the fresh complete-visible preview, inventory panel, deselection, endpoint and no-supply-line guards qualify. If the own graph only offers a Ruler destination, allow one Soldier-only adjacent empty-neutral capture instead, under the same fresh guards, to test the real input-entry receipt and arrival chain. Friendly reinforcement remains the preferred scenario. No qualified candidate means zero troops and normal teardown.",
+  "EXPECTED": "A larger camera/viewport may bring missing actor chunks into the ordinary replica. This is a hypothesis; canonical complete coverage still requires every positive sensor ref decoded. Real DOWN/UP adoption, quantity-independent birth lineage and full visible arrival comparison remain separate.",
+  "OBSERVED": "PENDING",
+  "SIMULATED": "Original recorded BEFORE only, no intermediate reset or unit/path/fuel fit. Formal event credit requires independently qualified path/lineage and full before-arrival to after comparison; temporal alignment alone stays calibration.",
+  "DIFF": "PENDING; retain changed coverage, camera, gaps, partial receipts and first full-world mismatch.",
+  "VERDICT": "PENDING; startup/preflight/viewport changes earn zero M2 event or trajectory credit.",
+  "limits": {"hosts": 2, "host_seconds": 180, "wheel_events_per_host": 2, "wheel_delta_y": 240, "troop_gestures_per_host": 1, "recorder_seconds": 30, "post_release_seconds": 10},
+  "input_policy": "Normal official private-page Playwright UI events only; no desktop/global input, packets, direct semantic WASM calls, game heap writes or hidden actor access."
+}

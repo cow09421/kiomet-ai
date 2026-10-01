@@ -1,0 +1,136 @@
+{
+  "QUESTION": "Does ordinary zoom load missing visible actors, and can a current own Soldier-only non-Ruler friendly pair be previewed without sending input?",
+  "BEFORE": "Original recorded strict canonical snapshots in portable fixtures; observer installed before controlled page creation, DISARMED.",
+  "ACTION": {
+    "finite_hosts": 2,
+    "host_seconds_limit_each": 180,
+    "normal_wheel_events": 3,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "host_terminal_exit_codes": [
+      0,
+      0
+    ]
+  },
+  "EXPECTED": "Normal viewport changes might load missing actors; refuse input on incomplete coverage, unknown identity, unsupported destination or unqualified route.",
+  "OBSERVED": {
+    "host_A": {
+      "before_coverage": "PLAYER_VISIBLE_COMPLETE",
+      "after_coverage": "PLAYER_VISIBLE_COMPLETE",
+      "positive_refs": 30,
+      "decoded_towers": 30,
+      "wheels": 1,
+      "friendly_preview_status": "NO_ELIGIBLE_CANDIDATE",
+      "cause": "Only own ordinary-source road neighbors were a Ruler destination; Ruler merge priority remains unsupported."
+    },
+    "host_B": {
+      "before_coverage": "PARTIAL",
+      "after_each_wheel_coverage": [
+        "PARTIAL",
+        "PARTIAL"
+      ],
+      "positive_refs": 32,
+      "decoded_towers": 29,
+      "wheels": 2,
+      "friendly_preview_status": "NOT_READY",
+      "initial_tick": 44514,
+      "latest_accepted_tick": 44526,
+      "latest_sequence": 48,
+      "sample_attempts": 48,
+      "sample_errors": [
+        "ValueError: current visibility cache pending"
+      ]
+    }
+  },
+  "SIMULATED": "Not applicable: no force gesture. Existing simulator and corpus counts unchanged.",
+  "DIFF": "A was already complete before zoom, so does not prove coverage repair. B remained partial after two normal zoom events. Corrected B preview preserves latest accepted identity/tick/sequence; A older preview metadata bug is retained in its original artifact.",
+  "VERDICT": "NO_QUALIFIED_TROOP_EXPERIMENT; coverage-repair hypothesis unproven. Normal zoom alone did not repair B. Do not relax coverage or credit events/trajectories.",
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/camera-preflight-friendly-camera-probeA-20261002.json.gz",
+      "raw_sha256": "604268db9e9601abdb4d5d9baa4cc2d2d542e001b0127287fc0d547fca1f620f",
+      "compressed_sha256": "0aba2efd9ca79988f1e5f3cbad1dc678f72a5b85854f52121eb1eb83129040f6"
+    },
+    {
+      "file": "tests/fixtures/v2/camera-preflight-friendly-camera-probeB-20261002.json.gz",
+      "raw_sha256": "b1f4390721d2b2278fda29df9168c3e3ab727cec54ead21988b1808fe8d8d6b0",
+      "compressed_sha256": "2ce5f0ae741d86d6eae95f852c5184c3b6346394261832816f17cfda95e0af6f"
+    },
+    {
+      "file": "tests/fixtures/v2/camera-preflight-friendly-camera-probeB2-20261002.json.gz",
+      "raw_sha256": "8ff4b3e4ae936e05f5202fed0d364af730d722f72287aeed933bf4395ba6da5a",
+      "compressed_sha256": "87a1cf5e113d9d53304594fc7737b07fd3489cae175444e7f232cccbdb273ee3"
+    },
+    {
+      "file": "tests/fixtures/v2/camera-preflight-controlled-transition-6bfdaace2795.json.gz",
+      "raw_sha256": "23f2d585044e32a2972e8aee643b853c4cba6a207767139fe2bf9338ea5599f5",
+      "compressed_sha256": "7ea24003684c58104b3d1c3d48e78b43edd5edeeac9f113c4276843c0c71d858"
+    },
+    {
+      "file": "tests/fixtures/v2/camera-preflight-controlled-transition-f4bd3aec70bf.json.gz",
+      "raw_sha256": "b317554d502b47ad2db999b40c01ff154f5aedfc2129be9c635c0892c4a5f1f1",
+      "compressed_sha256": "0923feaef35d9756fea11aff33e6b255cae8fbc885aa7aad8c4b31192f9c1e42"
+    }
+  ],
+  "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "input_observer_sha256": "9465a5c3581d6659571fa83949b90d7cb13896e6acdbba3889f4c0dd7d78ecb6",
+  "recorder_source_sha256": "d4f0fd32bb9b6d657760d53586296c28cae0b85a7bdf27bc20889480a473920a",
+  "source_proofs": {
+    "game_constructor": {
+      "function": "func1366",
+      "selected_none_store": "0xe872e (root+47968)",
+      "phase_two_store": "0xe8737 (root+47976 = Game+696)",
+      "pointerlock_zero_store": "0xe883a (root+48108 = Game+828)"
+    },
+    "release_paths": {
+      "blank_deselection": "0x58007..0x58010",
+      "same_source_toggle": "0x583b3..0x583e9",
+      "common_phase_two_store": "0x58708 after label13 at 0x58703; not a command-send witness"
+    },
+    "intervening_capture_listener": {
+      "runtime_source_sha256": "1fa3e0fe90b287cb49f0e4b458356120c1da419f16017060562caa1184c09b8a",
+      "identity": "Playwright InjectedScript hit-target interceptor",
+      "review": "Synchronous DOM hit test / optional event cancellation; no game/WASM world writes or queued work. Permanent listener calls optional interceptor; stop clears it. External normal lifecycle stop invocation remains a separate conditional."
+    }
+  },
+  "validation": {
+    "focused_preview_tests": 23,
+    "root_affected_tests": 51,
+    "root_affected_test_files": [
+      "tests/test_v2_controlled_capture.py",
+      "tests/test_v2_direct_route_certificate.py",
+      "tests/test_v2_input_entry_capture.py",
+      "tests/test_v2_controlled_launch_audit.py"
+    ],
+    "new_formal_events": 0,
+    "new_formal_trajectories": 0
+  },
+  "gate": {
+    "old_M1": "FAIL",
+    "M1B": "PASS",
+    "M2A": "IN_PROGRESS",
+    "ordinary_world_complete": false,
+    "formal_one_tick_total": 1053,
+    "formal_one_tick_matches": 1053,
+    "ordinary_event_total": 1,
+    "ordinary_event_required": 100,
+    "new_supported_multievent_trajectories": 0,
+    "M2": "NOT_YET_PASS",
+    "M3": "NOT_STARTED"
+  },
+  "next_P0": "Independently verify concrete synchronous actor-update currentness and present-chunk OptionNone evidence; absent chunks remain UNKNOWN. Continue real reinforcement/combat capture after strict coverage is genuinely qualified.",
+  "source_fixtures": [
+    {
+      "file": "tests/fixtures/v2/friendly-camera-probeA-20261002-script37.js.gz",
+      "raw_sha256": "1fa3e0fe90b287cb49f0e4b458356120c1da419f16017060562caa1184c09b8a",
+      "compressed_sha256": "b68a010f0f489c761cc0f7db5d94547abaa4e43a71ab53bed409b2fe5f0d7a45",
+      "normalization": "UTF-8 source text, LF line endings; matches recorded CDP source SHA"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-camera-probeA-20261002-script8.js.gz",
+      "raw_sha256": "05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e",
+      "compressed_sha256": "fa812dfee4d1336a907f1d5bcdeb34285720511c2fb7a957f156e1e8e0db0bf2",
+      "normalization": "UTF-8 source text, LF line endings; matches recorded CDP source SHA"
+    }
+  ]
+}

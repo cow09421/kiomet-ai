@@ -11,6 +11,7 @@ import asyncio
 from dataclasses import fields, is_dataclass
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -137,6 +138,255 @@ def validate_fresh_intent(state, source_id, destination_id, typed_deployable,
     if gaps:
         return "control_readiness_gaps:" + ",".join(gaps)
     return checked
+
+
+def _preflight_snapshot_metadata(state):
+    def known(fact):
+        return getattr(fact, "value", None)
+    sequence_observed = getattr(state, "world_sequence_observed_at_ms", None)
+    update_window = getattr(state, "source_update_window_ms", None)
+    return {"document_id": getattr(state, "document_id", None),
+            "match_id": known(getattr(state, "match_id", None)),
+            "player_id": known(getattr(state, "player_id", None)),
+            "lifecycle": known(getattr(state, "lifecycle", None)),
+            "tick": known(getattr(state, "tick", None)),
+            "sequence": getattr(state, "sequence", None),
+            "sampled_at_ms": getattr(state, "sampled_at_ms", None),
+            "world_sequence_observed_at_ms": known(sequence_observed),
+            "source_update_window_ms": known(update_window)}
+
+
+def _preflight_identity(state):
+    metadata = _preflight_snapshot_metadata(state)
+    identity = tuple(metadata[key] for key in ("document_id", "match_id", "player_id", "lifecycle"))
+    if any(value is None for value in identity):
+        return None
+    return identity
+
+
+def _bounded_warm_seconds(value):
+    if (isinstance(value, bool) or not isinstance(value, (int, float)) or
+            not math.isfinite(value) or value < 0):
+        raise ValueError("warm_seconds must be a finite nonnegative number")
+    return min(float(value), 3.0)
+
+
+def friendly_candidate_preflight(state, raw, view, now_ms):
+    """Preview visible own Soldier-only friendly pairs without touching input."""
+    result = {"kind": "FRIENDLY_CANDIDATE_PREFLIGHT", "input_sent": False,
+              "preview_only": True, "status": "NO_ELIGIBLE_CANDIDATE",
+              "snapshot": _preflight_snapshot_metadata(state),
+              "candidates": [], "selected_preview": None, "exclusions": []}
+    if state.coverage != "PLAYER_VISIBLE_COMPLETE" or state.forces.value is None:
+        result["status"] = "NOT_READY"
+        result["exclusions"].append({"reason": "visible_actor_coverage_incomplete",
+                                     "coverage": state.coverage})
+        return result
+    readiness = control_readiness_gaps(state, now_ms)
+    if readiness:
+        result["status"] = "NOT_READY"
+        result["exclusions"].append({"reason": "control_readiness_gaps", "gaps": list(readiness)})
+        return result
+    if state.lifecycle.value != Lifecycle.IN_MATCH or not state.match_id.value or not state.player_id.value:
+        result["status"] = "NOT_READY"
+        result["exclusions"].append({"reason": "match_identity_or_lifecycle_unknown"})
+        return result
+    if not isinstance(raw, dict) or "selected_tower" not in raw or raw["selected_tower"] is not None:
+        result["exclusions"].append({"reason": "normal_deselection_not_explicitly_confirmed"})
+        return result
+    if (not isinstance(view, dict) or view.get("dpr") != 1 or view.get("left") != 0 or
+            view.get("top") != 0 or not all(type(view.get(key)) in (int, float)
+                                             for key in ("w", "h", "cw", "ch"))):
+        result["exclusions"].append({"reason": "unsupported_full_canvas_projection"})
+        return result
+    camera = raw.get("camera_candidate")
+    if not isinstance(camera, (tuple, list)) or len(camera) != 3:
+        result["exclusions"].append({"reason": "camera_candidate_unknown"})
+        return result
+
+    towers = {tower.id: tower for tower in state.towers}
+    player = state.player_id.value
+    for source in state.towers:
+        if source.owner.value != player or source.relation.value != Relation.SELF:
+            continue
+        mobile = _counts(source.deployable)
+        inventory = _counts(source.units)
+        if mobile is None or inventory is None:
+            result["exclusions"].append({"source": source.id, "reason": "source_typed_inventory_unknown"})
+            continue
+        typed = tuple(sorted((kind, amount) for kind, amount in mobile.items() if amount))
+        if typed != ((5, mobile.get(5, 0)),) or mobile.get(5, 0) <= 0:
+            result["exclusions"].append({"source": source.id, "reason": "source_not_soldier_only"})
+            continue
+        if inventory.get(9, 0) or mobile.get(9, 0):
+            result["exclusions"].append({"source": source.id, "reason": "source_contains_ruler"})
+            continue
+        effects = source.effects.value
+        boost = dict(effects).get("MORALE_BOOST") if effects is not None else None
+        if type(boost) is not bool:
+            result["exclusions"].append({"source": source.id, "reason": "source_morale_boost_unknown"})
+            continue
+        if source.supply_line_present.value is not False:
+            result["exclusions"].append({"source": source.id, "reason": "source_supply_line_not_false"})
+            continue
+        neighbors = source.neighbors.value
+        if not isinstance(neighbors, tuple):
+            result["exclusions"].append({"source": source.id, "reason": "source_neighbors_unknown"})
+            continue
+        for destination_id in neighbors:
+            destination = towers.get(destination_id)
+            if destination is None or destination.relation.value != Relation.SELF:
+                continue
+            if destination.owner.value != player:
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "friendly_destination_owner_unknown"})
+                continue
+            dest_units = _counts(destination.units)
+            if dest_units is None:
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "destination_typed_inventory_unknown"})
+                continue
+            if dest_units.get(9, 0):
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "destination_contains_ruler"})
+                continue
+            if destination.supply_line_present.value is not False:
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "destination_supply_line_not_false"})
+                continue
+            checked = validate_fresh_intent(state, source.id, destination_id, typed,
+                                            None, now_ms)
+            if isinstance(checked, str) or checked["scenario"] != "friendly_reinforcement":
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                    "reason": checked if isinstance(checked, str) else "not_friendly_reinforcement"})
+                continue
+            route = direct_route_certificate(state, source.id, destination_id,
+                client_sha256=state.client_sha256, selected_tower=None,
+                selection_confirmed=True, selection_tick=state.tick.value,
+                selection_sampled_at_ms=state.sampled_at_ms)
+            if route.get("qualified") is not True:
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "before_route_certificate:" + str(route.get("reason"))})
+                continue
+            try:
+                sx, sy = world_to_page(*source.position.value, *camera, view["w"], view["h"], 1)
+                dx, dy = world_to_page(*destination.position.value, *camera, view["w"], view["h"], 1)
+            except (TypeError, ValueError, ZeroDivisionError):
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "endpoint_projection_failed"})
+                continue
+            def safe_point(x, y):
+                return 80 < x < view["cw"] - 160 and 90 < y < view["ch"] - 110
+            if not (safe_point(sx, sy) and safe_point(dx, dy)):
+                result["exclusions"].append({"source": source.id, "destination": destination_id,
+                                              "reason": "endpoint_outside_safe_canvas"})
+                continue
+            result["candidates"].append({"scenario": "friendly_reinforcement",
+                "source": source.id, "destination": destination_id,
+                "scenario_class": checked["scenario_class"],
+                "scenario_ineligible_reasons": checked["scenario_ineligible_reasons"],
+                "morale_boost": boost,
+                "observed_deployable_baseline": typed,
+                "selected_tower_none_confirmed": True,
+                "source_supply_line_present": False,
+                "destination_supply_line_present": False,
+                "projected_source": [sx, sy], "projected_destination": [dx, dy],
+                "route_certificate": route})
+    result["candidates"].sort(key=lambda row: (row["source"], row["destination"]))
+    result["status"] = "PREVIEW_READY" if result["candidates"] else "NO_ELIGIBLE_CANDIDATE"
+    result["selected_preview"] = result["candidates"][0] if result["candidates"] else None
+    return result
+
+
+async def warm_friendly_candidate_preflight(extractor, state, raw, view, *, warm_seconds=3):
+    """Retry only ordinary extractor samples for up to three seconds when unready."""
+    bound = _bounded_warm_seconds(warm_seconds)
+    deadline = time.monotonic() + bound
+    samples, errors = 0, []
+    current_state, current_raw = state, raw
+    identity = _preflight_identity(state)
+    initial_snapshot = _preflight_snapshot_metadata(state)
+    if identity is None:
+        result = friendly_candidate_preflight(state, raw, view,
+            time.monotonic_ns() // 1_000_000)
+        result["status"] = "IDENTITY_UNKNOWN"
+        result["exclusions"].append({"reason": "initial_document_match_player_lifecycle_identity_unknown"})
+        result.update({"initial_snapshot": initial_snapshot, "sample_attempts": 0,
+                       "warm_seconds_limit": bound, "sample_errors": []})
+        return result
+    while True:
+        result = friendly_candidate_preflight(current_state, current_raw, view,
+            time.monotonic_ns() // 1_000_000)
+        result["sample_attempts"] = samples
+        result["warm_seconds_limit"] = bound
+        result["sample_errors"] = errors
+        result["initial_snapshot"] = initial_snapshot
+        if result["status"] != "NOT_READY" or time.monotonic() >= deadline:
+            return result
+        remaining = deadline - time.monotonic()
+        try:
+            next_state, next_raw = await asyncio.wait_for(extractor.sample(),
+                timeout=max(0.01, remaining))
+            samples += 1
+            if _preflight_identity(next_state) != identity:
+                result["status"] = "IDENTITY_CHANGED"
+                result["candidates"] = []
+                result["selected_preview"] = None
+                result["exclusions"].append({"reason": "document_match_player_or_lifecycle_changed_during_warm",
+                    "initial_identity": list(identity),
+                    "observed_identity": list(_preflight_identity(next_state) or ())})
+                result.update({"sample_attempts": samples, "warm_seconds_limit": bound,
+                               "sample_errors": errors,
+                               "latest_snapshot": _preflight_snapshot_metadata(next_state)})
+                return result
+            previous_meta = _preflight_snapshot_metadata(current_state)
+            next_meta = _preflight_snapshot_metadata(next_state)
+            if (type(next_meta["sequence"]) is not int or type(previous_meta["sequence"]) is not int or
+                    next_meta["sequence"] <= previous_meta["sequence"] or
+                    type(next_meta["sampled_at_ms"]) is not int or
+                    type(previous_meta["sampled_at_ms"]) is not int or
+                    next_meta["sampled_at_ms"] < previous_meta["sampled_at_ms"]):
+                result["status"] = "INCOHERENT_SAMPLE_ORDER"
+                result["candidates"] = []
+                result["selected_preview"] = None
+                result["exclusions"].append({"reason": "warmed_snapshot_sequence_or_time_not_increasing"})
+                result.update({"sample_attempts": samples, "warm_seconds_limit": bound,
+                               "sample_errors": errors,
+                               "latest_snapshot": next_meta})
+                return result
+            current_state, current_raw = next_state, next_raw
+            if time.monotonic() < deadline:
+                await asyncio.sleep(min(0.05, deadline - time.monotonic()))
+        except Exception as exc:
+            samples += 1
+            errors.append(f"{type(exc).__name__}: {exc}")
+            if time.monotonic() >= deadline:
+                result["sample_errors"] = errors
+                result["warm_deadline_reached"] = True
+                return result
+            await asyncio.sleep(min(0.1, deadline - time.monotonic()))
+
+
+def apply_preflight_hit_tests(preview, hit_results):
+    """Filter preview candidates by the already-read-only canvas hit tests."""
+    if preview.get("status") != "PREVIEW_READY":
+        return preview
+    candidates = preview.get("candidates", [])
+    if not isinstance(hit_results, list) or len(hit_results) != len(candidates):
+        hit_results = [{} for _ in candidates]
+    accepted = []
+    for candidate, hits in zip(candidates, hit_results):
+        if hits == {"source": True, "destination": True}:
+            candidate["endpoint_hit_tests"] = hits
+            accepted.append(candidate)
+        else:
+            preview["exclusions"].append({"source": candidate["source"],
+                "destination": candidate["destination"],
+                "reason": "projected_endpoint_canvas_hit_test_failed"})
+    preview["candidates"] = accepted
+    preview["status"] = "PREVIEW_READY" if accepted else "NO_ELIGIBLE_CANDIDATE"
+    preview["selected_preview"] = accepted[0] if accepted else None
+    return preview
 
 
 def require_deselected_selection_evidence(raw, stage):
@@ -572,26 +822,49 @@ async def run(args):
                   return c&&r?{w:c.width,h:c.height,cw:r.width,ch:r.height,left:r.left,top:r.top,dpr:devicePixelRatio}:null}""")
                 if not view or view["dpr"] != 1 or view["left"] != 0 or view["top"] != 0:
                     raise ValueError("unsupported full-canvas projection")
-                if args.source is None or args.destination is None:
-                    raise ValueError("supply one observed --source and --destination pair; no automatic target search")
-                initial_check = validate_scenario(initial, args.source, args.destination)
-                if isinstance(initial_check, str):
-                    exclusions.append({"source": args.source, "destination": args.destination,
-                                       "reason": initial_check})
-                    raise ValueError("requested pair excluded: " + initial_check)
-                if not args.execute:
+                if args.preflight:
+                    preview = await warm_friendly_candidate_preflight(ex, initial, initial_raw, view,
+                        warm_seconds=3)
+                    raw_candidates = preview["candidates"]
+                    if raw_candidates:
+                        points = [[row["projected_source"], row["projected_destination"]]
+                                  for row in raw_candidates]
+                        hit_results = await page.evaluate("""(pairs) => {
+                          const c=document.querySelector('canvas');
+                            return pairs.map(([s,d]) => ({source:document.elementFromPoint(...s)===c,
+                            destination:document.elementFromPoint(...d)===c}));}""", points)
+                        preview = apply_preflight_hit_tests(preview, hit_results)
+                    preview.update({"match_id": preview["snapshot"]["match_id"],
+                        "displayed_tick": preview["snapshot"]["tick"],
+                        "normal_deselection": "explicit selected_tower None required",
+                        "selection_effect": "none; preview only",
+                        "input_sent": False})
                     with path.open("w", encoding="utf8") as stream:
-                        plan = {"kind": "PLAN", "scenario": initial_check["scenario"],
-                            "scenario_class": initial_check["scenario_class"],
-                            "scenario_ineligible_reasons": initial_check["scenario_ineligible_reasons"],
-                            "match_id": initial_check["match_id"], "source": args.source,
-                            "destination": args.destination,
-                            "quantity_policy": "ALL_CURRENT_DEPLOYABLE",
-                            "observed_deployable_baseline": initial_check["typed_deployable"],
-                            "input_sent": False}
-                        stream.write(json.dumps(plan, ensure_ascii=False) + "\n")
-                        stream.flush()
-                    events.append(plan)
+                        durable_before(stream, preview)
+                    events.append(preview)
+                    initial_check = None
+                elif args.source is None or args.destination is None:
+                    raise ValueError("supply one observed --source and --destination pair; no automatic target search")
+                else:
+                    initial_check = validate_scenario(initial, args.source, args.destination)
+                    if isinstance(initial_check, str):
+                        exclusions.append({"source": args.source, "destination": args.destination,
+                                           "reason": initial_check})
+                        raise ValueError("requested pair excluded: " + initial_check)
+                if not args.execute:
+                    if not args.preflight:
+                        with path.open("w", encoding="utf8") as stream:
+                            plan = {"kind": "PLAN", "scenario": initial_check["scenario"],
+                                "scenario_class": initial_check["scenario_class"],
+                                "scenario_ineligible_reasons": initial_check["scenario_ineligible_reasons"],
+                                "match_id": initial_check["match_id"], "source": args.source,
+                                "destination": args.destination,
+                                "quantity_policy": "ALL_CURRENT_DEPLOYABLE",
+                                "observed_deployable_baseline": initial_check["typed_deployable"],
+                                "input_sent": False}
+                            stream.write(json.dumps(plan, ensure_ascii=False) + "\n")
+                            stream.flush()
+                        events.append(plan)
                 else:
                     with path.open("w", encoding="utf8") as stream:
                         checked, before = initial_check, initial
@@ -929,14 +1202,15 @@ async def run(args):
                     await asyncio.wait_for(ex.close(), timeout=3)
                 except Exception as exc:
                     errors.append(f"extractor close: {exc}")
-                if not page.is_closed():
+                if args.execute and not page.is_closed():
                     try:
                         await page.mouse.move(20, 20)
                     except Exception:
                         pass
     except Exception as exc:
         errors.append(f"{type(exc).__name__}: {exc}")
-    report = {"status": "PARTIAL", "run_id": run_id, "mode": "EXECUTE" if args.execute else "PLAN",
+    report = {"status": "PARTIAL", "run_id": run_id,
+        "mode": "EXECUTE" if args.execute else "PREFLIGHT" if args.preflight else "PLAN",
         "commands_limit": min(args.max_commands, 6), "seconds_limit": min(args.seconds, 180),
         "events": events, "exclusions": exclusions, "errors": errors,
         "source_manifest": source_manifest, "event_file": str(path.relative_to(ROOT)),
@@ -957,6 +1231,8 @@ async def run(args):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true", help="explicitly permit bounded ordinary UI commands")
+    parser.add_argument("--preflight", action="store_true",
+        help="preview currently visible eligible friendly Soldier pairs without sending input")
     parser.add_argument("--input-entry-observer", action="store_true",
         help="require a headless lease with the pre-start input-entry observer and adopt buffered event samples")
     parser.add_argument("--source", type=int, help="operator-selected positively visible own source")
@@ -970,6 +1246,8 @@ def parse_args(argv=None):
         parser.error("--seconds must be 5..180")
     if args.execute and (args.source is None or args.destination is None):
         parser.error("--execute requires explicit --source and --destination")
+    if args.preflight and (args.execute or args.source is not None or args.destination is not None):
+        parser.error("--preflight is preview-only and cannot be combined with execution or explicit endpoints")
     return args
 
 

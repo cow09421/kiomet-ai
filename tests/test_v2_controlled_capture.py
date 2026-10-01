@@ -16,7 +16,8 @@ from tools.v2_controlled_transition_capture import (
     durable_before, force_lineage_credit, is_project_headless_browser_process,
     record_before_gesture, require_deselected_selection_evidence,
     supply_line_guard_passed, validate_fresh_intent,
-    validate_scenario,
+    validate_scenario, friendly_candidate_preflight, warm_friendly_candidate_preflight,
+    parse_args, apply_preflight_hit_tests,
 )
 
 
@@ -60,6 +61,166 @@ def test_plan_requires_adjacent_visible_own_source_and_empty_neutral_destination
     assert planned["typed_deployable"] == ((1, 3),)
     assert validate_scenario(state(), 1, 9) == "endpoint_not_currently_visible"
     assert validate_scenario(state(), 1, 1) == "destination_not_adjacent"
+
+
+def test_friendly_preflight_is_read_only_strict_and_selects_only_a_preview(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+                        lambda *_args: ())
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.direct_route_certificate",
+        lambda *_args, **_kwargs: {"qualified": True, "scope": "BEFORE_SNAPSHOT_ONLY",
+                                   "gesture_continuity": "UNKNOWN", "path": [1, 2]})
+    source = tower(1, 7, Relation.SELF, neighbor=(2,), mobile={"soldier": 4},
+                   inventory={"soldier": 4}, cap={"soldier": 10})
+    destination = tower(2, 7, Relation.SELF, neighbor=(1,), mobile={},
+                        inventory={}, cap={})
+    current = state(source, destination)
+    current.client_sha256 = "pinned"
+    current.tick = fact(8)
+    current.sampled_at_ms = 1000
+    raw = {"selected_tower": None, "camera_candidate": [10, 0, 100]}
+    view = {"w": 800, "h": 600, "cw": 800, "ch": 600,
+            "left": 0, "top": 0, "dpr": 1}
+    preview = friendly_candidate_preflight(current, raw, view, 1000)
+    assert preview["status"] == "PREVIEW_READY"
+    assert preview["input_sent"] is False and preview["preview_only"] is True
+    assert preview["selected_preview"]["source"] == 1
+    assert preview["selected_preview"]["destination"] == 2
+    assert preview["selected_preview"]["observed_deployable_baseline"] == ((5, 4),)
+    assert preview["selected_preview"]["selected_tower_none_confirmed"] is True
+    assert preview["selected_preview"]["route_certificate"]["gesture_continuity"] == "UNKNOWN"
+
+    boosted_source = tower(1, 7, Relation.SELF, neighbor=(2,), mobile={"soldier": 4},
+                           inventory={"soldier": 4}, cap={"soldier": 10}, morale=True)
+    current.towers = (boosted_source, destination)
+    boosted = friendly_candidate_preflight(current, raw, view, 1000)
+    assert boosted["status"] == "PREVIEW_READY"
+    assert boosted["selected_preview"]["morale_boost"] is True
+
+    for bad_raw, coverage, reason in [
+        ({"camera_candidate": [10, 0, 100]}, "PLAYER_VISIBLE_COMPLETE",
+         "normal_deselection_not_explicitly_confirmed"),
+        ({"selected_tower": 1, "camera_candidate": [10, 0, 100]}, "PLAYER_VISIBLE_COMPLETE",
+         "normal_deselection_not_explicitly_confirmed"),
+        (raw, "PARTIAL", "visible_actor_coverage_incomplete"),
+    ]:
+        current.coverage = coverage
+        result = friendly_candidate_preflight(current, bad_raw, view, 1000)
+        assert result["status"] == "NOT_READY" if coverage == "PARTIAL" else result["status"] == "NO_ELIGIBLE_CANDIDATE"
+        assert any(row["reason"] == reason for row in result["exclusions"])
+        assert result["input_sent"] is False and result["selected_preview"] is None
+    current.coverage = "PLAYER_VISIBLE_COMPLETE"
+
+
+def test_preflight_warms_only_until_three_second_bound(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.friendly_candidate_preflight",
+        lambda *_args: {"status": "NOT_READY", "input_sent": False, "candidates": [],
+                        "exclusions": [{"reason": "visible_actor_coverage_incomplete"}]})
+    clock = [0.0]
+    sleeps = []
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.time.monotonic",
+                        lambda: clock[0])
+
+    async def fake_sleep(seconds):
+        sleeps.append(seconds)
+        clock[0] += seconds
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.asyncio.sleep", fake_sleep)
+
+    def warming_state(sequence, tick, sampled_at, match="match-A"):
+        return NS(document_id="doc-A", match_id=fact(match), player_id=fact(7),
+            lifecycle=fact(Lifecycle.IN_MATCH), sequence=sequence,
+            sampled_at_ms=sampled_at, tick=fact(tick),
+            world_sequence_observed_at_ms=fact(sampled_at), source_update_window_ms=fact(None))
+
+    current = [warming_state(1, 10, 100)]
+
+    class Extractor:
+        calls = 0
+
+        async def sample(self):
+            self.calls += 1
+            clock[0] += 1.5 if self.calls == 1 else 1.45
+            current[0] = warming_state(current[0].sequence + 1, 10 + self.calls,
+                                       current[0].sampled_at_ms + 1500)
+            return current[0], {}
+
+    result = asyncio.run(warm_friendly_candidate_preflight(
+        Extractor(), current[0], {}, {}, warm_seconds=30))
+    assert result["warm_seconds_limit"] == 3
+    assert result["sample_attempts"] <= 2
+    assert clock[0] <= 3
+    assert sleeps and all(0 < value <= 0.05 for value in sleeps)
+
+
+def test_preflight_uses_latest_coherent_snapshot_and_refuses_identity_change(monkeypatch):
+    def warming_state(sequence, tick, sampled_at, match="match-A", doc="doc-A"):
+        return NS(document_id=doc, match_id=fact(match), player_id=fact(7),
+            lifecycle=fact(Lifecycle.IN_MATCH), sequence=sequence,
+            sampled_at_ms=sampled_at, tick=fact(tick),
+            world_sequence_observed_at_ms=fact(sampled_at), source_update_window_ms=fact(None))
+
+    initial = warming_state(1, 10, 100)
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.friendly_candidate_preflight",
+        lambda state, *_args: {"status": "NOT_READY" if state.sequence == 1 else "NO_ELIGIBLE_CANDIDATE",
+            "input_sent": False, "candidates": [], "selected_preview": None, "exclusions": [],
+            "snapshot": {"document_id": state.document_id, "match_id": state.match_id.value,
+                "player_id": state.player_id.value, "lifecycle": state.lifecycle.value,
+                "tick": state.tick.value, "sequence": state.sequence,
+                "sampled_at_ms": state.sampled_at_ms}})
+
+    class SameMatchExtractor:
+        async def sample(self):
+            return warming_state(2, 11, 200), {}
+
+    latest = asyncio.run(warm_friendly_candidate_preflight(
+        SameMatchExtractor(), initial, {}, {}, warm_seconds=1))
+    assert latest["status"] == "NO_ELIGIBLE_CANDIDATE"
+    assert latest["snapshot"]["tick"] == 11 and latest["snapshot"]["sequence"] == 2
+    assert latest["initial_snapshot"]["tick"] == 10
+
+    class ChangedMatchExtractor:
+        async def sample(self):
+            return warming_state(2, 1, 200, match="match-B"), {}
+
+    changed = asyncio.run(warm_friendly_candidate_preflight(
+        ChangedMatchExtractor(), initial, {}, {}, warm_seconds=1))
+    assert changed["status"] == "IDENTITY_CHANGED"
+    assert changed["candidates"] == [] and changed["selected_preview"] is None
+    assert changed["snapshot"]["match_id"] == "match-A"
+    assert changed["snapshot"]["tick"] == 10 and changed["snapshot"]["sequence"] == 1
+    assert changed["latest_snapshot"]["match_id"] == "match-B"
+
+
+def test_preflight_hit_test_filter_preserves_warm_guard_failure_statuses():
+    rejected = {"status": "IDENTITY_CHANGED", "snapshot": {"tick": 10},
+                "latest_snapshot": {"tick": 11}, "candidates": [],
+                "selected_preview": None, "exclusions": []}
+    assert apply_preflight_hit_tests(rejected, []) is rejected
+    assert rejected["status"] == "IDENTITY_CHANGED"
+    assert rejected["snapshot"]["tick"] == 10
+    assert rejected["latest_snapshot"]["tick"] == 11
+
+    preview = {"status": "PREVIEW_READY", "candidates": [
+        {"source": 1, "destination": 2}], "selected_preview": None, "exclusions": []}
+    filtered = apply_preflight_hit_tests(preview, [{"source": False, "destination": True}])
+    assert filtered["status"] == "NO_ELIGIBLE_CANDIDATE"
+    assert filtered["selected_preview"] is None
+    assert filtered["exclusions"] == [{"source": 1, "destination": 2,
+        "reason": "projected_endpoint_canvas_hit_test_failed"}]
+
+
+@pytest.mark.parametrize("value", [True, float("nan"), float("inf"), float("-inf"), -0.1])
+def test_preflight_rejects_invalid_warm_bounds(value):
+    with pytest.raises(ValueError, match="finite nonnegative"):
+        asyncio.run(warm_friendly_candidate_preflight(None, object(), {}, {}, warm_seconds=value))
+
+
+def test_preflight_cli_cannot_be_combined_with_actions_or_endpoints():
+    preview = parse_args(["--preflight"])
+    assert preview.preflight and not preview.execute
+    with pytest.raises(SystemExit):
+        parse_args(["--preflight", "--execute", "--source", "1", "--destination", "2"])
+    with pytest.raises(SystemExit):
+        parse_args(["--preflight", "--source", "1", "--destination", "2"])
 
 
 def test_refuses_nonempty_neutral_weapons_ruler_morale_and_overflow():
