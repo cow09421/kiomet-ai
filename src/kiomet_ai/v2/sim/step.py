@@ -45,6 +45,12 @@ def movement_parameters(units,source_position,destination_position):
     return speed,required
 
 
+def _captured_relation(owner,player,arriving_relation):
+    if owner==player and player>0: return 'SELF'
+    if owner==0: return 'NEUTRAL'
+    return arriving_relation if arriving_relation in ('ALLY','ENEMY') else None
+
+
 def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenario=Scenario()):
     if not scenario.fixed_morale: raise UnsupportedState('DYNAMIC_MORALE_AURA')
     towers={tower.id:tower for tower in state.towers}
@@ -87,7 +93,8 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             if clock%period==0:
                 if unit in (6,7,8,9): raise UnsupportedState('SPECIAL_PRODUCTION')
                 if 1<=unit<=5 and any(units[6:10]): continue  # Many cannot enter a Single vector.
-                if tower.owner and not units[9] and (unit or tower.kind==15) and tower.capacity[unit]-units[unit]<2:
+                if (tower.owner and not units[9] and (unit or tower.kind==15)
+                        and tower.capacity[unit]-units[unit]<2 and tower.supply_line_present is not False):
                     raise UnsupportedState('PRODUCTION_SUPPLY_LINE')
                 # add_inner does not truncate pre-existing overflow.
                 if units[unit]<tower.capacity[unit]:
@@ -124,7 +131,9 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             if fight.winner is None: raise UnsupportedState('DESTRUCTION_DOWNGRADE')
             force=replace(force,units=fight.attacker)
             periods=production(dst.kind,Units(tuple(enumerate(force.units))),force.owner,dst.delay,dst.morale)
-            towers[dst.id]=dst=replace(dst,owner=force.owner,production=periods)
+            towers[dst.id]=dst=replace(dst,owner=force.owner,production=periods,
+                                      relation=_captured_relation(force.owner,state.player,force.relation),
+                                      supply_line_present=False if force.owner==state.player else None)
         if index not in terminals and force.terminal is not True: raise UnsupportedState('UNKNOWN_POST_ARRIVAL_PATH')
         if force.fuel is None: raise UnsupportedState('UNKNOWN_ARRIVAL_FUEL')
         if force.fuel<=0: raise UnsupportedState('EXPIRED_ARRIVAL')
@@ -133,8 +142,11 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             # A terminal Many force can acquire the destination supply line
             # and move on instead of merging. Ownership changes clear that line;
             # an already friendly destination requires an independent premise.
-            if same_owner_before_arrival and dst.id not in no_supply_lines:
-                raise UnsupportedState('UNKNOWN_REINFORCEMENT_SUPPLY_LINE')
+            if same_owner_before_arrival:
+                if dst.supply_line_present is True:
+                    raise UnsupportedState('UNSUPPORTED_REINFORCEMENT_SUPPLY_LINE')
+                if dst.supply_line_present is not False and dst.id not in no_supply_lines:
+                    raise UnsupportedState('UNKNOWN_REINFORCEMENT_SUPPLY_LINE')
             if dst.units[9] and any(force.units[1:6]): raise UnsupportedState('SINGLE_REINFORCEMENT_PRIORITY')
             combined=tuple(a+b for a,b in zip(dst.units,force.units))
             if any(n>dst.capacity[i] for i,n in enumerate(combined)): raise UnsupportedState('REINFORCEMENT_OVERFLOW')
@@ -143,7 +155,9 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             if not any(force.units[1:6]): raise UnsupportedState('NON_CLAIMING_FORCE')
             if any(n>dst.capacity[i] for i,n in enumerate(force.units)): raise UnsupportedState('CAPTURE_OVERFLOW')
             periods=production(dst.kind,Units(tuple(enumerate(force.units))),force.owner,dst.delay,dst.morale)
-            towers[dst.id]=replace(dst,owner=force.owner,units=force.units,production=periods)
+            towers[dst.id]=replace(dst,owner=force.owner,units=force.units,production=periods,
+                                  relation=_captured_relation(force.owner,state.player,force.relation),
+                                  supply_line_present=False if force.owner==state.player else None)
         else:
             raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
     # Kiomet tick_before_inputs advances the existing world, then inputs create

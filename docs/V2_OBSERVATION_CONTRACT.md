@@ -142,3 +142,35 @@ still reject a minimum simulation. Each simulator must also reject unsupported
 mechanics, uncertain future routes, unobserved actions and missing required inputs.
 This amendment changes the control-time gate only; visibility, provenance, input
 isolation, version pinning and unknown semantics continue to apply in full.
+
+## M2 optional own supply-line presence
+
+`Tower.supply_line_present` is an optional OBSERVED Boolean, not a minimum M1B
+readiness field. Omitted historical fields remain UNKNOWN/None. Known values
+require a positively visible current tower, exact positive-integer own player
+and owner identity, SELF relation, and the pinned active NETWORK/nonpending/
+nonexpanded observation gates. Derived known Boolean values and bool/int identity
+aliases are rejected. Compact simulation state checks ownership independently;
+it does not treat a relation label as an ownership certificate.
+
+The pinned normal own-tower overlay checks the Option tag at Tower+24. The decoder
+reads only that four-byte tag after ownership qualification: 0x80000000 is None
+(False); a low-half tag is Some (True); unsupported high-half tags remain UNKNOWN.
+It never reads supply-line pointer/length/route fields at +28/+32 or path entries,
+and never reads the tag for foreign/allied/neutral towers. This is presence only,
+not a terminal route, fuel, relay destination or action-eligibility certificate.
+No observed True case has independent live UI validation yet. Synthetic Some
+tests and negative-only passive observations are contract evidence, not an
+independent Boolean accuracy gate or malformed-vector characterization.
+
+Observed False permits limited no-line production/reinforcement semantics.
+Observed True still refuses unsupported relay mechanics; an explicit scenario
+absence premise cannot override it. Unknown remains unknown and requires an
+independent scenario premise where applicable. Pinned capture-time absence is a
+simulator rule prediction, not a newly observed canonical fact.
+
+For visible-to-visible forces, the pinned inbound vector is the observation
+source. Preserve its snapshot-local per-destination queue order through tracking
+and canonical conversion. Tracker IDs, a global force sort and multiset output
+agreement do not establish that order. No production world-wide ordering between
+different destination towers is claimed from the adapter's y/x traversal.

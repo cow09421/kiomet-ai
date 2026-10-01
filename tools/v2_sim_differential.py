@@ -38,7 +38,7 @@ def input_has_potential_event(state):
                 continue
             if tower.units[unit]<tower.capacity[unit]:
                 return True
-            if not tower.units[9] and (unit or tower.kind==15):
+            if not tower.units[9] and (unit or tower.kind==15) and tower.supply_line_present is not False:
                 return True  # Full mobile production may auto-deploy; do not ignore it.
     return False
 
@@ -72,11 +72,32 @@ def input_event_categories(state):
 
 
 def signature(state):
-    return {'world_sequence':state.world_sequence,
+    result={'world_sequence':state.world_sequence,
             'towers':[(t.id,t.owner,t.kind,t.units,t.delay,t.morale) for t in state.towers],
+            'tower_context':[(t.id,t.capacity,t.production,t.neighbors,t.position,t.relation)
+                             for t in sorted(state.towers,key=lambda t:t.id)],
             # Multiset comparison does not pretend observer IDs are permanent.
             'forces':sorted((f.owner,f.source,f.destination,f.units,f.progress) for f in state.forces),
+            'force_context':sorted(
+                ((f.owner,f.source,f.destination,f.units,f.progress,f.accelerated,f.relation)
+                 for f in state.forces),
+                key=lambda row:(row[0],row[1],row[2],row[3],row[4],
+                                (row[5] is not None,row[5] if row[5] is not None else False),
+                                (row[6] is not None,row[6] if row[6] is not None else ''))),
+            'inbound_order':_inbound_order(state.forces),
             'rulers':sorted(state.visible_rulers)}
+    lines=sorted((t.id,t.supply_line_present) for t in state.towers if t.supply_line_present is not None)
+    if lines: result['supply_lines']=lines
+    return result
+
+
+def _inbound_order(forces):
+    """Snapshot-local per-destination queue order; global cross-target order is irrelevant."""
+    queues={}
+    for force in forces:
+        queues.setdefault(force.destination,[]).append(
+            (force.owner,force.source,force.units,force.progress,force.accelerated,force.relation))
+    return [(destination,tuple(queues[destination])) for destination in sorted(queues)]
 
 
 def inspect(cohort, ground_combat=False, ordinary_combat=False):

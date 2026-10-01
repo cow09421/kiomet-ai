@@ -42,6 +42,11 @@ class SimTower:
     delay: int
     morale: bool
     relation: str | None=None
+    supply_line_present: bool | None=None
+
+    def __post_init__(self):
+        if self.supply_line_present is not None and type(self.supply_line_present) is not bool:
+            raise UnsupportedState('INVALID_SUPPLY_LINE_FLAG')
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,6 +71,13 @@ class SimulationState:
     towers: tuple[SimTower,...]
     forces: tuple[SimForce,...]
     simulated_ticks: int=0
+
+    def __post_init__(self):
+        if any(t.supply_line_present is not None and
+               (type(self.player) is not int or self.player <= 0 or
+                type(t.owner) is not int or t.owner <= 0 or t.owner != self.player)
+               for t in self.towers):
+            raise ValueError('known supply-line presence is own-only')
 
     @property
     def visible_rulers(self):
@@ -100,7 +112,8 @@ def from_canonical(state, now_ms=None):
         if set(effects)-{'MORALE_BOOST'}: raise UnsupportedState('COMPLEX_AURA')
         if 'MORALE_BOOST' not in effects: raise UnsupportedState('UNKNOWN_MORALE')
         towers.append(SimTower(tower.id,tower.owner.value,tower.tower_type.value,units,cap,
-            periods,tower.neighbors.value,tower.position.value,tower.delay_ticks.value,effects['MORALE_BOOST'],tower.relation.value))
+            periods,tower.neighbors.value,tower.position.value,tower.delay_ticks.value,effects['MORALE_BOOST'],tower.relation.value,
+            tower.supply_line_present.value))
     forces=[]
     for force in state.forces.value or ():
         units=unit_tuple(force.units)

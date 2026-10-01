@@ -1,0 +1,487 @@
+{
+  "status": "CLASSIFIED_WITH_UNKNOWNS_NO_PASS",
+  "scope": "Finite read-only classification of the 13 intermediate mismatches retained in docs/V2_M2A_TRAJECTORIES.json.",
+  "method": "Used existing trajectory mismatch summaries and raw retained snapshots only. For each mismatch, the before reference is the first retained observation at the immediately preceding world tick (same-tick duplicate polls are skipped, matching the report's selection rule); after is the retained observation at the mismatch sequence. No simulator comparison was rerun and no after-state was used as an input.",
+  "summary": {
+    "retained_intermediate_failures": 13,
+    "classified_visible_force_births": 13,
+    "independent_before_action_or_queue_inputs_available": 0,
+    "current_segment_endpoints_observed_after_birth": 13,
+    "terminal_routes_known_before": 0,
+    "fuel_known_before": 0,
+    "historical_matched_trajectories_preserved": 2,
+    "m2_pass": false
+  },
+  "interpretation": {
+    "observed": "At each mismatch boundary, the observed signature contains a new visible force absent from the immediately preceding retained world-tick observation. The source tower's observed unit vector has lost the force's reported unit counts, while the model-predicted source tower retains those counts and the predicted force set lacks the new force. This establishes a visible state transition, not the initiating command or its cause.",
+    "cause": "The initiating action, command queue, actor, and command acceptance are not recorded in these snapshots. A queued/external launch or an omitted deterministic launch rule remain hypotheses; neither is proven by the retained evidence.",
+    "route_and_fuel": "The raw force observation supplies the current visible segment source/destination, unit vector, progress, and acceleration. It does not establish the terminal route before launch; launch_ms is marked UNKNOWN in the observation schema, and no independent pre-action fuel input is retained. Do not infer route continuation, arrival, fuel, or success.",
+    "queue": "After birth the visible force contributes to the observed per-destination force ordering. No pre-action command queue or independent queue input is present, so this is an observed post-state queue membership difference only.",
+    "limits": "All 13 remain intermediate mismatches. The two historical matched trajectories remain untouched. This audit does not establish M2PASS."
+  },
+  "failures": [
+    {
+      "cohort": "03d032d57e5b",
+      "trajectory_start_sequence": 1093,
+      "mismatch_sequence": 1105,
+      "comparison_ticks": 6,
+      "before": {
+        "file": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+        "sequence": 1104,
+        "world_tick": 21324
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+        "sequence": 1105,
+        "world_tick": 21325
+      },
+      "observed_new_force": {
+        "owner": 10,
+        "source": 13893863,
+        "destination": 13828326,
+        "unit_counts_by_index": {
+          "4": 1,
+          "5": 3
+        },
+        "progress": 0
+      },
+      "source_tower": 13893863,
+      "observed_delta": "The observed force set adds the reverse leg 13893863->13828326; the observed source tower lacks the 1 type-4 and 3 type-5 units retained there by the prediction.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 445,
+      "mismatch_sequence": 451,
+      "comparison_ticks": 3,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 450,
+        "world_tick": 23899
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 451,
+        "world_tick": 23900
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17236238,
+        "destination": 17236237,
+        "unit_counts_by_index": {
+          "1": 3
+        },
+        "progress": 0
+      },
+      "source_tower": 17236238,
+      "observed_delta": "The observed force set adds 3 type-1 units on 17236238->17236237; the observed source tower has 0 type-1 units where the prediction retains 3.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 637,
+      "mismatch_sequence": 639,
+      "comparison_ticks": 1,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 637,
+        "world_tick": 23993
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 639,
+        "world_tick": 23994
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17301773,
+        "destination": 17301772,
+        "unit_counts_by_index": {
+          "3": 4
+        },
+        "progress": 0
+      },
+      "source_tower": 17301773,
+      "observed_delta": "The observed force set adds 4 type-3 units on 17301773->17301772; the observed source tower has 0 type-3 units where the prediction retains 4.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 757,
+      "mismatch_sequence": 773,
+      "comparison_ticks": 8,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 772,
+        "world_tick": 24060
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 773,
+        "world_tick": 24061
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17236237,
+        "destination": 17301773,
+        "unit_counts_by_index": {
+          "1": 2
+        },
+        "progress": 0
+      },
+      "source_tower": 17236237,
+      "observed_delta": "The observed force set adds 2 type-1 units on 17236237->17301773; the observed source tower has 0 type-1 units where the prediction retains 2.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 973,
+      "mismatch_sequence": 987,
+      "comparison_ticks": 7,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 986,
+        "world_tick": 24167
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 987,
+        "world_tick": 24168
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17236238,
+        "destination": 17236237,
+        "unit_counts_by_index": {
+          "1": 2
+        },
+        "progress": 0
+      },
+      "source_tower": 17236238,
+      "observed_delta": "The observed force set adds 2 type-1 units on 17236238->17236237; the observed source tower has 0 type-1 units where the prediction retains 2.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 1357,
+      "mismatch_sequence": 1369,
+      "comparison_ticks": 6,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1368,
+        "world_tick": 24358
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1369,
+        "world_tick": 24359
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17236238,
+        "destination": 17236237,
+        "unit_counts_by_index": {
+          "1": 2
+        },
+        "progress": 0
+      },
+      "source_tower": 17236238,
+      "observed_delta": "The observed force set adds 2 type-1 units on 17236238->17236237; the observed source tower has 0 type-1 units where the prediction retains 2.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 1549,
+      "mismatch_sequence": 1565,
+      "comparison_ticks": 8,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1564,
+        "world_tick": 24456
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1565,
+        "world_tick": 24457
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17301773,
+        "destination": 17367309,
+        "unit_counts_by_index": {
+          "3": 1
+        },
+        "progress": 0
+      },
+      "source_tower": 17301773,
+      "observed_delta": "The observed force set adds 1 type-3 unit on 17301773->17367309; the observed source tower has 0 type-3 units where the prediction retains 1.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 1693,
+      "mismatch_sequence": 1699,
+      "comparison_ticks": 3,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1698,
+        "world_tick": 24523
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1699,
+        "world_tick": 24524
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17301773,
+        "destination": 17301772,
+        "unit_counts_by_index": {
+          "3": 1
+        },
+        "progress": 0
+      },
+      "source_tower": 17301773,
+      "observed_delta": "The observed force set adds 1 type-3 unit on 17301773->17301772; the observed source tower has 0 type-3 units where the prediction retains 1. A separate owner-30 force is present in both signatures.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "trajectory_start_sequence": 1827,
+      "mismatch_sequence": 1831,
+      "comparison_ticks": 2,
+      "before": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1830,
+        "world_tick": 24589
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+        "sequence": 1831,
+        "world_tick": 24590
+      },
+      "observed_new_force": {
+        "owner": 24,
+        "source": 17236238,
+        "destination": 17236237,
+        "unit_counts_by_index": {
+          "1": 2
+        },
+        "progress": 0
+      },
+      "source_tower": 17236238,
+      "observed_delta": "The observed force set adds 2 type-1 units on 17236238->17236237; the observed source tower has 0 type-1 units where the prediction retains 2.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "85391858b5d8",
+      "trajectory_start_sequence": 1378,
+      "mismatch_sequence": 1392,
+      "comparison_ticks": 7,
+      "before": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 1391,
+        "world_tick": 31222
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 1392,
+        "world_tick": 31223
+      },
+      "observed_new_force": {
+        "owner": 43,
+        "source": 15204568,
+        "destination": 15139033,
+        "unit_counts_by_index": {
+          "1": 2,
+          "5": 5
+        },
+        "progress": 0
+      },
+      "source_tower": 15204568,
+      "observed_delta": "The observed force set adds 2 type-1 and 5 type-5 units on 15204568->15139033; the observed source tower has 0 of those types where the prediction retains them.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "85391858b5d8",
+      "trajectory_start_sequence": 2242,
+      "mismatch_sequence": 2244,
+      "comparison_ticks": 1,
+      "before": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 2242,
+        "world_tick": 31648
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 2244,
+        "world_tick": 31649
+      },
+      "observed_new_force": {
+        "owner": 43,
+        "source": 15204568,
+        "destination": 15204569,
+        "unit_counts_by_index": {
+          "1": 3
+        },
+        "progress": 0
+      },
+      "source_tower": 15204568,
+      "observed_delta": "The observed force set adds 3 type-1 units on 15204568->15204569; the observed source tower has 0 type-1 units where the prediction retains 3.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "85391858b5d8",
+      "trajectory_start_sequence": 2338,
+      "mismatch_sequence": 2342,
+      "comparison_ticks": 2,
+      "before": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 2341,
+        "world_tick": 31697
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-85391858b5d8.jsonl",
+        "sequence": 2342,
+        "world_tick": 31698
+      },
+      "observed_new_force": {
+        "owner": 43,
+        "source": 15073496,
+        "destination": 15073497,
+        "unit_counts_by_index": {
+          "1": 3
+        },
+        "progress": 0
+      },
+      "source_tower": 15073496,
+      "observed_delta": "The observed force set adds 3 type-1 units on 15073496->15073497; the observed source tower has 0 type-1 units where the prediction retains 3.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "trajectory_start_sequence": 1116,
+      "mismatch_sequence": 1120,
+      "comparison_ticks": 2,
+      "before": {
+        "file": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+        "sequence": 1119,
+        "world_tick": 46506
+      },
+      "after": {
+        "file": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+        "sequence": 1120,
+        "world_tick": 46507
+      },
+      "observed_new_force": {
+        "owner": 29,
+        "source": 17694979,
+        "destination": 17694980,
+        "unit_counts_by_index": {
+          "3": 2,
+          "5": 1
+        },
+        "progress": 0
+      },
+      "source_tower": 17694979,
+      "observed_delta": "The observed force set adds 2 type-3 and 1 type-5 units on 17694979->17694980; the observed source tower has 0 of those types where the prediction retains them. The other three predicted forces are present in the observed force set.",
+      "evidence_class": "visible_force_birth_and_source_unit_departure; initiating_action_unknown",
+      "independent_beforeinputs_available": false,
+      "terminal_route_known_before": false,
+      "fuel_known_before": false,
+      "cause_hypothesis": "A launch/command or an omitted launch mechanic could explain the departure; the cause is not evidenced."
+    }
+  ],
+  "preservation": {
+    "source_report_failure_count": 13,
+    "source_report_matched_trajectories": [
+      {
+        "cohort": "fe678ebb30ce",
+        "start": 3097,
+        "end": 3137,
+        "ticks": 20,
+        "event_ticks": 20
+      },
+      {
+        "cohort": "b1f7f9416e92",
+        "start": 1,
+        "end": 41,
+        "ticks": 20,
+        "event_ticks": 3
+      }
+    ],
+    "original_report_rewritten": false,
+    "matched_trajectories_rewritten": false,
+    "m2pass_claimed": false
+  },
+  "source_sha256": {
+    "docs/V2_M2A_TRAJECTORIES.json": "95db96effecd2853448b9306f45dad05c41dc18f69a2a3039da12521d9751648",
+    "tools/v2_sim_trajectories.py": "ec878814b5cb2846011edebcab2b27cf7c4a958be12217ba5cd9a683f2fe3194",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "runtime/research/v2/snapshots-03d032d57e5b.jsonl": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "runtime/research/v2/snapshots-daf86d0544b7.jsonl": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "runtime/research/v2/snapshots-85391858b5d8.jsonl": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+    "runtime/research/v2/snapshots-7d56a775bc4c.jsonl": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+    "runtime/research/v2/luna-corpus/7d56a775bc4c-candidates.json": "b4db83ad71678065314026a667aa75aac623a882458787bf9de55d565987b32f",
+    "runtime/research/v2/luna-corpus/85391858b5d8-candidates.json": "7bd8adb10395b67e9bc62973830a8c9bc664b5366ae9bda43926b058ab076af7",
+    "runtime/research/v2/luna-corpus/785512e8888b-candidates.json": "7acc517bad20721cc6580677b81c4c5476e3b47f3247d4f9b39e4a3d758cf852",
+    "runtime/research/v2/m2a-first-trajectory-full-failures.json": "3d6193190809c3483ae9532a893f20bd28ae82727e8905fbd444c326df3ec007"
+  },
+  "hashes_verified": {
+    "verified": true,
+    "algorithm": "SHA-256",
+    "files_checked": 13,
+    "method": "Recomputed from source file bytes."
+  },
+  "root_admission": "Thirteen retained references and all source hashes verified; classified observed deltas only. Original trajectory report and both historical matches preserved; no current simulator replay or inferred-action accuracy credit."
+}

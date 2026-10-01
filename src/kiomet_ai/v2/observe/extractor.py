@@ -98,6 +98,13 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         if type(owner) is not int or not 0 <= owner <= 65535:
             raise ValueError("invalid owner")
         relation = Relation(row["relation"]) if row["relation"] is not None else None
+        supply_line=row.get('supply_line_present')
+        if supply_line is not None:
+            if type(supply_line) is not bool: raise ValueError('invalid supply-line presence flag')
+            player=raw.get('player_id')
+            if (type(player) is not int or player <= 0 or owner <= 0 or
+                    owner != player or relation!=Relation.SELF):
+                raise ValueError('supply-line presence is own-only')
         units=decode_units(row['units7'])
         morale,delay=row.get('morale'),row.get('delay_ticks')
         if morale is not None and (type(morale) is not int or morale not in (0,1)):
@@ -109,6 +116,8 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
             own_unlocks['unlocked_types'] if own_unlocks is not None else None) if relation==Relation.SELF else None
         towers.append(Tower(row["id"], observed(True, row["visibility_source"], at),
             owner=observed(owner, "Tower.owner+36", at),
+            supply_line_present=observed(supply_line,
+                'pinned normal owner supply-line overlay: Tower+24 Option sentinel; presence only, no route',at),
             relation=(Fact(relation,Knowledge.DERIVED,'pinned normal Color::new bilateral alliance membership',at)
                       if relation in (Relation.ALLY,Relation.ENEMY) else observed(relation, "client player identity comparison", at)),
             tower_type=observed(typ, "Tower.type+46", at),

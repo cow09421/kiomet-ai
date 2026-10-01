@@ -95,12 +95,19 @@ class Tower:
     effects: Fact[tuple] = field(default_factory=Fact)
     # Delay can be caused by upgrade or EMP; never assume its cause.
     delay_ticks: Fact[int] = field(default_factory=Fact)
+    # Only currently visible SELF towers expose presence, never path contents.
+    supply_line_present: Fact[bool] = field(default_factory=Fact)
 
     def __post_init__(self):
         if type(self.id) is not int or self.id < 0:
             raise ValueError("invalid tower ID")
         if self.visibility.value is not True or self.visibility.knowledge != Knowledge.OBSERVED:
             raise ValueError("current towers require positively observed visibility")
+        if self.supply_line_present.value is not None and type(self.supply_line_present.value) is not bool:
+            raise ValueError('invalid supply-line presence flag')
+        if (self.supply_line_present.value is not None and
+                self.supply_line_present.knowledge != Knowledge.OBSERVED):
+            raise ValueError('known supply-line presence must be observed')
 
 
 @dataclass(frozen=True, slots=True)
@@ -191,6 +198,12 @@ class GameState:
         if self.coverage == 'PLAYER_VISIBLE_COMPLETE' and self.coverage_evidence.knowledge == Knowledge.UNKNOWN:
             raise ValueError('complete visibility coverage requires evidence')
         for tower in self.towers:
+            if tower.supply_line_present.value is not None and (
+                    type(self.player_id.value) is not int or self.player_id.value <= 0 or
+                    type(tower.owner.value) is not int or tower.owner.value <= 0 or
+                    tower.owner.value != self.player_id.value or
+                    tower.relation.value!=Relation.SELF):
+                raise ValueError('supply-line presence is own-only')
             if tower.neighbors.value is not None and any(n not in ids for n in tower.neighbors.value):
                 raise ValueError("graph exposes an unobserved tower")
         for force in self.forces.value or ():

@@ -1,34 +1,202 @@
 {
   "status": "MEASURED_SUPPORTED_SCOPE_ONLY",
+  "candidate_only": true,
+  "pass": false,
+  "corpus": "runtime/research/v2/luna-corpus/manager-checkpoint-development-corpus.jsonl",
   "input_cases": 611,
-  "complete_transitions": 300612,
-  "elapsed_seconds": 5.335818400140852,
-  "complete_transitions_per_second": 56884.21056685917,
-  "rate_statistic": "median of three trials, each >=100000 complete transitions",
+  "all_corpus_cases_matched_before_measurement": true,
+  "mismatches": 0,
+  "genuine_event_inputs": 611,
+  "static_outputs": 0,
+  "restored_cases_by_cohort": {
+    "fe678ebb30ce": 51,
+    "03d032d57e5b": 162,
+    "daf86d0544b7": 398
+  },
+  "complete_world_scope": {
+    "towers_min": 27,
+    "towers_max": 33,
+    "forces_min": 0,
+    "forces_max": 5,
+    "timed_operation": "step(state) over restored complete visible-state inputs; corpus parsing, snapshot restoration, conversion, IO, signature, assertions and reporting outside timer",
+    "cache_state": "pure phase-offset and movement-parameter rule caches warmed by full preflight replays; no source optimization"
+  },
   "trials": [
     {
-      "complete_transitions": 100204,
-      "elapsed_seconds": 1.8286653000395745,
-      "complete_transitions_per_second": 54796.24948197544
+      "trial": 1,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 1.9595969999209046,
+      "steps_per_second": 51135.00378090217
     },
     {
-      "complete_transitions": 100204,
-      "elapsed_seconds": 1.7615433000028133,
-      "complete_transitions_per_second": 56884.21056685917
+      "trial": 2,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 2.0192344998940825,
+      "steps_per_second": 49624.74641021443
     },
     {
-      "complete_transitions": 100204,
-      "elapsed_seconds": 1.745609800098464,
-      "complete_transitions_per_second": 57403.4357474092
+      "trial": 3,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 1.9177884000819176,
+      "steps_per_second": 52249.76853323329
     }
   ],
-  "scope": "Full Python step over all visible towers and forces, no conversion/IO in timing; genuine-event input restored and every full output checked before timing. Pure movement and static phase-offset caches warmed by validation. No combat PASS.",
-  "corpus_sha256": "ff571a2b96cd5ed54215a1c4e0d2d075742ccc8b6f46e993a9770b16d2ef2117",
-  "source_manifest": {
-    "src\\kiomet_ai\\v2\\sim\\combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
-    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
-    "src\\kiomet_ai\\v2\\sim\\step.py": "1bb7158b7b9c361bc666786f3cc487f4061344fb87b97e42a29d09c97bdd9404",
-    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  "rate_statistic": "median of three quiet per-trial complete-world-steps/second rates",
+  "median_steps_per_second": 51135.00378090217,
+  "minimum_steps_per_second": 49624.74641021443,
+  "maximum_steps_per_second": 52249.76853323329,
+  "corpus_sha256_before": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+  "corpus_sha256_after": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+  "snapshots_sha256_before": {
+    "03d032d57e5b": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "daf86d0544b7": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "fe678ebb30ce": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
   },
-  "profile": "         27702 function calls in 0.016 seconds\n\n   Ordered by: cumulative time\n\n   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n      611    0.012    0.000    0.017    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:48(step)\n    19598    0.002    0.000    0.002    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:171(<genexpr>)\n      120    0.000    0.000    0.001    0.000 C:\\Users\\cow09\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\dataclasses.py:1540(replace)\n      611    0.001    0.000    0.001    0.000 <string>:2(__init__)\n      611    0.000    0.000    0.000    0.000 {built-in method builtins.sorted}\n      500    0.000    0.000    0.000    0.000 {built-in method builtins.any}\n     1833    0.000    0.000    0.000    0.000 {built-in method builtins.len}\n      753    0.000    0.000    0.000    0.000 {built-in method builtins.min}\n     1320    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}\n      753    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}\n      457    0.000    0.000    0.000    0.000 E:\\SteamLibrary\\kiomet\\src\\kiomet_ai\\v2\\sim\\step.py:64(<genexpr>)\n      120    0.000    0.000    0.000    0.000 C:\\Users\\cow09\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\dataclasses.py:1296(_is_dataclass_instance)\n      174    0.000    0.000    0.000    0.000 {built-in method builtins.max}\n      120    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}\n      120    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}\n        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}\n\n\n"
+  "snapshots_sha256_after": {
+    "03d032d57e5b": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "daf86d0544b7": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "fe678ebb30ce": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+  },
+  "source_manifest_sha256_before": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+    "src/kiomet_ai/v2/observe/extractor.py": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+    "src/kiomet_ai/v2/sim/combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "tools/v2_sim_profile.py": "4772faedd5b93bfc4a0d604bf5465956eae1b91fa6c44f990ea1d49cc1b63df9"
+  },
+  "source_manifest_sha256_after": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+    "src/kiomet_ai/v2/observe/extractor.py": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+    "src/kiomet_ai/v2/sim/combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "tools/v2_sim_profile.py": "4772faedd5b93bfc4a0d604bf5465956eae1b91fa6c44f990ea1d49cc1b63df9"
+  },
+  "source_and_corpus_unchanged": true,
+  "limitations": "Supported-scope candidate measurement only; not production-wide concurrency evidence and not an M2 PASS.",
+  "initial_trials": [
+    {
+      "trial": 1,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 2.3256914000958204,
+      "steps_per_second": 43085.681959296715
+    },
+    {
+      "trial": 2,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 2.5287974001839757,
+      "steps_per_second": 39625.15937129243
+    },
+    {
+      "trial": 3,
+      "complete_world_steps": 100204,
+      "elapsed_seconds": 2.3354227000381798,
+      "steps_per_second": 42906.151421051894
+    }
+  ],
+  "initial_rate": 42906.151421051894,
+  "initial_rate_statistic": "median of first three rates; classified as concurrent-integrity measurement, not quiet baseline",
+  "initial_interference": "root receipt JSON/hash adoption overlapped timing",
+  "initial_corpus_sha256_before": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+  "initial_corpus_sha256_after": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+  "initial_snapshots_sha256_before": {
+    "03d032d57e5b": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "daf86d0544b7": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "fe678ebb30ce": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+  },
+  "initial_snapshots_sha256_after": {
+    "03d032d57e5b": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "daf86d0544b7": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "fe678ebb30ce": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+  },
+  "initial_source_manifest_sha256_before": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+    "src/kiomet_ai/v2/observe/extractor.py": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+    "src/kiomet_ai/v2/sim/combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "tools/v2_sim_profile.py": "4772faedd5b93bfc4a0d604bf5465956eae1b91fa6c44f990ea1d49cc1b63df9"
+  },
+  "initial_source_manifest_sha256_after": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+    "src/kiomet_ai/v2/observe/extractor.py": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+    "src/kiomet_ai/v2/sim/combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "tools/v2_sim_profile.py": "4772faedd5b93bfc4a0d604bf5465956eae1b91fa6c44f990ea1d49cc1b63df9"
+  },
+  "complete_transitions_per_second": 51135.00378090217,
+  "complete_transitions": 300612,
+  "all_retained_transitions": 601224,
+  "source_manifest": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+    "src/kiomet_ai/v2/observe/extractor.py": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+    "src/kiomet_ai/v2/sim/combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "tools/v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe",
+    "tools/v2_sim_profile.py": "4772faedd5b93bfc4a0d604bf5465956eae1b91fa6c44f990ea1d49cc1b63df9"
+  },
+  "corpus_sha256": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+  "root_admission": "Source/corpus/snapshot hashes independently verified. All six trials retained; first group has overlapping integrity work, second group quiet. Limited supported scope, not full M2/M2B PASS."
 }

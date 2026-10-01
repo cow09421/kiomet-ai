@@ -30,9 +30,12 @@ launch. Local defender agreement is not full-state agreement. Its mismatch stays
 in the denominator; an after-inferred launch reproduces the world only as
 calibration, with no accuracy credit. Do not use the aggregate ratio as combat PASS.
 
-Trajectories: two nonoverlapping five-second multievent rollouts match all
-intermediate visible states. Thirteen intermediate failures are retained; these
-include unrecorded force births. No intermediate canonical resets. The required
+Trajectories: two historical nonoverlapping five-second multievent rollouts match
+all intermediate visible states. Thirteen intermediate failures are retained and
+classified as visible force births with corresponding source-unit departures.
+Initiating commands/queues remain unknown; none has independent before-action
+input evidence. External/queued input and an omitted launch rule remain hypotheses.
+See V2_M2A_TRAJECTORY_AUDIT.json. No intermediate canonical resets. The required
 100 trajectories and ruler death/elimination direction gates are unfinished.
 
 ## Core rules and root integration
@@ -48,12 +51,15 @@ world advancement at progress zero. Limited terminal capture/reference scenarios
 require known path/fuel and non-overflowing ordinary units.
 
 Friendly terminal reinforcement additionally requires an independently supplied
-Scenario.no_supply_line_towers premise. Terminal=True and positive fuel alone do
-not establish that premise. Public Force::try_move_on can clone a destination
+observed own no-line flag or Scenario.no_supply_line_towers premise. Terminal=True
+and positive fuel alone do not establish that premise. Public Force::try_move_on can clone a destination
 supply line and relay a Many force; unknown destinations now refuse with
 UNKNOWN_REINFORCEMENT_SUPPLY_LINE. No canonical unknown is converted to false.
-The existing observation contract is unchanged, and no live friendly-arrival
-accuracy claim is made. Invalid scenario tower references are rejected.
+The observation contract now includes an optional own-only OBSERVED presence
+Boolean; missing historical fields remain UNKNOWN. It never exports a route or
+fuel and does not change the M1B minimum gate. No live friendly-arrival accuracy
+claim is made. Known True refuses unsupported relay and cannot be overridden by
+a scenario absence premise. Invalid scenario tower references are rejected.
 
 Root independently corrected morale bonus to min(3, headcount//2): pinned select
 at 0xffb43..0xffb51 selects 3 when half>=3. The old max interpretation and previous
@@ -102,7 +108,8 @@ trajectory and performance verification; bounded Python optimization.
 
 ## Verification and performance
 
-69 v2 regression tests pass. Performance inputs are all 611 development genuine
+120 v2 regression tests pass; root additionally verified the four new focused
+contract/capture/comparison files (46 tests). Performance inputs are all 611 development genuine
 event states, each restored from original canonical records and independently
 checked against its complete expected visible state before timing. Every measured
 step includes all visible towers and forces; conversion/IO is outside timing.
@@ -116,10 +123,15 @@ median 46759, below target; its complete receipt remains in runtime and Git.
 Root then removed the phase helper call in the tower hot loop, allocated premise
 sets only when nonempty, validated their original elements before deduplication
 (bool/int aliases must not hide invalid types), and delayed the same-owner check
-until arrival. Latest source-specific rerun is V2_M2A_PERFORMANCE.json:
-54796 / 56884 / 57403, median 56884 complete transitions/sec. All trials,
-including below-target trials, remain reported. This limited-scope measurement
-is not full M2/M2B PASS. No native rewrite or GPU work has started.
+until arrival. The 1a0185b source-specific run was 54796 / 56884 / 57403,
+median 56884 complete transitions/sec. Current optional-field/identity-validator
+source is measured separately in V2_M2A_PERFORMANCE.json: quiet trials
+51135 / 49625 / 52250, median 51135 complete transitions/sec. An initial group
+43086 / 39625 / 42906 overlapped root's receipt parsing/hash work; all six trials
+are retained with their conditions. Each group uses all 611 genuine development
+inputs, independently restored and fully compared with expanded context/order
+before timing. One quiet trial is also below 50000. This limited supported-scope
+measurement is not full M2/M2B PASS. No native rewrite or GPU work has started.
 
 Passive cohorts 7d and b1 were captured without troop gestures. b1 contains a
 single 600-second NETWORK match; 7d naturally entered RESULT and remains a partial
@@ -136,5 +148,19 @@ This is a pending authorization for that action, not a reason to stop all work.
 
 Genuine engineering blocker: none. Remaining gates are construction work.
 NEXT PARALLEL PLAN: Luna independently red-teams arrival relay and evidence
-accounting; Sol verifies pinned ownership/supply-line boundaries and integrates
-only independently checked results. Preserve all failures and uncertainty. No M3.
+accounting, classifies retained trajectories and measures complete-state steps;
+Sol reviews boundaries and integrates only independently checked results. Current
+recommended concurrency cap is Sol + 3 Luna, with dynamic use below the cap;
+no Codex settings changed. See V2_M2_CONCURRENCY_REVIEW.md and V2_M2_TASK_BACKLOG.md.
+Preserve all failures and uncertainty. No M3.
+
+Latest bounded integration: observed own presence and exact identity/provenance
+checks; stale capture relation repair; pinned same-destination inbound-order and
+neutral initialization evidence. Complete comparison now also checks tower
+context, force acceleration/relation and destination queue order. The current
+complete replay retains 1052/1052 formal, 1054/1054 ground candidate and 593/594
+ordinary candidate results, with zero static credited outputs. Root verified
+all source/corpus/snapshot hashes and context comparisons before adopting
+V2_M2A_MANAGER_VALIDATION.json. Historical signatures and trials remain in Git. See
+V2_M2A_OPTIONAL_PRESENCE_REVIEW.md. The 785 cohort has zero independently eligible
+event candidates, so it adds no combat/reinforcement accuracy credit.

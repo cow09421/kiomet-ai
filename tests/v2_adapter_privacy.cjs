@@ -51,6 +51,41 @@ setMember(players+64,1_890_000,1);
 r=decode.call(memories,'world',sockets,owners);
 assert.equal(r.towers[0].relation,'ALLY','bilateral membership must produce ally');
 reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.towers[0].supply_line_present,null,'ally supply-line state stays unknown');
+assert(!reads.includes(tower+24),'ally supply-line tag was read');
+short(tower+36,1);put(tower+24,0x80000000);reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.towers[0].supply_line_present,false,'valid own None is observed false');
+assert(reads.includes(tower+24),'own presence tag must be read');
+assert(!reads.includes(tower+28)&&!reads.includes(tower+32),'presence read followed route storage');
+const privateSupplyPath=2_250_000;
+put(tower+24,2);put(tower+28,privateSupplyPath);put(tower+32,2);reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.towers[0].supply_line_present,true,'valid own Some is observed true');
+assert(!reads.includes(tower+28)&&!reads.includes(tower+32));
+assert(!reads.some(p=>p>=privateSupplyPath&&p<privateSupplyPath+8),'supply-line path was read');
+for (const [setGate,restoreGate] of [
+  [()=>short(refs,0),()=>short(refs,1)],
+  [()=>view.setUint8(root+45784,1),()=>view.setUint8(root+45784,0)],
+  [()=>put(root+548,2),()=>put(root+548,3)],
+  [()=>{view.setUint8(core+105,1);view.setUint8(core+104,1);put(root+46480,1)},
+   ()=>{view.setUint8(core+105,2);view.setUint8(core+104,0);put(root+46480,0)}],
+  [()=>view.setBigUint64(root,2n,true),()=>view.setBigUint64(root,1n,true)]
+]) {
+  setGate();reads.length=0;
+  r=decode.call(memories,'world',sockets,owners);
+  assert(!reads.includes(tower+24),'invalid own visibility/lifecycle gate read presence');
+  assert(!reads.some(p=>p>=tower&&p<tower+256*48),'invalid own gate read payload');
+  restoreGate();
+}
+put(tower+24,0x80000001);r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.towers[0].supply_line_present,null,'invalid Option discriminant remains unknown');
+short(tower+36,2);reads.length=0;
+r=decode.call(memories,'world',sockets,owners);
+assert.equal(r.towers[0].supply_line_present,null);
+assert(!reads.includes(tower+24),'foreign tag was read despite invalid contents');
+reads.length=0;
 r=decode.call(memories,'visibility',[0],owners);
 assert.deepEqual(JSON.parse(JSON.stringify(r.watched_visibility)),[{id:0,visible:true}]);
 assert(!reads.some(p=>p>=tower&&p<tower+256*48),'sensor mode read actor payload');

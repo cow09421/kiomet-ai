@@ -7,7 +7,7 @@ from kiomet_ai.v2.sim.model import SimForce, SimTower, SimulationState
 from kiomet_ai.v2.state import Fact
 from kiomet_ai.v2.sim.combat import fight_ground, fight_ordinary
 from test_v2_control import control_fixture
-from tools.v2_sim_differential import input_has_potential_event
+from tools.v2_sim_differential import input_has_potential_event, signature
 from kiomet_ai.v2.sim.step import phase
 
 
@@ -279,3 +279,42 @@ def test_scenario_validation_does_not_lose_bool_int_aliases_in_sets():
     force=SimForce(7,1,4,(0,0,0,0,0,3,0,0,0,0),0,False)
     with pytest.raises(UnsupportedState,match='INVALID_TERMINAL_SCENARIO'):
         step(replace(state,forces=(force,)),scenario=Scenario(terminal_forces=(0,False)))
+
+
+@pytest.mark.parametrize('line',(None,True,False))
+def test_mobile_near_capacity_only_known_absence_removes_supply_line_guard(line):
+    state=empty_world()
+    tower=replace(state.towers[0],units=(0,0,0,0,0,9,0,0,0,0),
+                  capacity=(10,)*10,production=((5,1),),supply_line_present=line)
+    state=replace(state,towers=(tower,))
+    assert input_has_potential_event(state)
+    if line is not False:
+        with pytest.raises(UnsupportedState,match='PRODUCTION_SUPPLY_LINE'): step(state)
+    else:
+        result=step(state)
+        assert result.towers[0].units[5]==10 and not result.forces
+        assert not input_has_potential_event(result)
+        assert step(result).towers==result.towers
+
+
+def test_observed_friendly_absence_permits_merge_but_known_line_cannot_be_overridden():
+    state=empty_world()
+    dst=replace(state.towers[1],owner=7,units=(0,)*10,production=(),relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,terminal=True,fuel=150)
+    state=replace(state,towers=(state.towers[0],dst),forces=(force,))
+    result=step(state)
+    assert not result.forces and result.towers[1].units[5]==3
+    with pytest.raises(UnsupportedState,match='UNSUPPORTED_REINFORCEMENT_SUPPLY_LINE'):
+        step(replace(state,towers=(state.towers[0],replace(dst,supply_line_present=True))),
+             scenario=Scenario(no_supply_line_towers=(4,)))
+
+
+def test_canonical_conversion_preserves_own_line_unknown_and_observed_false():
+    state=control_fixture()
+    assert from_canonical(state).towers[0].supply_line_present is None
+    state=replace(state,towers=(replace(state.towers[0],supply_line_present=replace(
+        state.towers[0].visibility,value=False,source='test own absence')),state.towers[1]))
+    converted=from_canonical(state)
+    assert converted.towers[0].supply_line_present is False
+    assert signature(converted)['supply_lines']==[(3,False)]
+    assert signature(converted)!=signature(replace(converted,towers=(replace(converted.towers[0],supply_line_present=True),converted.towers[1])))

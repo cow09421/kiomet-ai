@@ -158,9 +158,17 @@ function (mode = "world", watchedIds = [], ownerStates = []) {
       if ((offset & 15) > 4 || (offset >> 4) > 4) throw Error("invalid world-position offset");
       const owner = u16(tower + 36);
       const relation = relationFor(owner);
+      // Pinned normal owner overlay checks Tower+24's Option sentinel before
+      // drawing its road. Observe presence only; no path pointer/length/entry.
+      // Owner and positive current fog gates precede this read, even for allies.
+      let supplyLinePresent = null;
+      if (player > 0 && owner === player) {
+        const tag = u32(tower + 24);
+        supplyLinePresent = tag === 0x80000000 ? false : tag < 0x80000000 ? true : null;
+      }
       towers.push({id: (x | y << 16) >>> 0, visible: true,
         visibility_source: "official Visible.refs positive + generated tower",
-        owner, relation, type: u8(tower + 46),
+        owner, relation, type: u8(tower + 46), supply_line_present: supplyLinePresent,
         units7: Array.from(new Uint8Array(memory.buffer, tower + 38, 7)),
         morale: u8(tower + 45), delay_ticks: u8(tower + 47),
         position: [x * 5 + (offset & 15), y * 5 + (offset >> 4)],
