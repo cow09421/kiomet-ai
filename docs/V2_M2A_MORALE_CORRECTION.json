@@ -1,0 +1,79 @@
+{
+  "status": "STATIC_CORRECTION_WITH_ONE_DEVELOPMENT_REGRESSION",
+  "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "function": "Combatants::morale_advantage",
+  "instructions": [
+    {
+      "offset": "0xffb43",
+      "instruction": "i32.const 3"
+    },
+    {
+      "offset": "0xffb45",
+      "instruction": "local.get $var2"
+    },
+    {
+      "offset": "0xffb47",
+      "instruction": "i32.const 1"
+    },
+    {
+      "offset": "0xffb49",
+      "instruction": "i32.shr_u"
+    },
+    {
+      "offset": "0xffb4a",
+      "instruction": "local.tee $var0"
+    },
+    {
+      "offset": "0xffb4c",
+      "instruction": "local.get $var0"
+    },
+    {
+      "offset": "0xffb4e",
+      "instruction": "i32.const 3"
+    },
+    {
+      "offset": "0xffb50",
+      "instruction": "i32.ge_u"
+    },
+    {
+      "offset": "0xffb51",
+      "instruction": "select"
+    }
+  ],
+  "wasm_select_semantics": "select pops condition, second operand, first operand; true chooses the first operand. Tail stack is [3, non_shield_non_single_use_count >> 1, half_count >= 3].",
+  "correct_formula": "min(3, count // 2)",
+  "rejected_formula": "max(3, count // 2)",
+  "boundary_examples": {
+    "0": 0,
+    "1": 0,
+    "2": 1,
+    "5": 2,
+    "6": 3,
+    "12": 3
+  },
+  "retained_case": {
+    "cohort": "daf86d0544b7",
+    "before_sequence": 125,
+    "after_sequence": 127,
+    "attacker_soldiers": 4,
+    "defender_shields_before": 20,
+    "defender_soldiers": 12,
+    "defender_morale": true,
+    "bonus": 3,
+    "predicted_shields_after": 19,
+    "observed_shields_after": 19,
+    "complete_state_match": true
+  },
+  "old_failed_receipts": [
+    "Git c2b6274:docs/V2_M2A_GROUND_CANDIDATE.json",
+    "runtime/research/v2/m2a-ground-initial-869-mismatch.json",
+    "runtime/research/v2/m2a-ground-before-morale-cap-correction.json"
+  ],
+  "ground_validation_limits": {
+    "distinct_ground_development_cases": 1,
+    "independent_ground_holdout_cases": 0,
+    "ground_enabled_by_default": false,
+    "milestone_pass": false
+  },
+  "stale_subagent_report": "runtime/research/v2/luna-corpus/ground-loss-review.json used the pre-correction model: retain as historical research, do not quote its local prediction as the current result. Its 13 source references and unsupported-input classifications are separate candidate facts."
+}

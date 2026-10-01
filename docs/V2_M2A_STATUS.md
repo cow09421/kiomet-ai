@@ -48,7 +48,7 @@ WASM `0x1a449` world.tick load、`0x1a459` chunk ID load、`0x1a4a0..1a4aa`
 純地面damage／field另已離線核對正式Unit::damage、Unit::field，0/4/5/9
 兵種surface damage為1/3/1/1；這只驗證純scalar，不等於fight順序或live戰鬥。
 
-55項v2回歸通過。完整世界轉移已profile；正確支援範圍先驗證，profile後才
+61項v2回歸通過。完整世界轉移已profile；正確支援範圍先驗證，profile後才
 考慮將熱迴圈移至Rust或C++，不碰GPU／CUDA。
 
 ## 平行施工審核 checkpoint
@@ -126,3 +126,38 @@ GROUND CANDIDATE：初次869個candidate cases中868吻合，僅比正式範圍�
 使用此已知值，來源morale True的launch在flag初始化驗證前UNSUPPORTED。
 NEXT PARALLEL PLAN：Sol整合combat side/flag與完整轉移；Luna唯讀解析morale
 caller、採礦arrival/defense與紅隊驗證。M2未PASS前不進M3、不重開timestamp。
+
+## 士氣加成修正與候選資料審核
+
+CURRENT MILESTONE: M2A。STATUS: IN_PROGRESS。
+
+Sol親自重讀 `0xffb43..0xffb51`，找到原先 max 判讀錯誤：WASM尾端stack
+為 `[3, count>>1, (count>>1)>=3]`；select在true選第一operand，因此是
+`min(3, count//2)`，不是max。12 Soldier加成應為3，原先錯算為6。
+這是固定程式指令證據的修正；没有針對單筆真實結果修改經驗常數。
+完整proof與舊失敗receipt位置見V2_M2A_MORALE_CORRECTION.json。
+
+ACCEPTED：min上限、1/2/6/12人邊界回歸及原daf seq125→127完整world fixture。
+REJECTED：子代理及根代理此前max解釋；不能把869/868或1207/1206的整体比例
+當成combat正確率。REWORKED：差分工具增加before-input event categories，各類
+分開記錄完整state吻合數；分類重疊不增加獨立cases。ground hypothesis重跑後
+1207/1207，但真實ground分母只有1/1，未調參獨立holdout的ground分母為0。
+ground flag保持預設OFF，正式1206個生產／移動case不冒稱全部機制驗證。
+
+corpus_candidates新cohort後續：20候選（12capture、1reinforcement、7無可見
+unit loss的defense），11個before可轉換、6個after可轉換、6個pair兩端可轉換。
+兩端可轉換不等於terminal/fuel/actions已知；scenario eligibility全部false。
+target確實是before Force.destination，先前一律寫after-inferred已更正。
+根代理驗證20筆標記、原report SHA未改及output越界拒絕；另移除工具未開啟的
+sampling manifest讀取宣稱。此機械採礦修改接受，不提升到正式accuracy資料。
+
+Luna另唯讀核對原13個ground-loss候選，3個pair可轉換、10個fail closed；
+3個有同時force birth，2個有其他塔unit變化。該report的fight計算在根代理
+修正前已載入舊module，因此Shield20預測明確記為歷史，不引用為目前結果。
+來源refs與unknown分類可接受；現行模型完整輸出由Sol新差分與fixture確認。
+
+SOL DIRECT WORK：WASM select修正、完整world回歸fixture、event分母隔離、
+來源／後驗情境標記審核。進行新的有時限被動觀測，沒有兵力控制輸入。
+真正阻塞仍無；arrival/capture獨立輸入與100段trajectory仍是施工缺口。
+NEXT PARALLEL PLAN：新cohort完成後Luna限定採礦，Sol審核combat獨立驗證與
+抵達的未知route/fuel保護；效能擴大前先完成語意。M2未PASS，尚未開始M3。

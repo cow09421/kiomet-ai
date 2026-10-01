@@ -1,29 +1,36 @@
 {
-  "status": "HYPOTHESIS_ONLY_INITIAL_MISMATCH_RETAINED",
-  "scope": "production/current-segment only; no live commands; explicit no-exogenous-action fixed-morale scenario",
+  "status": "HYPOTHESIS_ONLY",
+  "scope": "complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario",
   "ground_combat_reference_enabled": true,
   "validation_split": "hypothesis",
-  "selection": "one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura/force count changes. Counts never used to select correctness.",
+  "selection": "one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura changes or force births. Ground hypothesis permits force count decreases. Predictions never select correctness.",
+  "event_count_semantics": "Overlapping event categories are derived from before-state inputs; each reports its own complete-state matched count. They are not additional independent cases.",
   "limitations": "Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.",
   "counts": {
-    "world_transitions": 7189,
-    "exclude:NOT_READY": 3230,
-    "exclude:no_production_or_movement_event": 2614,
-    "cases": 869,
-    "matched": 868,
-    "production_cases": 295,
-    "exclude:PRODUCTION_SUPPLY_LINE": 143,
-    "movement_cases": 574,
-    "exclude:external_owner_type_delay_aura_change": 9,
-    "exclude:ACTIVE_UPGRADE_OR_EMP": 197,
-    "exclude:NEUTRAL_UNIT_DECAY": 2,
-    "exclude:unrecorded_external_launch": 12,
+    "world_transitions": 9587,
+    "exclude:NOT_READY": 4038,
+    "exclude:no_production_or_movement_event": 3716,
+    "cases": 1207,
+    "matched": 1207,
+    "production_cases": 400,
+    "event:production_due:cases": 483,
+    "event:production_due:matched": 483,
+    "exclude:PRODUCTION_SUPPLY_LINE": 272,
+    "movement_cases": 807,
+    "event:current_leg_movement:cases": 807,
+    "event:current_leg_movement:matched": 807,
+    "exclude:external_owner_type_delay_aura_change": 14,
+    "exclude:ACTIVE_UPGRADE_OR_EMP": 203,
+    "exclude:NEUTRAL_UNIT_DECAY": 6,
+    "exclude:unrecorded_external_launch": 15,
     "exclude:multi_tick_or_backward": 1,
     "exclude:isolation": 89,
-    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 16,
+    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 17,
     "exclude:UNKNOWN_PAIR_RELATION": 1,
+    "event:ground_combat_arrival:cases": 1,
+    "event:ground_combat_arrival:matched": 1,
     "exclude:SPECIAL_PRODUCTION": 4,
-    "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 1,
+    "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 3,
     "exclude:AIR_OR_SPECIAL_COMBAT": 1
   },
   "cohorts": [
@@ -37,8 +44,12 @@
         "cases": 271,
         "matched": 271,
         "production_cases": 236,
+        "event:production_due:cases": 241,
+        "event:production_due:matched": 241,
         "exclude:PRODUCTION_SUPPLY_LINE": 38,
         "movement_cases": 35,
+        "event:current_leg_movement:cases": 35,
+        "event:current_leg_movement:matched": 35,
         "exclude:external_owner_type_delay_aura_change": 1
       },
       "failures": []
@@ -56,7 +67,11 @@
         "cases": 166,
         "matched": 166,
         "production_cases": 4,
+        "event:production_due:cases": 22,
+        "event:production_due:matched": 22,
         "movement_cases": 162,
+        "event:current_leg_movement:cases": 162,
+        "event:current_leg_movement:matched": 162,
         "exclude:external_owner_type_delay_aura_change": 3,
         "exclude:unrecorded_external_launch": 2,
         "exclude:multi_tick_or_backward": 1,
@@ -71,12 +86,18 @@
         "world_transitions": 2398,
         "exclude:NOT_READY": 1328,
         "cases": 432,
-        "matched": 431,
+        "matched": 432,
         "movement_cases": 377,
+        "event:current_leg_movement:cases": 377,
+        "event:current_leg_movement:matched": 377,
+        "event:production_due:cases": 94,
+        "event:production_due:matched": 94,
         "exclude:PRODUCTION_SUPPLY_LINE": 86,
         "exclude:external_owner_type_delay_aura_change": 5,
         "exclude:UNKNOWN_POST_ARRIVAL_PATH": 16,
         "exclude:UNKNOWN_PAIR_RELATION": 1,
+        "event:ground_combat_arrival:cases": 1,
+        "event:ground_combat_arrival:matched": 1,
         "exclude:no_production_or_movement_event": 514,
         "production_cases": 55,
         "exclude:SPECIAL_PRODUCTION": 4,
@@ -84,77 +105,41 @@
         "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 1,
         "exclude:AIR_OR_SPECIAL_COMBAT": 1
       },
-      "failures": [
-        {
-          "before_sequence": 125,
-          "tick": 23737,
-          "tower_differences": [
-            {
-              "tower": 17301775,
-              "kind": 3,
-              "owner": 83,
-              "morale": true,
-              "units_before": [
-                20,
-                0,
-                0,
-                0,
-                0,
-                12,
-                0,
-                0,
-                0,
-                0
-              ],
-              "predicted": [
-                20,
-                0,
-                0,
-                0,
-                0,
-                12,
-                0,
-                0,
-                0,
-                0
-              ],
-              "expected": [
-                19,
-                0,
-                0,
-                0,
-                0,
-                12,
-                0,
-                0,
-                0,
-                0
-              ],
-              "production": [
-                [
-                  0,
-                  10
-                ],
-                [
-                  5,
-                  12
-                ]
-              ],
-              "phase": 27850
-            }
-          ],
-          "force_match": true
-        }
-      ]
+      "failures": []
+    },
+    {
+      "cohort": "85391858b5d8",
+      "snapshot_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "counts": {
+        "world_transitions": 2398,
+        "exclude:no_production_or_movement_event": 1102,
+        "exclude:PRODUCTION_SUPPLY_LINE": 129,
+        "cases": 338,
+        "matched": 338,
+        "production_cases": 105,
+        "event:production_due:cases": 126,
+        "event:production_due:matched": 126,
+        "exclude:NEUTRAL_UNIT_DECAY": 4,
+        "exclude:NOT_READY": 808,
+        "movement_cases": 233,
+        "event:current_leg_movement:cases": 233,
+        "event:current_leg_movement:matched": 233,
+        "exclude:external_owner_type_delay_aura_change": 5,
+        "exclude:unrecorded_external_launch": 3,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 1,
+        "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 2,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 6
+      },
+      "failures": []
     }
   ],
-  "corpus_file": "runtime/research/v2/m2a-ground-candidate-transition-corpus.jsonl",
-  "corpus_sha256": "91bcc99d241e13bdd969ad6daba0fe7df863e5978ac92df98165fc8870f3e3df",
-  "tool_sha256": "335b2e214ed6a4d0eb91a4cd62d57ed2412e4ab8268bb30987dd104c834361ef",
+  "corpus_file": "runtime\\research\\v2\\m2a-hypothesis-transition-corpus.jsonl",
+  "corpus_sha256": "ad5ba932cd236ad58f4baab87f7c31d66a690c03eb0001d0576efd4b19640ba8",
+  "tool_sha256": "b04f7ea16fd9466c350ac2d7414acc185bcb8e604c9265e33816333a239a2241",
   "source_manifest": {
-    "src\\kiomet_ai\\v2\\sim\\combat.py": "5df8a098c22173c5ea561f8d7206d9425277eddeebbe4cf9d1be8288ca5db41d",
-    "src\\kiomet_ai\\v2\\sim\\model.py": "57e1a7e2867ae90ea74373f70fffb24bee910894836e911a4c696a434c391d11",
-    "src\\kiomet_ai\\v2\\sim\\step.py": "2192ef0eae96ee87959e0e7b8c51990ed68479492ae74c8cc09b61acb00c65c1",
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "09252c338c7b32aa455c1c68bc0b89bfb3880f2f18914789255fa2628b8f58e5",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "db5a867a097cfe7b1f857cf5dcfc67c6eab6f6b6681197c1352c5592d12f0e1b",
     "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
   }
 }

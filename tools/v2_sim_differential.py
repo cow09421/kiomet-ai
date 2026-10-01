@@ -5,7 +5,34 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
 from kiomet_ai.v2.serialization import state_from_dict
 from kiomet_ai.v2.sim import from_canonical, step, UnsupportedState, Scenario
-from kiomet_ai.v2.sim.step import phase
+from kiomet_ai.v2.sim.step import phase, movement_parameters
+
+
+def input_event_categories(state):
+    """Overlapping diagnostics derived only from the observed before state.
+
+    These do not select cases, and each category has its own matched count.
+    In particular, ordinary movement must not dilute combat failures.
+    """
+    categories=[]
+    next_tick=(state.world_sequence+1)&65535
+    if any(phase(next_tick,t.id)%period==0 for t in state.towers
+           for unit,period in t.production):
+        categories.append('production_due')
+    if state.forces:
+        categories.append('current_leg_movement')
+    towers={t.id:t for t in state.towers}
+    for force in state.forces:
+        source=towers[force.source]
+        target=towers[force.destination]
+        speed,required=movement_parameters(force.units,source.position,target.position)
+        if force.accelerated:
+            required=max(1,required*4//5)
+        if min(255,force.progress+speed)>=required and target.owner!=force.owner:
+            if target.owner or any(target.units):
+                categories.append('ground_combat_arrival')
+                break
+    return categories
 
 
 def signature(state):
@@ -70,8 +97,12 @@ def inspect(cohort, ground_combat=False):
             counts['cases']+=1
             counts['matched']+=matched
             counts['movement_cases' if start.forces else 'production_cases']+=1
+            event_categories=input_event_categories(start)
+            for category in event_categories:
+                counts['event:'+category+':cases']+=1
+                counts['event:'+category+':matched']+=int(matched)
             payload={'cohort':cohort,'before_sequence':before.sequence,'after_sequence':current.sequence,
-                     'world_sequence':start.world_sequence,'matched':matched,'input':signature(start),
+                     'world_sequence':start.world_sequence,'matched':matched,'event_categories':event_categories,'input':signature(start),
                      'expected':expected,'predicted':actual}
             cases.append(payload)
             if not matched and len(failures)<10:
@@ -106,7 +137,8 @@ def main():
     result={'status':'HYPOTHESIS_ONLY' if args.ground_combat else 'IN_PROGRESS','scope':'complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario',
             'ground_combat_reference_enabled':args.ground_combat,
             'validation_split':args.label,
-            'selection':'one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura/force count changes. Counts never used to select correctness.',
+            'selection':'one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura changes or force births. Ground hypothesis permits force count decreases. Predictions never select correctness.',
+            'event_count_semantics':'Overlapping event categories are derived from before-state inputs; each reports its own complete-state matched count. They are not additional independent cases.',
             'limitations':'Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.',
             'counts':dict(total),'cohorts':results,'corpus_file':str(output.relative_to(ROOT)),
             'corpus_sha256':hashlib.sha256(output.read_bytes()).hexdigest(),

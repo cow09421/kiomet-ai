@@ -1,7 +1,9 @@
 from dataclasses import replace
+import json
+from pathlib import Path
 import pytest
 from kiomet_ai.v2.sim import from_canonical, step, Launch, Scenario, UnsupportedState, RuntimeTimeModel
-from kiomet_ai.v2.sim.model import SimForce
+from kiomet_ai.v2.sim.model import SimForce, SimTower, SimulationState
 from kiomet_ai.v2.state import Fact
 from kiomet_ai.v2.sim.combat import fight_ground
 from test_v2_control import control_fixture
@@ -129,11 +131,48 @@ def test_near_capacity_mobile_production_rejects_unknown_supply_line():
 
 
 def test_pinned_morale_bonus_changes_ground_tie_direction_as_candidate_only():
-    soldiers=(0,0,0,0,0,1,0,0,0,0)
+    soldiers=(0,0,0,0,0,2,0,0,0,0)
     assert fight_ground(soldiers,soldiers,attacker_morale=True).winner=='ATTACKER'
     assert fight_ground(soldiers,soldiers,defender_morale=True).winner=='DEFENDER'
     with pytest.raises(UnsupportedState,match='UNKNOWN_COMBAT_MORALE'):
         fight_ground(soldiers,soldiers,attacker_morale=None)
+
+
+@pytest.mark.parametrize('count,survivors',[(1,0),(2,1),(6,3),(12,3)])
+def test_ground_morale_half_headcount_is_capped_at_three(count,survivors):
+    soldiers=(0,0,0,0,0,count,0,0,0,0)
+    attack=fight_ground(soldiers,soldiers,attacker_morale=True)
+    defend=fight_ground(soldiers,soldiers,defender_morale=True)
+    assert attack.attacker[5]==survivors and not any(attack.defender)
+    assert defend.defender[5]==survivors and not any(defend.attacker)
+
+
+def test_retained_daf_ground_defense_candidate_consumes_one_shield():
+    # Real before seq125/tick23737: Force4Soldier vs Barracks Shield20+Soldier12.
+    # This regression records the local event, not a claim of external isolation.
+    attacker=(0,0,0,0,0,4,0,0,0,0)
+    defender=(20,0,0,0,0,12,0,0,0,0)
+    result=fight_ground(attacker,defender,defender_morale=True)
+    assert result.winner=='DEFENDER' and not any(result.attacker)
+    assert result.defender==(19,0,0,0,0,12,0,0,0,0)
+
+
+def test_retained_complete_ground_transition_matches_all_visible_state():
+    receipt=json.loads((Path(__file__).parent/'fixtures/v2_ground_daf23737.json').read_text())
+    data=receipt['input']
+    towers=tuple(SimTower(**{key:tuple(tuple(p) for p in value) if key=='production'
+                   else tuple(value) if key in ('units','capacity','neighbors','position') else value
+                   for key,value in row.items()}) for row in data.pop('towers'))
+    forces=tuple(SimForce(**{**row,'units':tuple(row['units'])}) for row in data.pop('forces'))
+    state=SimulationState(**data,towers=towers,forces=forces)
+    with pytest.raises(UnsupportedState,match='UNVERIFIED_NORMAL_COMBAT'):
+        step(state)  # One development regression does not enable combat globally.
+    result=step(state,scenario=Scenario(ground_combat=True))
+    actual={'world_sequence':result.world_sequence,
+            'towers':[(t.id,t.owner,t.kind,t.units,t.delay,t.morale) for t in result.towers],
+            'forces':sorted((f.owner,f.source,f.destination,f.units,f.progress) for f in result.forces),
+            'rulers':sorted(result.visible_rulers)}
+    assert json.loads(json.dumps(actual))==receipt['expected']
 
 
 def test_terminal_empty_capture_accepts_shield_with_living_claiming_unit():

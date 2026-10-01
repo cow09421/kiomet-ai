@@ -29,8 +29,10 @@ def fight_ground(attacker,defender,defender_is_tower=True,attacker_morale=False,
     # Force+21 reaches scratch309 via an aggregate i32 copy; Tower+45 is the
     # defender flag. A mismatch starts with a signed non-single-use bonus.
     # The iterator explicitly skips enum zero (Shield) at 0xffb1d..0xffb27.
-    damage=(max(3,sum(units[0][1:])//2) if attacker_morale else
-            -max(3,sum(units[1][1:])//2)) if attacker_morale!=defender_morale else 0
+    # 0xffb43..0xffb51 pushes [3, headcount>>1, headcount>>1>=3];
+    # WASM select takes the FIRST operand on true, hence a cap, not a floor.
+    damage=(min(3,sum(units[0][1:])//2) if attacker_morale else
+            -min(3,sum(units[1][1:])//2)) if attacker_morale!=defender_morale else 0
     def next_unit(side):
         return next((i for i,n in enumerate(units[side]) if n-(last[side]==i)>0),None)
     def consume(side,unit):

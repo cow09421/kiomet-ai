@@ -10,11 +10,18 @@ import argparse
 import collections
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COHORTS = ("fe678ebb30ce", "03d032d57e5b", "f3f22dae0791", "daf86d0544b7")
+sys.path.insert(0, str(ROOT / "src"))
+from kiomet_ai.v2.serialization import state_from_dict
+from kiomet_ai.v2.sim import UnsupportedState, from_canonical
+
+COHORTS = ("fe678ebb30ce", "03d032d57e5b", "f3f22dae0791", "daf86d0544b7", "85391858b5d8")
 DEFAULT_OUT = ROOT / "runtime/research/v2/luna-event-candidates.json"
+NEW_COHORT = "85391858b5d8"
+NEW_COHORT_OUT = ROOT / "runtime/research/v2/luna-corpus/85391858b5d8-candidates.json"
 
 
 def val(row, key):
@@ -90,7 +97,7 @@ def tower_relation(t):
     return val(t, "relation")
 
 
-def transition(before, after, cohort, counts):
+def transition(before, after, cohort, counts, input_check=None):
     bt, at = tick(before), tick(after)
     sc = scope(before)
     if sc != scope(after) or sc[1] is None:
@@ -152,12 +159,19 @@ def transition(before, after, cohort, counts):
         if kind:
             explained_towers.add(dst)
             counts[kind] += 1
+            eligibility = input_check(before, after) if input_check else None
             candidates.append({
                 "kind": kind,
                 "cohort": cohort,
                 "scope": {"document_id": sc[0], "match_id": sc[1], "player_id": sc[2]},
                 "before": {"sequence": before["sequence"], "world_sequence": bt},
                 "after": {"sequence": after["sequence"], "world_sequence": at},
+                "scenario_inputs": (eligibility if eligibility else {
+                    "before_canonical_conversion": "NOT_CHECKED",
+                    "after_canonical_conversion": "NOT_CHECKED",
+                    "independent_before_state_input": False,
+                    "target_observed_in_before_force": True,
+                    "target_inferred_from_after_state": False}),
                 "force_reference": {"id": fid, "identity_knowledge": val(force, "id") is not None and force["id"].get("knowledge"),
                                     "source": src, "destination": dst, "owner": owner,
                                     "relation_before": val(force, "relation"), "units": units},
@@ -165,8 +179,12 @@ def transition(before, after, cohort, counts):
                     "relation_before": tower_relation(old), "relation_after": tower_relation(new),
                     "owner_before": old_owner, "owner_after": new_owner,
                     "unit_delta": delta,
-                    "target_inferred_from_after_state": True,
-                    "independent_scenario_input": False},
+                    "target_source": "before_tick_observed_force_destination",
+                    "target_inferred_from_after_state": False,
+                    "independent_scenario_input": False,
+                    "terminal_route_known_before": False,
+                    "fuel_known_before": False,
+                    "external_actions_excluded": False},
                 "limitations": ["force disappearance alone does not prove arrival",
                                 "world actions and fog can explain state changes",
                                 "event is an offline candidate, never a PASS"]
@@ -182,7 +200,7 @@ def transition(before, after, cohort, counts):
     return candidates
 
 
-def mine(cohort, cap):
+def mine(cohort, cap, check_inputs=False):
     source = ROOT / f"runtime/research/v2/snapshots-{cohort}.jsonl"
     digest = hashlib.sha256()
     counts = collections.Counter()
@@ -192,6 +210,41 @@ def mine(cohort, cap):
     group_tick = None
     group_latest = None
     seen_pairs = set()
+    input_cache = {}
+
+    def check_pair_inputs(before, after):
+        def check(row):
+            seq = row["sequence"]
+            if seq not in input_cache:
+                try:
+                    from_canonical(state_from_dict(row))
+                    input_cache[seq] = {"supported": True, "reason": None}
+                except (UnsupportedState, ValueError) as exc:
+                    input_cache[seq] = {"supported": False,
+                                        "reason": f"{type(exc).__name__}:{str(exc)}"}
+            return input_cache[seq]
+        pre, post = check(before), check(after)
+        counts["candidate_rows_input_checked"] += 1
+        counts["before_canonical_supported"] += int(pre["supported"])
+        counts["after_canonical_supported"] += int(post["supported"])
+        counts["both_canonical_supported"] += int(pre["supported"] and post["supported"])
+        if not pre["supported"]:
+            counts["before_fail_closed:" + pre["reason"]] += 1
+        if not post["supported"]:
+            counts["after_fail_closed:" + post["reason"]] += 1
+        return {
+            "before_canonical_conversion": "SUPPORTED" if pre["supported"] else "UNSUPPORTED",
+            "before_reason": pre["reason"],
+            "after_canonical_conversion": "SUPPORTED" if post["supported"] else "UNSUPPORTED",
+            "after_reason": post["reason"],
+            "independent_before_state_input": pre["supported"],
+            "target_observed_in_before_force": True,
+            "target_inferred_from_after_state": False,
+            "terminal_route_known_before": False,
+            "fuel_known_before": False,
+            "external_actions_excluded": False,
+            "prediction_used_to_select_candidate": False
+        }
 
     def consume(prev, curr):
         if curr is None:
@@ -210,7 +263,8 @@ def mine(cohort, cap):
         # Includes cross-scope and nonconsecutive tick changes. Those pairs
         # are counted here, then explicitly rejected by transition().
         counts["tick_transition_observations"] += 1
-        rows = transition(prev, curr, cohort, counts)
+        rows = transition(prev, curr, cohort, counts,
+                          check_pair_inputs if check_inputs else None)
         if rows:
             counts["candidate_transition_pairs"] += 1
             for row in rows:
@@ -244,6 +298,10 @@ def mine(cohort, cap):
             # observed even though no later poll arrived to trigger the flush.
             last = consume(last, group_latest)
             counts["final_tick_endpoint_flushed"] += 1
+    if check_inputs:
+        counts["unique_canonical_endpoints_checked"] = len(input_cache)
+        counts["unique_canonical_endpoints_supported"] = sum(x["supported"] for x in input_cache.values())
+        counts["unique_canonical_endpoints_fail_closed"] = sum(not x["supported"] for x in input_cache.values())
     return {"cohort": cohort, "source_file": str(source.relative_to(ROOT)),
             "source_sha256": digest.hexdigest(), "counts": dict(counts), "candidates": emitted,
             "transition_keys": transition_keys}
@@ -251,12 +309,18 @@ def mine(cohort, cap):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cohorts", nargs="+", choices=COHORTS, default=list(COHORTS))
+    parser.add_argument("--cohorts", nargs="+", choices=COHORTS, default=list(COHORTS[:4]))
     parser.add_argument("--max-candidates", type=int, default=250)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUT)
     args = parser.parse_args()
     if args.max_candidates < 0:
         parser.error("--max-candidates must be nonnegative")
-    per_cohort = [mine(name, args.max_candidates) for name in args.cohorts]
+    output = args.output.resolve()
+    if output != DEFAULT_OUT.resolve():
+        if output != NEW_COHORT_OUT.resolve() or args.cohorts != [NEW_COHORT]:
+            parser.error("custom output is allowed only at runtime/research/v2/luna-corpus/85391858b5d8-candidates.json for that single cohort")
+    check_inputs = args.cohorts == [NEW_COHORT]
+    per_cohort = [mine(name, args.max_candidates, check_inputs=check_inputs) for name in args.cohorts]
     total = collections.Counter()
     candidates = []
     global_pairs = set()
@@ -277,21 +341,24 @@ def main():
                 candidates.append(candidate)
     categories = ("capture_candidate", "reinforcement_or_arrival_candidate",
                   "ground_defense_or_other_loss_candidate", "ground_defense_no_visible_unit_loss_candidate")
+    before_reason_counts = {key.removeprefix("before_fail_closed:"): value
+                            for key, value in total.items() if key.startswith("before_fail_closed:")}
+    after_reason_counts = {key.removeprefix("after_fail_closed:"): value
+                           for key, value in total.items() if key.startswith("after_fail_closed:")}
     report = {
-        "task": "Bounded Kiomet v2 offline event corpus mining",
+        "task": "Bounded Kiomet v2 offline event corpus mining" + (" and input eligibility" if check_inputs else ""),
         "status": "CANDIDATES_ONLY_NO_PASS",
         "model_effort": "Requested via collaboration: gpt-6-luna / high; lead reviewed candidate output",
         "files_read": [f"runtime/research/v2/snapshots-{name}.jsonl" for name in args.cohorts] +
-                      [f"runtime/research/v2/sampling-{name}.json" for name in args.cohorts] +
-                      ["runtime/research/v2/final-evidence-audit-f3f22dae0791.json",
-                       "runtime/research/v2/natural-force-gap-03d032d57e5b.json",
-                       "runtime/research/v2/readiness-force-03d032d57e5b.json",
-                       "tools/v2_sim_differential.py", "src/kiomet_ai/v2/state.py",
-                       "src/kiomet_ai/v2/serialization.py", "src/kiomet_ai/v2/sim/model.py",
-                       "src/kiomet_ai/v2/sim/step.py", "src/kiomet_ai/v2/observe/forces.py"],
+                      ["tools/v2_event_corpus_candidates.py", "src/kiomet_ai/v2/state.py",
+                       "src/kiomet_ai/v2/serialization.py", "src/kiomet_ai/v2/sim/__init__.py",
+                       "src/kiomet_ai/v2/sim/model.py", "src/kiomet_ai/v2/sim/step.py",
+                       "src/kiomet_ai/v2/sim/combat.py", "src/kiomet_ai/v2/observe/forces.py",
+                       "src/kiomet_ai/v2/observe/rules.py", "src/kiomet_ai/v2/control.py"],
+        "context_files_reviewed": [],
         "files_modified": ["tools/v2_event_corpus_candidates.py",
-                           "runtime/research/v2/luna-event-candidates.json"],
-        "scope": "bounded offline mining of four existing canonical observation cohorts",
+                           str(output.relative_to(ROOT))],
+        "scope": "bounded offline mining of requested canonical observation cohort(s): " + ", ".join(args.cohorts),
         "method": "Collapse repeated same-tick polls to last observed row; compare unique same-scope consecutive u16 world ticks; require known match/player, PLAYER_VISIBLE_COMPLETE coverage and observed force collection. Correlate only stable non-unknown force IDs to endpoint deltas.",
         "candidate_categories": {name: sum(row["kind"] == name for row in candidates) for name in categories},
         "counts": dict(total),
@@ -302,6 +369,21 @@ def main():
             "candidate_eligible_pairs": "Same-scope consecutive pairs with positive complete visibility, known tower facts, and observed force collections in both endpoints.",
             "candidate_transition_pairs": "Eligible pairs that emitted one or more classified force-disappearance/endpoint-change candidates; this is not an accuracy count."
         },
+        "canonical_input_eligibility": ("from_canonical(state_from_dict(row)) was independently attempted for each unique referenced before/after snapshot sequence; candidate-row totals below count endpoint status per row, and unique-endpoint totals count conversion attempts after sequence caching. A supported before state does not prove external actions were absent." if check_inputs else "Not run for this cohort selection."),
+        "input_eligibility": ({
+            "candidate_rows_checked": total["candidate_rows_input_checked"],
+            "before_supported_rows": total["before_canonical_supported"],
+            "before_fail_closed_rows": total["candidate_rows_input_checked"] - total["before_canonical_supported"],
+            "after_supported_rows": total["after_canonical_supported"],
+            "after_fail_closed_rows": total["candidate_rows_input_checked"] - total["after_canonical_supported"],
+            "both_supported_rows": total["both_canonical_supported"],
+            "unique_endpoints_checked": total["unique_canonical_endpoints_checked"],
+            "unique_endpoints_supported": total["unique_canonical_endpoints_supported"],
+            "unique_endpoints_fail_closed": total["unique_canonical_endpoints_fail_closed"],
+            "before_fail_closed_reasons": before_reason_counts,
+            "after_fail_closed_reasons": after_reason_counts,
+            "external_action_exclusion_established": False
+        } if check_inputs else None),
         "deduplication": {"scope_key": "document_id + match_id.value + player_id.value + consecutive before/after u16 world sequence",
                            "unique_transition_pairs_across_cohorts": len(global_pairs),
                            "cohort_pair_occurrences": pair_occurrences,
@@ -309,7 +391,7 @@ def main():
                            "unique_candidate_rows_after_dedup": len(candidates)},
         "candidate_rows_emitted": len(candidates),
         "candidate_rows_capped": total["candidate_rows_over_output_cap"],
-        "scenario_input_rule": "Any target/endpoint inferred using after-state is marked target_inferred_from_after_state=true and independent_scenario_input=false. These cases cannot be used as independent scenario inputs.",
+        "scenario_input_rule": ("The destination is observed in the before-tick force, but a supported canonical conversion only establishes modeled state availability. Endpoint scenario eligibility remains false because terminal route and fuel are unknown and external actions are not excluded. After-state classifies only the observed transition; predictions do not select candidates." if check_inputs else "Target is the before-tick observed force destination; conversion eligibility is not checked for this run. Terminal route and fuel remain unknown, and external actions are not excluded."),
         "uncertainty_counts": {name: total[name] for name in (
             "possible_external_force_birth_or_action", "fog_or_visibility_uncertainty_transition",
             "visible_tower_set_change_uncertainty", "unknown_force_path_or_payload",
@@ -319,7 +401,7 @@ def main():
         "candidates": candidates,
         "claims": ["Emitted rows are event candidates from retained offline observations only.",
                    "No PASS, simulator accuracy, or live behavior claim is made."],
-        "tests": ["Executed the finite miner across the four specified cohorts; the initial run exposed and then fixed endpoint initialization before final counts."],
+        "tests": ["Executed the finite miner for the requested cohort selection; count and provenance assertions were applied to the new-cohort report."],
         "unknowns": ["Retained observations do not establish all external actions between sampled world updates.",
                      "Stable force identity is only the recorded non-unknown ID; source lineage and event cause remain unproven."],
         "risks": ["Candidate correlations can be confounded by fog, hidden actions, simultaneous production, or combat ordering."],
@@ -329,12 +411,12 @@ def main():
                         "PARTIAL cohort manifests and absent independent UI comparisons limit these to research leads.",
                         "No simulator accuracy or live behavior claim is made."]
     }
-    DEFAULT_OUT.parent.mkdir(parents=True, exist_ok=True)
-    DEFAULT_OUT.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": report["status"], "counts": report["counts"],
                       "candidate_categories": report["candidate_categories"],
                       "candidate_rows_emitted": report["candidate_rows_emitted"],
-                      "output": str(DEFAULT_OUT.relative_to(ROOT))}, sort_keys=True))
+                      "output": str(output.relative_to(ROOT))}, sort_keys=True))
 
 
 if __name__ == "__main__":
