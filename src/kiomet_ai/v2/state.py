@@ -165,6 +165,13 @@ class GameState:
             raise ValueError("missing snapshot identity")
         if self.received_at_ms < self.sampled_at_ms:
             raise ValueError("receipt predates sample")
+        if self.clock_domain != "host_monotonic_ms":
+            raise ValueError("unsupported canonical clock domain")
+        update = self.updated_at_ms.value
+        if update is not None and (type(update) is not int or update < 0 or update > self.received_at_ms):
+            # A browser/server epoch cannot masquerade as a host-clock point.
+            # Generation precedes receipt; conversion uncertainty stays unknown.
+            raise ValueError("invalid authoritative update time in host clock")
         window = self.source_update_window_ms.value
         if window is not None and (len(window) != 2 or
                 any(type(t) is not int or t < 0 for t in window) or
@@ -186,11 +193,18 @@ class GameState:
                 raise ValueError("force path exposes an unobserved tower")
 
     def age_ms(self, now_ms: int) -> int | None:
-        if self.updated_at_ms.value is None:
+        if type(now_ms) is not int or now_ms < self.received_at_ms or self.updated_at_ms.value is None:
             return None
-        return max(0, now_ms - self.updated_at_ms.value)
+        return now_ms - self.updated_at_ms.value
 
     def age_bounds_ms(self, now_ms: int) -> tuple[int, int] | None:
+        """Diagnostic client-application bounds; authoritative point age is age_ms.
+
+        Without an application window, a known authoritative point gives exact
+        bounds. An application window must never override authoritative readiness.
+        """
+        if type(now_ms) is not int or now_ms < self.received_at_ms:
+            return None
         window = self.source_update_window_ms.value
         if window is None:
             age = self.age_ms(now_ms)
@@ -204,8 +218,8 @@ class GameState:
         for name in ("match_id", "tick", "player_id", "forces", "king", "upgrade_resources"):
             if getattr(self, name).knowledge == Knowledge.UNKNOWN:
                 gaps.append(name)
-        bounds = self.age_bounds_ms(now_ms)
-        if self.updated_at_ms.knowledge == Knowledge.UNKNOWN or bounds is None or bounds[1] > max_age_ms:
+        age = self.age_ms(now_ms)
+        if age is None or age > max_age_ms:
             gaps.append("freshness")
         if self.coverage != "PLAYER_VISIBLE_COMPLETE":
             gaps.append("coverage")

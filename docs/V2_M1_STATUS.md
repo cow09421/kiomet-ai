@@ -350,3 +350,16 @@ Game 生成時間的假設 FAIL。數字只在工具內暫存，未寫入證據�
 普通 Play Again 新局的 bfc0d4968952 有 132 rows、8 次 dirty 拒絕，畫面
 縮放 18.125→22.836→18.125，actor 數全程 23，沒有特殊 Single 或新的
 sensor cycle。這條支線沒有增加所需覆蓋，不再延長同場景輪詢。
+
+### 拒絕錯誤時域，並用真正權威年齡決定 freshness
+
+原 age_ms 的 max(0, now-update) 可把未來時間／錯誤 epoch 截成新鮮的零。
+現在 Canonical 只接受 host_monotonic_ms；已知更新點必須是非負整數且不
+晚於 receipt。未來、bool、NaN／Infinity、錯誤時域均拒絕；receipt 前或
+無效數值的年齡查詢回 UNKNOWN。正常欄位沒有被填入假的新時間來源。
+
+另修正 freshness 在更新點已知時，仍可能優先採用近期客戶端套用 bounds
+的缺口：現在直接用權威 point age。回歸案例的 application bound 0..12 ms，
+但 generation age 901 ms，必須拒絕就緒。案例時間全部是合成隔離資料，
+不算 live 年齡證據。完整 v2 回歸 36 項通過；真實 updated_at_ms 與年齡
+p95 仍 UNKNOWN。既有 application bound 指標仍分開記錄。

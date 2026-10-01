@@ -61,6 +61,11 @@ sequence ages its existing window. Document/match/clock discontinuity invalidate
 the window; a first sample cannot claim known source age.
 An application-age bound alone cannot clear canonical decision readiness's
 freshness requirement while authoritative update time remains UNKNOWN.
+Canonical update points must be nonnegative integer host milliseconds no later
+than receipt; unsupported domains, nonfinite values and future points are
+rejected, never clamped to fresh zero. An age query before receipt or in an
+invalid numeric clock is UNKNOWN. Readiness uses authoritative point age, so a
+recent client-application interval cannot override an older generation point.
 Host read endpoints use floor-quantized integer milliseconds. The stored window
 contains the application's integer-clock time; continuous elapsed-age bounds
 expand each end by 1 ms to cover endpoint quantization. An old reported upper
@@ -95,6 +100,10 @@ AND term may resolve an unlocked flag; unresolved targets stay UNKNOWN. UI lock,
 prerequisite satisfaction and final command eligibility are separate facts.
 Unavailable fields remain UNKNOWN. Readiness requires verified match/update identity,
 graph, units and command-relevant fields; partial state cannot silently enter search.
+An OBSERVED force collection does not clear unavailable member identity, owner,
+relation, segment endpoints, units/count, progress or nominal ETA. Missing fields
+block readiness without erasing legally observed inventory. Array indexes in gap
+labels locate a diagnostic only, never a canonical entity identity.
 PLAYER_VISIBLE_COMPLETE is a derived entity-coverage certificate: every current
 positive sensor slot has a decoded generated actor under the normal active,
 connected, non-expanded visibility gates. A missing slot remains PARTIAL. This

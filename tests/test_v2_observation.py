@@ -94,6 +94,38 @@ def test_browser_clock_skew_does_not_reorder_host_capture():
     assert state.age_ms(1001) is None
 
 
+def test_epoch_or_invalid_authoritative_time_cannot_become_zero_age():
+    state = normalize(raw(), 's', 'd', 1, 101)
+    # The old max(0, now-update) admitted a browser epoch as fresh zero age.
+    for invalid in (1790829802884, 102, -1, True, float('nan'), float('inf')):
+        with pytest.raises(ValueError, match='authoritative update time'):
+            replace(state, updated_at_ms=fact(invalid))
+    with pytest.raises(ValueError, match='clock domain'):
+        replace(state, clock_domain='browser_epoch_ms')
+
+
+def test_age_query_before_receipt_or_in_an_invalid_clock_is_unknown():
+    state = normalize(raw(), 's', 'd', 1, 101)
+    known = replace(state, updated_at_ms=fact(100))
+    assert known.age_ms(101) == 1
+    bounded = replace(known, tick=fact(1), source_update_window_ms=fact((99,100)))
+    for invalid_now in (100, True, 101.0, float('nan')):
+        assert known.age_ms(invalid_now) is None
+        assert bounded.age_bounds_ms(invalid_now) is None
+        assert 'freshness' in bounded.readiness_gaps(invalid_now)
+
+
+def test_recent_client_application_cannot_override_an_old_authoritative_point():
+    state = normalize(raw(), 's', 'd', 1, 1001, sample_started_ms=1000)
+    state = replace(state, tick=fact(1), updated_at_ms=fact(100),
+        source_update_window_ms=Fact((990,1000), Knowledge.DERIVED, 'test client application', 1000))
+    assert state.age_bounds_ms(1001) == (0,12)  # Client application only.
+    assert state.age_ms(1001) == 901  # Stale generation despite recent application.
+    assert 'freshness' in state.readiness_gaps(1001)
+    # Only a genuinely known fresh point clears this particular freshness gap.
+    assert 'freshness' not in replace(state, updated_at_ms=fact(1000)).readiness_gaps(1001)
+
+
 def ready_force_fixture():
     # Synthetic readiness isolation, never a live age/coverage certificate.
     payload = raw()
