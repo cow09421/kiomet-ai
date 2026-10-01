@@ -33,13 +33,22 @@ future receipts, identity changes, partial/offline worlds and concurrent reads.
 Normalization errors restore tracker state. Document changes and lifecycle gaps
 remain invalidating and cannot revive a prior match through rollback.
 
-P0 integration still required: arm/drain in the bounded recorder; verify the
-authenticated lease, source digest and document; match each endpoint to its own
-entry snapshot's unique visible projected center; require stable camera/canvas
-geometry; certify selection=None and route facts at release entry; record and
-compare all intermediate complete worlds. Server application time remains
+The opt-in bounded recorder now verifies the authenticated lease, source digest
+and document, arms/drains the observer, and adopts DOWN before movement and UP
+before post-release sampling. Its pure endpoint helper checks each unique
+visible projected center, stable camera/canvas and explicit deselection. The
+observer rejects reset-sensitive blur/leave/touch/pointer-lock/visibility/keyboard
+events; final reset-free history and document guards must qualify. The offline
+auditor requires ordered endpoint checks and a VALID receipt containing that
+history, compares duplicate displayed ticks, and never resets its original BEFORE
+baseline to an entry frame. Cleanup after any post-DOWN error may dispatch a real
+release and remains INVALID_OR_PARTIAL.
+
+P0 real-event validation and handler-time route continuity remain required.
+Endpoint evidence cannot establish the saved source phase, intervening capture
+callback effects or actual path consumed by the game. Server application time remains
 UNKNOWN. A trusted input alone does not prove server acceptance or earn credit.
-Current live admission tests keep the observer disabled and send zero troops.
+Current finite live admission/preflight tests kept the observer disabled and sent zero troops.
 The first finite host's missed status inspection remains PARTIAL; the subsequent
 inline status check passed disabled startup admission. Synthetic protocol tests
 do not establish armed real-event data or server input acceptance.

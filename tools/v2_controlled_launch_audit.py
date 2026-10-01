@@ -67,22 +67,113 @@ def audit_events(events, *, allow_legacy_manual_ui=False):
         return dict(result, reason='manual_ui_branch_not_qualified')
     try:
         before = state_from_dict(intent['state'])
-        observations = [state_from_dict(row['observation']['state']) for row in events
-                        if row.get('kind') == 'AFTER_DISTINCT_TICK']
+        frames = [(row['kind'], state_from_dict(row['observation']['state']
+                  if row['kind'] == 'AFTER_DISTINCT_TICK' else row['state']))
+                  for row in events if row.get('kind') in
+                  ('INPUT_ENTRY_DOWN_ADOPTED', 'INPUT_ENTRY_UP_ADOPTED', 'AFTER_DISTINCT_TICK')]
     except (KeyError, ValueError, TypeError) as error:
         return dict(result, reason=f'invalid_recorded_state: {error}')
-    if not observations:
+    if not any(kind == 'AFTER_DISTINCT_TICK' for kind, _ in frames):
         return dict(result, reason='no_after_ticks')
+    entry_kinds = [kind for kind, _ in frames if kind != 'AFTER_DISTINCT_TICK']
+    if entry_kinds and entry_kinds != ['INPUT_ENTRY_DOWN_ADOPTED', 'INPUT_ENTRY_UP_ADOPTED']:
+        return dict(result, reason='incomplete_or_reordered_input_entry_pair')
+    if entry_kinds and [kind for kind, _ in frames[:2]] != entry_kinds:
+        return dict(result, reason='input_entry_pair_must_precede_after_observations')
+    if entry_kinds:
+        required = ('BEFORE_INTENT', 'INPUT_ENTRY_DOWN_ADOPTED',
+                    'INPUT_ENTRY_DOWN_ENDPOINT_CHECK', 'INPUT_ENTRY_UP_ADOPTED',
+                    'INPUT_ENTRY_ENDPOINT_PAIR_CHECK', 'INPUT_ENTRY_CAPTURE_RECEIPT')
+        recorded = {}
+        indices = []
+        for kind in required:
+            found = [(index, row) for index, row in enumerate(events) if row.get('kind') == kind]
+            if len(found) != 1:
+                return dict(result, reason='input_entry_success_evidence_missing_or_duplicate')
+            index, row = found[0]
+            indices.append(index)
+            recorded[kind] = row
+        if indices != sorted(indices):
+            return dict(result, reason='input_entry_success_evidence_reordered')
+        first_after = next(index for index, row in enumerate(events)
+                           if row.get('kind') == 'AFTER_DISTINCT_TICK')
+        if first_after <= indices[-1]:
+            return dict(result, reason='input_entry_receipt_must_precede_after_observations')
+        down_check = recorded['INPUT_ENTRY_DOWN_ENDPOINT_CHECK'].get('certificate', {})
+        pair_check = recorded['INPUT_ENTRY_ENDPOINT_PAIR_CHECK'].get('certificate', {})
+        for check, scope in ((down_check, 'DOWN_SOURCE_ENDPOINT_ONLY'),
+                             (pair_check, 'ENTRY_ENDPOINTS_ONLY')):
+            if (not isinstance(check, dict) or check.get('qualified') is not True or
+                    not isinstance(check.get('certificate'), dict) or
+                    check['certificate'].get('scope') != scope or
+                    check['certificate'].get('gesture_route_continuity') != 'UNKNOWN'):
+                return dict(result, reason='input_entry_endpoint_evidence_not_qualified')
+        receipt = recorded['INPUT_ENTRY_CAPTURE_RECEIPT']
+        if (receipt.get('status') != 'VALID' or receipt.get('error') is not None or
+                any(receipt.get(key) is not True for key in ('down_canonicalized', 'up_canonicalized',
+                    'destination_move_attempted', 'mouse_release_attempted')) or
+                receipt.get('endpoint_certificate') != pair_check or
+                not isinstance(receipt.get('disarm'), dict) or
+                receipt['disarm'].get('disarmed') is not True):
+            return dict(result, reason='input_entry_capture_receipt_not_valid')
+        observer_summary = receipt.get('observer_summary')
+        if (not isinstance(observer_summary, dict) or observer_summary.get('valid') is not True or
+                observer_summary.get('status') != 'COMPLETE' or
+                observer_summary.get('drained_stages') != ['down', 'up'] or
+                observer_summary.get('reset_free') is not True or
+                observer_summary.get('reset_history') != [] or
+                observer_summary.get('reset_history_truncated') != 0 or
+                observer_summary.get('document_loading_at_install') is not True or
+                observer_summary.get('one_shot') is not True or
+                not isinstance(observer_summary.get('guard_evidence'), dict) or
+                observer_summary['guard_evidence'].get('pointer_lock_element_is_null') is not True or
+                observer_summary['guard_evidence'].get('visibility_state') != 'visible'):
+            return dict(result, reason='input_entry_observer_history_not_qualified')
+        try:
+            down_source = down_check['certificate']['source']['tower_id']
+            pair_source = pair_check['certificate']['source']['tower_id']
+            pair_destination = pair_check['certificate']['destination']['tower_id']
+        except (KeyError, TypeError):
+            return dict(result, reason='input_entry_endpoint_evidence_missing_endpoints')
+        if (type(down_source) is not int or type(pair_source) is not int or
+                type(pair_destination) is not int or
+                (down_source, pair_source, pair_destination) !=
+                (intent.get('source'), intent.get('source'), intent.get('destination'))):
+            return dict(result, reason='input_entry_endpoint_evidence_conflicts_with_intent')
     if intent.get('tick') != before.tick.value or intent.get('document_id') != before.document_id or intent.get('match_id') != before.match_id.value:
         return dict(result, reason='before_intent_identity_conflicts_with_state')
     identity = (before.document_id, before.match_id.value, before.player_id.value)
     prior_tick = before.tick.value
-    for observed in observations:
+    prior_state = before
+    observations = []
+    up_observation_index = None
+    result['same_tick_entry_comparisons'] = []
+    for kind, observed in frames:
         if (observed.document_id, observed.match_id.value, observed.player_id.value) != identity:
             return dict(result, reason='identity_changed')
+        if type(observed.tick.value) is not int:
+            return dict(result, reason='invalid_observation_tick')
+        if observed.tick.value == prior_tick:
+            try:
+                difference = first_difference(_signature(from_canonical(prior_state)),
+                                              _signature(from_canonical(observed)))
+            except (UnsupportedState, ValueError) as error:
+                return dict(result, reason=f'unsupported_same_tick_comparison: {error}',
+                            classification='UNSUPPORTED')
+            if difference:
+                return dict(result, reason='same_tick_visible_world_conflicts',
+                            first_divergence={'tick': observed.tick.value, **difference})
+            result['same_tick_entry_comparisons'].append({'kind': kind, 'tick': prior_tick})
+            if kind == 'INPUT_ENTRY_UP_ADOPTED':
+                up_observation_index = len(observations) - 1
+            continue
         if type(prior_tick) is not int or observed.tick.value != ((prior_tick + 1) & 65535):
             return dict(result, reason='noncontiguous_observation_ticks', first_gap_after=prior_tick)
+        observations.append(observed)
         prior_tick = observed.tick.value
+        prior_state = observed
+        if kind == 'INPUT_ENTRY_UP_ADOPTED':
+            up_observation_index = len(observations) - 1
     source, destination = intent.get('source'), intent.get('destination')
     if type(source) is not int or type(destination) is not int or source == destination:
         return dict(result, reason='invalid_input_endpoints')
@@ -115,6 +206,12 @@ def audit_events(events, *, allow_legacy_manual_ui=False):
     if not births['eligible']:
         return dict(result, reason='no_unique_quantity_independent_birth')
     birth = births['candidates'][0]
+    if entry_kinds:
+        birth_index = next(index for index, state in enumerate(observations)
+                           if state.tick.value == birth['birth_tick'])
+        if birth_index <= up_observation_index:
+            return dict(result, reason='candidate_birth_not_after_mouse_up_entry')
+        result['input_entry_application_boundary'] = 'OBSERVED_BIRTH_AFTER_CAPTURED_UP; SERVER_TIME_UNKNOWN'
     result['application_displayed_tick'] = birth['birth_tick']
     result['server_application_time'] = 'UNKNOWN'
     try:

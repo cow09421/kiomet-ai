@@ -24,9 +24,9 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **194 passed, 1363 deselected** after integrating
-LaunchAll, quantity-independent newborn recording, before-only route certificates
-and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
+Current v2 regression run: **228 passed, 1363 deselected** after integrating
+LaunchAll, quantity-independent newborn recording, before-only route certificates,
+chronological entry adoption and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
 passing tests. No performance rerun was
 needed for the changed launch/arrival paths; the performance figures below retain
 their historical source/conditions. M2A ORDINARY WORLD COMPLETE remains NO.
@@ -69,18 +69,34 @@ clock/adoption review and bounded ruler-cache writer research. Root fixed three
 reviewed continuation/ordering issues and retained their regression evidence.
 Maximum remains three Luna workers; actual dispatch follows available bounded work.
 
-The optional pre-start observer and chronological captured-world adoption are
-implemented and tested. They are preparation for independently certified real
-gesture routes, not new arrival evidence. Late event-listener ordering remains
-unproved; only context init-script registration before the controlled page is
-used. The recorder does not yet arm/drain this observer. See
-V2_M2A_INPUT_ENTRY_CONTRACT.md and the separate finite admission receipts.
-Root verified 9 synthetic observer tests plus the adapter privacy boundaries.
+The optional pre-start observer is now integrated into the bounded recorder.
+It authenticates the host lease, observer source digest and document origin,
+drains/adopts DOWN before destination movement and then UP before polling.
+Endpoint checks retain gesture-route continuity UNKNOWN. Passive blur, leave,
+touch, pointer-lock, visibility and keyboard guards invalidate affected receipts.
+Cleanup release after a failure remains a possibly dispatched action. The
+offline auditor compares entry frames in chronological order without replacing
+its original BEFORE baseline; duplicate displayed ticks must match the complete
+visible world. Successful endpoint checks, complete/reset-free observer history
+and a VALID receipt are required before diagnostic launch attribution.
+See V2_M2A_INPUT_ENTRY_CONTRACT.md and V2_M2A_INPUT_ENTRY_SCOPE.md.
+Root verified 12 synthetic observer tests plus the adapter privacy boundaries.
 The first 120-second disabled host ended normally but its later inspection missed
 the finite lease; PARTIAL receipt remains. A separate prepared 30-second host
 verified inline loading/disarmed status, source pin, normal Play and teardown.
 Both had zero observer arms and zero troop gestures. Its admission PASS is only
 for disabled startup; armed real-event and arrival evidence are still pending.
+The next planned two-host diagnostic added zero arms/troop gestures: host 1's
+execute request was rejected before attachment because the finite lease could
+not cover its cleanup margin; host 2 retained PARTIAL positive-visible coverage
+at both preflights and sent no execute request. Both hosts exited normally.
+The listener inventory also found a registered capture callback between the
+observer and canvas broker; its effects remain unqualified. These exclusions
+add zero event or trajectory credit. The current positive-cell/absent-actor
+coverage review confirmed that sensor coverage alone cannot prove a missing actor
+is an authoritative empty slot: pinned getters distinguish absent chunk and
+absent tower, but chunk freshness remains unproved. No decoder relaxation was
+made. See V2_M2A_VISIBLE_ABSENCE_REVIEW.md and V2_M2A_INPUT_ENTRY_LIVE_VALIDATION.json.
 
 Ruler-cache writer continuity remains UNKNOWN. The pinned player slot is 64 bytes
 and aura reads its optional TowerId at offset 0; alliances use offset 8. Vendored

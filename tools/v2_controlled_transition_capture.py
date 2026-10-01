@@ -26,6 +26,9 @@ from kiomet_ai.v2.control import control_readiness_gaps
 from kiomet_ai.v2.state import Lifecycle, Relation
 from kiomet_ai.observe import TOWER_TYPES, TOWER_TYPE_ZH
 from tools.v2_direct_route_certificate import direct_route_certificate
+from tools.v2_input_entry_capture import (
+    perform_buffered_drag, validate_observer_startup,
+)
 
 
 ALLOWED_UNITS = frozenset(range(6))  # shields through soldiers; no weapons/Ruler.
@@ -519,6 +522,13 @@ async def run(args):
     source_manifest[str(Path(__file__).resolve().relative_to(ROOT))] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     route_tool = Path(__file__).with_name('v2_direct_route_certificate.py')
     source_manifest[str(route_tool.relative_to(ROOT))] = hashlib.sha256(route_tool.read_bytes()).hexdigest()
+    input_capture_tool = Path(__file__).with_name('v2_input_entry_capture.py')
+    source_manifest[str(input_capture_tool.relative_to(ROOT))] = hashlib.sha256(input_capture_tool.read_bytes()).hexdigest()
+    if args.input_entry_observer:
+        endpoint_tool = Path(__file__).with_name('v2_input_entry_evidence.py')
+        if not endpoint_tool.is_file():
+            raise ValueError("input-entry endpoint evidence helper is unavailable")
+        source_manifest[str(endpoint_tool.relative_to(ROOT))] = hashlib.sha256(endpoint_tool.read_bytes()).hexdigest()
     ui_rule = ROOT / "docs/V2_M2A_UI_INPUT_RULE.md"
     if ui_rule.is_file():
         source_manifest[str(ui_rule.relative_to(ROOT))] = hashlib.sha256(ui_rule.read_bytes()).hexdigest()
@@ -526,6 +536,8 @@ async def run(args):
     if launch_rule.is_file():
         source_manifest[str(launch_rule.relative_to(ROOT))] = hashlib.sha256(launch_rule.read_bytes()).hexdigest()
     events, errors, exclusions = [], [], []
+    input_entry_status = None
+    input_entry_proof = None
     try:
         async with async_playwright() as pw:
             browser = await connect_dedicated(pw, ROOT)
@@ -538,6 +550,23 @@ async def run(args):
             try:
                 await ex.attach()
                 initial, initial_raw = await _sample_ready(ex)
+                input_entry_host_prerequisite = None
+                if args.input_entry_observer:
+                    observer_path = ROOT / "src/kiomet_ai/v2/observe/input_entry.js"
+                    observer_sha = hashlib.sha256(observer_path.read_bytes()).hexdigest()
+                    input_entry_status = await page.evaluate("""() => ({
+                      controlled_document_observer_status: (() => {
+                        const o=window[Symbol.for('kiomet.inputEntryObserver.v1')];
+                        return o&&typeof o.status==='function'?o.status():null;
+                      })(), document_time_origin_ms:performance.timeOrigin})""")
+                    input_entry_proof = validate_observer_startup(lease, input_entry_status,
+                        current_source_sha256=observer_sha,
+                        extractor_time_origin=ex.time_origin)
+                    preregistered = input_entry_proof["registered_before_controlled_page_creation"]
+                    input_entry_host_prerequisite = {
+                        "init_script_registered_before_page": preregistered,
+                        "page_created_after_registration": preregistered}
+                    source_manifest[str(observer_path.relative_to(ROOT))] = observer_sha
                 identity = (initial.document_id, initial.match_id.value, initial.player_id.value)
                 view = await page.evaluate("""() => {const c=document.querySelector('canvas'),r=c?.getBoundingClientRect();
                   return c&&r?{w:c.width,h:c.height,cw:r.width,ch:r.height,left:r.left,top:r.top,dpr:devicePixelRatio}:null}""")
@@ -566,6 +595,10 @@ async def run(args):
                 else:
                     with path.open("w", encoding="utf8") as stream:
                         checked, before = initial_check, initial
+                        if args.input_entry_observer:
+                            durable_before(stream, {"kind": "INPUT_ENTRY_STARTUP_PROOF",
+                                "proof": input_entry_proof,
+                                "headless_observer_metadata": lease.get("input_entry_observer")})
                         source, destination = checked["source"], checked["destination"]
                         if source.supply_line_present.value is not False:
                             raise ValueError("source supply-line presence is not positively false")
@@ -690,6 +723,7 @@ async def run(args):
                         if hit_tests != {"source": True, "destination": True}:
                             raise ValueError("fresh_endpoint_canvas_hit_test_failed")
                         before_ids = {f.id.value for f in (before.forces.value or ()) if f.id.value}
+                        capture_initial_tick = before.tick.value
                         intent = {"kind": "BEFORE_INTENT", "run_id": run_id, "command_index": 1,
                             "time_monotonic": time.monotonic(), "scenario": fresh["scenario"],
                             "scenario_class": fresh["scenario_class"],
@@ -760,7 +794,62 @@ async def run(args):
                                         await page.mouse.up()
                                     finally:
                                         mouse_down = False
-                        await record_before_gesture(stream, intent, ordinary_drag)
+                        if args.input_entry_observer:
+                            from tools.v2_input_entry_evidence import (
+                                validate_input_entry_down, validate_input_entry_pair,
+                            )
+
+                            def validate_entry_stage(stage, original_before, adopted_state, entry):
+                                kwargs = {"client_sha256": before.client_sha256,
+                                    "document_time_origin_ms": ex.time_origin,
+                                    "expected_source_id": source.id}
+                                if stage == "down":
+                                    checked_entry = validate_input_entry_down(
+                                        before, entry, entry_state=adopted_state, **kwargs)
+                                    if not checked_entry.get("qualified"):
+                                        raise ValueError("down endpoint evidence rejected: " +
+                                            str(checked_entry.get("reason")))
+                                    return checked_entry
+                                checked_pair = validate_input_entry_pair(
+                                    before, down_entry_saved[0], entry,
+                                    expected_destination_id=destination.id,
+                                    down_state=down_state_saved[0], up_state=adopted_state,
+                                    **kwargs)
+                                if not checked_pair.get("qualified"):
+                                    raise ValueError("entry endpoint pair rejected: " +
+                                        str(checked_pair.get("reason")))
+                                return checked_pair
+
+                            down_entry_saved = [None]
+                            down_state_saved = [None]
+                            original_validator = validate_entry_stage
+                            def save_and_validate(stage, original_before, adopted_state, entry):
+                                if stage == "down":
+                                    down_entry_saved[0] = entry
+                                    down_state_saved[0] = adopted_state
+                                return original_validator(stage, original_before, adopted_state, entry)
+
+                            expected_entry_coords = {"down": {"x": sx, "y": sy},
+                                "up": {"x": dx, "y": dy}, "tolerancePx": 1}
+                            capture_result = await perform_buffered_drag(
+                                page=page, extractor=ex, source_point=(sx, sy),
+                                destination_point=(dx, dy), expected=expected_entry_coords,
+                                host_prerequisite=input_entry_host_prerequisite,
+                                before_state=before, source_id=source.id, stream=stream,
+                                intent=intent, endpoint_validator=save_and_validate,
+                                deadline_monotonic=started + args.seconds)
+                            if not capture_result["valid"]:
+                                raise ValueError("buffered input-entry capture was not valid")
+                            capture_initial_tick = capture_result["up_state"].tick.value
+                            durable_before(stream, {"kind": "INPUT_ENTRY_CANONICAL_PAIR",
+                                "down": capture_result["down_entry"],
+                                "down_state": capture_result["down_state"],
+                                "up": capture_result["up_entry"],
+                                "up_state": capture_result["up_state"],
+                                "endpoint_certificate": capture_result["endpoint_certificate"],
+                                "observer_summary": capture_result["observer_summary"]})
+                        else:
+                            await record_before_gesture(stream, intent, ordinary_drag)
                         released_at = time.monotonic()
                         prior_destination_counts = _counts(fresh["destination"].units) or {}
                         launched_pair = (source.id, destination.id)
@@ -780,7 +869,7 @@ async def run(args):
                                 for k in now_counts)
                         capture_deadline = min(started + args.seconds, released_at + 10)
                         tick_states, poll_errors, arrival_cue, completion = await capture_distinct_ticks(
-                            ex.metadata, ex.sample, before.tick.value, capture_deadline, identity, arrived)
+                            ex.metadata, ex.sample, capture_initial_tick, capture_deadline, identity, arrived)
                         states = []
                         for observed_at, state in tick_states:
                             state_row = {"offset_s": round(observed_at - released_at, 3),
@@ -854,7 +943,10 @@ async def run(args):
         "first_observed_change": "first canonical visible tower/force/lifecycle signature change; not a simulation divergence",
         "first_simulation_divergence": "UNKNOWN until scenario eligibility and route/fuel rules are proved",
         "unknowns": ["server application tick", "future route after current adjacent leg", "fuel cost", "supply-line path contents"],
-        "input_policy": "official Playwright page mouse only; no global input, packets, semantic WASM calls, upgrades, weapons, enemies, allies, or supply-line configuration"}
+        "input_policy": "official Playwright page mouse only; no global input, packets, semantic WASM calls, upgrades, weapons, enemies, allies, or supply-line configuration",
+        "input_entry_observer_requested": bool(getattr(args, "input_entry_observer", False)),
+        "input_entry_observer_metadata": (input_entry_status if getattr(args, "input_entry_observer", False) else None),
+        "input_entry_startup_proof": (input_entry_proof if getattr(args, "input_entry_observer", False) else None)}
     report_path = out / f"controlled-transition-{run_id}.json"
     report_path.write_text(json.dumps(report, indent=2, default=state_json, ensure_ascii=False) + "\n", encoding="utf8")
     release_writer(writer_path, writer_token)
@@ -865,6 +957,8 @@ async def run(args):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true", help="explicitly permit bounded ordinary UI commands")
+    parser.add_argument("--input-entry-observer", action="store_true",
+        help="require a headless lease with the pre-start input-entry observer and adopt buffered event samples")
     parser.add_argument("--source", type=int, help="operator-selected positively visible own source")
     parser.add_argument("--destination", type=int, help="operator-selected adjacent own or empty neutral destination")
     parser.add_argument("--max-commands", type=int, default=1)

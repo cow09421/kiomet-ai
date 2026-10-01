@@ -75,6 +75,8 @@
     const loadingAtInstall = readyStateAtInstall === "loading";
     const installPerformanceOrigin = target.performance.timeOrigin;
     const installPerformanceNow = target.performance.now();
+    const resetEventNames = ["blur", "mouseleave", "keydown", "keyup", "touchstart", "touchmove", "touchend",
+      "touchcancel", "pointerlockchange", "pointercancel", "visibilitychange"];
     let capture = null;
     let armedOnce = false;
     let removed = false;
@@ -94,6 +96,15 @@
         capture.status = "INVALID";
         capture.errors.push(reason);
       }
+    }
+
+    function onResetEvent(event) {
+      if (!capture || capture.status === "INVALID") return;
+      const eventName = event && typeof event.type === "string" ? event.type : "unknown";
+      if (capture.resetHistory.length < 8) capture.resetHistory.push(eventName);
+      else capture.resetHistoryTruncated += 1;
+      capture.resetFree = false;
+      invalidate(`reset-sensitive event during armed drag: ${eventName}`);
     }
 
     function eventPoint(event) {
@@ -167,6 +178,13 @@
 
     target.addEventListener("mousedown", onMouse, true);
     target.addEventListener("mouseup", onMouse, true);
+    const resetRegistrations = [];
+    for (const type of resetEventNames) {
+      const owner = type === "visibilitychange" || type === "pointerlockchange" ? document : target;
+      if (typeof owner.addEventListener !== "function") continue;
+      owner.addEventListener(type, onResetEvent, {capture: true, passive: true});
+      resetRegistrations.push({owner, type});
+    }
 
     const api = {
       status() {
@@ -176,6 +194,10 @@
           install_performance_time_origin_ms: installPerformanceOrigin,
           install_performance_now_ms: installPerformanceNow,
           armed_once: armedOnce, armed: !!capture,
+          guard_evidence: capture ? capture.guardEvidence : null,
+          reset_free: capture ? capture.resetFree : null,
+          reset_history: capture ? capture.resetHistory.slice() : [],
+          reset_history_truncated: capture ? capture.resetHistoryTruncated : 0,
           status: capture ? capture.status : (removed ? "REMOVED" : "DISARMED")});
       },
       arm(options) {
@@ -197,11 +219,23 @@
         if (canvas && (String(canvas.tagName).toLowerCase() !== "canvas" || !metrics(canvas))) {
           throw new TypeError("expected canvas is invalid");
         }
+        if (document.pointerLockElement !== null) {
+          throw new Error("pointer lock must be explicitly absent before arming");
+        }
+        const visibilityApiAvailable = "visibilityState" in document;
+        const visibilityState = visibilityApiAvailable ? document.visibilityState : null;
+        if (visibilityApiAvailable && visibilityState !== "visible") {
+          throw new Error("document must be visible before arming");
+        }
         armedOnce = true;
         capture = {decoder: options.decoder, memories: options.memories, owners: options.owners,
-          canvas, expected, status: "ARMED", entries: [], errors: [], drained: new Set()};
+          canvas, expected, status: "ARMED", entries: [], errors: [], drained: new Set(),
+          guardEvidence: {pointer_lock_element_is_null: true,
+            visibility_api_available: visibilityApiAvailable, visibility_state: visibilityState},
+          resetFree: true, resetHistory: [], resetHistoryTruncated: 0};
         return deepFreeze({armed: true, one_shot: true,
           document_loading_at_install: loadingAtInstall,
+          guard_evidence: capture.guardEvidence,
           host_prestart_evidence: structuredClone(hostProof)});
       },
       drainEntry(stage) {
@@ -244,6 +278,9 @@
         const result = deepFreeze({valid: active.status === "COMPLETE" && active.entries.length === 2,
           status: active.status, entries: active.entries.slice(), errors: active.errors.slice(),
           drained_stages: [...active.drained],
+          guard_evidence: active.guardEvidence, reset_free: active.resetFree,
+          reset_history: active.resetHistory.slice(),
+          reset_history_truncated: active.resetHistoryTruncated,
           document_loading_at_install: loadingAtInstall,
           one_shot: true});
         capture = null;
@@ -258,6 +295,9 @@
         if (!removed) {
           target.removeEventListener("mousedown", onMouse, true);
           target.removeEventListener("mouseup", onMouse, true);
+          for (const {owner, type} of resetRegistrations) {
+            owner.removeEventListener(type, onResetEvent, {capture: true, passive: true});
+          }
           removed = true;
         }
         return deepFreeze({removed: true, queue_cleared: true});

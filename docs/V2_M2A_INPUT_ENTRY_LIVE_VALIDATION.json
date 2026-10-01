@@ -1,0 +1,118 @@
+{
+  "QUESTION": "Can the opt-in pre-start observer preserve a real ordinary friendly drag with complete visible-world evidence?",
+  "BEFORE": {
+    "starting_head": "adf228af195cff029ed85704a2584108ed9f3ee1",
+    "plan": "docs/V2_M2A_INPUT_ENTRY_LIVE_PLAN.json",
+    "plan_sha256": "73e9f8e781c9308cc6424e7f4bfaaf6da7dc23126ce92172b9111e9f401b7a51",
+    "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c"
+  },
+  "ACTION": {
+    "finite_hosts": 2,
+    "host_seconds_limit_each": 180,
+    "normal_Play_joins": 2,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "desktop_input": 0,
+    "semantic_WASM_calls": 0,
+    "game_heap_writes": 0
+  },
+  "EXPECTED": "If a fresh complete ordinary own-source/non-Ruler friendly destination qualifies, use at most one normal drag and retain original BEFORE plus ordered DOWN/UP and full post-release states. Otherwise withhold troops and preserve exclusion.",
+  "OBSERVED": {
+    "host1": {
+      "startup_observer_sha256": "ae2970c0bb6aba53a937a17d4d02fa7ea6941f337ec43d2c2c127b29927d0d5c",
+      "normal_exit_code": 0,
+      "execute_request": "source15925496 destination15925497 max1 seconds30",
+      "execute_pre_attachment_rejection": "owned browser lease/profile cannot cover bounded cohort and mouse-release margin",
+      "observer_arms": 0,
+      "troop_gestures": 0
+    },
+    "host2": {
+      "startup_observer_sha256": "9465a5c3581d6659571fa83949b90d7cb13896e6acdbba3889f4c0dd7d78ecb6",
+      "normal_exit_code": 0,
+      "execute_requests": 0,
+      "exclusion": "visible_actor_coverage_incomplete; canonical PARTIAL at both read-only preflights",
+      "observer_arms": 0,
+      "troop_gestures": 0
+    },
+    "preflights": [
+      {
+        "fixture": "tests/fixtures/v2/input-entry-preflight-host1-20261002.json.gz",
+        "raw_sha256": "4a3d735c58cb017fd54db2f37a955aa8fd00e722d2bb3e1c2129b1303fd52508",
+        "gzip_sha256": "8f48bf16e936a920725c0e44ee6f8a42f371353f33c603621489062c82048b05",
+        "tick": 33970,
+        "canonical_coverage": "PLAYER_VISIBLE_COMPLETE",
+        "observer_arms": 0,
+        "troop_gestures": 0,
+        "candidate_count": 8,
+        "listener_count": 22,
+        "source_scope": "read-only visible-world preflight; no after-event or simulation accuracy credit"
+      },
+      {
+        "fixture": "tests/fixtures/v2/input-entry-preflight-host2-20261002.json.gz",
+        "raw_sha256": "ca93a5ed4537d8cfd3151832cf6b9a6d4b115ea0a403a7a73eb27f26a0ef406d",
+        "gzip_sha256": "989f8b9b1379d835abf75db94ef05de3b9d4a4b65700ddd89d6177837e6ad68b",
+        "tick": 34879,
+        "canonical_coverage": "PARTIAL",
+        "observer_arms": 0,
+        "troop_gestures": 0,
+        "candidate_count": 0,
+        "listener_count": 22,
+        "source_scope": "read-only visible-world preflight; no after-event or simulation accuracy credit"
+      },
+      {
+        "fixture": "tests/fixtures/v2/input-entry-preflight-host2-warm-20261002.json.gz",
+        "raw_sha256": "c6bf7b19063107f8e6ac14e3dc22e346c5a1efd9e2623a11cd1994e6e482b169",
+        "gzip_sha256": "ebfd166862edf77c123705b58707633c2b0879930cd481360e02e2158243ffff",
+        "tick": 35128,
+        "canonical_coverage": "PARTIAL",
+        "observer_arms": 0,
+        "troop_gestures": 0,
+        "candidate_count": 0,
+        "listener_count": 22,
+        "source_scope": "read-only visible-world preflight; no after-event or simulation accuracy credit"
+      }
+    ],
+    "cleanup": {
+      "host_lease_absent": true,
+      "writer_lease_absent": true,
+      "stop_marker_absent": true
+    },
+    "listener_interval": "observer window capture; additional registered window capture callback script37 line7994; canvas broker script8 line2270; effect/route continuity UNKNOWN"
+  },
+  "SIMULATED": "NOT_APPLICABLE to live cohort: no gesture. Synthetic journal migration tests exercise original-BEFORE rollout, duplicate-tick full-world checks and success/history gates; no new independent events.",
+  "DIFF": "Host1 rejected before input by cleanup-margin gate; host2 retained partial coverage. No full-world simulation comparison or matching arrival occurred. All exclusions retained.",
+  "VERDICT": "PASS_OFFLINE_ENGINEERING; LIVE_EXCLUDED_WITH_ZERO_INPUT; no formal M2 failure and no event/trajectory credit. M2 IN_PROGRESS, M3 NOT_STARTED.",
+  "verification": {
+    "v2_pytest_passed": 228,
+    "unrelated_deselected": 1363,
+    "synthetic_observer_node_passed": 12,
+    "adapter_privacy_boundaries": "PASS",
+    "independent_Luna_receipt_review": "ACCEPT after success-certificate and reset-history gates"
+  },
+  "accounting": {
+    "new_formal_one_tick_credit": 0,
+    "formal_one_tick_total": 1053,
+    "ordinary_independent_event_total": 1,
+    "ordinary_event_target": 100,
+    "friendly_reinforcement_formal": 0,
+    "ordinary_combat_formal": 0,
+    "new_formal_5_10s_trajectories": 0,
+    "historical_nonoverlapping_supported_5s_trajectories": 2,
+    "preserved_unqualified_trajectory_failures": 13,
+    "ordinary_world_complete": false,
+    "M2": "NOT_PASSED",
+    "M3": "NOT_STARTED"
+  },
+  "source_manifest": {
+    "src/kiomet_ai/v2/observe/input_entry.js": "9465a5c3581d6659571fa83949b90d7cb13896e6acdbba3889f4c0dd7d78ecb6",
+    "src/kiomet_ai/v2/observe/extractor.py": "e6e18091df642afe4da9d478a52549c76e76f17bab6a569b126a29849af3cad7",
+    "src/kiomet_ai/v2/sim/step.py": "548911631642b0c22c7a63f4d068ecd6284c16e1b989d83772e970488818366f",
+    "tools/v2_controlled_transition_capture.py": "5d1d45b2388897c83552238c2e056cbc3775debff5d13bd553b9797e050030dd",
+    "tools/v2_input_entry_capture.py": "f85043c138406eb6ea890d0364b711407355decf5c517b983bd9ad48634ec8ad",
+    "tools/v2_input_entry_evidence.py": "d70a8bd974998c5fc3255dfab0d597dccec6d8a9f3ce06a4bbe40e2b55c09109",
+    "tools/v2_controlled_launch_audit.py": "958dcd922c8b0d1a68903bf5e361414b256cad42211299e48499b1a676c54c02",
+    "tools/v2_direct_route_certificate.py": "cb651091db5c0518402071beabbf4fc5ec85a02729428cd20288656dda08fc6f",
+    "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4"
+  },
+  "next_work": "Pinned/public coverage review confirms missing chunk and absent tower are distinct; per-chunk freshness remains UNKNOWN, so strict coverage stays unchanged. See docs/V2_M2A_VISIBLE_ABSENCE_REVIEW.md. Next collect a qualified complete-visible reinforcement and resolve handler-time route continuity; no additional formal credit or performance claim."
+}

@@ -6,7 +6,17 @@ const {install, key} = require("../src/kiomet_ai/v2/observe/input_entry.js");
 
 class FakeWindow {
   constructor(readyState = "loading") {
-    this.document = {readyState};
+    this.document = {readyState, pointerLockElement: null, visibilityState: "visible",
+      listeners: new Map(),
+      addEventListener(type, listener, capture) {
+        const rows = this.listeners.get(type) || [];
+        rows.push({listener, capture: !!capture});
+        this.listeners.set(type, rows);
+      },
+      removeEventListener(type, listener, capture) {
+        const rows = this.listeners.get(type) || [];
+        this.listeners.set(type, rows.filter(row => row.listener !== listener || row.capture !== !!capture));
+      }};
     this.devicePixelRatio = 1;
     this.performance = {timeOrigin: 1234, now: () => 56};
     this.listeners = new Map();
@@ -26,6 +36,10 @@ class FakeWindow {
     const rows = this.listeners.get(event.type) || [];
     for (const row of rows.filter(item => item.capture)) row.listener(event);
     for (const row of rows.filter(item => !item.capture)) row.listener(event);
+  }
+  dispatchDocument(type) {
+    const event = {type, target: this.document};
+    for (const row of this.document.listeners.get(type) || []) row.listener(event);
   }
 }
 
@@ -198,4 +212,61 @@ test("late bootstrap, shared memory and malformed endpoint bounds cannot arm", (
     owners: [{}], hostPrerequisite: {init_script_registered_before_page: true,
       page_created_after_registration: true},
     expected: {down: {x: 1, y: 1}, up: {x: 2, y: 2}, tolerancePx: 3}}), /tolerance/);
+});
+
+test("pointer lock and hidden documents fail closed at arm without inventing missing visibility", () => {
+  const locked = fixture();
+  locked.win.document.pointerLockElement = {};
+  assert.throws(() => locked.arm(), /pointer lock/);
+
+  const hidden = fixture();
+  hidden.win.document.visibilityState = "hidden";
+  assert.throws(() => hidden.arm(), /visible/);
+
+  const absentVisibility = fixture();
+  delete absentVisibility.win.document.visibilityState;
+  const armed = absentVisibility.arm();
+  assert.equal(armed.guard_evidence.visibility_api_available, false);
+  assert.equal(armed.guard_evidence.visibility_state, null);
+  assert.equal(absentVisibility.api.status().guard_evidence.visibility_state, null);
+  absentVisibility.api.disarm();
+});
+
+test("reset-sensitive events invalidate armed capture passively with bounded history", () => {
+  const events = [
+    ["window", "blur"], ["window", "mouseleave"], ["window", "keydown"],
+    ["window", "keyup"], ["window", "touchstart"],
+    ["window", "touchmove"], ["window", "touchend"], ["window", "touchcancel"],
+    ["document", "pointerlockchange"], ["window", "pointercancel"],
+    ["document", "visibilitychange"]
+  ];
+  for (const [owner, type] of events) {
+    const f = fixture();
+    f.arm();
+    if (owner === "document") f.win.dispatchDocument(type);
+    else f.win.dispatch({type});
+    const status = f.api.status();
+    assert.equal(status.status, "INVALID", type);
+    assert.equal(status.reset_free, false, type);
+    assert.deepEqual(status.reset_history, [type], type);
+    const result = f.api.take();
+    assert.equal(result.valid, false, type);
+    assert.equal(result.reset_free, false, type);
+    assert.deepEqual(result.reset_history, [type], type);
+    assert.equal(f.calls.length, 0, type);
+  }
+});
+
+test("reset-sensitive events after down retain bounded evidence and never take a second sample", () => {
+  const f = fixture();
+  f.arm();
+  f.dispatch("mousedown", {x: 10, y: 20});
+  f.win.dispatch({type: "blur"});
+  f.win.dispatch({type: "touchcancel"});
+  const result = f.api.take();
+  assert.equal(result.valid, false);
+  assert.equal(result.status, "INVALID");
+  assert.equal(result.reset_free, false);
+  assert.deepEqual(result.reset_history, ["blur"]);
+  assert.deepEqual(f.calls, ["decode"]);
 });
