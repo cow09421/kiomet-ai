@@ -1,0 +1,66 @@
+{
+  "status": "AFTER_INFERRED_ACTION_CALIBRATION_ONLY",
+  "cohort": "7d56a775bc4c",
+  "before_sequence": 1146,
+  "after_sequence": 1148,
+  "world_sequence": 46520,
+  "formal_hypothesis_complete_state_matched": false,
+  "failure_retained_in": "docs/V2_M2A_ORDINARY_CANDIDATE.json",
+  "new_observed_force": {
+    "owner": 30,
+    "source": 17826052,
+    "destination": 17891588,
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "progress": 0
+  },
+  "source_inventory_delta": {
+    "tower": 17826052,
+    "tanks_before": 3,
+    "tanks_after": 0
+  },
+  "diagnosis": "Simultaneous force disappearance and a new zero-progress force keep observed force count unchanged. No-exogenous-action scenario omits the new launch.",
+  "after_inferred_action": {
+    "source": 17826052,
+    "destination": 17891588,
+    "owner": 30,
+    "units": [
+      0,
+      0,
+      0,
+      0,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "terminal": null
+  },
+  "action_known_before": false,
+  "independent_scenario_eligible": false,
+  "prediction_selected_case": false,
+  "calibrated_complete_state_match": true,
+  "calibrated_counts_as_accuracy_success": false,
+  "source_manifest": {
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "798ea3cad222f9b440209491b22e601e5a7dbaeae72929fa6b64b981bac519c7",
+    "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
+  },
+  "limits": "Calibration verifies candidate consistency and input ordering; after-inferred commands are not independent scenario evidence and do not erase the original full-state mismatch.",
+  "terminal_route_known_before": false,
+  "terminal_route_known_after": false,
+  "calibration_requires_terminal_route": false
+}

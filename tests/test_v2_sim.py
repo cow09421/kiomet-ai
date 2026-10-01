@@ -5,8 +5,10 @@ import pytest
 from kiomet_ai.v2.sim import from_canonical, step, Launch, Scenario, UnsupportedState, RuntimeTimeModel
 from kiomet_ai.v2.sim.model import SimForce, SimTower, SimulationState
 from kiomet_ai.v2.state import Fact
-from kiomet_ai.v2.sim.combat import fight_ground
+from kiomet_ai.v2.sim.combat import fight_ground, fight_ordinary
 from test_v2_control import control_fixture
+from tools.v2_sim_differential import input_has_potential_event
+from kiomet_ai.v2.sim.step import phase
 
 
 def empty_world():
@@ -157,8 +159,9 @@ def test_retained_daf_ground_defense_candidate_consumes_one_shield():
     assert result.defender==(19,0,0,0,0,12,0,0,0,0)
 
 
-def test_retained_complete_ground_transition_matches_all_visible_state():
-    receipt=json.loads((Path(__file__).parent/'fixtures/v2_ground_daf23737.json').read_text())
+@pytest.mark.parametrize('fixture',['v2_ground_daf23737.json','v2_ground_7d46518.json'])
+def test_retained_complete_ground_transition_matches_all_visible_state(fixture):
+    receipt=json.loads((Path(__file__).parent/'fixtures'/fixture).read_text())
     data=receipt['input']
     towers=tuple(SimTower(**{key:tuple(tuple(p) for p in value) if key=='production'
                    else tuple(value) if key in ('units','capacity','neighbors','position') else value
@@ -173,6 +176,65 @@ def test_retained_complete_ground_transition_matches_all_visible_state():
             'forces':sorted((f.owner,f.source,f.destination,f.units,f.progress) for f in result.forces),
             'rulers':sorted(result.visible_rulers)}
     assert json.loads(json.dumps(actual))==receipt['expected']
+    wider=step(state,scenario=Scenario(ordinary_combat=True))
+    assert wider==result
+
+
+def test_ordinary_bomber_air_damage_to_surface_and_air_targets():
+    bomber=(0,0,0,1,0,0,0,0,0,0)
+    shield=(4,0,0,0,0,0,0,0,0,0)
+    fighter=(0,1,0,0,0,0,0,0,0,0)
+    assert fight_ordinary(bomber,shield,(4,)*10).winner=='ATTACKER'
+    air=fight_ordinary(bomber,fighter,(0,)*10)
+    assert air.winner=='DEFENDER' and air.defender==fighter and not any(air.attacker)
+    with pytest.raises(UnsupportedState,match='AIR_OR_SPECIAL'):
+        fight_ground(bomber,shield)
+
+
+def test_ordinary_tower_aircraft_field_depends_on_overflow_capacity():
+    attacker=(0,1,0,0,0,0,0,0,0,0)
+    defender=(0,2,0,0,0,0,0,0,0,0)
+    housed=fight_ordinary(attacker,defender,(2,)*10)
+    overflow=fight_ordinary(attacker,defender,(0,)*10)
+    assert housed.winner=='ATTACKER' and housed.attacker==attacker
+    assert overflow.winner=='DEFENDER' and overflow.defender[1]==1
+    with pytest.raises(UnsupportedState,match='UNKNOWN_COMBAT_CAPACITY'):
+        fight_ordinary(attacker,defender,None)
+    with pytest.raises(UnsupportedState,match='SPECIAL_COMBAT'):
+        fight_ordinary((0,0,0,0,0,0,1,0,0,0),defender,(2,)*10)
+
+
+def test_event_selection_rejects_stationary_capacity_and_single_blocked_ticks():
+    state=empty_world()
+    tower=replace(state.towers[0],units=(10,0,0,0,0,0,0,0,0,0),
+                  capacity=(10,)*10,production=((0,1),))
+    capped=replace(state,towers=(tower,))
+    assert not input_has_potential_event(capped)
+    assert step(capped).towers==capped.towers
+    blocked=replace(tower,units=(0,0,0,0,0,0,0,0,0,1),production=((5,1),))
+    assert not input_has_potential_event(replace(state,towers=(blocked,)))
+    producing=replace(tower,units=(9,0,0,0,0,0,0,0,0,0))
+    assert input_has_potential_event(replace(state,towers=(producing,)))
+
+
+def test_event_selection_keeps_possible_mobile_supply_line_for_explicit_rejection():
+    state=empty_world()
+    tower=replace(state.towers[0],units=(0,0,0,0,0,10,0,0,0,0),
+                  capacity=(10,)*10,production=((5,1),))
+    possible=replace(state,towers=(tower,))
+    assert input_has_potential_event(possible)
+    with pytest.raises(UnsupportedState,match='PRODUCTION_SUPPLY_LINE'):
+        step(possible)
+
+
+def test_cached_phase_preserves_chunk_coordinates_and_u16_wrap():
+    for x in (0,15,16,511):
+        for y in (0,15,16,511):
+            for tick in (0,1,65535):
+                assert phase(tick,x|(y<<16))==(tick+(x>>4)+((y>>4)<<8))&65535
+    state=empty_world()
+    with pytest.raises(UnsupportedState,match='DUPLICATE_TOWER_IDS'):
+        step(replace(state,towers=(state.towers[0],state.towers[0])))
 
 
 def test_terminal_empty_capture_accepts_shield_with_living_claiming_unit():
@@ -192,3 +254,18 @@ def test_terminal_hypothesis_does_not_turn_unknown_fuel_into_nonexpired():
         step(replace(state,forces=(force,)))
     with pytest.raises(UnsupportedState,match='EXPIRED_ARRIVAL'):
         step(replace(state,forces=(replace(force,fuel=0),)))
+
+
+def test_terminal_friendly_arrival_requires_independent_no_supply_line_premise():
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,)*10,production=(),relation='SELF')
+    force=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,terminal=True,fuel=150)
+    state=replace(state,towers=(state.towers[0],destination),forces=(force,))
+    with pytest.raises(UnsupportedState,match='UNKNOWN_REINFORCEMENT_SUPPLY_LINE'):
+        step(state)
+    with pytest.raises(UnsupportedState,match='UNKNOWN_REINFORCEMENT_SUPPLY_LINE'):
+        step(state,scenario=Scenario(terminal_forces=(0,)))
+    result=step(state,scenario=Scenario(no_supply_line_towers=(4,)))
+    assert not result.forces and result.towers[1].units[5]==3
+    with pytest.raises(UnsupportedState,match='INVALID_SUPPLY_LINE_SCENARIO'):
+        step(state,scenario=Scenario(no_supply_line_towers=(99,)))

@@ -4,7 +4,7 @@ from ..state import Units
 from ..observe.forces import motion
 from ..observe.rules import DOWNGRADE, production
 from .model import SimulationState, SimForce, UnsupportedState
-from .combat import fight_ground
+from .combat import fight_ground, fight_ordinary
 
 
 @dataclass(frozen=True,slots=True)
@@ -23,10 +23,18 @@ class Scenario:
     terminal_forces: tuple[int,...]=()
     ground_combat: bool=False  # Validation candidate until live ordering is verified.
     opponent_launches: tuple[Launch,...]=()
+    ordinary_combat: bool=False  # Separate wider hypothesis; never enabled implicitly.
+    no_supply_line_towers: tuple[int,...]=()  # Explicit before-input scenario, never inferred from terminal path.
+
+
+@lru_cache(maxsize=4096)
+def phase_offset(tower_id):
+    # Static arithmetic only: no actor facts, world clock, or lifecycle state.
+    return ((tower_id>>4)&4095)+((tower_id>>20)<<8)
 
 
 def phase(sequence,tower_id):
-    return (sequence+((tower_id>>4)&4095)+((tower_id>>20)<<8)) & 65535
+    return (sequence+phase_offset(tower_id)) & 65535
 
 
 @lru_cache(maxsize=4096)
@@ -40,8 +48,12 @@ def movement_parameters(units,source_position,destination_position):
 def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenario=Scenario()):
     if not scenario.fixed_morale: raise UnsupportedState('DYNAMIC_MORALE_AURA')
     towers={tower.id:tower for tower in state.towers}
+    if len(towers)!=len(state.towers): raise UnsupportedState('DUPLICATE_TOWER_IDS')
     forces=list(state.forces)
     terminals=set(scenario.terminal_forces)
+    no_supply_lines=set(scenario.no_supply_line_towers)
+    if any(type(i) is not int or i not in towers for i in no_supply_lines):
+        raise UnsupportedState('INVALID_SUPPLY_LINE_SCENARIO')
     if any(type(i) is not int or not 0<=i<len(forces) for i in terminals):
         raise UnsupportedState('INVALID_TERMINAL_SCENARIO')
     sequence=(state.world_sequence+1)&65535
@@ -50,7 +62,8 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             if any(other.owner!=force.owner and (other.source,other.destination)==(force.destination,force.source)
                    for other in forces[i+1:]):
                 raise UnsupportedState('OPPOSED_FORCE_COMBAT')
-    for key,tower in tuple(towers.items()):
+    for tower in state.towers:
+        key=tower.id
         clock=phase(sequence,tower.id)
         if not tower.owner and DOWNGRADE[tower.kind]!=27 and clock%240==0:
             raise UnsupportedState('NEUTRAL_DOWNGRADE')
@@ -82,6 +95,7 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
     remaining=[]
     for index,force in enumerate(forces):
         src,dst=towers[force.source],towers[force.destination]
+        same_owner_before_arrival=dst.owner==force.owner
         speed,required=movement_parameters(force.units,src.position,dst.position)
         if force.accelerated is None:
             earliest=max(1,required*4//5)
@@ -94,11 +108,13 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
                                       progress,force.accelerated,force.relation,force.terminal,force.fuel))
             continue
         if dst.owner!=force.owner and (dst.owner or any(dst.units)):
-            if not scenario.ground_combat: raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
+            if not (scenario.ground_combat or scenario.ordinary_combat): raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
             known_enemy=(dst.owner==state.player and force.relation=='ENEMY' or
                          force.owner==state.player and dst.relation=='ENEMY' or dst.owner==0)
             if not known_enemy: raise UnsupportedState('UNKNOWN_PAIR_RELATION')
-            fight=fight_ground(force.units,dst.units,attacker_morale=force.accelerated,defender_morale=dst.morale)
+            fight=(fight_ordinary(force.units,dst.units,dst.capacity,attacker_morale=force.accelerated,defender_morale=dst.morale)
+                   if scenario.ordinary_combat else
+                   fight_ground(force.units,dst.units,attacker_morale=force.accelerated,defender_morale=dst.morale))
             if fight.attacker_ruler_lost or fight.defender_ruler_lost:
                 raise UnsupportedState('UNVERIFIED_RULER_ELIMINATION')
             towers[dst.id]=dst=replace(dst,units=fight.defender)
@@ -112,6 +128,11 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
         if force.fuel<=0: raise UnsupportedState('EXPIRED_ARRIVAL')
         if force.units[9]: raise UnsupportedState('RULER_ARRIVAL_AURA')
         if dst.owner==force.owner:
+            # A terminal Many force can acquire the destination supply line
+            # and move on instead of merging. Ownership changes clear that line;
+            # an already friendly destination requires an independent premise.
+            if same_owner_before_arrival and dst.id not in no_supply_lines:
+                raise UnsupportedState('UNKNOWN_REINFORCEMENT_SUPPLY_LINE')
             if dst.units[9] and any(force.units[1:6]): raise UnsupportedState('SINGLE_REINFORCEMENT_PRIORITY')
             combined=tuple(a+b for a,b in zip(dst.units,force.units))
             if any(n>dst.capacity[i] for i,n in enumerate(combined)): raise UnsupportedState('REINFORCEMENT_OVERFLOW')

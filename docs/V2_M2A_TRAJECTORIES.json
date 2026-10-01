@@ -6,16 +6,16 @@
   "trajectory_duration_ms": 5000.0,
   "selection": "First observation per tick; nonoverlapping complete consecutive chains, same scope; no intermediate canonical reset. All mismatches retained, not counted as success.",
   "counts": {
-    "exclude:NOT_READY": 4102,
+    "exclude:NOT_READY": 4858,
     "exclude:fewer_than_two_events": 78,
-    "exclude:PRODUCTION_SUPPLY_LINE": 273,
-    "complete_matched_trajectories": 1,
-    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 23,
-    "exclude:ACTIVE_UPGRADE_OR_EMP": 201,
-    "exclude:NEUTRAL_UNIT_DECAY": 6,
-    "intermediate_mismatches": 12,
+    "exclude:PRODUCTION_SUPPLY_LINE": 480,
+    "complete_matched_trajectories": 2,
+    "exclude:UNKNOWN_POST_ARRIVAL_PATH": 27,
+    "exclude:ACTIVE_UPGRADE_OR_EMP": 381,
+    "exclude:NEUTRAL_UNIT_DECAY": 8,
+    "intermediate_mismatches": 13,
     "exclude:NEUTRAL_DOWNGRADE": 1,
-    "exclude:UNVERIFIED_NORMAL_COMBAT": 2,
+    "exclude:UNVERIFIED_NORMAL_COMBAT": 5,
     "exclude:SPECIAL_PRODUCTION": 4,
     "exclude:MOBILE_OVERFLOW_SUPPLY_LINE": 3
   },
@@ -1086,6 +1086,216 @@
           "ruler_difference": null
         }
       ]
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "raw_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "counts": {
+        "exclude:NOT_READY": 720,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 3,
+        "exclude:PRODUCTION_SUPPLY_LINE": 13,
+        "exclude:NEUTRAL_UNIT_DECAY": 2,
+        "exclude:ACTIVE_UPGRADE_OR_EMP": 180,
+        "exclude:UNVERIFIED_NORMAL_COMBAT": 3,
+        "intermediate_mismatches": 1
+      },
+      "failures": [
+        {
+          "cohort": "7d56a775bc4c",
+          "start": 1116,
+          "at": 1120,
+          "ticks": 2,
+          "predicted_signature_sha256": "93372833d9e483abc41952239ea7131a0e9e911decf3004a4df7308bc89fe232",
+          "observed_signature_sha256": "ff80c25b9144ec90e33dcad6816567dc6017170ba1f4d65cd5e0f08f38bbbf00",
+          "tower_differences": [
+            {
+              "id": 17694979,
+              "predicted": [
+                17694979,
+                29,
+                3,
+                [
+                  1,
+                  0,
+                  0,
+                  2,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ],
+              "observed": [
+                17694979,
+                29,
+                3,
+                [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0,
+                false
+              ]
+            }
+          ],
+          "force_difference": {
+            "predicted": [
+              [
+                30,
+                17826051,
+                17760516,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                78
+              ],
+              [
+                30,
+                17891588,
+                17826052,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                34
+              ],
+              [
+                43,
+                17826054,
+                17760518,
+                [
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                30
+              ]
+            ],
+            "observed": [
+              [
+                29,
+                17694979,
+                17694980,
+                [
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                0
+              ],
+              [
+                30,
+                17826051,
+                17760516,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                78
+              ],
+              [
+                30,
+                17891588,
+                17826052,
+                [
+                  0,
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                34
+              ],
+              [
+                43,
+                17826054,
+                17760518,
+                [
+                  0,
+                  0,
+                  0,
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                30
+              ]
+            ]
+          },
+          "ruler_difference": null
+        }
+      ]
+    },
+    {
+      "cohort": "b1f7f9416e92",
+      "raw_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+      "counts": {
+        "complete_matched_trajectories": 1,
+        "exclude:PRODUCTION_SUPPLY_LINE": 194,
+        "exclude:NOT_READY": 36,
+        "exclude:UNKNOWN_POST_ARRIVAL_PATH": 1
+      },
+      "failures": []
     }
   ],
   "matched_trajectories": [
@@ -1095,12 +1305,19 @@
       "end": 3137,
       "ticks": 20,
       "event_ticks": 20
+    },
+    {
+      "cohort": "b1f7f9416e92",
+      "start": 1,
+      "end": 41,
+      "ticks": 20,
+      "event_ticks": 3
     }
   ],
   "source_manifest": {
-    "src\\kiomet_ai\\v2\\sim\\combat.py": "357ba985be7e3c5d2f3521dbe436933aa5398ac37940b8dcff608439152aa8d8",
-    "src\\kiomet_ai\\v2\\sim\\model.py": "57e1a7e2867ae90ea74373f70fffb24bee910894836e911a4c696a434c391d11",
-    "src\\kiomet_ai\\v2\\sim\\step.py": "014e00507cb8f6fc3915dd02236027cb7a59ed98b968bffee93dff56494dc88f",
+    "src\\kiomet_ai\\v2\\sim\\combat.py": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2472499caa373c9af9bf3bffbd6c1679bf6505ff72436111d6475b1829baaa12",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "44aebdcd3617dcef5c85825bd9713018abb0f5b8942894b4181f7aafc660c9cd",
     "src\\kiomet_ai\\v2\\sim\\__init__.py": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9"
   }
 }

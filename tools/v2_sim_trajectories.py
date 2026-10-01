@@ -44,7 +44,7 @@ def inspect(cohort,ticks):
                 counts['exclude:'+str(exc)]+=1; predicted=None; continue
             if signature(predicted)!=signature(observed):
                 counts['intermediate_mismatches']+=1
-                if len(failures)<10: failures.append({'cohort':cohort,'start':start,'at':canonical.sequence,'ticks':length+1,
+                failures.append({'cohort':cohort,'start':start,'at':canonical.sequence,'ticks':length+1,
                     **mismatch_summary(predicted,observed)})
                 predicted=None; continue
             length+=1

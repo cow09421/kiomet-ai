@@ -1,0 +1,144 @@
+{
+  "status": "OFFLINE_SCALAR_VALIDATION_ONLY",
+  "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "damage_offset": "0x126c57..0x126caa",
+  "field_offset": "0x14178d..0x1417bc",
+  "damage_evaluations": 28,
+  "field_evaluations": 56,
+  "values": [
+    {
+      "unit": 0,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "unit": 1,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        3,
+        3
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "unit": 2,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        3,
+        3
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "unit": 3,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        5,
+        1
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "unit": 4,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "unit": 5,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "unit": 9,
+      "damage_surface_surface__surface_air__air_surface__air_air": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "field_overflow_inforce_anyair_000_to_111": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "limits": "Static scalar rules only; does not establish full fight, arrival, capture or elimination accuracy."
+}

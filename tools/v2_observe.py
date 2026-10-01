@@ -67,6 +67,8 @@ async def main(args):
         previous_towers=None
         source_reads=0
         source_latencies=[]
+        completion_reason='duration_limit'
+        natural_result=False
         start = time.perf_counter()
         next_poll = start
         next_source = start
@@ -83,6 +85,10 @@ async def main(args):
                                 source_raw=await extractor.metadata()
                                 source_reads+=1
                                 source_latencies.append((time.perf_counter()-source_began)*1000)
+                                if args.stop_on_result and source_raw.get('derived_lifecycle')=='RESULT':
+                                    natural_result=True
+                                    completion_reason='observed_natural_result'
+                                    break
                                 if args.on_update and source_raw.get('tick')!=emitted_tick and source_raw.get('derived_match_id') and not source_raw.get('visible_pending'):
                                     next_poll=time.perf_counter()
                                     break
@@ -93,6 +99,8 @@ async def main(args):
                                 next_source=time.perf_counter()
                     else:
                         await asyncio.sleep(max(0, next_poll - time.perf_counter()))
+                    if natural_result:
+                        break
                     began = time.perf_counter()
                     try:
                         state, raw = await extractor.sample()
@@ -138,6 +146,9 @@ async def main(args):
                         errors.append(str(exc)[:300])
                         if len(errors) == 1:
                             print(json.dumps({"decode_error": errors[-1]}), flush=True)
+                        if args.stop_on_result and extractor.extractor and str(extractor.extractor.lifecycle.state)=='RESULT':
+                            completion_reason='observed_natural_result'
+                            break
                     next_poll += args.poll_ms/1000
                     if next_poll < time.perf_counter():
                         next_poll = time.perf_counter()
@@ -146,6 +157,7 @@ async def main(args):
         duration = time.perf_counter() - start
         p95 = sorted(latencies)[max(0, int(len(latencies) * .95) - 1)] if latencies else None
         report = {"status": "PARTIAL", "seconds": duration, "snapshots": snapshots,
+            "requested_seconds":args.seconds,"completion_reason":completion_reason,
             "m1b_control_counts":dict(control_status),
             "sequence_observation_to_extraction_complete_p95_ms":sorted(observation_to_complete)[max(0,int(len(observation_to_complete)*.95)-1)] if observation_to_complete else None,
             "sequence_observation_latency_samples":len(observation_to_complete),
@@ -181,6 +193,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seconds", type=int, default=60)
     parser.add_argument("--join", action="store_true", help="Use only official Play/Play Again UI")
+    parser.add_argument('--stop-on-result',action='store_true',help='End this cohort at confirmed natural RESULT; never auto-rejoin')
     parser.add_argument('--source-hz',type=int,default=0,help='Separate metadata-only source clock reads between world snapshots')
     parser.add_argument('--on-update',action='store_true',help='Also capture each confirmed new visible-world sequence; timer remains active')
     parser.add_argument('--poll-ms',type=int,default=200,help='Fixed fallback observation cadence; never filters on measured age')

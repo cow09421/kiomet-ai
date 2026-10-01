@@ -1,163 +1,125 @@
-# M2A — minimum deterministic world simulator
+# M2A — deterministic simulator engineering checkpoint
 
-STATUS: IN_PROGRESS，持續施工。M1B PASS checkpoint `2212346`；OLD M1 FAIL 原樣保留。
+CURRENT MILESTONE: M2A / M2B measurement only
+STATUS: IN_PROGRESS. M2 has not passed; M3 has not started.
+OLD M1 FAIL documents remain unchanged. M1B PASS checkpoint: 2212346.
 
-`src/kiomet_ai/v2/sim/` 新 Python reference core，沒有延伸舊 simulate.py。
-Canonical→compact SimulationState 轉換先通過 M1B control gate，再拒絕其
-未支援機制。模擬以u16 world sequence及離散 tick為主軸；RuntimeTimeModel
-以M1B正式 cadence中位數校準，預設時間長度UNKNOWN，不要求Unix timestamp。
+## Current evidence and corrected accounting
 
-目前：tick前進／wrap、普通生產（本方／敵方已知owner、morale旗標、Single
-Ruler優先及capacity）、當前路段移動，顯式可見來源行動的本機launch模型。
-有明確terminal情境時可處理有限友方不溢位增援及空中立塔探索／ownership。
-後兩項目前只有參考／合成驗證，不宣稱live到達正確率。永久force ID不參與
-模擬，force比較採owner/current segment/composition/progress multiset。
+Formal production/current-leg movement: 1052/1052 genuine one-tick complete
+visible-state transitions: development 611/611 (38 production-only, 573 movement),
+untouched holdout 441/441 (35 production-only, 406 movement). Overlapping event
+categories are not additional cases. All formal outputs contain actual visible
+changes. Before-input event selection never depends on after-state agreement.
 
-未支援：active upgrade／EMP、special force／production、mobile overflow decay、
-neutral downgrade、未知加速接近抵達、未知post-arrival path、相向部隊戰鬥、
-普通敵方戰鬥／死亡後全域elimination、動態morale aura與供應線。各項明確
-UNSUPPORTED_STATE／NOT_READY，不靜默忽略，不列為accuracy成功。
+RETRACTION: historical 440, 868/338/1206 and subsequent 1340 counts included
+at-capacity stationary production attempts. The six-cohort 1340 denominator
+contained 347 unchanged cases; these are removed. New cohorts supply the current
+1052 genuine events. Historical Git and runtime before-event-tightening receipts
+remain available; their counts and static-weighted performance are superseded.
+The root agent identified and corrected this accounting error.
 
-## 第一批真實差分
+Ground candidate: 1054/1054 overall, only TWO actual ground combat events, 2/2
+complete-world matches. The daf development event and independent 7d event are
+retained as full-state fixtures. Default ground/ordinary combat flags remain OFF.
 
-440個獨立one-tick「完整可觀察輸入」案例，440/440吻合；283production、
-157movement。來自fe678ebb30ce（302/302）及03d032d57e5b（138/138），
-原始SHA與所有排除計數見V2_M2A_DIFFERENTIAL.json。本機小型轉移corpus保存
-原state序號、输入、預測與實際，source manifest固定；原始大型檔gitignored。
+Ordinary Air/Surface candidate: 593/594 complete-world matches. Actual ground
+2/2; actual air 1/2. The second air case includes an unrecorded simultaneous enemy
+launch. Local defender agreement is not full-state agreement. Its mismatch stays
+in the denominator; an after-inferred launch reproduces the world only as
+calibration, with no accuracy credit. Do not use the aggregate ratio as combat PASS.
 
-選取同epoch、相鄰單tick、同可見集合與已知最小輸入；owner/type/delay/aura
-變化、force birth／arrival未有可觀察行動紀錄時排除為外部或未支援事件。
-比較兵數不作選樣条件；全部不吻合仍記錄。重複tick輪詢與沒有任何生產／
-移動事件的state不列case。沒有把一座塔的十兵種當十個完整transition。
-固定morale／無新外部行動是顯式情境，不宣稱隱藏對手沒有行動。
+Trajectories: two nonoverlapping five-second multievent rollouts match all
+intermediate visible states. Thirteen intermediate failures are retained; these
+include unrecorded force births. No intermediate canonical resets. The required
+100 trajectories and ruler death/elimination direction gates are unfinished.
 
-這是development corpus與有限支援範圍結果，不是正式M2 PASS；normal combat、
-arrival／capture與king方向的live驗證、1,000獨立case、100多事件軌跡及效能Gate
-仍未完成。接著使用新的正式資料做獨立驗證，不因ordinary樣本不足停止。
+## Core rules and root integration
 
-## Production phase：公開假設→正式來源→真實比較
+Pinned official-client WASM SHA:
+fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c.
+Old public AGPL source informs hypotheses; it is not current-server authority.
 
-公開common/src/chunk.rs以chunk的x/y組合u16加world tick；本輪定位正式
-WASM `0x1a449` world.tick load、`0x1a459` chunk ID load、`0x1a4a0..1a4aa`
-加總及u16mask，再由`0x1a676..1a69b`按morale調整period並取餘。
-生成呼叫`0x1a6a0..1a6b9` add_inner(2,overflow=false)並減去added-1，保留
-每次最多1個淨生成；delay在`0x1a619..1a627`單步減1且當tick不生成。
-因此phase=(next_world_sequence+(tower_x>>4)+((tower_y>>4)<<8))&65535，
-並非為了配合corpus任意調參。440差分驗證支持目前普通生產／移動分支。
+SUPPORTED: u16 relative world phase/wrap, ordinary production within guarded
+capacity scope, current-segment movement, owned immobile Shield overflow decay,
+stationary special inventory preservation, explicit local ordinary launch after
+world advancement at progress zero. Limited terminal capture/reference scenarios
+require known path/fuel and non-overflowing ordinary units.
 
-純地面damage／field另已離線核對正式Unit::damage、Unit::field，0/4/5/9
-兵種surface damage為1/3/1/1；這只驗證純scalar，不等於fight順序或live戰鬥。
+Friendly terminal reinforcement additionally requires an independently supplied
+Scenario.no_supply_line_towers premise. Terminal=True and positive fuel alone do
+not establish that premise. Public Force::try_move_on can clone a destination
+supply line and relay a Many force; unknown destinations now refuse with
+UNKNOWN_REINFORCEMENT_SUPPLY_LINE. No canonical unknown is converted to false.
+The existing observation contract is unchanged, and no live friendly-arrival
+accuracy claim is made. Invalid scenario tower references are rejected.
 
-61項v2回歸通過。完整世界轉移已profile；正確支援範圍先驗證，profile後才
-考慮將熱迴圈移至Rust或C++，不碰GPU／CUDA。
+Root independently corrected morale bonus to min(3, headcount//2): pinned select
+at 0xffb43..0xffb51 selects 3 when half>=3. The old max interpretation and previous
+iterator-Tower scratch alias were rejected. Force+21 is scratch309 within the
+aggregate i32. Shield and Single-use weapons do not inflate morale headcount.
 
-## 平行施工審核 checkpoint
+Ordinary combat is an explicit isolated hypothesis: Air before Surface, held-unit
+accounting, capacity-sensitive aircraft fields, Shield air grouping, and retained
+damage across phases. Root ran 84 independent pinned damage/field scalar cases;
+scalar agreement does not establish complete fight correctness.
 
-CURRENT MILESTONE: M2A。STATUS: IN_PROGRESS。M2 Gate 尚未通過。
+UNSUPPORTED: king death/global elimination, dynamic morale/aura, active EMP or
+upgrade, special production/movement/combat, mobile overflow/supply-line effects,
+unknown arrival acceleration, unknown future path/fuel, neutral decay/downgrade,
+opposed force combat, unknown pair relationship, and unrecorded external actions.
+Unsupported transitions do not earn accuracy credit.
 
-SUBAGENTS USED: 3，均以 `gpt-6-luna / high` 明確派工；模型身分只記錄
-工具設定，不把子代理自述的泛用人格當成模型證據。
+## Parallel review decisions
 
-- arrival_review：唯讀抵達／增援與production/movement紅隊；接受Single/Many
-  invariant、overflow順序和production供應線風險。含Shield的探索與友方overflow
-  是待驗證候選，尚未擴大正式支援。
-- combat_review：唯讀普通戰鬥與morale dataflow；接受固定版 `0xffab8..0xffb52`
-  的morale advantage及 `0x1acda..0x1ad06` signed初始damage差異。
-  拒絕把舊公開zero-start fight提升為正式combat authority。Sol親自找到
-  aggregate i32寫入scratch308..311：Force+21正是scratch309，退回子代理
-  「previous iterator Tower旗標」錯誤判讀，取得更正；Shield enum0不計入
-  morale headcount。候選signed bonus已整合，ground flag預設仍OFF。
-- corpus_candidates：新工具唯讀資料採礦；首版EOF漏最後完整pair且9471語意過寬，
-  退回REWORK，修正後接受為候選發現工具。9475次tick-group比較，7099個
-  同scope相鄰完整可見eligible pair，300筆候選；後驗推導的情境輸入不能當
-  獨立accuracy案例。根代理重跑並檢查counts、輸入SHA與uncertainty標記。
+SUBAGENTS USED: arrival_review, combat_review, corpus_candidates; dispatched with
+gpt-6-luna/high. Root alone controls integration, Git and milestone decisions.
 
-SOL DIRECT WORK：親讀固定WASM `0x1a570..0x1a5f4` owned120/neutral40
-decay、capacity比較、subtract1及Projector mobile分支；實作immobile Shield
-overflow decay與保留超量生產。補上Single/Many invariant，保留特殊靜止庫存，
-拒絕其production/dispatch/combat。production接近mobile容量可能觸發供應線時
-回報PRODUCTION_SUPPLY_LINE。修正launch在world tick後建立progress0，普通
-觀測的兩筆enemy birth與公開tick_before/after_inputs是順序證據，不將後驗
-重建的opponent action當獨立驗證。自己實作差分、完整profile及不重置中間
-狀態的5秒trajectory工具；按profile消除未變塔兵數複製與重複movement規則計算。
+ACCEPTED: arrival Single/Many and overflow risks; bounded corpus references and
+uncertainty classifications; combat scalar/dataflow evidence after independent
+root verification. Corpus canonical convertibility is not scenario eligibility.
 
-DIFFERENTIAL RESULTS：開發集868/868，295production、573movement；新未用於
-語義調參的600秒holdout `85391858b5d8` 338/338，105production、233movement。
-合計1206個獨立完整one-tick案例，限定目前支援範圍；零吻合案例的第一批
-holdout `daf86d0544b7` 原試驗存於runtime/m2a-daf-first-holdout-zero.json，
-由其unsupported資料修規則後已明確改列development。供應線保護使先前
-1007開發案例下降為868，未把排除列成accuracy成功。
+REJECTED: max morale, previous-Tower flag alias, stale ground calculations,
+aggregate combat PASS claims, and unsupported after-inferred actions as accuracy.
+REWORKED: event denominator, miner EOF/target provenance, complete combat fixtures,
+source manifests and whole-state failure reporting. Original candidate report
+SHA and old M1 failure documents are preserved.
 
-SUPPORTED：known production/current-leg movement、owned immobile Shield overflow
-decay、靜止特殊庫存原樣保留、explicit local launch與有限terminal參考情境。
-UNSUPPORTED：普通戰鬥正式驗證、king death/elimination、動態morale、未知
-future path、unknown supply-line觸發、special production/movement及複雜事件。
-Single tuple與固定相位皆有新回歸；舊M1三份FAIL文件無diff。
+SOL DIRECT WORK: pinned rule/dataflow tracing; compact-state/world ordering;
+combat candidate integration; event selection correction; new independent ground
+fixture; terminal reinforcement supply-line guard; complete-state differential,
+trajectory and performance verification; bounded Python optimization.
 
-TRAJECTORIES：四個cohort目前1條完整5秒多事件鏈吻合；12處中間差異全部留存，
-逐筆檢查均有observed force birth（預測force數較少），無記錄的opponent
-inputs尚未納入。不能據此宣告100條Gate通過。所有中間world state完整比較，
-不重置成canonical，不把單tick串接冒充rollout。
+## Verification and performance
 
-PERFORMANCE：首次493case約19212完整transitions/sec；守住供應線後868case
-約28956/sec；profile導向Python改善後曾約49296/sec，fuel保護後約44302/sec，
-99820個完整step涵蓋
-全可見塔與forces，先逐筆驗證完整輸出，再量測；pure movement cache由
-驗證預熱，非冷啟動效能；
-conversion/IO未含在timing中。最新profile見V2_M2A_PERFORMANCE.json。
-尚未宣告50000/sec Gate通過。已查PATH及有限常見位置，無native compiler。
+68 v2 regression tests pass. Performance inputs are all 611 development genuine
+event states, each restored from original canonical records and independently
+checked against its complete expected visible state before timing. Every measured
+step includes all visible towers and forces; conversion/IO is outside timing.
 
-最後三次持續量測各100688個完整轉移：51403、48663、50409/sec，中位數
-50409/sec。低於門檻的trial仍完整保留；目前只是支援範圍效能證據，不能
-把中位數略過50000當成combat、trajectory或正式M2 Gate全部通過。
+Quiet baseline before phase caching: 47058 / 46973 / 46749 transitions/sec,
+median 46973. Bounded pure phase-offset caching and direct immutable input-tower
+iteration produced 50149 / 50940 / 51357, median 50940 before the latest relay guard.
+Caches contain only immutable rule inputs, never actor facts. Duplicate tower IDs
+are rejected. Latest source-specific rerun is V2_M2A_PERFORMANCE.json:
+43963 / 46759 / 52314, median 46759 complete transitions/sec, below target. All trials,
+including below-target trials, remain reported. This limited-scope measurement
+is not full M2/M2B PASS. No native rewrite or GPU work has started.
 
-GROUND CANDIDATE：初次869個candidate cases中868吻合，僅比正式範圍新增
-1個defense event，該event不吻合：daf cohort序號125、tick23737，進攻4Soldier，
-防守Shield20+Soldier12且morale True，預測Shield20、實際19。保留整體state
-差異與原始refs，不能用868個production/movement成功沖淡這唯一combat失敗。
-正式DIFFERENTIAL與HOLDOUT維持ground OFF；hypothesis使用獨立輸出檔。
+Passive cohorts 7d and b1 were captured without troop gestures. b1 contains a
+single 600-second NETWORK match; 7d naturally entered RESULT and remains a partial
+cohort. Optional --stop-on-result ends finite sampling without automatic rejoin;
+the natural-result branch still needs its own live verification.
 
-真正阻塞：目前無；普通bug、樣本量和效能不足仍是施工項目。
+## Authorization and next work
 
-抵達額外保護：canonical force fuel仍UNKNOWN，不把terminal情境當fuel證明。
-合併／探索前拒絕UNKNOWN_ARRIVAL_FUEL與EXPIRED_ARRIVAL；防守摧毀進攻force
-先於expiry分支，不要求未知future route/fuel。Sol定位固定Chunk::apply_0
-`0x7d849..0x7d875` Force記錄scratch80及+23 fuel150；本機新建非boost部隊
-使用此已知值，來源morale True的launch在flag初始化驗證前UNSUPPORTED。
-NEXT PARALLEL PLAN：Sol整合combat side/flag與完整轉移；Luna唯讀解析morale
-caller、採礦arrival/defense與紅隊驗證。M2未PASS前不進M3、不重開timestamp。
+No troop command has been sent. A concrete two-match bounded ordinary-UI input
+capture plan is recorded in V2_M2A_CONTROLLED_CAPTURE_PLAN.md. The earlier M1 user
+instruction explicitly prohibited automatic dispatch/attack; execution awaits an
+explicit answer about these M2 tests. Core fixes and offline verification continue.
+This is a pending authorization for that action, not a reason to stop all work.
 
-## 士氣加成修正與候選資料審核
-
-CURRENT MILESTONE: M2A。STATUS: IN_PROGRESS。
-
-Sol親自重讀 `0xffb43..0xffb51`，找到原先 max 判讀錯誤：WASM尾端stack
-為 `[3, count>>1, (count>>1)>=3]`；select在true選第一operand，因此是
-`min(3, count//2)`，不是max。12 Soldier加成應為3，原先錯算為6。
-這是固定程式指令證據的修正；没有針對單筆真實結果修改經驗常數。
-完整proof與舊失敗receipt位置見V2_M2A_MORALE_CORRECTION.json。
-
-ACCEPTED：min上限、1/2/6/12人邊界回歸及原daf seq125→127完整world fixture。
-REJECTED：子代理及根代理此前max解釋；不能把869/868或1207/1206的整体比例
-當成combat正確率。REWORKED：差分工具增加before-input event categories，各類
-分開記錄完整state吻合數；分類重疊不增加獨立cases。ground hypothesis重跑後
-1207/1207，但真實ground分母只有1/1，未調參獨立holdout的ground分母為0。
-ground flag保持預設OFF，正式1206個生產／移動case不冒稱全部機制驗證。
-
-corpus_candidates新cohort後續：20候選（12capture、1reinforcement、7無可見
-unit loss的defense），11個before可轉換、6個after可轉換、6個pair兩端可轉換。
-兩端可轉換不等於terminal/fuel/actions已知；scenario eligibility全部false。
-target確實是before Force.destination，先前一律寫after-inferred已更正。
-根代理驗證20筆標記、原report SHA未改及output越界拒絕；另移除工具未開啟的
-sampling manifest讀取宣稱。此機械採礦修改接受，不提升到正式accuracy資料。
-
-Luna另唯讀核對原13個ground-loss候選，3個pair可轉換、10個fail closed；
-3個有同時force birth，2個有其他塔unit變化。該report的fight計算在根代理
-修正前已載入舊module，因此Shield20預測明確記為歷史，不引用為目前結果。
-來源refs與unknown分類可接受；現行模型完整輸出由Sol新差分與fixture確認。
-
-SOL DIRECT WORK：WASM select修正、完整world回歸fixture、event分母隔離、
-來源／後驗情境標記審核。進行新的有時限被動觀測，沒有兵力控制輸入。
-真正阻塞仍無；arrival/capture獨立輸入與100段trajectory仍是施工缺口。
-NEXT PARALLEL PLAN：新cohort完成後Luna限定採礦，Sol審核combat獨立驗證與
-抵達的未知route/fuel保護；效能擴大前先完成語意。M2未PASS，尚未開始M3。
+Genuine engineering blocker: none. Remaining gates are construction work.
+NEXT PARALLEL PLAN: Luna independently red-teams arrival relay and evidence
+accounting; Sol verifies pinned ownership/supply-line boundaries and integrates
+only independently checked results. Preserve all failures and uncertainty. No M3.

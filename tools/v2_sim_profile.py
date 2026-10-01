@@ -45,7 +45,7 @@ def main():
             'complete_transitions_per_second':median(t['complete_transitions_per_second'] for t in trials),
             'rate_statistic':'median of three trials, each >=100000 complete transitions',
             'trials':trials,
-            'scope':'Full Python step over all visible towers and forces, no conversion/IO in timing; input restored and every full output checked before timing. Pure movement cache warmed by validation. No combat PASS.',
+            'scope':'Full Python step over all visible towers and forces, no conversion/IO in timing; genuine-event input restored and every full output checked before timing. Pure movement and static phase-offset caches warmed by validation. No combat PASS.',
             'corpus_sha256':report['corpus_sha256'],
             'source_manifest':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in (ROOT/'src/kiomet_ai/v2/sim').glob('*.py')},

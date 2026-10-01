@@ -6,6 +6,41 @@ sys.path.insert(0,str(ROOT/'src'))
 from kiomet_ai.v2.serialization import state_from_dict
 from kiomet_ai.v2.sim import from_canonical, step, UnsupportedState, Scenario
 from kiomet_ai.v2.sim.step import phase, movement_parameters
+from kiomet_ai.v2.observe.rules import DOWNGRADE
+
+
+def input_has_potential_event(state):
+    """Before-only selection; an at-capacity production attempt is not an event.
+
+    Potential unsupported decay/deployment still reaches step and is excluded
+    by its explicit guard. Never drop a mismatch because the after state stayed
+    unchanged when the before state predicted a real production event.
+    """
+    if state.forces:
+        return True
+    sequence=(state.world_sequence+1)&65535
+    for tower in state.towers:
+        clock=phase(sequence,tower.id)
+        if not tower.owner:
+            if clock%40==0 and any(tower.units) or clock%240==0 and DOWNGRADE[tower.kind]!=27:
+                return True
+            continue
+        if clock%120==0 and any(n>tower.capacity[i] for i,n in enumerate(tower.units)):
+            return True
+        for unit,period in tower.production:
+            if period<=0:
+                return True  # Let step report INVALID_PRODUCTION_PERIOD.
+            if clock%period:
+                continue
+            if unit in (6,7,8,9):
+                return True  # Unverified special production must hit its guard.
+            if 1<=unit<=5 and any(tower.units[6:10]):
+                continue
+            if tower.units[unit]<tower.capacity[unit]:
+                return True
+            if not tower.units[9] and (unit or tower.kind==15):
+                return True  # Full mobile production may auto-deploy; do not ignore it.
+    return False
 
 
 def input_event_categories(state):
@@ -30,7 +65,8 @@ def input_event_categories(state):
             required=max(1,required*4//5)
         if min(255,force.progress+speed)>=required and target.owner!=force.owner:
             if target.owner or any(target.units):
-                categories.append('ground_combat_arrival')
+                categories.append('ordinary_air_unit_combat_arrival' if any(force.units[i] or target.units[i] for i in (1,2,3))
+                                  else 'ground_combat_arrival')
                 break
     return categories
 
@@ -43,7 +79,7 @@ def signature(state):
             'rulers':sorted(state.visible_rulers)}
 
 
-def inspect(cohort, ground_combat=False):
+def inspect(cohort, ground_combat=False, ordinary_combat=False):
     source=ROOT/f'runtime/research/v2/snapshots-{cohort}.jsonl'
     counts=collections.Counter()
     failures=[]
@@ -77,18 +113,13 @@ def inspect(cohort, ground_combat=False):
             if any((a.owner,a.kind,a.delay,a.morale)!=(b.owner,b.kind,b.delay,b.morale)
                    for a,b in zip(start.towers,end.towers)):
                 counts['exclude:external_owner_type_delay_aura_change']+=1;continue
-            if len(start.forces)!=len(end.forces) and not ground_combat:
+            if len(start.forces)!=len(end.forces) and not (ground_combat or ordinary_combat):
                 counts['exclude:external_force_birth_or_arrival']+=1;continue
             if len(end.forces)>len(start.forces):
                 counts['exclude:unrecorded_external_launch']+=1;continue
-            meaningful=bool(start.forces) or any(t.owner and
-                phase((start.world_sequence+1)&65535,t.id)%120==0 and
-                any(n>t.capacity[i] for i,n in enumerate(t.units)) for t in start.towers) or any(
-                phase((start.world_sequence+1)&65535,t.id)%period==0
-                for t in start.towers for unit,period in t.production)
-            if not meaningful:
-                counts['exclude:no_production_or_movement_event']+=1;continue
-            try: predicted=step(start,scenario=Scenario(ground_combat=ground_combat))
+            if not input_has_potential_event(start):
+                counts['exclude:no_potential_visible_event']+=1;continue
+            try: predicted=step(start,scenario=Scenario(ground_combat=ground_combat,ordinary_combat=ordinary_combat))
             except UnsupportedState as exc:
                 counts['exclude:'+str(exc)]+=1;continue
             expected=signature(end)
@@ -120,24 +151,26 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--cohorts',nargs='+',default=['fe678ebb30ce','03d032d57e5b'])
     parser.add_argument('--ground-combat',action='store_true',help='Evaluate the ground-fight reference hypothesis; not a live combat PASS')
-    parser.add_argument('--label',default='development',choices=['development','holdout','hypothesis'])
+    parser.add_argument('--ordinary-combat',action='store_true',help='Evaluate the ordinary Air/Surface hypothesis in a separate corpus')
+    parser.add_argument('--label',default='development',choices=['development','holdout','hypothesis','ordinary_hypothesis'])
     args=parser.parse_args()
-    if args.ground_combat!=(args.label=='hypothesis'):
-        parser.error('ground-combat hypotheses require --label hypothesis, isolated from formal corpus')
+    if args.ground_combat!=(args.label=='hypothesis') or args.ordinary_combat!=(args.label=='ordinary_hypothesis'):
+        parser.error('use --ground-combat with --label hypothesis OR --ordinary-combat with --label ordinary_hypothesis; hypotheses are isolated from formal corpus')
     results=[]
     output=ROOT/f'runtime/research/v2/m2a-{args.label}-transition-corpus.jsonl'
     total=collections.Counter()
     with output.open('w',encoding='utf8') as stream:
         for cohort in args.cohorts:
-            report,cases=inspect(cohort,args.ground_combat)
+            report,cases=inspect(cohort,args.ground_combat,args.ordinary_combat)
             results.append(report)
             total.update(report['counts'])
             for row in cases: stream.write(json.dumps(row)+'\n')
             print(json.dumps(report),flush=True)
-    result={'status':'HYPOTHESIS_ONLY' if args.ground_combat else 'IN_PROGRESS','scope':'complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario',
+    result={'status':'HYPOTHESIS_ONLY' if (args.ground_combat or args.ordinary_combat) else 'IN_PROGRESS','scope':'complete supported visible-state step; no live commands; explicit no-exogenous-action fixed-morale scenario',
             'ground_combat_reference_enabled':args.ground_combat,
+            'ordinary_combat_reference_enabled':args.ordinary_combat,
             'validation_split':args.label,
-            'selection':'one-tick same epoch and visible set, known minimum inputs; no owner/type/delay/aura changes or force births. Ground hypothesis permits force count decreases. Predictions never select correctness.',
+            'selection':'First observation per tick, same epoch and visible set, known minimum inputs; no owner/type/delay/aura changes or net force births. Combat hypotheses permit force count decreases. Before-only event predicate rejects at-capacity stationary production attempts, while potential unsupported events still reach explicit guards. Predictions and after-state agreement never select cases.',
             'event_count_semantics':'Overlapping event categories are derived from before-state inputs; each reports its own complete-state matched count. They are not additional independent cases.',
             'limitations':'Excluded events and unsupported mechanics do not count as accurate. Repeated tick polls and no-event states excluded; full-state accuracy within supported corpus only.',
             'counts':dict(total),'cohorts':results,'corpus_file':str(output.relative_to(ROOT)),
@@ -145,7 +178,8 @@ def main():
             'tool_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'source_manifest':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in (ROOT/'src/kiomet_ai/v2/sim').glob('*.py')}}
-    target={'holdout':'V2_M2A_HOLDOUT.json','development':'V2_M2A_DIFFERENTIAL.json','hypothesis':'V2_M2A_GROUND_CANDIDATE.json'}[args.label]
+    target={'holdout':'V2_M2A_HOLDOUT.json','development':'V2_M2A_DIFFERENTIAL.json','hypothesis':'V2_M2A_GROUND_CANDIDATE.json',
+            'ordinary_hypothesis':'V2_M2A_ORDINARY_CANDIDATE.json'}[args.label]
     (ROOT/'docs'/target).write_text(json.dumps(result,indent=2)+'\n',encoding='utf8')
     print(json.dumps({'counts':dict(total),'accuracy':total['matched']/total['cases'] if total['cases'] else None}))
 

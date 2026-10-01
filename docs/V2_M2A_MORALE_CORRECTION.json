@@ -71,9 +71,21 @@
   ],
   "ground_validation_limits": {
     "distinct_ground_development_cases": 1,
-    "independent_ground_holdout_cases": 0,
+    "independent_ground_holdout_cases": 1,
     "ground_enabled_by_default": false,
     "milestone_pass": false
   },
-  "stale_subagent_report": "runtime/research/v2/luna-corpus/ground-loss-review.json used the pre-correction model: retain as historical research, do not quote its local prediction as the current result. Its 13 source references and unsupported-input classifications are separate candidate facts."
+  "stale_subagent_report": "runtime/research/v2/luna-corpus/ground-loss-review.json used the pre-correction model: retain as historical research, do not quote its local prediction as the current result. Its 13 source references and unsupported-input classifications are separate candidate facts.",
+  "independent_case": {
+    "cohort": "7d56a775bc4c",
+    "before_sequence": 1142,
+    "after_sequence": 1144,
+    "attacker_tanks": 2,
+    "defender_shields_before": 20,
+    "defender_soldiers": 12,
+    "defender_morale": true,
+    "predicted_shields_after": 17,
+    "observed_shields_after": 17,
+    "complete_state_match": true
+  }
 }
