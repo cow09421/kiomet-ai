@@ -2,6 +2,7 @@
 import asyncio
 import argparse
 import json
+import hashlib
 from pathlib import Path
 import sys
 import time
@@ -26,6 +27,12 @@ async def main(args):
     out = ROOT / "runtime/research/v2"
     rows = []
     errors=[]
+    manifest = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted((ROOT/'src/kiomet_ai/v2').rglob('*'))
+        if p.is_file() and p.suffix in ('.py', '.js', '.json')}
+    for p in (Path(__file__).resolve(), ROOT/'src/kiomet_ai/camera.py',
+              ROOT/'src/kiomet_ai/observe.py', ROOT/'src/kiomet_ai/ui_parse.py'):
+        manifest[str(p.relative_to(ROOT))] = hashlib.sha256(p.read_bytes()).hexdigest()
     deadline=time.monotonic()+args.seconds if args.seconds else None
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
@@ -115,6 +122,17 @@ async def main(args):
                     stable=target is not None and end_target is not None and all(
                         target.get(k)==end_target.get(k) for k in ('units7','type','owner','relation','morale','delay_ticks'))
                     counts_stable=after.get('own_tower_counts')==bracket_end.get('own_tower_counts')
+                    # Only a positively identified ordinary UI note proves the
+                    # effect. Absence is not yet a validated false/zero source.
+                    morale_note = any(r['text'] == '士氣高昂' and r['title'] ==
+                        '你的國王就在附近：產量加倍，出發的單位在途中移動更快、作戰更猛'
+                        for r in dom['titles'] if r['tag'] == 'P')
+                    morale_coherent = selected and stable and morale_note and target['morale'] in (0, 1)
+                    morale_check = {'ui_boost': True if morale_note else None,
+                        'expected_boost': bool(target['morale']) if target else None,
+                        'coherent': morale_coherent,
+                        'match': morale_coherent and target['morale'] == 1,
+                        'limits': 'positive supported Chinese note only; absence is UNKNOWN'}
                     progress_width=dom['progress_width']
                     progress_ui=float(progress_width[:-1]) if progress_width and progress_width.endswith('%') else None
                     nominal=rules.UPGRADE_DELAY[target['type']] if target else None
@@ -195,6 +213,7 @@ async def main(args):
                         "relation_check":relation_check,
                         'type_check':type_check,
                         'progress_check':progress_check,
+                        'morale_check':morale_check,
                         "own_tower_counts":after.get('own_tower_counts'),
                         "prerequisite_comparisons":prerequisite_comparisons,
                         'upgrade_ui_comparisons':upgrade_ui_comparisons,
@@ -225,14 +244,21 @@ async def main(args):
         stratum['tower_types'].add(row['type'])
         for comparison in row['comparisons']:
             key = (*base, 'unit_count', comparison['unit'])
-            if comparison['coherent'] and key not in unique_fields:
-                unique_fields[key] = bool(comparison['match'])
-                stratum['unit_fields'] += 1
-                stratum['matched_unit_fields'] += int(comparison['match'])
+            if comparison['coherent']:
+                if key not in unique_fields:
+                    unique_fields[key] = bool(comparison['match'])
+                    stratum['unit_fields'] += 1
+                    stratum['matched_unit_fields'] += int(comparison['match'])
+                elif unique_fields[key] and not comparison['match']:
+                    # A later failed independent read must not be hidden by an
+                    # earlier successful read of the same source revision.
+                    unique_fields[key] = False
+                    stratum['matched_unit_fields'] -= 1
     for stratum in strata.values():
         stratum['tower_ids'] = sorted(stratum['tower_ids'])
         stratum['tower_types'] = sorted(t for t in stratum['tower_types'] if t is not None)
     report = {"status": "PARTIAL", "timestamp": time.time(), "rows": rows,
+        'observer_source_manifest': manifest,
         'unique_unit_fields':len(unique_fields),
         'unique_matched_unit_fields':sum(unique_fields.values()), 'strata':strata,
         "requested_rounds":args.rounds,"errors":errors,

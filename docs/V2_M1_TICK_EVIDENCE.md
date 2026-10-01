@@ -265,6 +265,18 @@ This typed decode/use proof is stronger than absence of a timestamp name, but
 does not by itself establish that every other legal source is absent. The
 canonical server-generation time and authoritative snapshot age stay UNKNOWN.
 
+### QUESTION: may a normally emptied Single retain a zero Single count?
+
+Pinned Units::subtract (function 1448, entry 0xedecc) decreases Single.count at
+0xedf79..0xedf85. When the removed count equals the prior count, its normal
+branch at 0xedf91..0xedf98 stores zero to bytes 0..5 at 0xedf9c/0xedfa3, restoring
+Many(empty); shield byte +6 is retained. The public Units reference likewise
+documents Single as nonzero and defaults an emptied Single to Many.
+
+CONCLUSION / STATUS: PASS for rejecting zero-count Single as an invalid typed
+normal state. This is a finite production-code invariant, not a new live Single
+force comparison or special-unit coverage claim.
+
 ### QUESTION: what is the remaining scalar in the direct Game actor update?
 
 The pinned decoder's Game branch begins at 0x4d832. At 0x4d848 it reads an

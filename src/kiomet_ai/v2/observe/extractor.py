@@ -42,7 +42,7 @@ def observed(value, source, at):
 def decode_many(raw):
     if not isinstance(raw, list) or len(raw) != 7 or any(type(n) is not int or not 0 <= n <= 255 for n in raw):
         raise ValueError("malformed units")
-    # Single layout is still independently unverified: retain UNKNOWN.
+    # Single is decoded separately; its union bytes must not become Many counts.
     if raw[0] == 1:
         return None
     if raw[0] != 0:

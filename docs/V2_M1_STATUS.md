@@ -290,3 +290,40 @@ source 改動後 sampling-b192f03bc401 的 60.014 秒診斷：479 筆、7.981 Hz
 擷取 p95 8.659 ms、客戶端套用年齡上界 p95 204 ms，5,465 metadata reads、
 零錯誤，一文件／一 epoch／NETWORK。沒有移動部隊，不列完整 M1 驗收。
 31 項 v2 回歸與 Node 隱私門控通過；authoritative age 仍 UNKNOWN。
+
+### 完整 UI cohort 與自然來源缺口
+
+ui-comparison-9f8a743e9d1d 完成 1,000 次普通資訊框選取，零戰術命令。
+994 次 coherent 塔型／關係／進度條均吻合；1,558 個 coherent 兵數與容量
+欄位均吻合。涵蓋 SELF:SINGLE、SELF:MANY、NEUTRAL:MANY、ENEMY:MANY。
+完整 observer source manifest 保存在原始報告；Single 分層不等同每一個
+Single 兵種都在 DOM 顯示並已核對，例如國王 icon 不能當成國王兵數。
+
+tools/v2_validation_inventory.py 對全部有獨立檔名的歷史 UI 報告做一次有限
+統計：必須有文件、玩家、非空 epoch、正式 SHA、NETWORK、確認選取及
+世界版本 bracket；跨 observer 按文件／玩家／版本／塔／欄位去重。
+重複失敗不會被第一次成功遮蔽。1,248 rows 缺 scope/epoch、6 rows 未能
+確認 source/selection，明確排除；每個不 coherent 的欄位另計，不混入分母。
+1,353 eligible rows、1,345 unique selections；兵數 2,117/2,117、容量
+2,117/2,117、關係 1,336/1,336、塔型 1,211/1,211、delay 進度條
+1,294/1,294、前置數 536/536、disabled 229/229、lock 270/270，重複衝突零。
+兵數分層：ENEMY:MANY 897、SELF:SINGLE 102、SELF:MANY 525、NEUTRAL:MANY
+589、ENEMY:SINGLE 4。缺完整 moving/fog/lifecycle、部分特殊兵種及 true-lock
+分層；這些欄位結果不能合併成「完整 GameState 關鍵欄位準確率」。
+
+既存 live DOM rows 的有限士氣分析 morale-ui-9f8a743e9d1d，有 264/264
+明確「士氣高昂」提示與 visible morale=1 相符。736 rows 沒有正向提示或
+不 coherent，未將提示缺席推論為 false；不是 264 個新採集案例。
+
+sampling-03d032d57e5b 在 lifecycle 修正後跑足 600.088 s：4,767 筆、
+7.944 Hz、擷取 p95 7.745 ms；客戶端套用年齡的連續時間保守上界 p95
+205 ms（原整數 204，4,622 bounds）、55,039 metadata reads，7 次拒絕。
+初段同時有正常資訊框比對負載，没有 debugger pause。有效跨度 599.535 s。
+一文件／NETWORK，但舊 epoch 後變 UNKNOWN，不能列完整同局 PASS。
+
+序號 4618 首見 tick=23078，至 4624 仍未改；4625 在 1,062 ms 後讀到
+23081，因此失效原本的一秒連續性視窗；不是 metadata 呼叫間隔超時。
+當時 14 個部隊 ID 均原為 DERIVED；失效後 14 個 ID/first-seen 均 UNKNOWN。
+後續 143 快照共 1,412 個合法部隊 facts 都未復用 ID。證據保存為
+natural-force-gap-03d032d57e5b，來自原始快照（SHA 隨報告）；是非空
+自然來源缺口驗證，不能宣稱受控斷線或真正伺服器換局。停滯原因 UNKNOWN。
