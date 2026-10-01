@@ -209,4 +209,14 @@ actor 解碼數完全相等，且正常 active／NETWORK／連線／非 expanded
 直接 getter 的 83d3f2a9f42b 遇到自然終局，沒有有效案例；356d561ee6e5
 雖在真正直升機場景命中正式 entry 0xf9203，但 bounded caller／address seek
 未找到可核對目標，仍為零案例。已新增有限 caller 名稱／地址是否吻合的布林
-診斷，尚待下一個正常瀏覽器生命週期；不把 selector 失敗當成 getter 一致。
+診斷；後續靜態 proof 已確認 iterator 呼叫 Units::clone，getter 参数地址無法
+回推原 Force 指標，因此已退役未驗證直接模式，保留已成功的 captured
+Force::speed nested getter 方法。失敗嘗試仍保留，沒有成功案例回填。
+
+sampling-fe678ebb30ce 是新版 150 ms 備援計時器的完整 600.120 秒單局：
+4,797 筆／7.993 Hz，有效跨度 599.571 秒，擷取 p95 8.248 ms，已含量化誤差
+的客戶端套用年齡上界 p95 189 ms（4,795 筆有區間）。一文件／一 epoch／
+NETWORK，1 次 dirty 拒絕；無除錯暫停或資訊框操作。4,797/4,797 筆皆有
+29 個正值 sensor slots 與 29 個 generated actors，coverage evidence 數量全符。
+來源 manifest 含當次 sampler 雜湊；authoritative age 仍 UNKNOWN，不能列為
+M1 PASS 或把這些集合一致性檢查當成獨立 UI 正確率。

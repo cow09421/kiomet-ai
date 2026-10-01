@@ -289,3 +289,22 @@ Further independent normal Force::speed nested getter cohorts: 9ac718c8fdb9
 contains 30 distinct twelve-soldier vectors, 300/300 getter fields; 06d675aad308
 contains 30 distinct four-bomber vectors, 300/300. No injected live WASM call,
 no hidden endpoint reads, and no debugger samples in performance cohorts.
+
+## QUESTION: can Units::available's argument address identify its original force?
+
+The failed direct-getter cohorts 83d3f2a9f42b and 356d561ee6e5 supply zero
+independent cases. Static pinned evidence resolves the pointer hypothesis:
+Force::speed directly queries enum 2 at 0x98987, then (when zero) builds
+Units::iter_with_zeros at 0x98998. That iterator explicitly calls Units::clone
+at 0x14e72c, storing a copy at its result+8. Its getter adapter func5444 calls
+Units::available at 0x14e782 using that cloned iterator object. Thus those getter
+arguments are not the original force+14 address. Subtracting 14 cannot identify
+the force. The unrelated direct call at 0xcd9bf is a tower-production loop,
+not a force-render identity certificate.
+
+CONCLUSION / STATUS: FAIL for the address-identification hypothesis. Retired
+the unvalidated direct-getter mode; retain the validated units mode, which first
+captures a legal Force::speed invocation and observes nested getter returns
+only inside that invocation. No claim of new live Single coverage follows from
+this static proof. d4a9b156ae26 independently verifies ten distinct source ticks
+with two/four choppers, ten complete vectors and 100/100 getter fields.

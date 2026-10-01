@@ -21,7 +21,6 @@ POINTS = {
     'speed': (0x9896d, 0x98b8e),
     'position': (0x1036c0, 0x10375f),
     'units': (0x9896d, 0x98b8e),
-    'getter': (0xf9203, 0xf92c2),
 }
 
 
@@ -44,7 +43,7 @@ async def locals_at(cdp, frame, names):
 
 
 async def main(args):
-    rows, errors, getter_seek_diagnostics = [], [], []
+    rows, errors = [], []
     unique = {}
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
@@ -101,17 +100,8 @@ async def main(args):
                         render = args.mode == 'position' or any(
                             'Force::interpolated_position' in f['functionName'] or
                             f['functionName']=='$func1861' for f in event['callFrames'])
-                        if args.mode=='getter':
-                            render=any(f['functionName']=='$func1242' for f in event['callFrames']) and not any(
-                                any(n in f['functionName'] for n in ('ServerState::apply','World::tick','Chunk::apply'))
-                                for f in event['callFrames'])
-                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']-14 if args.mode=='getter' else values['$var0']
-                        correct_unit=args.mode!='getter' or values['$var1']==args.unit_type
-                        if args.mode=='getter' and len(getter_seek_diagnostics)<3:
-                            getter_seek_diagnostics.append({'caller_names':[f['functionName'] for f in event['callFrames'][:6]],
-                                'normal_render_filter':render,'matches_preselected_units_address':force_ptr==target['research_ref'],
-                                'queried_unit_type':values['$var1'],'wanted_unit_type':args.unit_type})
-                        if render and correct_unit and force_ptr==target['research_ref']:
+                        force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']
+                        if render and force_ptr==target['research_ref']:
                             force=target
                             break
                         await resume()
@@ -121,7 +111,7 @@ async def main(args):
                             break
                     else:
                         raise ValueError('bounded renderer seek did not find preselected visible force')
-                    if not render or not correct_unit or force_ptr!=target['research_ref']:
+                    if not render or force_ptr!=target['research_ref']:
                         continue
                     # Never relax the production observer's borrow guard. While
                     # paused in normal rendering, only reuse the prior payload if
@@ -183,12 +173,6 @@ async def main(args):
                     if args.mode == 'speed':
                         actual = end_values['$var2'] & 255
                         row.update(official_speed=actual, match=actual == speed)
-                    elif args.mode == 'getter':
-                        count=(await locals_at(cdp,end['callFrames'][0],{'$var1','$var3'}))['$var3']&255
-                        expected_counts=dict(units.counts)
-                        row.update(queried_unit=args.unit_type,official_unit_counts=[(args.unit_type,count)],
-                            derived_unit_counts=[(args.unit_type,expected_counts[args.unit_type])],
-                            complete_vector=False,match=count==expected_counts[args.unit_type])
                     elif args.mode == 'units':
                         expected_counts = dict(units.counts)
                         row.update(official_unit_counts=sorted(official_counts.items()),
@@ -250,7 +234,6 @@ async def main(args):
                 'breakpoint_locations':breakpoint_locations,
                 'unit_getter_fields':sum(len(r.get('official_unit_counts',())) for r in rows),
                 'requested_positive_unit_type':args.unit_type,
-                'getter_seek_diagnostics':getter_seek_diagnostics,
                 'debugger_pauses': True, 'performance_cohort': False, 'tactical_commands': 0,
                 'limits': 'normal rendered visible forces only; no stable force ID or launch-time proof'}
             path = ROOT / 'runtime/research/v2' / f'force-render-comparison-{uuid4().hex[:12]}.json'
@@ -271,6 +254,4 @@ if __name__ == '__main__':
         parser.error('samples 1..100 and seconds 1..120 required')
     if args.unit_type is not None and not 0 <= args.unit_type < 10:
         parser.error('unit type must be 0..9')
-    if args.mode=='getter' and args.unit_type is None:
-        parser.error('direct getter comparison requires the explicitly queried unit type')
     asyncio.run(main(args))

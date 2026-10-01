@@ -238,3 +238,29 @@ alone. The experiment demonstrates the distinction on the unmodified client;
 it does not measure ordinary p95 age, identify every possible timestamp source,
 or assign this held update's age to a later snapshot. Normal execution was
 resumed and all breakpoints removed. M1 authoritative age remains UNKNOWN.
+
+### QUESTION: do active lifecycle payload or GameActorUpdate tail contain a clock?
+
+Pinned receive decodes the active NonActor lifecycle case at 0x51a80..0x51a88
+by writing tag 3 to stack+436 and branching past every variant payload decoder.
+NonActor starts at stack+400; this tag maps to typed context+548 after normal
+application. Tag 3 therefore has no typed variant payload from which to obtain
+a timestamp. Inactive/dead variant storage is not a legal active field and was
+not inspected in live memory. Initial/unavailable case writes tag 5 at 0x51c05.
+
+The candidate GameActorUpdate tail at stack+392 is produced at 0x51a47 by
+func3817. That function returns two i32 words: the Vec pointer (+4) and length
+(+8), after its container allocation helper. Its caller decodes a collection
+length at 0x519d4..0x519f5, initializes capacity/pointer/length at stack+12880,
+and passes it to func3817. func3682 calls the allocation path with element size
+0 and alignment 1; func1545 performs allocator/deallocator operations, not time
+conversion. Normal ServerState::apply copies the 80-byte actor update to
+stack+640 and uses its tail length at stack+716 as a decrementing loop count
+at 0xdb2e..0xdb81 while moving singleton state. This is a zero-sized-element
+collection descriptor, not a decoded u64 generation timestamp. No candidate
+value or hidden actor payload was read or exported from live memory.
+
+CONCLUSION / STATUS: FAIL for both of these particular timestamp hypotheses.
+This typed decode/use proof is stronger than absence of a timestamp name, but
+does not by itself establish that every other legal source is absent. The
+canonical server-generation time and authoritative snapshot age stay UNKNOWN.
