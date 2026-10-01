@@ -136,6 +136,14 @@ def validate_fresh_intent(state, source_id, destination_id, typed_deployable,
     return checked
 
 
+def require_deselected_selection_evidence(raw, stage):
+    """Require an explicit observer key whose value is exactly None."""
+    if not isinstance(raw, dict) or "selected_tower" not in raw:
+        raise ValueError(f"{stage} selection evidence missing; force gesture withheld")
+    if raw["selected_tower"] is not None:
+        raise ValueError(f"{stage} selected_tower is not explicitly None; force gesture withheld")
+
+
 def _ui_quantity_evidence(dom, typed_deployable, tower_type, morale_boost):
     """Read only direct inventory rows under the unique selected tower heading."""
     rows = dom.get("rows") if isinstance(dom, dict) else None
@@ -642,8 +650,7 @@ async def run(args):
                             "supply_line_before": selected_source.supply_line_present.value})
                         await page.mouse.click(sx, sy)
                         deselected, deselected_raw = await _sample_ready(ex)
-                        if "selected_tower" not in deselected_raw or deselected_raw["selected_tower"] is not None:
-                            raise ValueError("ordinary deselection was not confirmed; force gesture withheld")
+                        require_deselected_selection_evidence(deselected_raw, "ordinary deselection")
                         source_now = next((t for t in deselected.towers if t.id == source.id), None)
                         if source_now is None or source_now.supply_line_present.value is not False:
                             raise ValueError("source disappeared or supply-line guard failed after deselection")
@@ -658,8 +665,7 @@ async def run(args):
                         # Fresh state, fresh camera, both endpoint hit-tests, and readiness are
                         # checked after deselection and immediately before durable command intent.
                         before, before_raw = await _sample_ready(ex)
-                        if "selected_tower" not in before_raw:
-                            raise ValueError("fresh selection evidence missing; force gesture withheld")
+                        require_deselected_selection_evidence(before_raw, "fresh before-state")
                         fresh = validate_fresh_intent(before, source.id, destination.id,
                             checked["typed_deployable"], before_raw.get("selected_tower"),
                             time.monotonic_ns() // 1_000_000)

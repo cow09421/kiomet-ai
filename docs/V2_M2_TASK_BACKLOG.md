@@ -77,19 +77,23 @@ completed the offline no-reset auditor and the stronger local-coverage route
 certificate after three later worker tasks reported service usage limits before
 editing. Their independent static rule reviews remain useful; unfinished worker
 implementation/review tasks are not marked complete. The root additions are
-diagnostic tools with zero automatic formal credit. Current regression: 182 pass.
+diagnostic tools with zero automatic formal credit. Current regression: 194 pass.
 The original-before LaunchAll audit matches 30 complete worlds then refuses unknown
 arrival path at 65186. Four additional finite preflight hosts sent zero troops;
 margin, partial actor coverage and foreign endpoint gaps remain exclusions.
 
-Latest checkpoint resumes Luna-first text review; local file tool availability
-remains limited by automatic approval usage quota. Independent text review accepted
+Luna-first local read/edit/test availability is now verified restored; the earlier
+automatic approval usage quota was temporary. Independent text review accepted
 the original single capture, diagnostic causal audit and evidence accounting.
 The reusable certificate now requires coherent fact times and explicit selection
 evidence and claims BEFORE_SNAPSHOT_ONLY, never implicit gesture continuity.
 
-Ready P0: prove pinned mouseup handler ordering and obtain an atomic before-handler
-read-only snapshot or independently establish route-predicate stability across a
+Ready P0: integrate the tested pre-start observer into the bounded recorder,
+draining each event into the same chronological extractor before the next event.
+Verify event-specific unique visible center endpoints, stable camera/geometry,
+lease/source/document and release-entry None selection. Late-listener ordering
+was unproved; the optional host now installs before controlled-page scripts.
+Obtain an atomic before-handler snapshot or independently establish predicate stability across a
 real gesture. Then obtain an independently recorded own, no-line terminal reinforcement
 with that route evidence, and compare the complete visible arrival
 world and next tick. Keep bounded experiment questions and retry ineligible

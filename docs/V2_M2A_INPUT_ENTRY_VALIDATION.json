@@ -1,0 +1,53 @@
+{
+  "QUESTION": "Does the bounded official headless host install the disabled input-entry observer before the controlled page scripts, while preserving pinned normal client observation?",
+  "BEFORE": {
+    "branch": "v2-rebuild",
+    "head": "9e4cd597c15f20987651fd61013c4ee055d7e50f",
+    "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "sources": {
+      "src/kiomet_ai/v2/observe/input_entry.js": "0e327e707f95b82eae6e00e141679b241476e43cafe6641d7350f941b706374a",
+      "src/kiomet_ai/v2/observe/client_fae13.js": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+      "src/kiomet_ai/v2/observe/extractor.py": "51436bdc81fd3dbc95a70ba41ddcc64d1b08349c619360c9a39416235c7b57c0",
+      "tools/v2_headless_research.py": "efc079deb1510a9a4a063bc14f044e822f1665305d15d8d169fcb4fc42b8ea70"
+    },
+    "v2_tests_passed": 192,
+    "observer_fixture_tests_passed": 9
+  },
+  "ACTION": {
+    "operation": "one finite normal official headless host with opt-in pre-start observer; normal Play only",
+    "seconds": 120,
+    "troop_gesture_limit": 0,
+    "observer_arm_limit": 0,
+    "semantic_wasm_calls": 0
+  },
+  "EXPECTED": {
+    "startup_registered_before_controlled_page_creation": true,
+    "document_loading_at_install": true,
+    "observer_status": "DISARMED",
+    "armed_once": false,
+    "pinned_normal_decoder_succeeds": true,
+    "normal_teardown": true
+  },
+  "OBSERVED": {
+    "startup_registered_before_controlled_page_creation": true,
+    "initial_blank_page_count": 1,
+    "observer_source_sha256": "0e327e707f95b82eae6e00e141679b241476e43cafe6641d7350f941b706374a",
+    "pinned_normal_decoder_succeeded": true,
+    "normal_raf_interval_ms_range": [
+      6.8,
+      13.9
+    ],
+    "normal_play_joined": true,
+    "observer_api_status": "NOT_OBSERVED",
+    "reason": "Separate bounded inspection started after finite host expiry; lease absent, no connection or actor read attempted.",
+    "host_exit_code": 0,
+    "normal_teardown": true,
+    "observer_arms": 0,
+    "troop_gestures": 0
+  },
+  "SIMULATED": "NOT_APPLICABLE; instrumentation admission only",
+  "DIFF": "Expected disabled API status was not observed; startup registration, normal decoder, normal Play and teardown were observed.",
+  "VERDICT": "PARTIAL_INSTRUMENTATION_ADMISSION_NO_FORMAL_CREDIT",
+  "formal_credit": 0,
+  "trajectory_credit": 0
+}

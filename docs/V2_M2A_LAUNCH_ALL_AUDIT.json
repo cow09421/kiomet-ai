@@ -389,7 +389,7 @@
   "reason": "UNKNOWN_POST_ARRIVAL_PATH",
   "manifest": {
     "recording_sha256": "0854dc24aa326fd2b6b027195582bedb368d97e96c752843265a9a813bd62d3b",
-    "auditor_sha256": "af9e1e7277c0dea10c82924ebd81ad351e5196ecbf15482edf904a71bb5fa4b1",
+    "auditor_sha256": "dbe9ab2db540fb2fc3de4e05f63ddcf30aa0cb2e62f92ac893a7d37764b30aa3",
     "simulator_sha256": "548911631642b0c22c7a63f4d068ecd6284c16e1b989d83772e970488818366f"
   }
 }

@@ -24,7 +24,7 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **182 passed, 1363 deselected** after integrating
+Current v2 regression run: **194 passed, 1363 deselected** after integrating
 LaunchAll, quantity-independent newborn recording, before-only route certificates
 and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
 passing tests. No performance rerun was
@@ -56,15 +56,38 @@ ended normally. Their exclusions are retained, never counted as arrival cases.
 No active live control loop is left running. Supplemental preflight audit:
 V2_M2A_CONTROLLED_PREFLIGHT_AUDIT.json.
 
-Luna-first dispatch has resumed for bounded text reviews: capture_morale_review
+Luna-first dispatch resumed first for bounded text reviews: capture_morale_review
 accepted the existing single arrival's before/first-post route-predicate stability;
 ordinary_combat_closure accepted the LaunchAll causal audit with explicit
 CALIBRATION_ONLY_TEMPORAL_ALIGNMENT; controlled_capture_builder reconciled the
 nonadditive counts. Root integrated their time/selection guard requests. Luna
-local file access was rejected by automatic approval's usage limit, so those
-reviews used already supplied source and evidence only. The quota does not cancel
-Luna-first scheduling; tool availability will be rechecked at natural checkpoints.
+local file access was initially rejected by automatic approval's usage limit, so
+those reviews used supplied source and evidence. At the next checkpoint, local
+read/edit/test access was independently verified restored. Three Luna workers
+then completed the recorder refusal regression, pre-start observer/host startup,
+clock/adoption review and bounded ruler-cache writer research. Root fixed three
+reviewed continuation/ordering issues and retained their regression evidence.
 Maximum remains three Luna workers; actual dispatch follows available bounded work.
+
+The optional pre-start observer and chronological captured-world adoption are
+implemented and tested. They are preparation for independently certified real
+gesture routes, not new arrival evidence. Late event-listener ordering remains
+unproved; only context init-script registration before the controlled page is
+used. The recorder does not yet arm/drain this observer. See
+V2_M2A_INPUT_ENTRY_CONTRACT.md and the separate finite admission receipts.
+Root verified 9 synthetic observer tests plus the adapter privacy boundaries.
+The first 120-second disabled host ended normally but its later inspection missed
+the finite lease; PARTIAL receipt remains. A separate prepared 30-second host
+verified inline loading/disarmed status, source pin, normal Play and teardown.
+Both had zero observer arms and zero troop gestures. Its admission PASS is only
+for disabled startup; armed real-event and arrival evidence are still pending.
+
+Ruler-cache writer continuity remains UNKNOWN. The pinned player slot is 64 bytes
+and aura reads its optional TowerId at offset 0; alliances use offset 8. Vendored
+Alerts.ruler_position is approximate, recomputed every second and sent through
+NonActor, while the vendored Player actor contains alliance fields. That reference
+does not establish the pinned offset-0 writer or its ordering against tick replay.
+No aura model or long-trajectory credit was changed.
 
 Formal production/current-leg movement: 1052/1052 genuine one-tick complete
 visible-state transitions: development 611/611 (38 production-only, 573 movement),

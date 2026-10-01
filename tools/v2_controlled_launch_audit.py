@@ -92,7 +92,10 @@ def audit_events(events, *, allow_legacy_manual_ui=False):
     terminal = None
     recorded_route = intent.get('before_only_route_certificate')
     if isinstance(recorded_route, dict) and recorded_route.get('qualified') is True:
-        selection = intent.get('before_selection_evidence', {})
+        selection = intent.get('before_selection_evidence')
+        if (not isinstance(selection, dict)
+                or not {'confirmed', 'selected_tower', 'tick', 'sampled_at_ms'} <= selection.keys()):
+            return dict(result, reason='recorded_before_selection_evidence_missing')
         proved = direct_route_certificate(before, source, destination,
                                          client_sha256=before.client_sha256,
                                          selected_tower=selection.get('selected_tower'),

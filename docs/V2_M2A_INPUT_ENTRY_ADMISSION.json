@@ -1,0 +1,64 @@
+{
+  "QUESTION": "Does inline host validation confirm the disabled pre-start observer on the controlled official document before normal Play?",
+  "BEFORE": {
+    "prior_partial_receipt": "docs/V2_M2A_INPUT_ENTRY_VALIDATION.json",
+    "head": "9e4cd597c15f20987651fd61013c4ee055d7e50f",
+    "sources": {
+      "tools/v2_headless_research.py": "12234228395ca41393062e567d145d227624ca61c556bd8c06485007aee967e6",
+      "src/kiomet_ai/v2/observe/input_entry.js": "0e327e707f95b82eae6e00e141679b241476e43cafe6641d7350f941b706374a",
+      "src/kiomet_ai/v2/observe/extractor.py": "e6e18091df642afe4da9d478a52549c76e76f17bab6a569b126a29849af3cad7"
+    },
+    "fixture_scope": "disabled startup, chronological adoption and synthetic gesture protocol; no armed-live evidence"
+  },
+  "ACTION": {
+    "operation": "one finite official headless host with opt-in pre-start observer, inline status validation, normal Play only",
+    "seconds": 30,
+    "troop_gesture_limit": 0,
+    "observer_arm_limit": 0
+  },
+  "EXPECTED": {
+    "registered_before_controlled_page_creation": true,
+    "document_loading_at_install": true,
+    "status": "DISARMED",
+    "armed_once": false,
+    "pinned_normal_decoder_succeeds": true,
+    "normal_teardown": true
+  },
+  "OBSERVED": {
+    "startup": {
+      "observer_requested": true,
+      "registered_before_controlled_page_creation": true,
+      "initial_blank_page_count": 1,
+      "source_sha256": "0e327e707f95b82eae6e00e141679b241476e43cafe6641d7350f941b706374a"
+    },
+    "controlled_document_observer_status": {
+      "installed": true,
+      "ready_state_at_install": "loading",
+      "document_loading_at_install": true,
+      "install_performance_time_origin_ms": 1790892143137.1,
+      "install_performance_now_ms": 358.2000000476837,
+      "armed_once": false,
+      "armed": false,
+      "status": "DISARMED"
+    },
+    "document_time_origin_ms": 1790892143137.1,
+    "pinned_client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "pinned_normal_decoder_succeeded": true,
+    "normal_raf_interval_ms_range": [
+      6.8,
+      7.0
+    ],
+    "normal_play_joined": true,
+    "in_match_play_button_hidden_polls": 3,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "host_exit_code": 0,
+    "normal_teardown": true,
+    "lease_absent_after_exit": true
+  },
+  "SIMULATED": "NOT_APPLICABLE; instrumentation admission only",
+  "DIFF": "All disabled startup admission expectations matched. No armed event snapshot or actor/arrival validation was attempted.",
+  "VERDICT": "PASS_DISABLED_STARTUP_ADMISSION_ONLY",
+  "formal_credit": 0,
+  "trajectory_credit": 0
+}

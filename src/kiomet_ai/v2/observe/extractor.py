@@ -1,7 +1,9 @@
 """Pinned client observation; no WASM calls, heap writes or command dispatch."""
 import base64
+import copy
 from dataclasses import replace
 import hashlib
+import math
 from pathlib import Path
 import time
 from uuid import uuid4
@@ -218,6 +220,10 @@ class ClientExtractor:
         self.owner_states_id = None
         self.sockets_checked_at = 0
         self.diagnostic_sockets = diagnostic_sockets
+        self.last_read_finished_ms = None
+        self.last_read_finished_monotonic_ms = None
+        self._document_invalidated = False
+        self._read_in_flight = False
         self.decoder_source = Path(__file__).with_name("client_fae13.js").read_text(encoding="utf8")
 
     async def _refresh_sockets(self):
@@ -293,6 +299,17 @@ class ClientExtractor:
             raise
 
     async def _read(self, mode, watched_ids=()):
+        if self._read_in_flight:
+            raise RuntimeError('extractor read is already in flight')
+        self._read_in_flight = True
+        try:
+            return await self._read_unlocked(mode, watched_ids)
+        finally:
+            self._read_in_flight = False
+
+    async def _read_unlocked(self, mode, watched_ids=()):
+        if self._document_invalidated:
+            raise ValueError('document changed; discard observer and reattach')
         if self.memories_id is None:
             raise RuntimeError("extractor is not attached")
         if self.diagnostic_sockets and (self.sockets_dirty or time.monotonic()-self.sockets_checked_at>=1):
@@ -306,10 +323,36 @@ class ClientExtractor:
         if "exceptionDetails" in result:
             raise ValueError(result["exceptionDetails"].get("exception", {}).get("description", "client decode failed"))
         raw = result["result"]["value"]
+        received_monotonic = time.monotonic_ns() / 1000000
+        return self._accept_raw(raw, began_monotonic, received_monotonic)
+
+    def _invalidate_document(self):
+        self._document_invalidated = True
+        self.source_clock.clear()
+        self.force_tracker.clear()
+        self.upgrade_tracker.clear()
+        self.lifecycle = MatchLifecycle(self.document_id)
+        self.lifecycle.invalidated = True
+
+    def _accept_raw(self, raw, began_monotonic, received_monotonic):
+        """Consume one chronological synchronous read in the existing clock domain."""
+        if (type(began_monotonic) not in (int, float) or not math.isfinite(began_monotonic)
+                or began_monotonic < 0 or type(received_monotonic) not in (int, float)
+                or not math.isfinite(received_monotonic) or received_monotonic < began_monotonic
+                or received_monotonic > time.monotonic_ns() / 1000000):
+            raise ValueError('invalid host observation bracket')
+        began_ms = int(began_monotonic)
+        received_ms = int(received_monotonic)
+        if (self.last_read_finished_monotonic_ms is not None
+                and began_monotonic < self.last_read_finished_monotonic_ms):
+            raise ValueError('captured observation is retrospective or overlaps a consumed read')
+        if not isinstance(raw, dict):
+            raise ValueError('invalid captured observation payload')
         if raw["document_time_origin"] != self.time_origin:
-            self.source_clock.clear()
+            self._invalidate_document()
             raise ValueError("document changed; discard observer and reattach")
-        received_ms = time.monotonic_ns() // 1000000
+        self.last_read_finished_ms = received_ms
+        self.last_read_finished_monotonic_ms = received_monotonic
         life, identity = self.lifecycle.observe(raw, received_ms)
         raw["derived_lifecycle"] = life
         raw["derived_match_id"] = identity
@@ -341,6 +384,62 @@ class ClientExtractor:
 
     async def sample(self):
         raw, began_ms, received_ms, window = await self._read("world")
+        return self._normalize_world(raw, began_ms, received_ms, window)
+
+    def adopt_captured_world(self, raw, *, began_monotonic_ms, received_monotonic_ms):
+        """Consume a buffered synchronous decoder sample, never re-read game memory.
+
+        The caller must drain each event before another read/input. Browser epoch
+        timestamps stay separate; the host dispatch/receipt bracket is conservative.
+        This API does not authenticate event ordering or grant gesture credit.
+        """
+        if self.memories_id is None or self.owner_states_id is None:
+            raise RuntimeError('extractor is not attached')
+        if self._read_in_flight:
+            raise RuntimeError('captured adoption cannot overlap a live read')
+        if self._document_invalidated:
+            raise ValueError('document changed; discard observer and reattach')
+        if (not isinstance(raw, dict) or raw.get('world_unavailable')
+                or raw.get('coverage') != 'PLAYER_VISIBLE_COMPLETE'
+                or raw.get('transport_mode') != 'NETWORK'
+                or raw.get('online') is not True or raw.get('transport_connected') is not True
+                or raw.get('active') is not True or raw.get('play_text') is not None
+                or raw.get('visible_pending') is not False or raw.get('expanded_visibility') is not False
+                or type(raw.get('player_id')) is not int or not 0 < raw['player_id'] <= 65535
+                or type(raw.get('root_candidate')) is not int or raw['root_candidate'] <= 0
+                or type(raw.get('tick')) is not int or not 0 <= raw['tick'] <= 65535):
+            raise ValueError('captured world is not a complete network observation')
+        if raw.get('document_time_origin') != self.time_origin:
+            self._invalidate_document()
+            raise ValueError('document changed; discard observer and reattach')
+        if self.source_clock.key is not None and (
+                raw.get('root_candidate'), raw.get('player_id'), raw.get('transport_mode')) != self.source_clock.key[2:]:
+            raise ValueError('captured world identity differs from the accepted stream')
+        if (self.source_clock.previous_tick is not None
+                and (raw['tick'] - self.source_clock.previous_tick) % 65536 >= 32768):
+            raise ValueError('captured world tick goes backwards')
+        saved = copy.deepcopy((self.source_clock, self.force_tracker, self.upgrade_tracker,
+                               self.lifecycle, self.last_read_finished_ms,
+                               self.last_read_finished_monotonic_ms, self.sequence))
+        continuity_lost = False
+        try:
+            raw, began_ms, received_ms, window = self._accept_raw(
+                dict(raw), began_monotonic_ms, received_monotonic_ms)
+            if raw['derived_lifecycle'] != 'IN_MATCH' or raw['derived_match_id'] is None:
+                continuity_lost = True
+                raise ValueError('captured world lifecycle continuity is not qualified')
+            result = self._normalize_world(raw, began_ms, received_ms, window)
+            if result[0].lifecycle.value != 'IN_MATCH' or result[0].match_id.value is None:
+                continuity_lost = True
+                raise ValueError('captured world lifecycle continuity is not qualified')
+            return result
+        except Exception:
+            if not continuity_lost:
+                (self.source_clock, self.force_tracker, self.upgrade_tracker, self.lifecycle,
+                 self.last_read_finished_ms, self.last_read_finished_monotonic_ms, self.sequence) = saved
+            raise
+
+    def _normalize_world(self, raw, began_ms, received_ms, window):
         if raw.get("world_unavailable"):
             raise ValueError(raw["world_unavailable"])
         state = normalize(raw, self.session_id, self.document_id,
@@ -356,6 +455,8 @@ class ClientExtractor:
         return state, raw
 
     async def close(self):
+        self.last_read_finished_ms = None
+        self.last_read_finished_monotonic_ms = None
         self.source_clock.clear()
         self.force_tracker.clear()
         self.upgrade_tracker.clear()

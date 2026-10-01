@@ -8,12 +8,14 @@ import tempfile
 from pathlib import Path
 from types import SimpleNamespace as NS
 
+import pytest
 from kiomet_ai.v2.state import Lifecycle, Relation
 from tools.v2_controlled_transition_capture import (
     _ui_quantity_evidence, capture_distinct_ticks, collect_new_force_births,
     collect_new_force_lineage,
     durable_before, force_lineage_credit, is_project_headless_browser_process,
-    record_before_gesture, supply_line_guard_passed, validate_fresh_intent,
+    record_before_gesture, require_deselected_selection_evidence,
+    supply_line_guard_passed, validate_fresh_intent,
     validate_scenario,
 )
 
@@ -278,6 +280,42 @@ def test_before_intent_is_durable_before_mouse_gesture():
     assert asyncio.run(record_before_gesture(stream, intent, gesture)) == "released"
     assert seen == ["flush", "gesture"]
     backing.close()
+
+
+def test_missing_or_non_none_selection_evidence_withholds_gesture_at_both_stages():
+    intent = {"kind": "BEFORE_INTENT", "input_sent": False}
+    for stage in ("ordinary deselection", "fresh before-state"):
+        for raw in ({}, {"other": None}, {"selected_tower": False}, {"selected_tower": 0},
+                    {"selected_tower": 12}):
+            called = []
+
+            async def attempt():
+                require_deselected_selection_evidence(raw, stage)
+                with tempfile.TemporaryFile(mode="w+t", encoding="utf8") as stream:
+                    return await record_before_gesture(stream, intent,
+                        lambda: record_gesture(called))
+
+            async def record_gesture(calls):
+                calls.append("gesture")
+
+            with pytest.raises(ValueError, match="selection evidence|selected_tower"):
+                asyncio.run(attempt())
+            assert called == []
+
+        called = []
+
+        async def accepted():
+            require_deselected_selection_evidence({"selected_tower": None}, stage)
+            with tempfile.TemporaryFile(mode="w+t", encoding="utf8") as stream:
+                return await record_before_gesture(stream, intent,
+                    lambda: record_gesture(called))
+
+        async def record_gesture(calls):
+            calls.append("gesture")
+            return "released"
+
+        assert asyncio.run(accepted()) == "released"
+        assert called == ["gesture"]
 
 
 def test_durable_before_writes_complete_record():

@@ -72,3 +72,24 @@ def test_before_route_certificate_supports_rollout_but_never_grants_trajectory_c
     assert result['terminal_path_application'] == 'CONDITIONAL_ON_UNPROVED_GESTURE_CONTINUITY'
     intent['before_only_route_certificate']['frontier'][0]['f'] += 1
     assert audit_events(events, allow_legacy_manual_ui=True)['reason'] == 'recorded_before_route_certificate_does_not_revalidate'
+
+
+def test_route_audit_never_infers_none_from_an_omitted_selection_field():
+    events = recording()
+    intent = next(row for row in events if row['kind'] == 'BEFORE_INTENT')
+    before = state_from_dict(intent['state'])
+    intent['before_only_route_certificate'] = direct_route_certificate(
+        before, intent['source'], intent['destination'], client_sha256=before.client_sha256,
+        selected_tower=None, selection_confirmed=True, selection_tick=before.tick.value,
+        selection_sampled_at_ms=before.sampled_at_ms)
+    selection = {'confirmed': True, 'selected_tower': None,
+                 'tick': before.tick.value, 'sampled_at_ms': before.sampled_at_ms}
+    for omitted in (None, {}, {key: value for key, value in selection.items() if key != 'selected_tower'}):
+        intent['before_selection_evidence'] = omitted
+        result = audit_events(events, allow_legacy_manual_ui=True)
+        assert result['reason'] == 'recorded_before_selection_evidence_missing'
+        assert result['matched_intermediate_ticks'] == []
+        assert result['formal_credit'] == result['trajectory_credit'] == 0
+    for invalid in (False, 0):
+        intent['before_selection_evidence'] = dict(selection, selected_tower=invalid)
+        assert audit_events(events, allow_legacy_manual_ui=True)['reason'] == 'recorded_before_route_certificate_does_not_revalidate'
