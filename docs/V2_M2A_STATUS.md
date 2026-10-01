@@ -6,6 +6,29 @@ OLD M1 FAIL documents remain unchanged. M1B PASS checkpoint: 2212346.
 
 ## Current evidence and corrected accounting
 
+Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,
+comprising the unchanged 1052 production/movement baseline below and **one**
+independently qualified empty-neutral capture, 65185 -> 65186. Its before-input
+UI intent, complete direct-route certificate, manual newborn initialization and
+unambiguous force lineage are preserved. Root and two Luna reviewers checked the
+complete 35-tower world, including ownership/relation, units, capacity, production,
+morale, force context/order and own supply-line state. This is one arrival/capture
+case, not forty movement cases. See V2_M2A_CONTROLLED_CAPTURE_VALIDATION.json and
+V2_M2A_DIRECT_PATH_CERTIFICATE.md.
+
+The original recorder receipt remains PARTIAL (post-recording tuple-processing
+error); all forty consecutive full snapshots are intact and stored in portable,
+hash-checked gzip fixtures. The repaired recorder has explicit before-input
+QUESTION/ACTION/EXPECTED and bounded page-only UI controls. Ten-second terminal
+hypothesis rollout matches all forty intermediate worlds without a reset, but
+is **calibration only**: post-capture aura/cache eligibility remains unproved.
+It adds zero formal trajectories. The next-tick match is diagnostic only.
+
+Current v2 regression run: **148 passed, 1363 deselected** after integrating the
+portable capture-simulation fixture. No performance rerun was
+needed for the changed launch/arrival paths; the performance figures below retain
+their historical source/conditions. M2A ORDINARY WORLD COMPLETE remains NO.
+
 Formal production/current-leg movement: 1052/1052 genuine one-tick complete
 visible-state transitions: development 611/611 (38 production-only, 573 movement),
 untouched holdout 441/441 (35 production-only, 406 movement). Overlapping event
@@ -47,8 +70,13 @@ Old public AGPL source informs hypotheses; it is not current-server authority.
 SUPPORTED: u16 relative world phase/wrap, ordinary production within guarded
 capacity scope, current-segment movement, owned immobile Shield overflow decay,
 stationary special inventory preservation, explicit local ordinary launch after
-world advancement at progress zero. Limited terminal capture/reference scenarios
-require known path/fuel and non-overflowing ordinary units.
+world advancement at progress zero, with acceleration copied from the source's
+input-phase morale and initial fuel150. Limited terminal capture/reference
+scenarios require independently known path/fuel. Pinned owned Tank/Soldier merges
+allow capacity+5/+10, clip only arriving stock, and preserve pre-existing excess;
+their 120-phase cleanup requires positively absent own supply lines. These
+capacity-sensitive extensions have static proof and regression coverage, but no
+independent live friendly-overflow result yet.
 
 Friendly terminal reinforcement additionally requires an independently supplied
 observed own no-line flag or Scenario.no_supply_line_towers premise. Terminal=True
@@ -72,7 +100,7 @@ damage across phases. Root ran 84 independent pinned damage/field scalar cases;
 scalar agreement does not establish complete fight correctness.
 
 UNSUPPORTED: king death/global elimination, dynamic morale/aura, active EMP or
-upgrade, special production/movement/combat, mobile overflow/supply-line effects,
+upgrade, special production/movement/combat, other mobile overflow/supply-line effects,
 unknown arrival acceleration, unknown future path/fuel, neutral decay/downgrade,
 opposed force combat, unknown pair relationship, and unrecorded external actions.
 Unsupported transitions do not earn accuracy credit.
@@ -140,11 +168,12 @@ the natural-result branch still needs its own live verification.
 
 ## Authorization and next work
 
-No troop command has been sent. A concrete two-match bounded ordinary-UI input
-capture plan is recorded in V2_M2A_CONTROLLED_CAPTURE_PLAN.md. The earlier M1 user
-instruction explicitly prohibited automatic dispatch/attack; execution awaits an
-explicit answer about these M2 tests. Core fixes and offline verification continue.
-This is a pending authorization for that action, not a reason to stop all work.
+At checkpoint dae2c42 no troop command had been sent. A concrete two-match bounded ordinary-UI input
+capture plan is recorded in V2_M2A_CONTROLLED_CAPTURE_PLAN.md. The latest mainline
+instruction, attachment 6cbef14b-e757-4a9d-a1c6-f0cc629aa9a0 section 7, explicitly
+authorizes bounded M2 official-UI troop experiments and supersedes the M1-only
+read-only restriction. Record before inputs and complete intermediate states;
+unknown UI selection, route/fuel or action application tick stays unknown.
 
 Genuine engineering blocker: none. Remaining gates are construction work.
 NEXT PARALLEL PLAN: Luna independently red-teams arrival relay and evidence
@@ -153,6 +182,13 @@ Sol reviews boundaries and integrates only independently checked results. Curren
 recommended concurrency cap is Sol + 3 Luna, with dynamic use below the cap;
 no Codex settings changed. See V2_M2_CONCURRENCY_REVIEW.md and V2_M2_TASK_BACKLOG.md.
 Preserve all failures and uncertainty. No M3.
+
+Current P0 work supersedes that historical dispatch list: accumulate independently
+qualified friendly reinforcement/combat/capture cases and model post-capture aura
+refresh with before-certified owner/King context. A fixed aura premise cannot be
+used to claim a fully supported long capture trajectory. The bounded friendly
+preflight had only one ordinary own source and a Ruler destination; it ended with
+zero input rather than relocating the Ruler. No active live agent remains.
 
 Latest bounded integration: observed own presence and exact identity/provenance
 checks; stale capture relation repair; pinned same-destination inbound-order and

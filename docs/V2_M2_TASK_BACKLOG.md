@@ -20,7 +20,7 @@ not runtime evidence; dispatch arguments are the configuration record.
 | P0-01 | Own supply-line presence privacy and transition red-team | BOUNDED CONTRACT ACCEPTED | provenance and bool/int alias repairs reviewed; positive live accuracy not claimed |
 | P0-02 | Ordinary capture ownership, reconciliation, aura and ruler guards | RELATION REPAIR ACCEPTED | capture_relation_fix; independent reviewer; combat remains candidate/default-off |
 | P1-01 | Cohort 785512e8888b Boolean audit and independent event candidates | AUDIT ACCEPTED WITH LIMITS | corpus_candidates completed; two ignored reports; zero scenario-eligible event rows |
-| P0-03 | Before-input terminal/fuel admission and controlled-input test matrix | QUEUED | READ-ONLY plan first; no UI execution |
+| P0-03 | Before-input terminal/fuel admission and controlled-input test matrix | ONE CONTROLLED CAPTURE QUALIFIED | pinned direct-path certificate, unique manual newborn, one 35-tower arrival match; not broad arrival PASS |
 | P0-04 | Air/Surface final casualty and ruler-loss direction proof | QUEUED | READ-ONLY; do not repeat resolved scalar/field caller work |
 | P1-02 | Thirteen retained trajectory failure classification | CLASSIFICATION ACCEPTED; NO ACCURACY CREDIT | trajectory_audit; 13 preserved failures, initiating actions unknown |
 | P2-01 | Corpus contamination and before/after selection audit | QUEUED | READ-ONLY; independent from corpus builder |
@@ -45,11 +45,14 @@ completion of the entire wave is not required.
 Baseline source checkpoint: 1a0185b. The reviewed own-only optional Boolean
 extension has 120 passing v2 tests and adapter privacy
 checks; completed 600-second passive cohort 785512e8888b with 4797 snapshots,
-NETWORK and one IN_MATCH epoch. No troop gesture has been sent.
+NETWORK and one IN_MATCH epoch. At that historical checkpoint no troop gesture
+had been sent. The current mainline subsequently recorded one ordinary UI launch.
 
-The bounded troop-input plan remains pending an explicit human answer because
-the earlier M1 instruction prohibited dispatch/attack. New management instructions
-do not themselves grant that answer. Its planning/testing can proceed offline.
+The latest mainline instruction (attachment 6cbef14b-e757-4a9d-a1c6-f0cc629aa9a0,
+section 7) explicitly authorizes bounded M2 normal-UI troop experiments. The
+earlier pending answer is resolved. Prioritize recorded launch -> arrival ->
+reinforcement/capture -> next-tick closure. Concurrency evaluation is finished;
+do not spend mainline engineering time on it.
 
 The most recent hover-evidence execution was not performed because automatic
 approval review hit a usage limit. That is an approval-review failure, not a
@@ -57,6 +60,22 @@ safety verdict. Do not retry that action through another agent, shell or tool.
 Separate permitted read-only work and existing process polling can continue.
 
 ## Reviewed cohort admission
+
+Latest construction: launch_lineage_rules corrected the manual/spawn boost branch
+confusion; ordinary_combat_closure implemented and independently reviewed owned
+Tank/Soldier merge limits and absent-line cleanup; controlled_capture_builder
+reworked quantity panels, selection/command branch, finite leases, tick recording
+and portable original-failure replay; capture_morale_review independently audited
+capture timing and the root's before-only direct path proof. Root accepted only
+the bounded immediate capture case, with zero formal long-trajectory credit.
+See V2_M2A_CONTROLLED_CAPTURE_VALIDATION.json. The three-worker cap is internal;
+the next ready work is friendly arrival evidence and dynamic capture-aura closure.
+
+M2A ORDINARY WORLD COMPLETE: NO (qualified arrival/capture inventory 1/100,
+new formal multi-event trajectories 0; historical matched trajectories 2).
+Do not count launch/transit frames from the controlled recording toward the 100.
+Ordinary combat stays candidate/default-off; general dynamic aura and relay stay
+unsupported. No M3.
 
 785512e8888b completed its finite 600-second observation window with 4,797
 snapshots; the sampling receipt's gate status remains PARTIAL. These are separate

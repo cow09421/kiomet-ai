@@ -51,6 +51,25 @@ def _captured_relation(owner,player,arriving_relation):
     return arriving_relation if arriving_relation in ('ALLY','ENEMY') else None
 
 
+def _merge_arriving_units(existing,incoming,capacity,error_reason):
+    # Units::add_inner applies this table after ordinary capacity, only on the
+    # owned/overflow-allowed path. Preserve existing over-cap stock and clip
+    # only the arriving count. Other kinds retain the model's prior fail-closed
+    # behavior when the combined count exceeds observed capacity.
+    result=list(existing)
+    for unit,count in enumerate(incoming):
+        if unit in (4,5):
+            limit=capacity[unit]+(5 if unit==4 else 10)
+            if limit>255: raise UnsupportedState('UNKNOWN_OVERFLOW_REPRESENTATION')
+            room=max(0,limit-existing[unit])
+            result[unit]=existing[unit]+min(count,room)
+        else:
+            total=existing[unit]+count
+            if total>capacity[unit]: raise UnsupportedState(error_reason)
+            result[unit]=total
+    return tuple(result)
+
+
 def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenario=Scenario()):
     if not scenario.fixed_morale: raise UnsupportedState('DYNAMIC_MORALE_AURA')
     towers={tower.id:tower for tower in state.towers}
@@ -84,10 +103,14 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
         if tower.owner and clock%120==0:
             for unit,n in enumerate(units):
                 if n>tower.capacity[unit]:
-                    if unit or tower.kind==15:
+                    if unit in (4,5) and tower.supply_line_present is False:
+                        if units is tower.units: units=list(units)
+                        units[unit]-=1
+                    elif unit or tower.kind==15:
                         raise UnsupportedState('MOBILE_OVERFLOW_SUPPLY_LINE')
-                    if units is tower.units: units=list(units)
-                    units[unit]-=1
+                    else:
+                        if units is tower.units: units=list(units)
+                        units[unit]-=1
         for unit,period in tower.production:
             if period<=0: raise UnsupportedState('INVALID_PRODUCTION_PERIOD')
             if clock%period==0:
@@ -148,14 +171,13 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
                 if dst.supply_line_present is not False and dst.id not in no_supply_lines:
                     raise UnsupportedState('UNKNOWN_REINFORCEMENT_SUPPLY_LINE')
             if dst.units[9] and any(force.units[1:6]): raise UnsupportedState('SINGLE_REINFORCEMENT_PRIORITY')
-            combined=tuple(a+b for a,b in zip(dst.units,force.units))
-            if any(n>dst.capacity[i] for i,n in enumerate(combined)): raise UnsupportedState('REINFORCEMENT_OVERFLOW')
+            combined=_merge_arriving_units(dst.units,force.units,dst.capacity,'REINFORCEMENT_OVERFLOW')
             towers[dst.id]=replace(dst,units=combined)
         elif dst.owner==0 and not any(dst.units):
             if not any(force.units[1:6]): raise UnsupportedState('NON_CLAIMING_FORCE')
-            if any(n>dst.capacity[i] for i,n in enumerate(force.units)): raise UnsupportedState('CAPTURE_OVERFLOW')
+            merged=_merge_arriving_units(dst.units,force.units,dst.capacity,'CAPTURE_OVERFLOW')
             periods=production(dst.kind,Units(tuple(enumerate(force.units))),force.owner,dst.delay,dst.morale)
-            towers[dst.id]=replace(dst,owner=force.owner,units=force.units,production=periods,
+            towers[dst.id]=replace(dst,owner=force.owner,units=merged,production=periods,
                                   relation=_captured_relation(force.owner,state.player,force.relation),
                                   supply_line_present=False if force.owner==state.player else None)
         else:
@@ -174,12 +196,12 @@ def step(state: SimulationState, actions: tuple[Launch,...]=(), scenario: Scenar
             raise UnsupportedState('INVALID_LAUNCH_UNITS')
         if any(action.units[i] for i in (6,7,8,9)): raise UnsupportedState('SPECIAL_OR_RULER_LAUNCH')
         if action.units[0] and tower.kind!=15: raise UnsupportedState('IMMOBILE_SHIELDS')
-        if tower.morale: raise UnsupportedState('UNVERIFIED_BOOSTED_LAUNCH')
         if any(n>tower.units[i] for i,n in enumerate(action.units)): raise UnsupportedState('INSUFFICIENT_UNITS')
         towers[tower.id]=replace(tower,units=tuple(n-action.units[i] for i,n in enumerate(tower.units)))
-        # Pinned Chunk::apply_0 builds a Force at scratch80, fuel150 at +23
-        # (0x7d849..0x7d875), with progress/boost initially zero (+21/+22).
-        remaining.append(SimForce(owner,action.source,action.destination,action.units,0,False,
+        # Manual DeployForce reaches Tower::deploy_force (Chunk::apply_0 0x7d542).
+        # It copies Tower.morale to Force+21 and initializes progress/fuel via
+        # 0x9600 at Force+22/+23; see V2_M2A_LAUNCH_RULE.md.
+        remaining.append(SimForce(owner,action.source,action.destination,action.units,0,tower.morale,
                                   'SELF' if owner==state.player else tower.relation,action.terminal,150))
     return SimulationState(sequence,state.player,state.match_epoch,state.document,
                            tuple(towers[key] for key in sorted(towers)),tuple(remaining),

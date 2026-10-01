@@ -1,0 +1,25 @@
+# Capture, morale aura, capacity, and production
+
+## Evidence boundary
+
+The pinned client artifact is `runtime/research/v2/fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c.wasm`, whose SHA-256 is `fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c`. The offsets below refer to the offline `runtime/research/v2/disassembly.json` for that artifact. No WASM was executed and no hidden state or live UI was read. `vendor/kiomet-ref` is useful corroboration for ownership/event flow, but does not contain the production client's morale aura rule or prove server-side King-position updates.
+
+## Capture transition
+
+`World::tick_before_inputs` is function 448 at `0x19b86`. Its per-tower pass refreshes the aura, checks capacity/overflow, and applies production before processing arriving forces. The aura write is `Tower+45` at `0x1a561`; force-arrival capture calls `Tower::set_player_id_inner` later at `0x1ac21`, then reconciles the surviving units at `0x1ac38`. The setter is function 3571 at `0x13b009`; it handles the owner field and prior-owner bookkeeping, but does not write the aura byte or a capacity/production field. Ownership therefore changes during the capture tick, after that tick's aura, capacity, and production pass.
+
+For an unowned target, the aura pass sees no owner and writes `Tower+45 = 0`. A successful capture later in that same pass leaves the newly owned tower at aura false for the remainder of the capture tick. A tower captured from an owner can retain that owner's last aura value until the next scheduled refresh. The client refreshes each tower only when `(tower_local_index XOR clock) & 15 == 0` (`0x1a4e7..0x1a4f0`), so the next refresh is phase-dependent and can be up to 16 ticks away. `func2290` advances the chunk tower iterator and returns the associated relative TowerId; `RelativeTowerId::upgrade` at `0x142448` maps its low four bits to local x and the next four bits to local y within the chunk. The refresh condition uses the tower-loop counter and effective world clock, so a mirror must retain that iterator/phase relationship rather than infer an immediate refresh from a new owner.
+
+On a refresh, the client reads the owner record through `World::player_inner` at `0x1a51a`, checks whether its optional ruler TowerId is this tower or a neighbor (`TowerId::is_neighbor` at `0x1a557`), and stores the resulting Boolean at `Tower+45` (`0x1a561`). This is based on a synchronized ruler location, not a direct King-alive Boolean. The client offsets prove how the cached location is consumed; they do not prove when the server clears or updates that location after King movement or death. The vendored public reference does not close that gap.
+
+## Capacity and production consequences
+
+`Units::capacity` is function 3834 at `0x13d8d1`. The tower pass calls it with the tower type and aura byte at `0x1a5c4`. Its result is raw tower-type capacity plus 10 for Shield only when the aura is true; other unit capacities do not receive this bonus. Thus capture does not grant the shield-capacity bonus immediately when the neutral target's aura was false. It can appear at the tower's next aura refresh if the new owner's synchronized ruler location is adjacent.
+
+Production for the capture tick has already run before the owner setter. The same tower pass selects a unit-generation interval and uses `Tower+45` to halve it, with a minimum of one tick (`0x1a659..0x1a69c`). The new owner can therefore produce starting with a later tick; its rate on that pass depends on the aura value refreshed for that tick. A capture after the pass cannot retroactively produce or change that tick's interval.
+
+The model's capture-time retention of `dst.morale` and `dst.capacity` matches this immediate client ordering when those fields describe the pre-capture aura. Recomputing production for the new owner is appropriate for the next production pass, using the aura then in effect. A fixed-morale simulation cannot safely continue across a later refresh that could change the captured tower's aura: the state model carries no independently certified owner-ruler location. Such a trajectory must fail closed unless the next refresh is outside the modeled horizon or a separate visible-state premise fixes the resulting aura. Inferring that every newly owned tower is immediately morale-boosted from fresh-own-tower observations is unsupported.
+
+## Public-reference cross-check
+
+`vendor/kiomet-ref/common/src/chunk.rs` handles an attacker victory by emitting the ownership event and calling `Tower::set_player_id_inner`; its unowned exploration path requires a surviving force. `vendor/kiomet-ref/common/src/tower.rs` clears supply state when ownership changes, and `vendor/kiomet-ref/common/src/units.rs` documents a ruler-based Shield bonus. Those sources corroborate an ownership transition and show that owner changes can affect unit reconciliation, but they do not implement the pinned client's synchronized-location morale aura. Use the pinned client offsets above for the aura and timing conclusions, and leave server-side King-location lifecycle semantics unknown.
