@@ -308,3 +308,56 @@ which Game was generated after that send, even when frames share a transport
 delivery. No causal association between that ACK and a specific Game generation
 has been established. No raw packet or hidden actor bytes were read for this
 proof. Other lawful source hypotheses remain possible; server age stays UNKNOWN.
+
+### QUESTION: is normal receive's f64 time a remote clock through a JS binding?
+
+The current official /client.js is 117,757 bytes with SHA-256
+05b51675785a3f6568f4d80562dabb4f59a6130504c7de9cf777c33094e.
+Its import __wbg_now_88621c9c9a4f3ffc directly returns Date.now(); the other
+now import invokes now() on its supplied JS object. Pinned now_ms at
+0x11c893..0x11c8ef obtains window's performance object (func5200), invokes
+that object's now at 0x11c8cc, and falls back to local Date.now at 0x11c8db.
+Its ten direct call sites are 0x55297, 0x55515, 0x55e9d, 0x7f235, 0x7f258,
+0x7fe28, 0xc12e1, 0xddf11, 0xde14c and 0x10c4d9. In particular HTTP polling
+uses it to compare/store local polling times, while the socket callback stores
+it at its local stack+40 before event-data handling at 0xc131c. No value from
+account claims, packet bodies or hidden actors was inspected in this tracing.
+
+CONCLUSION / STATUS: FAIL for interpreting this binding/receive-time path as
+remote generation time. The JS implementation establishes its local clock
+origin; neither Date fallback nor performance receipt time supplies missing
+Game generation semantics. This is a finite source-path result, not a claim
+that every possible lawful source has been exhausted.
+
+### QUESTION: do HTTP Date or x-held certify Game generation time?
+
+transport-headers-6eca31133777 observes 151 official-domain Fetch responses
+during one bounded reconnect, with Date in one-second textual resolution.
+No body, URL, credentials or other header values were stored. Each response's
+Game association remains UNKNOWN. The online-only a2e592adaeab has zero HTTP
+responses because the owned session had returned to WebSocket; it is not a
+successful HTTP comparison.
+
+The later 375a9c52106e reconnect cohort has 147 responses, 28 with x-held
+values (1..238, median 16.5), and no x-paged header. Missing x-held values are
+not filled with a measured zero. Pinned static data at 1203744 spells x-held;
+1203750 spells x-paged. The normal HTTP future reads x-held via Headers.get
+at 0x55765, parses a floating-point number, and stores it at its +72 field
+(0x55bd1). Later 0x55de9 retrieves it and 0x55e9d..0x55ec0 subtracts it from
+local now_ms minus local request-start time. This is a transport wait-duration
+correction for RTT, with clipping at 0x55ecd onward, not a decoded Game clock.
+x-paged is separately read at 0x55bfc and stored as a presence flag at 0x55c50.
+Its absence in this cohort is not a proof that all responses contain one Game.
+
+The public reference
+[server socket](https://github.com/SoftbearStudios/kodiak/blob/83f62d2aacd94647dbc97d1bd4764fbfc17cdf55/server/src/socket/socket.rs)
+queues CommonUpdate<GameUpdate> through an unbounded channel at line 64,
+then receives, encodes and sends it at lines 226..245. Generation, queueing and
+transmission are therefore distinct in that reference. It does not establish
+the private current HTTP server's x-held measurement boundaries or a bound on
+time between Game generation and waking its response task.
+
+CONCLUSION / STATUS: FAIL for using Date or x-held directly as Game generation
+time. UNKNOWN for a causal per-Game age bound: neither this client-side duration
+use nor response metadata establishes the necessary generation/wakeup mapping.
+No measured header is promoted into canonical updated_at_ms or snapshot age.

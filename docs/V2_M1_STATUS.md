@@ -244,3 +244,25 @@ claims 路徑維持 UNKNOWN，不讀 account claims。正常 UI root clone 與
 已完成傳輸 ACK 假設的型別編碼檢查：資料 frame 只有 length/kind 與 payload，
 ACK 另有送出序號及量化處理耗時，沒有已證明的特定 Game 生成因果關聯。
 因此無法用這條支線建立 per-Game snapshot age；仍維持 UNKNOWN。
+
+本方 Satellite(23)／Ews(8) 的新場景，visibility-research-652eee1871f2
+跑足 600.235 秒：2,630 個快照、2,385 coherent sensor brackets、110 個
+已知 ID，224 次 dirty 門控拒絕；sensor loss／recovery 仍為零。
+不延長這個靜態場景的相同輪詢。
+
+8 秒正常鏡頭遠移並反向移動的 87dd5b4a80ea 有 329 coherent rows，17 次
+dirty 拒絕，截圖證明移動畫面。actor 數量 110→96→110，原始 sensor refs
+全程仍為正值。從保留的 live rows 離線推導，14 個 actor 缺席並在同 scope
+新 tick 恢復，最短缺席 8,781 ms。截圖顯示反向移動後並未精確回到原鏡頭
+中心；actor 集合恢復不能證明鏡頭原點恢復。這驗證 viewport actor availability 的
+缺席／恢復，並非 fog sensor cycle；後續工具會分開記錄兩種轉換。
+
+正常 HTTP 時間標頭另有新證據：375a9c52106e 的 147 回應中 28 個有
+x-held=1..238（中位數 16.5）；官方程式用它扣除 request 等待耗時以算 RTT。
+Date 是一般回應日期，Game association 仍 UNKNOWN。缺 x-held 的回應沒有
+被填為已觀察零，沒有 packet／body／URL／credential 匯出。公開旧版 socket
+的 Game queue 也不能證明現行 HTTP 的生成時點；真正 server age 仍 UNKNOWN。
+
+0a2e70d05651 的有限資訊框比對有 100 次選取、157/157 兵數與容量欄位、
+100/100 顏色／塔型／delay 進度條。當時鏡頭中只選到 ENEMY:MANY；
+未取得新的本方 Single 或升級政策分層，不能把這批擴張為全面正確率。
