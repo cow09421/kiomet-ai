@@ -30,7 +30,7 @@ M2 / M3 尚未開始；本輪沒有派兵、拖曳、升級或語意遊戲命令
 官方 client SHA-256:
 fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c。
 
-| 實測 | 有效快照／Hz | 擷取延遲 p95 | DERIVED 來源年齡上界 p95 | 結論 |
+| 實測 | 有效快照／Hz | 擷取延遲 p95 | 原報告整數上界 p95（連續時間須 +1 ms） | 結論 |
 |---|---:|---:|---:|---|
 | 隔離有畫面，600.090 s | 1,849 / 3.081 | 10.44 ms | 415 ms | 頻率與上界不達標 |
 | 無視窗、密集來源讀取，30.101 s | 149 / 4.950 | 6.90 ms | 235 ms，148 筆有區間 | 短測，不能驗收 |
@@ -164,3 +164,49 @@ renderer 的 inbound/outbound vector membership；合法 anchor 通過前不讀
 force payload，也不讀 path pointer 或隱藏端點資料。合成邊界檢查已通過。
 ea293294b9f0 額外控制未取得有效部隊樣本，0 個獨立核對；不能當成新 guard
 的 live 成功證據。之後的合法短讀當時有 36 座可見塔、沒有移動部隊。
+
+camera-visibility-84402eb3385c 以普通左右鏡頭鍵向右並返回，正常畫面截圖
+證明鏡頭移動；201 個 coherent 世界／sensor brackets 中 loss=0、recovery=0。
+此場景鏡頭位置不能改變 sensor coverage，因此這條支線沒有補上 fog cycle，
+不重複延長相同實驗。這是當時工具版本的結果；後續新增 lease、文件／player／
+root bracket 與 source manifest 檢查，不回填為舊程序已測欄位。
+
+新場景的 fca86e13b9ad 已取得加強 pause guard 的 live 控制證據：10 個去重
+世界版本完整十兵種向量，100/100 欄位一致；實際是四坦克，不擴張為 Single
+覆蓋。來源端不可見仍不輸出其 ID／幾何。87214e834f0e 正常資訊框另有
+59/59 兵數／容量、42/42 顏色／塔型／delay 進度條，18/18 本方前置需求。
+
+同一新場景的 visibility-research-5a57cbbd3018：600.078 秒、2,627 次
+合法快照、2,447 次 coherent sensor brackets，33 個歷史已見 ID，仍沒有
+loss／recovery。不能將新場景有部隊等同於本方視野必然變化。
+
+delayed-apply-259d89778b11 取得因果反例：已解碼正常 Game 更新在暫停後
+照常套用，tick 32818→32819，但該更新在套用時至少存在 1,030 ms
+（原始整數端點差 1,031 ms，扣除 1 ms 取整不確定性）。
+session-clock-71082f680622 另核對 receive context 與本機／peer bootstrap
+範圍；兩者均非一般 Unix 時間範圍。仍未建立正式 server-generation clock。
+上述 debugger 研究均排除於效能分母，不宣稱 snapshot age p95 或 M1 PASS。
+
+年齡區間已擴張 ±1 ms，以涵蓋整數 host clock 端點的量化誤差。歷史報告的
+原值仍保留；三段主要完整單局的連續時間上界 p95 應保守讀作 236 ms，
+不是原先的 235 ms。005d91726c30 原報告 250 ms 應讀作 251 ms，因此這一
+新版負載場景的上界不通過 250 ms 門檻。真正 authoritative age 仍 UNKNOWN。
+
+sampling-bffad6e038a2 的 60 秒修正診斷：470 筆、7.829 Hz、p95 擷取
+10.273 ms、套用年齡上界 p95 251 ms。完整保留尾部，不將它列為通過。
+備援固定取樣間隔改為可明確配置並寫入報告／工具雜湊；150 ms 不依年齡
+選樣或刷新停滯來源。sampling-a63088d2539c 的 60 秒為 477 筆、7.932 Hz、
+p95 擷取 11.694 ms、含量化誤差的套用年齡上界 p95 205 ms；只是短診斷。
+
+可見集合 coverage 不再固定 PARTIAL。正式 sensor 正值數與目前 generated
+actor 解碼數完全相等，且正常 active／NETWORK／連線／非 expanded／非 dirty
+門控成立，才有 DERIVED coverage_evidence 與 PLAYER_VISIBLE_COMPLETE。
+缺任一目前 actor 仍 PARTIAL；這不是全世界完整性，也不清除 UNKNOWN 欄位
+或 freshness。真實短測有 41/41 sensor slots，已移除固定 coverage 缺口。
+26 項 v2 測試與 Node 隱私邊界通過。d4a9b156ae26 新直升機分層取得
+10 個完整十兵種向量、100/100 欄位一致；除錯暫停排除於效能驗收。
+
+直接 getter 的 83d3f2a9f42b 遇到自然終局，沒有有效案例；356d561ee6e5
+雖在真正直升機場景命中正式 entry 0xf9203，但 bounded caller／address seek
+未找到可核對目標，仍為零案例。已新增有限 caller 名稱／地址是否吻合的布林
+診斷，尚待下一個正常瀏覽器生命週期；不把 selector 失敗當成 getter 一致。

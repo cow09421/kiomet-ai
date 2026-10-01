@@ -61,6 +61,10 @@ sequence ages its existing window. Document/match/clock discontinuity invalidate
 the window; a first sample cannot claim known source age.
 An application-age bound alone cannot clear canonical decision readiness's
 freshness requirement while authoritative update time remains UNKNOWN.
+Host read endpoints use floor-quantized integer milliseconds. The stored window
+contains the application's integer-clock time; continuous elapsed-age bounds
+expand each end by 1 ms to cover endpoint quantization. An old reported upper
+percentile of 250 ms becomes a conservative 251 ms, not a threshold pass.
 
 Reject current world payload while the official visibility cache is pending, while
 the official active-state condition is false, or while expanded visibility is
@@ -86,6 +90,11 @@ position and visibility; visible moving forces with identity/path/owner/typed un
 launch/ETA and provenance; king, upgrade resources/state, ranking, effects/aura/EMP.
 Unavailable fields remain UNKNOWN. Readiness requires verified match/update identity,
 graph, units and command-relevant fields; partial state cannot silently enter search.
+PLAYER_VISIBLE_COMPLETE is a derived entity-coverage certificate: every current
+positive sensor slot has a decoded generated actor under the normal active,
+connected, non-expanded visibility gates. A missing slot remains PARTIAL. This
+certificate covers the player's visible set, not hidden actors or the whole world;
+it does not certify unknown field values, age or general decision readiness.
 
 ## Input isolation and verification
 

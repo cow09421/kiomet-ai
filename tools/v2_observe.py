@@ -35,6 +35,7 @@ async def main(args):
     source_manifest={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                      for p in sorted((ROOT/'src/kiomet_ai/v2').rglob('*'))
                      if p.is_file() and p.suffix in ('.py','.js','.json')}
+    source_manifest[str(Path(__file__).resolve().relative_to(ROOT))]=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
         pages = [p for p in browser.contexts[0].pages if p.url == "https://kiomet.com/"]
@@ -130,7 +131,7 @@ async def main(args):
                         errors.append(str(exc)[:300])
                         if len(errors) == 1:
                             print(json.dumps({"decode_error": errors[-1]}), flush=True)
-                    next_poll += 0.2
+                    next_poll += args.poll_ms/1000
                     if next_poll < time.perf_counter():
                         next_poll = time.perf_counter()
         finally:
@@ -154,7 +155,8 @@ async def main(args):
             "source_modes":sorted(source_modes),"observer_source_manifest":source_manifest,
             "accepted_span_seconds":last_accepted-first_accepted if first_accepted is not None else 0,
             "browser_closed":browser_closed,
-            "sampling_mode":"on_visible_world_update_and_200ms_timer" if args.on_update else "fixed_200ms_timer",
+            "sampling_mode":f"on_visible_world_update_and_{args.poll_ms}ms_timer" if args.on_update else f"fixed_{args.poll_ms}ms_timer",
+            "poll_interval_ms":args.poll_ms,
             "single_match_cohort":len(match_ids)==1 and None not in match_ids and
                 len(document_ids)==1 and lifecycle_states=={'IN_MATCH'} and not browser_closed,
             "error_count": len(errors), "errors": errors[:5],
@@ -171,11 +173,14 @@ if __name__ == "__main__":
     parser.add_argument("--join", action="store_true", help="Use only official Play/Play Again UI")
     parser.add_argument('--source-hz',type=int,default=0,help='Separate metadata-only source clock reads between world snapshots')
     parser.add_argument('--on-update',action='store_true',help='Also capture each confirmed new visible-world sequence; timer remains active')
+    parser.add_argument('--poll-ms',type=int,default=200,help='Fixed fallback observation cadence; never filters on measured age')
     args = parser.parse_args()
     if not 1 <= args.seconds <= 600:
         parser.error("seconds must be 1..600")
     if not 0<=args.source_hz<=100:
         parser.error('source-hz must be 0..100')
+    if not 40<=args.poll_ms<=1000:
+        parser.error('poll-ms must be 40..1000')
     if args.on_update and not args.source_hz:
         parser.error('on-update requires source-hz')
     asyncio.run(main(args))

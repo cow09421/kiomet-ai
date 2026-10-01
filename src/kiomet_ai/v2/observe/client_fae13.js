@@ -242,5 +242,5 @@ function (mode = "world", watchedIds = [], ownerStates = []) {
     camera_candidate: camera, status: "RESEARCH_CANDIDATE",
     selected_tower: u32(root + 47968) === 1 ? u32(root + 47972) : null,
     match_id: null, updated_at_ms: null,
-    forces, coverage: "PARTIAL"};
+    forces, coverage: positiveRefs === towers.length ? "PLAYER_VISIBLE_COMPLETE" : "PARTIAL"};
 }

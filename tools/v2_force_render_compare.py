@@ -44,7 +44,7 @@ async def locals_at(cdp, frame, names):
 
 
 async def main(args):
-    rows, errors = [], []
+    rows, errors, getter_seek_diagnostics = [], [], []
     unique = {}
     async with async_playwright() as pw:
         browser = await connect_dedicated(pw, ROOT)
@@ -107,6 +107,10 @@ async def main(args):
                                 for f in event['callFrames'])
                         force_ptr = values['$var1'] if args.mode == 'position' else values['$var0']-14 if args.mode=='getter' else values['$var0']
                         correct_unit=args.mode!='getter' or values['$var1']==args.unit_type
+                        if args.mode=='getter' and len(getter_seek_diagnostics)<3:
+                            getter_seek_diagnostics.append({'caller_names':[f['functionName'] for f in event['callFrames'][:6]],
+                                'normal_render_filter':render,'matches_preselected_units_address':force_ptr==target['research_ref'],
+                                'queried_unit_type':values['$var1'],'wanted_unit_type':args.unit_type})
                         if render and correct_unit and force_ptr==target['research_ref']:
                             force=target
                             break
@@ -246,6 +250,7 @@ async def main(args):
                 'breakpoint_locations':breakpoint_locations,
                 'unit_getter_fields':sum(len(r.get('official_unit_counts',())) for r in rows),
                 'requested_positive_unit_type':args.unit_type,
+                'getter_seek_diagnostics':getter_seek_diagnostics,
                 'debugger_pauses': True, 'performance_cohort': False, 'tactical_commands': 0,
                 'limits': 'normal rendered visible forces only; no stable force ID or launch-time proof'}
             path = ROOT / 'runtime/research/v2' / f'force-render-comparison-{uuid4().hex[:12]}.json'

@@ -190,3 +190,51 @@ CONCLUSION / STATUS: UNKNOWN for a legally observable server-generation timestam
 Client application bounds and EWMA/receipt/frame/session clocks cannot clear
 canonical authoritative freshness readiness. No source was promoted based on
 these unsuccessful alternatives; M1 remains PARTIAL.
+
+### QUESTION: is the new transport's bootstrap u64 a server clock?
+
+Pinned ClientSession::new calls mint_bootstrap at 0xb0df2. mint_bootstrap
+(0x151a3d) obtains the local random generator (func1157), draws a nonzero u64
+through func1804 (0x100d06..0x100daf), then releases the generator reference.
+The RNG initialization reaches getRandomValues at 0x97855. This initialization
+uses the RNG state/refill path, not Date/performance time or a received world
+update. The return object is copied from stack+8, so the minted stack+256 value
+is the final session+248 local bootstrap. It must not be confused with the
+peer bootstrap at session+256: receive compares/replaces that peer value at
+0x48324..0x48355 and 0x48467..0x48472, and uses a change to forget/rebind streams.
+The peer value's creation algorithm is not established by the local RNG proof.
+Neither bootstrap value is exported or inspected
+from live memory. Session receive also validates transport sequence continuity
+at 0x47e91..0x47eb9; that sequence is not a millisecond world-generation time.
+
+CONCLUSION / STATUS: FAIL for the local-bootstrap timestamp hypothesis. The
+peer bootstrap remains an opaque stream-generation marker with no demonstrated
+world-tick/time mapping. This closes this particular
+source branch; it does not prove that every possible legal production source is
+absent and does not independently authorize declaring M1 technically impossible.
+
+session-clock-71082f680622 separately verifies normal receive var0 equals the
+pinned context root in three invocations. Without exporting either bootstrap,
+boolean-only classification rejects conventional Unix seconds/milliseconds/
+microseconds/nanoseconds in 2010..2040 for both values. No peer clock encoding
+was promoted from this test. Debugger pauses are excluded from performance.
+
+### QUESTION: does a newly applied sequence guarantee a young Game update?
+
+delayed-apply-259d89778b11 pauses normal ServerState::apply's Game-only branch
+at 0xd627, after the Game update already exists. Its state argument equals the
+typed context+512. No packet, actor payload or update bytes are inspected.
+The experiment resumes normal execution after a recorded 1,031 ms interval;
+the Game branch's normal end at 0x10745 has sequence 32819, versus 32818 before.
+Both stored endpoints were originally floor-quantized, so subtracting 1 ms
+recovers a conservative lower bound of 1,030 ms. Later tool runs round event
+receipt up and resume send down. This held update therefore precedes application
+by at least 1,030 ms,
+although the sequence has just changed. This is a causal lower bound, not an
+estimated network delay, assumed tick period or canonical snapshot age.
+
+CONCLUSION / STATUS: FAIL for deriving young server data from a fresh application
+alone. The experiment demonstrates the distinction on the unmodified client;
+it does not measure ordinary p95 age, identify every possible timestamp source,
+or assign this held update's age to a later snapshot. Normal execution was
+resumed and all breakpoints removed. M1 authoritative age remains UNKNOWN.

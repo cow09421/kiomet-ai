@@ -138,6 +138,19 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         if f.owner.value==raw['player_id'] and dict(f.units.value.counts)[9]>0:
             rulers.append(('SELF_ALIVE_IN_VISIBLE_FORCE',f.id.value,f.source.value,f.destination.value))
     king=observed(rulers[0],'currently visible self Ruler units; absence never implies death',at) if len(rulers)==1 else Fact()
+    coverage, coverage_evidence = 'PARTIAL', Fact()
+    if raw.get('coverage') == 'PLAYER_VISIBLE_COMPLETE':
+        refs = raw.get('positive_refs')
+        if (type(refs) is not int or refs != len(towers) or refs > 512*512 or
+                raw.get('transport_mode') != 'NETWORK' or raw.get('active') is not True or
+                raw.get('visible_pending') is not False or raw.get('online') is not True or
+                raw.get('transport_connected') is not True or raw.get('expanded_visibility') is not False or
+                raw.get('play_text') is not None):
+            raise ValueError('complete visibility coverage certificate invalid')
+        coverage = 'PLAYER_VISIBLE_COMPLETE'
+        coverage_evidence = Fact((('positive_sensor_slots',refs), ('decoded_current_towers',len(towers))),
+            Knowledge.DERIVED, 'pinned current Visible.refs enumeration: every positive slot has a decoded '
+            'generated actor; active connected normal visibility gates; excludes fog and whole-world coverage',at)
     return GameState(session_id, document_id,
         Fact(match_identity, Knowledge.DERIVED,
              "document + player identity + observed lifecycle / official join epoch", at) if match_identity else Fact(),
@@ -160,6 +173,7 @@ def normalize(raw, session_id, document_id, sequence, received_ms, sample_starte
         unlocked_tower_types=observed(tuple(own_unlocks['unlocked_types']) if own_unlocks is not None else None,
             'own Unlocks byte-enum set copied by normal UI props; not command eligibility',at),
         king=king,
+        coverage=coverage, coverage_evidence=coverage_evidence,
         forces=forces,
         towers=tuple(sorted(towers, key=lambda t: t.id)))
 

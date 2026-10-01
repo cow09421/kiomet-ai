@@ -153,6 +153,7 @@ class GameState:
     unlocked_tower_types: Fact[tuple[int, ...]] = field(default_factory=Fact)
     ranking: Fact[tuple] = field(default_factory=Fact)
     coverage: str = "PARTIAL"
+    coverage_evidence: Fact[tuple] = field(default_factory=Fact)
 
     def __post_init__(self):
         if any(type(v) is not int or v < 0 for v in (self.sequence, self.sampled_at_ms, self.received_at_ms)):
@@ -172,6 +173,8 @@ class GameState:
         ids = {t.id for t in self.towers}
         if len(ids) != len(self.towers):
             raise ValueError("duplicate towers")
+        if self.coverage == 'PLAYER_VISIBLE_COMPLETE' and self.coverage_evidence.knowledge == Knowledge.UNKNOWN:
+            raise ValueError('complete visibility coverage requires evidence')
         for tower in self.towers:
             if tower.neighbors.value is not None and any(n not in ids for n in tower.neighbors.value):
                 raise ValueError("graph exposes an unobserved tower")
@@ -189,7 +192,9 @@ class GameState:
         if window is None:
             age = self.age_ms(now_ms)
             return None if age is None else (age, age)
-        return (max(0, now_ms - window[1]), max(0, now_ms - window[0]))
+        # Read endpoints and now are floor-quantized milliseconds. Expand the
+        # elapsed-age interval to cover the submillisecond parts of both reads.
+        return (max(0, now_ms - window[1] - 1), max(0, now_ms - window[0] + 1))
 
     def readiness_gaps(self, now_ms: int, max_age_ms: int = 250) -> tuple[str, ...]:
         gaps = []

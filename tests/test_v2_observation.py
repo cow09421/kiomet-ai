@@ -47,6 +47,25 @@ def test_hidden_entity_and_hidden_graph_endpoints_are_rejected():
         GameState("s", "d", Fact(), 1, 100, 101, "version", towers=(tower,))
 
 
+def test_complete_sensor_actor_coverage_requires_count_and_live_gates():
+    payload=raw()
+    payload.update(coverage='PLAYER_VISIBLE_COMPLETE',positive_refs=1,
+        transport_mode='NETWORK',active=True,visible_pending=False,online=True,
+        transport_connected=True,expanded_visibility=False,play_text=None)
+    state=normalize(payload,'s','d',1,101)
+    assert state.coverage=='PLAYER_VISIBLE_COMPLETE'
+    assert state.coverage_evidence.knowledge==Knowledge.DERIVED
+    assert 'freshness' in state.readiness_gaps(101)
+    for change in ({'positive_refs':2},{'visible_pending':True},
+            {'transport_connected':False},{'expanded_visibility':True}):
+        with pytest.raises(ValueError,match='coverage'):
+            normalize(dict(payload,**change),'s','d',1,101)
+    partial=normalize(dict(payload,coverage='PARTIAL',positive_refs=2),'s','d',1,101)
+    assert partial.coverage=='PARTIAL' and partial.coverage_evidence.knowledge==Knowledge.UNKNOWN
+    with pytest.raises(ValueError,match='coverage'):
+        replace(partial,coverage='PLAYER_VISIBLE_COMPLETE')
+
+
 def test_many_units_are_typed_and_single_stays_unknown():
     assert dict(decode_many([0, 1, 2, 3, 4, 5, 6]).counts) == {
         0: 6, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 0, 7: 0, 8: 0, 9: 0}
@@ -99,12 +118,14 @@ def test_source_clock_requires_a_real_transition_and_bounds_uncertainty():
     assert state.source_update_window_ms.knowledge == Knowledge.DERIVED
     assert state.updated_at_ms.knowledge == Knowledge.UNKNOWN
     assert state.age_ms(510) is None
-    assert state.age_bounds_ms(510) == (195,310)
+    assert state.age_bounds_ms(510) == (194,311)
     assert "freshness" in state.readiness_gaps(510)
     # A recent client application cannot certify server-state freshness.
     recent=replace(state,source_update_window_ms=Fact((300,500),Knowledge.DERIVED,'test client apply',500))
-    assert recent.age_bounds_ms(510)==(10,210)
+    assert recent.age_bounds_ms(510)==(9,211)
     assert "freshness" in recent.readiness_gaps(510)
+    edge=replace(state,source_update_window_ms=Fact((260,500),Knowledge.DERIVED,'quantized client apply',500))
+    assert edge.age_bounds_ms(510)==(9,251)
 
 
 def test_source_clock_resets_for_identity_clock_discontinuity_and_long_gap():
