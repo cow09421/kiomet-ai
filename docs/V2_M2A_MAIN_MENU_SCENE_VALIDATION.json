@@ -1,0 +1,313 @@
+{
+  "QUESTION": "Does the ordinary visible main menu expose a server/region selector for choosing a quieter controlled scene?",
+  "BEFORE": "Retained post-join scenes have unknown force endpoints; normal menu selector remains UNKNOWN. Original dedicated browser profile restored.",
+  "ACTION": {
+    "host_seconds_max": 90,
+    "join": false,
+    "observer": false,
+    "menu_dom_inventories": 1,
+    "clicks": 0,
+    "wheel": 0,
+    "troop_gestures": 0
+  },
+  "EXPECTED": "Record only visible UI labels and controls; if no selector is shown, keep selector availability UNKNOWN rather than invoke internal server settings.",
+  "OBSERVED": {
+    "url": "https://kiomet.com/",
+    "title": "Kiomet",
+    "observer_present": false,
+    "play_label": "Play",
+    "controls": [
+      {
+        "tag": "INPUT",
+        "id": "alias_input",
+        "type": "text",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": "Nickname",
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_button",
+        "type": null,
+        "label": "Play",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_with_friends_button",
+        "type": null,
+        "label": "Play with friends",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Discord",
+        "title": "Discord",
+        "placeholder": null,
+        "role": null,
+        "href": "https://discord.gg/YMheuFQWTX",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Google Play",
+        "title": "Google Play",
+        "placeholder": null,
+        "role": null,
+        "href": "https://play.google.com/store/apps/details?id=com.softbear.kiomet",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "GitHub",
+        "title": "GitHub",
+        "placeholder": null,
+        "role": null,
+        "href": "https://github.com/SoftbearStudios/kiomet",
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "YouTube",
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Softbear",
+        "aria_label": "Softbear",
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "https://softbear.com",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Help",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "/help/",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Feedback",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "/feedback/",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Privacy",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "/privacy/",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Terms",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "/terms/",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Sign in",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": "javascript:void(0)",
+        "options": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "候選人",
+        "aria_label": null,
+        "title": "Rank",
+        "placeholder": null,
+        "role": null,
+        "href": "/ranking/",
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Language",
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Volume",
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Go offline",
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Settings",
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Day",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Week",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "All",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "href": null,
+        "options": null
+      }
+    ],
+    "headings": [],
+    "server_or_region_select_visible": false,
+    "selector_in_unopened_controls": "UNKNOWN",
+    "host_terminal_exit_code": 0
+  },
+  "SIMULATED": "NOT_APPLICABLE",
+  "DIFF": "Only visible DOM control descriptions observed; no storage, credentials, hidden settings, actor payloads, or game inputs accessed.",
+  "VERDICT": "NO_SELECTOR_IN_RECORDED_VISIBLE_MENU; NORMAL_PLAY_WITH_FRIENDS_IS_A_NEW_REVIEW_LEAD",
+  "lease_margin_ms": 70750,
+  "formal_credit": 0,
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0,
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/menu-scene-selector-20261002.json.gz",
+      "raw_sha256": "486110b88dd430f24a51f6adcff204d5110e9cfb6e7fc9d0d09412e1af2661a7",
+      "compressed_sha256": "68272f51e542ba23367bd8e19e6fd1dcc1b9fb9c2e66a0ec95b72513db191919"
+    },
+    {
+      "file": "tests/fixtures/v2/menu-scene-selector-20261002.py.gz",
+      "raw_sha256": "ecb1929ec1b3d82b3fc5de5b47456daf6d27eb4a417f702326a76c0b6e79749f",
+      "compressed_sha256": "d6e838333837f6cef5bba78f2e231d61ba571431aa2d76b27869f2ac1465b399"
+    },
+    {
+      "file": "tests/fixtures/v2/menu-scene-selector-plan-20261002.json.gz",
+      "raw_sha256": "2e1236b85fcab0680388c5034201d0d52d518e08fdc8269721259ae6cec95c3f",
+      "compressed_sha256": "429a79f855149dc95cdc8128db7abfa6434960912c8557eaa9e52938f7fb140b"
+    }
+  ],
+  "formal_one_tick": {
+    "matched": 1053,
+    "total": 1053
+  },
+  "ordinary_events": 1,
+  "friendly_events": 0,
+  "combat_events": 0,
+  "new_multievent_trajectories": 0,
+  "M2A": "IN_PROGRESS",
+  "M2": "NOT_YET_PASS",
+  "M3": "NOT_STARTED"
+}

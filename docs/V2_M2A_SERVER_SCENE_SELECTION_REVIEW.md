@@ -19,3 +19,7 @@ Use one finite, read-only visit to the normal menu with `--join` omitted and no 
 Even a confirmed selector would only provide a scene choice. It would not clear unknown force endpoints or establish `PLAYER_VISIBLE_COMPLETE` control readiness. Preserve the current force-member readiness checks, and treat the fresh profile's observed own-source `MORALE_BOOST=true` as an actual fact that excludes any scenario requiring a known-false source; do not relabel that observation as unknown or unsupported.
 
 No host was started, no menu or game input was sent, and no credentials or browser storage were read for this review.
+
+## Subsequent bounded menu observation
+
+One normal no-join, observer-disabled host was inspected on 2026-10-02 and exited normally. Its visible menu included Play, Play with friends, Settings and Go offline; the recorded inventory showed no server/region select. No controls were clicked. This establishes the recorded visible menu only; selector availability inside unopened controls remains UNKNOWN. Play with friends is a concrete ordinary UI lead for a separate bounded review, not evidence of a private or quiet world. See `V2_M2A_MAIN_MENU_SCENE_VALIDATION.json` and its three portable gzip fixtures. No formal transitions or trajectories were added.
