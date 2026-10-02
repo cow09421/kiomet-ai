@@ -1,0 +1,3157 @@
+{
+  "analysis_version": "owner-endpoint-census-v1",
+  "comparison": {
+    "enemy_endpoint_known_rate": 0.5689303904923599,
+    "interpretation": "Descriptive SELF-vs-ENEMY endpoint distribution only; a difference may motivate observation-policy hypotheses but does not establish pipeline-loss cause.",
+    "self_endpoint_known_rate": null,
+    "self_minus_enemy_endpoint_known_rate": null,
+    "supports_general_pipeline_loss_claim": false
+  },
+  "complete_retained_observation_universe": {
+    "description": "Accepted 13,059 edge-before observations plus each cohort's final after observation; no duplicate scope/tick snapshots are added. This supplemental census prevents dropping the six terminal observations.",
+    "terminal_rows_included": 6,
+    "unique_first_observation_per_scope_tick_count": 13065
+  },
+  "complete_retained_unique_observation_counts_by_cohort": {
+    "03d032d57e5b": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 8470,
+          "rate": 0.5776444111027756
+        },
+        "current_leg_unknown": {
+          "count": 6193,
+          "rate": 0.4223555888972243
+        },
+        "endpoint_known": {
+          "count": 8470,
+          "rate": 0.5776444111027756
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 8470,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1456,
+          "SOURCE_ONLY": 4737
+        },
+        "endpoint_unknown": {
+          "count": 6193,
+          "rate": 0.4223555888972243
+        },
+        "input_blocked": {
+          "count": 6193,
+          "rate": 0.4223555888972243
+        },
+        "input_ready": {
+          "count": 8470,
+          "rate": 0.5776444111027756
+        },
+        "total_records": 14663
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "7d56a775bc4c": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 3704,
+          "rate": 0.6549955791335101
+        },
+        "current_leg_unknown": {
+          "count": 1951,
+          "rate": 0.34500442086648986
+        },
+        "endpoint_known": {
+          "count": 3704,
+          "rate": 0.6549955791335101
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 3704,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1100,
+          "SOURCE_ONLY": 851
+        },
+        "endpoint_unknown": {
+          "count": 1951,
+          "rate": 0.34500442086648986
+        },
+        "input_blocked": {
+          "count": 1951,
+          "rate": 0.34500442086648986
+        },
+        "input_ready": {
+          "count": 3704,
+          "rate": 0.6549955791335101
+        },
+        "total_records": 5655
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "85391858b5d8": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 904,
+          "rate": 0.4202696420269642
+        },
+        "current_leg_unknown": {
+          "count": 1247,
+          "rate": 0.5797303579730358
+        },
+        "endpoint_known": {
+          "count": 904,
+          "rate": 0.4202696420269642
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 904,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 759,
+          "SOURCE_ONLY": 488
+        },
+        "endpoint_unknown": {
+          "count": 1247,
+          "rate": 0.5797303579730358
+        },
+        "input_blocked": {
+          "count": 1247,
+          "rate": 0.5797303579730358
+        },
+        "input_ready": {
+          "count": 904,
+          "rate": 0.4202696420269642
+        },
+        "total_records": 2151
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "b1f7f9416e92": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 46,
+          "rate": 0.5609756097560976
+        },
+        "current_leg_unknown": {
+          "count": 36,
+          "rate": 0.43902439024390244
+        },
+        "endpoint_known": {
+          "count": 46,
+          "rate": 0.5609756097560976
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 46,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 36,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 36,
+          "rate": 0.43902439024390244
+        },
+        "input_blocked": {
+          "count": 36,
+          "rate": 0.43902439024390244
+        },
+        "input_ready": {
+          "count": 46,
+          "rate": 0.5609756097560976
+        },
+        "total_records": 82
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "daf86d0544b7": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 3621,
+          "rate": 0.5274581209031318
+        },
+        "current_leg_unknown": {
+          "count": 3244,
+          "rate": 0.4725418790968682
+        },
+        "endpoint_known": {
+          "count": 3621,
+          "rate": 0.5274581209031318
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 3621,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1542,
+          "SOURCE_ONLY": 1702
+        },
+        "endpoint_unknown": {
+          "count": 3244,
+          "rate": 0.4725418790968682
+        },
+        "input_blocked": {
+          "count": 3244,
+          "rate": 0.4725418790968682
+        },
+        "input_ready": {
+          "count": 3621,
+          "rate": 0.5274581209031318
+        },
+        "total_records": 6865
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "fe678ebb30ce": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "current_leg_unknown": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "endpoint_known": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 36,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 36,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "input_blocked": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "input_ready": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "total_records": 72
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    }
+  },
+  "complete_retained_unique_observation_counts_by_scope": {
+    "all": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 16781,
+          "rate": 0.569078947368421
+        },
+        "current_leg_unknown": {
+          "count": 12707,
+          "rate": 0.4309210526315789
+        },
+        "endpoint_known": {
+          "count": 16781,
+          "rate": 0.569078947368421
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 16781,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 4929,
+          "SOURCE_ONLY": 7778
+        },
+        "endpoint_unknown": {
+          "count": 12707,
+          "rate": 0.4309210526315789
+        },
+        "input_blocked": {
+          "count": 12707,
+          "rate": 0.4309210526315789
+        },
+        "input_ready": {
+          "count": 16781,
+          "rate": 0.569078947368421
+        },
+        "total_records": 29488
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "development": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 12127,
+          "rate": 0.5614351851851852
+        },
+        "current_leg_unknown": {
+          "count": 9473,
+          "rate": 0.4385648148148148
+        },
+        "endpoint_known": {
+          "count": 12127,
+          "rate": 0.5614351851851852
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 12127,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 3034,
+          "SOURCE_ONLY": 6439
+        },
+        "endpoint_unknown": {
+          "count": 9473,
+          "rate": 0.4385648148148148
+        },
+        "input_blocked": {
+          "count": 9473,
+          "rate": 0.4385648148148148
+        },
+        "input_ready": {
+          "count": 12127,
+          "rate": 0.5614351851851852
+        },
+        "total_records": 21600
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "holdout": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 4654,
+          "rate": 0.5900101419878296
+        },
+        "current_leg_unknown": {
+          "count": 3234,
+          "rate": 0.40998985801217036
+        },
+        "endpoint_known": {
+          "count": 4654,
+          "rate": 0.5900101419878296
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 4654,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1895,
+          "SOURCE_ONLY": 1339
+        },
+        "endpoint_unknown": {
+          "count": 3234,
+          "rate": 0.40998985801217036
+        },
+        "input_blocked": {
+          "count": 3234,
+          "rate": 0.40998985801217036
+        },
+        "input_ready": {
+          "count": 4654,
+          "rate": 0.5900101419878296
+        },
+        "total_records": 7888
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    }
+  },
+  "counts_by_cohort": {
+    "03d032d57e5b": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 8462,
+          "rate": 0.5774926636183717
+        },
+        "current_leg_unknown": {
+          "count": 6191,
+          "rate": 0.42250733638162835
+        },
+        "endpoint_known": {
+          "count": 8462,
+          "rate": 0.5774926636183717
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 8462,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1455,
+          "SOURCE_ONLY": 4736
+        },
+        "endpoint_unknown": {
+          "count": 6191,
+          "rate": 0.42250733638162835
+        },
+        "input_blocked": {
+          "count": 6191,
+          "rate": 0.42250733638162835
+        },
+        "input_ready": {
+          "count": 8462,
+          "rate": 0.5774926636183717
+        },
+        "total_records": 14653
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "7d56a775bc4c": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 3695,
+          "rate": 0.6547935495303916
+        },
+        "current_leg_unknown": {
+          "count": 1948,
+          "rate": 0.34520645046960835
+        },
+        "endpoint_known": {
+          "count": 3695,
+          "rate": 0.6547935495303916
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 3695,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1098,
+          "SOURCE_ONLY": 850
+        },
+        "endpoint_unknown": {
+          "count": 1948,
+          "rate": 0.34520645046960835
+        },
+        "input_blocked": {
+          "count": 1948,
+          "rate": 0.34520645046960835
+        },
+        "input_ready": {
+          "count": 3695,
+          "rate": 0.6547935495303916
+        },
+        "total_records": 5643
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "85391858b5d8": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 902,
+          "rate": 0.42031686859273065
+        },
+        "current_leg_unknown": {
+          "count": 1244,
+          "rate": 0.5796831314072693
+        },
+        "endpoint_known": {
+          "count": 902,
+          "rate": 0.42031686859273065
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 902,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 758,
+          "SOURCE_ONLY": 486
+        },
+        "endpoint_unknown": {
+          "count": 1244,
+          "rate": 0.5796831314072693
+        },
+        "input_blocked": {
+          "count": 1244,
+          "rate": 0.5796831314072693
+        },
+        "input_ready": {
+          "count": 902,
+          "rate": 0.42031686859273065
+        },
+        "total_records": 2146
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "b1f7f9416e92": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 45,
+          "rate": 0.5555555555555556
+        },
+        "current_leg_unknown": {
+          "count": 36,
+          "rate": 0.4444444444444444
+        },
+        "endpoint_known": {
+          "count": 45,
+          "rate": 0.5555555555555556
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 45,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 36,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 36,
+          "rate": 0.4444444444444444
+        },
+        "input_blocked": {
+          "count": 36,
+          "rate": 0.4444444444444444
+        },
+        "input_ready": {
+          "count": 45,
+          "rate": 0.5555555555555556
+        },
+        "total_records": 81
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "daf86d0544b7": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 3615,
+          "rate": 0.5273522975929978
+        },
+        "current_leg_unknown": {
+          "count": 3240,
+          "rate": 0.4726477024070022
+        },
+        "endpoint_known": {
+          "count": 3615,
+          "rate": 0.5273522975929978
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 3615,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1540,
+          "SOURCE_ONLY": 1700
+        },
+        "endpoint_unknown": {
+          "count": 3240,
+          "rate": 0.4726477024070022
+        },
+        "input_blocked": {
+          "count": 3240,
+          "rate": 0.4726477024070022
+        },
+        "input_ready": {
+          "count": 3615,
+          "rate": 0.5273522975929978
+        },
+        "total_records": 6855
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "fe678ebb30ce": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "current_leg_unknown": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "endpoint_known": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 36,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 36,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "input_blocked": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "input_ready": {
+          "count": 36,
+          "rate": 0.5
+        },
+        "total_records": 72
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    }
+  },
+  "counts_by_scope": {
+    "all": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 16755,
+          "rate": 0.5689303904923599
+        },
+        "current_leg_unknown": {
+          "count": 12695,
+          "rate": 0.43106960950764006
+        },
+        "endpoint_known": {
+          "count": 16755,
+          "rate": 0.5689303904923599
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 16755,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 4923,
+          "SOURCE_ONLY": 7772
+        },
+        "endpoint_unknown": {
+          "count": 12695,
+          "rate": 0.43106960950764006
+        },
+        "input_blocked": {
+          "count": 12695,
+          "rate": 0.43106960950764006
+        },
+        "input_ready": {
+          "count": 16755,
+          "rate": 0.5689303904923599
+        },
+        "total_records": 29450
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "development": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 12113,
+          "rate": 0.561306765523633
+        },
+        "current_leg_unknown": {
+          "count": 9467,
+          "rate": 0.438693234476367
+        },
+        "endpoint_known": {
+          "count": 12113,
+          "rate": 0.561306765523633
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 12113,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 3031,
+          "SOURCE_ONLY": 6436
+        },
+        "endpoint_unknown": {
+          "count": 9467,
+          "rate": 0.438693234476367
+        },
+        "input_blocked": {
+          "count": 9467,
+          "rate": 0.438693234476367
+        },
+        "input_ready": {
+          "count": 12113,
+          "rate": 0.561306765523633
+        },
+        "total_records": 21580
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    },
+    "holdout": {
+      "ALLY": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "ENEMY": {
+        "current_leg_known": {
+          "count": 4642,
+          "rate": 0.5898348157560356
+        },
+        "current_leg_unknown": {
+          "count": 3228,
+          "rate": 0.4101651842439644
+        },
+        "endpoint_known": {
+          "count": 4642,
+          "rate": 0.5898348157560356
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 4642,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 1892,
+          "SOURCE_ONLY": 1336
+        },
+        "endpoint_unknown": {
+          "count": 3228,
+          "rate": 0.4101651842439644
+        },
+        "input_blocked": {
+          "count": 3228,
+          "rate": 0.4101651842439644
+        },
+        "input_ready": {
+          "count": 4642,
+          "rate": 0.5898348157560356
+        },
+        "total_records": 7870
+      },
+      "NEUTRAL": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "SELF": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      },
+      "UNKNOWN_OWNER": {
+        "current_leg_known": {
+          "count": 0,
+          "rate": null
+        },
+        "current_leg_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_known": {
+          "count": 0,
+          "rate": null
+        },
+        "endpoint_pair_counts": {
+          "BOTH_KNOWN": 0,
+          "BOTH_UNKNOWN": 0,
+          "DESTINATION_ONLY": 0,
+          "SOURCE_ONLY": 0
+        },
+        "endpoint_unknown": {
+          "count": 0,
+          "rate": null
+        },
+        "input_blocked": {
+          "count": 0,
+          "rate": null
+        },
+        "input_ready": {
+          "count": 0,
+          "rate": null
+        },
+        "total_records": 0
+      }
+    }
+  },
+  "historical_accepted_ui_capture": {
+    "accepted_scope": "One independently recorded own empty-neutral arrival and ownership transition, tick 65185 to 65186. No longer-trajectory claim.",
+    "case": "accepted own UI drag -> one SELF force -> neutral empty tower arrival/capture",
+    "credits": {
+      "controlled_one_tick_capture_candidate": 1,
+      "formal_arrival_case_added": 1,
+      "formal_long_trajectory_added": 0,
+      "formal_trajectory_credit": false,
+      "trajectory_credit": false
+    },
+    "evidence_layers": {
+      "L0_preextractor_input": {
+        "basis": "Durable BEFORE_INTENT and selection/hit-test records preserve UI intent and typed deployable, but the BEFORE_INTENT is prior to dispatch and explicitly records input_sent=false; no raw pre-extractor input payload is retained.",
+        "status": "UNKNOWN"
+      },
+      "L1_extractor_output": {
+        "basis": "No separately retained extractor-stage object is paired with the canonical observation, so the L1 boundary is not independently evidenced.",
+        "status": "UNKNOWN"
+      },
+      "L2_canonical_gamestate": {
+        "basis": "The retained AFTER_DISTINCT_TICK observation at tick 65185 contains the canonical GameState fields, including observed SELF owner/source/destination/units/progress.",
+        "status": "PRESENT"
+      },
+      "L3_serialization": {
+        "basis": "Canonical state is retained as JSON in the recording; a paired explicit deserialize/reserialize boundary artifact is not recorded.",
+        "status": "SERIALIZED_PRESENT_ROUNDTRIP_UNKNOWN"
+      },
+      "L4_simulation_state": {
+        "basis": "Canonical before-state at 65185; inject terminal=True using the certificate that the recorded before-intent direct path is exactly the current two-node path; inject fuel=150 from pinned newborn first-leg constructor. No other force fields were injected.",
+        "status": "CONDITIONAL_MAPPING_PRESENT"
+      },
+      "L5_readiness": {
+        "basis": "Static reapplication of the pinned endpoint/control field gate to the saved tick-65185 canonical state finds both endpoints and no control_readiness_gaps. The accepted capture receipt does not store an independent global-readiness record for this tick; simulation mapping remains conditional on terminal/fuel premises.",
+        "status": "CANONICAL_ENDPOINT_FIELDS_READY; RECORDED_GLOBAL_READINESS_UNKNOWN"
+      }
+    },
+    "force": {
+      "arrival_and_owner_change_tick": 65186,
+      "birth_confidence": "NEW_TRACK",
+      "birth_progress": 0,
+      "birth_tick": 65157,
+      "destination": 14090504,
+      "owner": 25,
+      "same_unique_track_through_tick": 65185,
+      "source": 14090505,
+      "units_match_recorded_typed_deployable": true
+    },
+    "saved_evidence": {
+      "expected_recording_sha256": "0854dc24aa326fd2b6b027195582bedb368d97e96c752843265a9a813bd62d3b",
+      "fixture_compressed_sha256": "0e7f4d5e2a836d8f1d050ba69aee5b5c847652de70fd7c2bae7255880bc1b12a",
+      "fixture_path": "tests/fixtures/v2/controlled-transition-77636cad4e97.jsonl.gz",
+      "recording_path": "runtime/research/v2/controlled-transition-77636cad4e97.jsonl",
+      "recording_sha256": "0854dc24aa326fd2b6b027195582bedb368d97e96c752843265a9a813bd62d3b",
+      "validation_path": "docs/V2_M2A_CONTROLLED_CAPTURE_VALIDATION.json",
+      "validation_sha256": "b61e6d9634e32b995fb3aee459ae64bc3297b5f98e1b274693c6b03a31d079a6"
+    },
+    "source": {
+      "owner": 25,
+      "path": "14090505",
+      "relation": "SELF",
+      "supply_line_present": false
+    },
+    "target": {
+      "empty": true,
+      "owner": 0,
+      "path": "14090504",
+      "relation": "NEUTRAL",
+      "supply_line_present": false
+    },
+    "validation_status": "MATCHED_ONE_TICK_CONTROLLED_CAPTURE"
+  },
+  "method": {
+    "causality": "descriptive only; endpoint distributions do not identify why observation differs or prove pipeline loss/visibility policy",
+    "current_leg_known": "both endpoint Facts plus owner, relation, progress, unit_count, and a valid ten-type units vector whose sum equals unit_count are known; not a claim that motion/arrival is semantically simulated",
+    "endpoint_known": "both source and destination are integer OBSERVED/DERIVED Facts; partial knownness is separately reported",
+    "input_ready": "local endpoint readiness only: both endpoints resolve to positively visible towers and this exact force index has no source/destination readiness gap in the edge's before-state gate; not whole-state simulator readiness",
+    "owner": "recorded relation when valid, with contradictions classified UNKNOWN_OWNER, using the frozen owner_class rule; otherwise only direct SELF/neutral facts qualify",
+    "unit": "one force-record incidence in each accepted distinct-observation edge's BEFORE snapshot; the same snapshot may contribute again when it is the before endpoint of another edge"
+  },
+  "provenance": {
+    "coverage_json_sha256": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "git": {
+      "branch": "v2-rebuild",
+      "dirty": true,
+      "dirty_paths": [
+        "docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+        "docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md",
+        "tests/test_v2_enemy_current_leg.py",
+        "tests/test_v2_owner_endpoint_census.py",
+        "tests/test_v2_semantic_checkpoint_metrics.py",
+        "tools/v2_arrival_candidate_audit.py",
+        "tools/v2_enemy_current_leg.py",
+        "tools/v2_owner_endpoint_census.py",
+        "tools/v2_semantic_checkpoint_metrics.py"
+      ],
+      "head": "5c5e47534e53214247d0809a8c1913ccd2ad5ee3"
+    },
+    "source_hashes": {
+      "docs/V2_M2A_COVERAGE_DENOMINATOR.json": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+      "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+      "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+      "tools/v2_endpoint_lineage.py": "b6389820b62641aa2615fe9e945f41b467239d71db7b80957e71eba910027fde"
+    },
+    "tool_sha256": "7d6ffd56ccc6cb4520d257c1bfed2b44c57f627c1e37be97c1af3f4ba4b01e3c"
+  },
+  "status": "CANDIDATE_DESCRIPTIVE_CENSUS",
+  "universe": {
+    "cohorts": {
+      "03d032d57e5b": "development",
+      "7d56a775bc4c": "holdout",
+      "85391858b5d8": "holdout",
+      "b1f7f9416e92": "holdout",
+      "daf86d0544b7": "development",
+      "fe678ebb30ce": "development"
+    },
+    "edge_before_force_record_incidences": 29450,
+    "edge_decompressed_sha256": "ea60e2a194953306c18c051e8be06b4adcfaee9571c090259f8798813613cc66",
+    "edge_gzip_sha256": "8a67b03919070a1385dc0269207f4622101b62e4c5409fc4df19b99ff9e5346d",
+    "edge_rows": 13059,
+    "raw_snapshot_sha256": {
+      "runtime/research/v2/snapshots-03d032d57e5b.jsonl": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "runtime/research/v2/snapshots-7d56a775bc4c.jsonl": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "runtime/research/v2/snapshots-85391858b5d8.jsonl": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "runtime/research/v2/snapshots-b1f7f9416e92.jsonl": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+      "runtime/research/v2/snapshots-daf86d0544b7.jsonl": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "runtime/research/v2/snapshots-fe678ebb30ce.jsonl": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+    }
+  }
+}
