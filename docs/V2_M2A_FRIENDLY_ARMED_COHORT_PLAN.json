@@ -1,0 +1,129 @@
+{
+  "status": "PREPARED_FOR_ROOT_REVIEW_NOT_RUN",
+  "question": "Can one currently visible ordinary Soldier-only own force be recorded before intent and observed through a friendly no-line terminal merge, optionally preceded by one unarmed empty-neutral preparation capture?",
+  "scope": {
+    "host_seconds_max": 180,
+    "troop_gestures_max": 2,
+    "observer_arms_max": 1,
+    "wheel_events": 0,
+    "allowed_gestures": [
+      "optional one ordinary Soldier-only own-source drag to a positively visible empty neutral neighbor, observer remains disarmed",
+      "one ordinary Soldier-only own-source drag to a positively visible own neighbor, observer arms exactly once before this drag"
+    ],
+    "no_automatic_retry_or_replacement_gesture": true,
+    "no_enemy_or_ally_destination": true,
+    "no_ruler_special_upgrade_weapon_relay_edit_or_direct_semantic_call": true
+  },
+  "preview": {
+    "artifact": "runtime/research/v2/friendly-fast-preview-20261002.py",
+    "command_template": ".venv\\Scripts\\python.exe runtime\\research\\v2\\friendly-fast-preview-20261002.py --output runtime\\research\\v2\\friendly-fast-preview-<unique>.json",
+    "host_policy": "Connect-only. Requires an already-running project-owned official headless host with at least 30 seconds remaining. The preview itself never starts a host or arms the observer.",
+    "reads": [
+      "one ready canonical ClientExtractor snapshot with PLAYER_VISIBLE_COMPLETE current visible-set coverage",
+      "visible own and neutral tower facts, typed units/deployables, cached morale effect Tower+45, capacity, potential production, adjacency, relation, delay and own-only supply-line presence",
+      "current full visible force set, including any inbound forces that would make a destination contested",
+      "explicit normal selected_tower None, canvas geometry, projected endpoint centers and read-only elementFromPoint hit tests",
+      "bounded page metadata: official origin/path, title, ready/visibility/focus, canvas geometry, visual viewport and visible h1/h2 headings"
+    ],
+    "candidate_rules": [
+      "Source must be positively visible SELF/owned, delay zero, cached Tower+45 observed false, own supply-line observed false, no Ruler, and exactly Soldier-only current deployable inventory.",
+      "Friendly destination must be positively visible SELF/owned, supply-line observed false, no Ruler, cached Tower+45 known, capacity known, Shield count not above Shield capacity, and no visible inbound force.",
+      "Neutral preparation destination must be positively visible owner 0 and completely empty, no Ruler, capacity known, Shield count not above Shield capacity, and no visible inbound force. Its own-only supply-line overlay is not applicable.",
+      "Both endpoints must be current adjacent visible towers, project safely within the unchanged canvas, and hit the canvas at their projected centers."
+    ],
+    "route_and_input_scope": "Candidate adjacency is not a handler-consumption or path certificate. Route/terminal lineage and gesture continuity remain UNKNOWN until independent callback-binding and release review.",
+    "output": "All candidate pairs and their exact before facts are retained; no pair is auto-selected. Guard refusals, lease margin and any extraction error are written to a new exclusive JSON receipt. Zero formal and trajectory credit."
+  },
+  "execution_gates": {
+    "parent_review_required_before_any_recorder_command": true,
+    "explicit_ids_only": true,
+    "fresh_preview_before_each_gesture": true,
+    "same_document_match_player_and_current_tick_revalidated_by_existing_recorder": true,
+    "normal_ui_selection_panel_quantity_and_explicit_deselection_required": true,
+    "source_and_friendly_destination_line_must_remain_observed_false": true,
+    "friendly_pair_shield_overcapacity_excluded": true,
+    "partial_or_cleanup_release_is_possibly_dispatched_and_invalid": true,
+    "all_guard_refusals_and_partial_receipts_retained": true
+  },
+  "operator_sequence_for_later_root_run": [
+    {
+      "stage": "A_READ_ONLY_PREVIEW",
+      "actions": "Run only the connect-only preview script against the already-owned host. Review the saved snapshot, candidate fields, refusals and lease margin; choose explicit source/destination IDs manually. Do not treat route output as qualified."
+    },
+    {
+      "stage": "B_OPTIONAL_UNARMED_NEUTRAL_PREPARATION",
+      "condition": "Only if a reviewed Soldier-only source and empty neutral neighbor are in the fresh preview and enough host lease remains.",
+      "recorder_command_template": ".venv\\Scripts\\python.exe tools\\v2_controlled_transition_capture.py --execute --source <reviewed_source_id> --destination <reviewed_empty_neutral_id> --max-commands 1 --seconds 15",
+      "observer": "The observer may have been registered at host startup, but this preparation recorder invocation omits --input-entry-observer and therefore does not arm it.",
+      "failure_policy": "Any rejection or partial gesture ends the cohort; no replacement or retry command. Preserve the recorder receipt."
+    },
+    {
+      "stage": "C_FRESH_PREVIEW_AFTER_PREPARATION_OR_BASELINE",
+      "actions": "If preparation was attempted and the host still has margin, rerun the connect-only preview once to obtain current explicit IDs. If no eligible candidate or the lease guard refuses, stop with no friendly drag. Do not reuse stale IDs or facts."
+    },
+    {
+      "stage": "D_SINGLE_ARMED_FRIENDLY_GESTURE",
+      "condition": "Only after root reviews a fresh friendly pair and confirms recorder lease remaining is at least the selected --seconds value plus the recorder's 15-second cleanup margin.",
+      "recorder_command_template": ".venv\\Scripts\\python.exe tools\\v2_controlled_transition_capture.py --execute --input-entry-observer --source <reviewed_source_id> --destination <reviewed_friendly_id> --max-commands 1 --seconds <bounded_remaining_budget>",
+      "observer": "The input-entry observer must already have been registered before creation of the official page. This invocation arms it once, after durable BEFORE intent and before the trusted drag.",
+      "failure_policy": "One drag maximum. Do not retry if any guard, endpoint, continuity, or cleanup stage fails; retain all evidence and classify partial release as possibly dispatched."
+    }
+  ],
+  "validation_boundary": {
+    "capture": "Compare from actual fresh recorded before states and preserve every distinct canonical visible-world state and first mismatch.",
+    "no_after_fit": true,
+    "server_application_tick": "UNKNOWN",
+    "route_or_future_fuel": "UNKNOWN unless independently established from eligible before facts; do not infer from arrival.",
+    "dynamic_aura": "Use actual sampled Tower+45 facts and pinned refresh-phase evidence only; do not assume the flag stays fixed through a long trajectory.",
+    "formal_events_added": 0,
+    "formal_trajectories_added": 0
+  },
+  "this_task_execution": {
+    "host_started": false,
+    "input_sent": false,
+    "observer_armed": false,
+    "wheel_events": 0
+  },
+  "offline_script_review": {
+    "status": "READY_FOR_ROOT_CONNECT_ONLY_PREVIEW",
+    "fixture": "tests/fixtures/v2/friendly-scene-preview-A-20261002.json.gz",
+    "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "readiness_clock": "synthetic only: monkeypatched now_ms equals fixture received_at_ms / world_sequence_observed_at_ms",
+    "positive_path_variation": "synthetic only: one in-memory source MORALE_BOOST OBSERVED Boolean changed from the fixture's actual true to false to reach candidate and projection checks; fixture bytes were not modified",
+    "selection_and_camera": "synthetic only: selected_tower None and camera derived from the fixture's recorded projected endpoint points",
+    "candidate_pair": [
+      18809128,
+      18874664
+    ],
+    "projected_source_matches_fixture_point_within_float_rounding": true,
+    "other_guard_refusal_kinds_exercised": [
+      "destination_contains_ruler",
+      "destination_shield_overcapacity",
+      "source_cached_morale_not_observed_false",
+      "source_has_ruler_or_shield_overcapacity",
+      "source_not_soldier_only"
+    ],
+    "narrow_canvas_exercised_endpoint_outside_safe_canvas": true,
+    "cancellation_receipt": {
+      "status": "PREVIEW_TIMEOUT",
+      "input_sent": false,
+      "observer_armed": false,
+      "troop_gestures": 0
+    },
+    "formal_or_admission_credit": 0,
+    "script_sha256": "45a67c6ddecab1fac6713dddbf515961df0bd085d74f3d49f0e069dc0956b409",
+    "frozen_script_fixture": "tests/fixtures/v2/friendly-fast-preview-20261002.py.gz"
+  },
+  "first_owned_host_session": {
+    "status": "READONLY_PREFLIGHT_NOT_READY_PREVIEW_NOT_RUN",
+    "completed": true,
+    "terminal_exit_code": 0,
+    "readiness_refusal": "force:5:source UNKNOWN in PLAYER_VISIBLE_COMPLETE sample",
+    "preview_script_executed": false,
+    "observer_armed": false,
+    "troop_gestures": 0,
+    "lease_expired_during_review": true,
+    "recorder_or_gesture_commands": 0
+  },
+  "root_followup_cohort": "Separate actual immediate cohort is recorded in docs/V2_M2A_AURA_AND_FRIENDLY_CHECKPOINT.json; this original prepplan did not execute troopgestures"
+}

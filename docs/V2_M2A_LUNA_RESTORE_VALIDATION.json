@@ -22,6 +22,7 @@
     "Actual registered input callback target binding",
     "Valid reset-free armed friendly receipt and terminal lineage",
     "Independent complete-world combat admission/external-action exclusion",
+    "Combat-phase Tower+45 value after the pre-combat refresh gate, unless refresh is independently excluded",
     "Aura/King context for multievent trajectories"
   ],
   "M2": "NOT_YET_PASS",
@@ -30,11 +31,35 @@
     "verdict": "DEVELOPMENT_ONLY",
     "ticks": "23737->23738 and46518->46519; intervening polls same beforetick",
     "missing": [
-      "Actual cached before Tower+45 morale",
+      "Whether before-sampled Tower+45 remains unchanged through the pinned pre-fight refresh phase",
       "Independent external-action exclusion",
       "Own supply-line in complete stored signature"
     ],
+    "observed_before_inputs": {
+      "tower_effects": "MORALE_BOOST=true, OBSERVED from visible Tower.morale+45; normal UI morale note",
+      "tower_effect_sample_times_ms": [
+        1150227281,
+        1155922515
+      ],
+      "force_accelerated": "false, OBSERVED from visible Force.accelerated+21 at the same before-sample times",
+      "interpretation": "Before cache and Force+21 are genuine before facts; they do not alone exclude the pinned pre-combat Tower+45 refresh. After flags were not used to infer the combat-phase value."
+    },
     "audit": "docs/V2_M2A_SHIELD_DEFENSE_ADMISSION_AUDIT.md",
-    "formal_delta": 0
+    "formal_delta": 0,
+    "rank_interval_check": {
+      "daf23737": {
+        "local_slot": 143,
+        "chunk_key": 4112,
+        "next_phase": 10,
+        "periodic_refresh_excluded": false
+      },
+      "7d46518": {
+        "local_slot": 228,
+        "chunk_key": 4112,
+        "next_phase": 7,
+        "periodic_refresh_excluded": false
+      },
+      "basis": "Pinned ChunkId::bottom_left and RelativeTowerId::upgrade static arithmetic; no hidden occupancy read"
+    }
   }
 }

@@ -1,0 +1,80 @@
+{
+  "status": "PERIODIC_AURA_BOUND_IMPLEMENTED_INPUT_COHORTS_REFUSED_ZERO_FORMAL_DELTA",
+  "QUESTION": "Exclude periodic aura writes from before bounds and acquire independently eligible friendly input/arrival evidence",
+  "BEFORE": "HEAD5409aec; formal1053/1053, ordinaryevent1, friendly0/combat0, M2NOT_YET_PASS",
+  "ACTION": {
+    "finite_hosts": 2,
+    "host_seconds_max": 180,
+    "readonly_previews": 2,
+    "troop_gestures": 0,
+    "observer_arms": 0,
+    "wheel_events": 0,
+    "terminal_exit_codes": [
+      0,
+      0
+    ]
+  },
+  "EXPECTED": "Guarded wholevisible-world readiness and independently bound launch/terminal lineage; no hiddenoccupancy reads",
+  "OBSERVED": {
+    "first_preflight": "NOT_READY force:5:source UNKNOWN; no newpreview before leaseexpired",
+    "second_preview": "NO_ELIGIBLE_PAIR force:0:source andforce:2:destination UNKNOWN; fullcanonicalstate retained; stoppednormalhost",
+    "periodic_aura_helper": "Exact explicit beforetick/chunkkey/slot; exhaustive conservative rank theorem accepted byRoot,22pytest passed",
+    "cached_morale_audit_correction": "Both retained combat beforeeffects observedtrue; missing pre-fight refreshcurrentness rather than missingcachedmorale"
+  },
+  "SIMULATED": "No actualarmedtransition simulated/admitted; independent root math confirms retainedtarget slots143/228 cannotexclude refresh with interval0..slot",
+  "DIFF": {
+    "formal_events_added": 0,
+    "formal_trajectories_added": 0,
+    "formal_one_tick": {
+      "matched": 1053,
+      "total": 1053
+    },
+    "ordinary_event_total": 1,
+    "friendly_events": 0,
+    "combat_events": 0,
+    "new_multievent_trajectories": 0
+  },
+  "VERDICT": "M2A IN_PROGRESS, ordinaryworldcompleteNO, M2NOT_YET_PASS,M3NOT_STARTED",
+  "Luna_availability": "New GPT-6 Luna dispatches succeeded and completed bounded preview repair/aura implementation after user requested restore; rollingdispatch resumed cap3",
+  "tests": {
+    "root_aura_tests_passed": 22,
+    "full_v2_last_checkpoint_passed": 293,
+    "full_v2_rerun_this_checkpoint": false,
+    "reason": "Pure newhelper only; no existinghotloop/default/observer changes"
+  },
+  "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/controlled-transition-eeed0cc7a480.json.gz",
+      "raw_sha256": "4250b29c1c4310a86bec6b2bbca1a143dcc722359d1d2c0ee8ed12369667ecb5",
+      "compressed_sha256": "dd6ce24e02ba8cf994ece6c4be72964d08f2b6da3b6e3a326cf470f81ceb0567"
+    },
+    {
+      "file": "tests/fixtures/v2/controlled-transition-eeed0cc7a480.jsonl.gz",
+      "raw_sha256": "31d4d8dffc3d6c9c17c8a4487c9f3f8dd1039fbc12b8ce7a557be8993fc6aee8",
+      "compressed_sha256": "4c14b8462bc7b2901bfffe56ec4d256c4906b96ddc1e0806bef17a020c0ef693"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-immediate-preview-20261002.json.gz",
+      "raw_sha256": "637e649e743590f35b5592332f71a1560c57d3d859af525c98a06d85716ed4bf",
+      "compressed_sha256": "017df97277e6108f0f6321c3e134e1a35cf7e896715e6a805062da923dd0d199"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-fast-preview-20261002.py.gz",
+      "raw_sha256": "45a67c6ddecab1fac6713dddbf515961df0bd085d74f3d49f0e069dc0956b409",
+      "compressed_sha256": "f4431b97a577fa7c5b10bf2d7aea604b4d66efce7f4ed32112e8c8b3f09a556a"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-immediate-cohort-plan-20261002.json.gz",
+      "raw_sha256": "c0c985bf49a6685c8cdc0bffadb7f79c9aa2ac307deb091eb86ddf0a55b8c6ff",
+      "compressed_sha256": "7635d15ff09cbbb37af24b88d75d53792ff4d2e2e09b76c5a883d6c388eef689"
+    }
+  ],
+  "limits": [
+    "Aura helper excludes only periodicstore, not otherwriters or refreshedvalue",
+    "No hiddenactor or cacheheap reads",
+    "No actualarmedinputreceipt; callbacktarget/queuedhandling remainunknown",
+    "No legacycase/count upgrade from aftereffects or narrowlocalmatches"
+  ],
+  "next_P0": "Diagnose unknownvisibleforce endpoints without weakening readiness; continue callback writer binding and independent genuinefriendly/combat arrival admission"
+}
