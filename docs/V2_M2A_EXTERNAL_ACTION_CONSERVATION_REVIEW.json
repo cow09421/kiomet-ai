@@ -1,0 +1,1791 @@
+{
+  "status": "READ_ONLY_CONSERVATION_AUDIT_NO_CAUSAL_CREDIT",
+  "purpose": "Independent audit of 13 intermediate mismatches using retained before/after raw snapshots and a bounded one-step no-action source production adjustment.",
+  "scope": {
+    "canonical_case_selection": "docs/V2_M2A_TRAJECTORY_AUDIT.json failures",
+    "raw_source": "runtime/research/v2/snapshots-<cohort>.jsonl",
+    "simulator_source": "src/kiomet_ai/v2/sim/step.py, model.py, observe/rules.py; unchanged"
+  },
+  "summary": {
+    "cases": 13,
+    "visible_source_and_destination_at_boundary": 13,
+    "known_source_owner_relation": 13,
+    "raw_source_delta_equals_new_force_vector": 13,
+    "bounded_no_action_step_supported": 13,
+    "production_adjusted_delta_equals_force": 13,
+    "all_nonshield_mobile_inventory_equals_force": 13,
+    "zero_progress_new_tracks": 13,
+    "launch_ms_unknown": 13,
+    "terminal_route_known_before": 0,
+    "fuel_known_before": 0,
+    "before_action_or_queue_records": 0,
+    "acceleration_observed": 12,
+    "acceleration_unknown": 1,
+    "extra_zero_progress_tracks_extended_horizon": 6,
+    "target_track_observed_absence": 2,
+    "formal_credit": 0,
+    "M2_pass": false
+  },
+  "method": {
+    "raw_delta": "source vector before minus source vector after at the canonical adjacent observations; compare elementwise to visible new-force vector.",
+    "production_adjustment": "Initialize existing simulator with that before source tower alone, no forces/actions, and step once; for all 13 source unit vectors remain unchanged. Thus no-action adjusted depletion equals the raw depletion. This does not model the rest of the world.",
+    "horizon": "Check each first-divergence case through +20 observed world ticks inclusive; original shorter prefix is secondary and never treated as full replay proof."
+  },
+  "interpretation": {
+    "grade": "B: observed transition/conservation signature, not causal action proof",
+    "supported": "All 13 observed raw source deltas equal new force vectors; all 13 bounded no-action production-adjusted deltas also equal the force vectors. In all 13, the force vector equals all pre-transition source non-Shield mobile inventory (unit indices 1–5), while Shield remains at the source.",
+    "unproven": "No pre-action command, queue, actor, or acceptance record exists. Cannot distinguish LaunchAll from explicit quantities equal to all mobile units, establish manual attribution, or exclude another omitted launch mechanism. The observed post-state force vector may be used as a Grade-B inferred diagnostic injection, but that grants no causal or provenance accuracy credit.",
+    "route_fuel": "Current segment source/destination and progress do not establish terminal route or fuel before action. launch_ms UNKNOWN in all cases; route/fuel UNKNOWN before in all cases. Do not infer arrival or success."
+  },
+  "extended_horizon": {
+    "additional_zero_progress_NEW_TRACK_observations": 6,
+    "events": [
+      {
+        "cohort": "03d032d57e5b",
+        "tick": 21343,
+        "destination": 13762795,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "cohort": "7d56a775bc4c",
+        "tick": 46509,
+        "source": 17826052,
+        "destination": 17891589,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "cohort": "7d56a775bc4c",
+        "tick": 46521,
+        "source": 17826052,
+        "destination": 17891588,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "cohort": "85391858b5d8",
+        "tick": 31231,
+        "destination": 15007961,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "cohort": "85391858b5d8",
+        "tick": 31661,
+        "source": 15204569,
+        "units": [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "cohort": "daf86d0544b7",
+        "tick": 24079,
+        "source": 17301773,
+        "destination": 17367309,
+        "units": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "target_track_absences": [
+      {
+        "cohort": "85391858b5d8",
+        "first_divergence_tick": 31649,
+        "first_absent_tick": 31661,
+        "offset": 12,
+        "status": "OBSERVED_ABSENCE; not an arrival certificate"
+      },
+      {
+        "cohort": "daf86d0544b7",
+        "first_divergence_tick": 24061,
+        "first_absent_tick": 24079,
+        "offset": 18,
+        "status": "OBSERVED_ABSENCE; not an arrival certificate"
+      }
+    ],
+    "other_target_tracks": "Observed through their full +20 tick windows. Additional births and absences are not attributed to known actions.",
+    "original_20_tick_secondary": "Not evaluated by this conservation-only report. The causal replay runner computes this as a separate secondary full-match indicator; this report covers raw observational post-divergence windows and extra-track/absence boundaries.",
+    "earliest_additional_zero_progress_track_offset": 2,
+    "additional_track_semantics": "These are new observer-track appearances with progress 0, not authenticated action records. They are counted as additional track appearances, not causally proven launches."
+  },
+  "replay_admissibility": {
+    "recommendation": "Retain all 13 as Grade-B inferred diagnostic-action replays/conservation regressions, with source provenance clearly labeled as inferred. Do not claim causal launch accuracy or full trajectories; preserve terminal route, fuel, and later outcomes as UNKNOWN.",
+    "red_team_risks": [
+      "The observed force vector is an inferred Grade-B injection only; any match after injecting it is diagnostic consistency, not proof of action provenance or causal launch accuracy.",
+      "All-mobile equality does not prove launch-all or actor intent.",
+      "Snapshot horizon truncation can hide later collision, visibility changes, route segmentation, or arrival.",
+      "Observed absence is not arrival evidence.",
+      "Production intervals are potential events; the no-action adjustment is limited to a one-source state."
+    ],
+    "model_interface_note": "Current sim supports explicit Launch vectors for opponent actions, while LaunchAll is modeled as the player action. Encoding the observed newborn force as an input would be hindsight."
+  },
+  "cases": [
+    {
+      "cohort": "03d032d57e5b",
+      "before_sequence": 1104,
+      "after_sequence": 1105,
+      "before_world_tick": 21324,
+      "after_world_tick": 21325,
+      "source_tower_id": 13893863,
+      "destination_tower_id": 13828326,
+      "owner": 10,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 10,
+        "relation": "ENEMY",
+        "tower_type": 1
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 10,
+        "relation": "ENEMY",
+        "tower_type": 1
+      },
+      "source_units_before": [
+        13,
+        0,
+        0,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        13,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          4,
+          60
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          13,
+          0,
+          0,
+          0,
+          1,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": null,
+        "acceleration_knowledge": "UNKNOWN",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 450,
+      "after_sequence": 451,
+      "before_world_tick": 23899,
+      "after_world_tick": 23900,
+      "source_tower_id": 17236238,
+      "destination_tower_id": 17236237,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 19
+      },
+      "source_units_before": [
+        5,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 637,
+      "after_sequence": 639,
+      "before_world_tick": 23993,
+      "after_world_tick": 23994,
+      "source_tower_id": 17301773,
+      "destination_tower_id": 17301772,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 0
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 11
+      },
+      "source_units_before": [
+        20,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          10
+        ],
+        [
+          3,
+          60
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          20,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": true,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 772,
+      "after_sequence": 773,
+      "before_world_tick": 24060,
+      "after_world_tick": 24061,
+      "source_tower_id": 17236237,
+      "destination_tower_id": 17301773,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 19
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 0
+      },
+      "source_units_before": [
+        16,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        16,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          16,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 986,
+      "after_sequence": 987,
+      "before_world_tick": 24167,
+      "after_world_tick": 24168,
+      "source_tower_id": 17236238,
+      "destination_tower_id": 17236237,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 19
+      },
+      "source_units_before": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 1368,
+      "after_sequence": 1369,
+      "before_world_tick": 24358,
+      "after_world_tick": 24359,
+      "source_tower_id": 17236238,
+      "destination_tower_id": 17236237,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 19
+      },
+      "source_units_before": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 1564,
+      "after_sequence": 1565,
+      "before_world_tick": 24456,
+      "after_world_tick": 24457,
+      "source_tower_id": 17301773,
+      "destination_tower_id": 17367309,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 0
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 13
+      },
+      "source_units_before": [
+        20,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          10
+        ],
+        [
+          3,
+          60
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          20,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": true,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 1698,
+      "after_sequence": 1699,
+      "before_world_tick": 24523,
+      "after_world_tick": 24524,
+      "source_tower_id": 17301773,
+      "destination_tower_id": 17301772,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 0
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 11
+      },
+      "source_units_before": [
+        20,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          10
+        ],
+        [
+          3,
+          60
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          20,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": true,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_sequence": 1830,
+      "after_sequence": 1831,
+      "before_world_tick": 24589,
+      "after_world_tick": 24590,
+      "source_tower_id": 17236238,
+      "destination_tower_id": 17236237,
+      "owner": 24,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 24,
+        "relation": "ENEMY",
+        "tower_type": 19
+      },
+      "source_units_before": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "85391858b5d8",
+      "before_sequence": 1391,
+      "after_sequence": 1392,
+      "before_world_tick": 31222,
+      "after_world_tick": 31223,
+      "source_tower_id": 15204568,
+      "destination_tower_id": 15139033,
+      "owner": 43,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 43,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 43,
+        "relation": "ENEMY",
+        "tower_type": 14
+      },
+      "source_units_before": [
+        5,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          2,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          5,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "85391858b5d8",
+      "before_sequence": 2242,
+      "after_sequence": 2244,
+      "before_world_tick": 31648,
+      "after_world_tick": 31649,
+      "source_tower_id": 15204568,
+      "destination_tower_id": 15204569,
+      "owner": 43,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 43,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 0,
+        "relation": "NEUTRAL",
+        "tower_type": 9
+      },
+      "source_units_before": [
+        5,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "85391858b5d8",
+      "before_sequence": 2341,
+      "after_sequence": 2342,
+      "before_world_tick": 31697,
+      "after_world_tick": 31698,
+      "source_tower_id": 15073496,
+      "destination_tower_id": 15073497,
+      "owner": 43,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 43,
+        "relation": "ENEMY",
+        "tower_type": 22
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 43,
+        "relation": "ENEMY",
+        "tower_type": 17
+      },
+      "source_units_before": [
+        5,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          1,
+          120
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          5,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "before_sequence": 1119,
+      "after_sequence": 1120,
+      "before_world_tick": 46506,
+      "after_world_tick": 46507,
+      "source_tower_id": 17694979,
+      "destination_tower_id": 17694980,
+      "owner": 29,
+      "source_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 29,
+        "relation": "ENEMY",
+        "tower_type": 3
+      },
+      "destination_before": {
+        "visibility": "OBSERVED_TRUE",
+        "owner": 0,
+        "relation": "NEUTRAL",
+        "tower_type": 10
+      },
+      "source_units_before": [
+        1,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_units_after": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "observed_raw_source_delta": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "new_force_units": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_delta_equals_force": true,
+      "all_nonshield_mobile_inventory_equals_force": true,
+      "production_schedule": [
+        [
+          0,
+          20
+        ],
+        [
+          5,
+          24
+        ]
+      ],
+      "no_action_source_step": {
+        "result": "SUPPORTED_SINGLE_SOURCE_NO_ACTION_STEP",
+        "units_after": [
+          1,
+          0,
+          0,
+          2,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "production_added_units": false,
+        "production_adjusted_delta": [
+          0,
+          0,
+          0,
+          2,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "adjusted_delta_equals_force": true
+      },
+      "force_birth": {
+        "progress": 0,
+        "accelerated": false,
+        "acceleration_knowledge": "OBSERVED",
+        "launch_ms": "UNKNOWN",
+        "terminal_route_before": "UNKNOWN",
+        "fuel_before": "UNKNOWN"
+      },
+      "action_or_queue_before": "ABSENT",
+      "launch_mode": "UNKNOWN_ALL_VS_EXPLICIT_QUANTITY",
+      "cause": "UNKNOWN"
+    }
+  ],
+  "source_manifest": {
+    "sha256": {
+      "docs/V2_M2A_TRAJECTORY_AUDIT.json": "43452f082de11e3f64377c83375f98d13f48b9a95befdd86399b0d9f3dc5bd11",
+      "runtime/research/v2/snapshots-03d032d57e5b.jsonl": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "runtime/research/v2/snapshots-daf86d0544b7.jsonl": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "runtime/research/v2/snapshots-85391858b5d8.jsonl": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "runtime/research/v2/snapshots-7d56a775bc4c.jsonl": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "src/kiomet_ai/v2/sim/step.py": "e2fbffd1309b1d1ef71308c123028a478c2a603bf159354e189224f7d1324360",
+      "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+      "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b"
+    },
+    "git_head": "76194804b0ce62a2463405228916bffe391ecb82",
+    "git_dirty": true,
+    "git_dirty_paths": [
+      "?? docs/V2_M2A_ACTION_LEDGER_DESIGN.md",
+      "?? docs/V2_M2A_CAUSAL_COVERAGE.json",
+      "?? docs/V2_M2A_EXTERNAL_ACTION_CONSERVATION_REVIEW.json",
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_SANDBOX_FEASIBILITY.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md",
+      "?? tests/test_v2_external_action_replay.py",
+      "?? tools/v2_external_action_replay.py",
+      "?? tools/v2_regression_receipt.py"
+    ],
+    "provenance_note": "Hashes cover the case-selection audit, all four raw snapshot cohorts, and simulator step/model/observation rules read for this audit. The no-action production correction was isolated to one source tower per case; it is narrower than a full-world no-action trajectory and makes no assertion about other towers or forces."
+  }
+}

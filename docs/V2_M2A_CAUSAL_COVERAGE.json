@@ -1,0 +1,119 @@
+{
+  "status": "IN_PROGRESS_DENOMINATORS_NOT_COMPLETE",
+  "execution_head": "76194804b0ce62a2463405228916bffe391ecb82",
+  "method": "Read retained formal reports only; no new corpus replay. Production uses actual production-only event bucket, not all production_due flags.",
+  "categories": {
+    "Production": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 73,
+      "simulator_accepted_formal_sample": 73,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 73,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": 1.0,
+      "new_phase_grade_a_cases": 0
+    },
+    "Movement": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 979,
+      "simulator_accepted_formal_sample": 979,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 979,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": 1.0,
+      "new_phase_grade_a_cases": 0
+    },
+    "Arrival": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 1,
+      "simulator_accepted_formal_sample": 1,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 1,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": 1.0,
+      "new_phase_grade_a_cases": 0
+    },
+    "Reinforcement": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 0,
+      "simulator_accepted_formal_sample": 0,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 0,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": null,
+      "new_phase_grade_a_cases": 0
+    },
+    "Ground Combat": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 0,
+      "simulator_accepted_formal_sample": 0,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 0,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": null,
+      "new_phase_grade_a_cases": 0
+    },
+    "Air Combat": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 0,
+      "simulator_accepted_formal_sample": 0,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 0,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": null,
+      "new_phase_grade_a_cases": 0
+    },
+    "Capture": {
+      "eligible_real_transitions": null,
+      "eligible_real_transitions_lower_bound": 1,
+      "simulator_accepted_formal_sample": 1,
+      "simulator_rejected_eligible_total": null,
+      "correct_formal_sample": 1,
+      "incorrect_formal_sample": 0,
+      "coverage": null,
+      "coverage_reason": "All eligible real category transitions, including supported/refused events, were not independently enumerated in historical reports.",
+      "accuracy_formal_accepted_sample": 1.0,
+      "new_phase_grade_a_cases": 0
+    }
+  },
+  "formal_total": 1053,
+  "formal_correct": 1053,
+  "production_due_overlapping_baseline_cases": 180,
+  "ordinary_historical_grade_a_before_intent_cases": {
+    "Arrival": 1,
+    "Capture": 1
+  },
+  "new_stratified_gate_target_each": 20,
+  "capture_next_tick_dynamic_aura_not_certified": true,
+  "events_overlap": "Arrival and Capture are the same historical single transition. Production-only73 and Movement979 form the1052 baseline.",
+  "grade_b_formal_credit": 0,
+  "candidate_combat": {
+    "Ground Combat": {
+      "accepted": 2,
+      "correct": 2,
+      "incorrect": 0
+    },
+    "Air Combat": {
+      "accepted": 2,
+      "correct": 1,
+      "incorrect": 1
+    }
+  },
+  "input_sha256": {
+    "docs/V2_M2A_DIFFERENTIAL.json": "54ee24e73173fc9c38752fac79130e32ce31bafa926e6cc03b89c498b578d80c",
+    "docs/V2_M2A_HOLDOUT.json": "b5b95cd12c3e32ae9c9f37e0bf0fd690d413e3fc6e09e93e4b4d66e9ab4371e2",
+    "docs/V2_M2A_CONTROLLED_CAPTURE_VALIDATION.json": "b61e6d9634e32b995fb3aee459ae64bc3297b5f98e1b274693c6b03a31d079a6"
+  }
+}

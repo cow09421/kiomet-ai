@@ -846,6 +846,10 @@ async def run(args):
         ClientExtractor, connect_dedicated, is_official_client_url,
     )
     from playwright.async_api import async_playwright
+    if getattr(args, "action_ledger", False):
+        from tools.v2_action_ledger import (
+            associate_fixed_window, build_action_intent, ui_action_result,
+        )
 
     out = ROOT / "runtime/research/v2"
     out.mkdir(parents=True, exist_ok=True)
@@ -893,6 +897,9 @@ async def run(args):
     source_manifest[str(route_tool.relative_to(ROOT))] = hashlib.sha256(route_tool.read_bytes()).hexdigest()
     input_capture_tool = Path(__file__).with_name('v2_input_entry_capture.py')
     source_manifest[str(input_capture_tool.relative_to(ROOT))] = hashlib.sha256(input_capture_tool.read_bytes()).hexdigest()
+    action_ledger_tool = Path(__file__).with_name('v2_action_ledger.py')
+    if getattr(args, "action_ledger", False):
+        source_manifest[str(action_ledger_tool.relative_to(ROOT))] = hashlib.sha256(action_ledger_tool.read_bytes()).hexdigest()
     if args.input_entry_observer:
         endpoint_tool = Path(__file__).with_name('v2_input_entry_evidence.py')
         if not endpoint_tool.is_file():
@@ -1198,6 +1205,37 @@ async def run(args):
                                 selection_sampled_at_ms=before.sampled_at_ms),
                             "state": before, "input_sent": False,
                             "quantity_policy": "ALL_CURRENT_DEPLOYABLE at official input handling; displayed pre-gesture vectors are observations, not a fixed dispatched quantity"}
+                        ledger_intent = None
+                        ledger_ui_result = None
+                        ledger_input_times = {"down": None, "up": None}
+                        if getattr(args, "action_ledger", False):
+                            force_rows = before.forces.value
+                            inbound_destinations = ([force.destination.value for force in force_rows]
+                                if force_rows is not None else None)
+                            inbound_known = (inbound_destinations is not None and
+                                all(type(value) is int for value in inbound_destinations))
+                            preexisting_inbound = (any(value == source.id for value in inbound_destinations)
+                                if inbound_known else None)
+                            if preexisting_inbound is not False:
+                                durable_before(stream, {"kind": "ACTION_LEDGER_PREFLIGHT_REJECTION",
+                                    "reason": "preexisting_inbound_force_to_source" if preexisting_inbound else "inbound_force_status_unknown",
+                                    "source": source.id, "destination": destination.id,
+                                    "snapshot_sequence": before.sequence,
+                                    "world_sequence": before.tick.value,
+                                    "prior_force_ids": sorted(before_ids),
+                                    "pre_action_source_supply_line_present": fresh["source"].supply_line_present.value,
+                                    "action_sent": False})
+                                raise ValueError("action ledger requires no preexisting inbound force to the source")
+                            ledger_intent = build_action_intent(
+                                run_id=run_id, state=before, source=fresh["source"],
+                                destination=fresh["destination"],
+                                intended_vector=fresh["typed_deployable"],
+                                ui_action_type="ordinary_manual_deploy_force_canvas_drag",
+                                host_monotonic_ms=time.monotonic_ns() // 1_000_000,
+                                prior_force_ids=before_ids,
+                                preexisting_visible_inbound_force_to_source=preexisting_inbound,
+                                source_supply_line_present=fresh["source"].supply_line_present.value)
+                            intent["intent_id"] = ledger_intent["intent_id"]
                         mouse_down = False
                         async def ordinary_drag():
                             nonlocal mouse_down
@@ -1205,9 +1243,11 @@ async def run(args):
                                 await page.mouse.move(sx, sy)
                                 await page.mouse.down()
                                 mouse_down = True
+                                ledger_input_times["down"] = time.monotonic_ns() // 1_000_000
                                 await page.mouse.move(dx, dy, steps=6)
                                 await asyncio.sleep(.15)
                                 await page.mouse.up()
+                                ledger_input_times["up"] = time.monotonic_ns() // 1_000_000
                                 mouse_down = False
                             finally:
                                 if mouse_down:
@@ -1270,7 +1310,36 @@ async def run(args):
                                 "endpoint_certificate": capture_result["endpoint_certificate"],
                                 "observer_summary": capture_result["observer_summary"]})
                         else:
-                            await record_before_gesture(stream, intent, ordinary_drag)
+                            if ledger_intent is None:
+                                await record_before_gesture(stream, intent, ordinary_drag)
+                            else:
+                                async def durable_ledger_drag():
+                                    nonlocal ledger_ui_result
+                                    ledger_intent["intent_host_monotonic_ms"] = time.monotonic_ns() // 1_000_000
+                                    durable_before(stream, ledger_intent)
+                                    try:
+                                        await ordinary_drag()
+                                    except asyncio.CancelledError:
+                                        ledger_ui_result = ui_action_result(ledger_intent, status="UNKNOWN",
+                                            mouse_down_host_monotonic_ms=ledger_input_times["down"],
+                                            mouse_up_host_monotonic_ms=ledger_input_times["up"],
+                                            error_class="CancelledError")
+                                        durable_before(stream, ledger_ui_result)
+                                        raise
+                                    except Exception as exc:
+                                        status = "UNKNOWN" if ledger_input_times["down"] is not None else "FAILURE"
+                                        ledger_ui_result = ui_action_result(ledger_intent, status=status,
+                                            mouse_down_host_monotonic_ms=ledger_input_times["down"],
+                                            mouse_up_host_monotonic_ms=ledger_input_times["up"],
+                                            error_class=type(exc).__name__)
+                                        durable_before(stream, ledger_ui_result)
+                                        errors.append(f"UI delivery {status}: {type(exc).__name__}")
+                                        return
+                                    ledger_ui_result = ui_action_result(ledger_intent, status="SUCCESS",
+                                        mouse_down_host_monotonic_ms=ledger_input_times["down"],
+                                        mouse_up_host_monotonic_ms=ledger_input_times["up"])
+                                    durable_before(stream, ledger_ui_result)
+                                await record_before_gesture(stream, intent, durable_ledger_drag)
                         released_at = time.monotonic()
                         prior_destination_counts = _counts(fresh["destination"].units) or {}
                         launched_pair = (source.id, destination.id)
@@ -1315,6 +1384,13 @@ async def run(args):
                         line_guard = supply_line_guard_passed(observed_states, source.id, destination.id,
                             fresh["scenario"] == "friendly_reinforcement")
                         unique_birth_observed = birth_analysis["eligible"] and line_guard
+                        ledger_association = None
+                        if ledger_intent is not None:
+                            fixed_window_states = [state for _observed_at, state in tick_states[:2]]
+                            ledger_association = associate_fixed_window(
+                                ledger_intent, ledger_ui_result, fixed_window_states,
+                                before_ids, before.player_id.value)
+                            durable_before(stream, ledger_association)
                         first_change = next((row for row in states
                             if _world_signature(row["state"]) != _world_signature(before)), None)
                         result = {"kind": "COMMAND_RESULT", "command_index": 1,
@@ -1336,6 +1412,8 @@ async def run(args):
                             "distinct_world_ticks_captured": [s["tick"] for s in states],
                             "acceptance": "UNIQUE_NEWBORN_OBSERVED" if unique_birth_observed else "NO_UNAMBIGUOUS_NEWBORN",
                             "pre_gesture_quantity_is_baseline_only": True}
+                        if ledger_association is not None:
+                            result["action_ledger_association"] = ledger_association
                         durable_before(stream, result)
                         events.append(result)
             except Exception as exc:
@@ -1359,6 +1437,8 @@ async def run(args):
         errors.append(f"{type(exc).__name__}: {exc}")
     report = {"status": "PARTIAL", "run_id": run_id,
         "mode": "EXECUTE" if args.execute else "PREFLIGHT" if args.preflight else "PLAN",
+        "action_ledger_enabled": bool(getattr(args, "action_ledger", False)),
+        "action_ledger_policy": ("one durable intent, explicit UI delivery outcome, and fixed next-two-distinct-tick lineage/pair candidate match; source depletion and deterministic production conservation are not validated, so causal attribution is UNKNOWN; no server acceptance or formal credit" if getattr(args, "action_ledger", False) else None),
         "commands_limit": min(args.max_commands, 6), "seconds_limit": min(args.seconds, 180),
         "events": events, "exclusions": exclusions, "errors": errors,
         "source_manifest": source_manifest, "event_file": str(path.relative_to(ROOT)),
@@ -1383,6 +1463,8 @@ def parse_args(argv=None):
         help="preview currently visible eligible friendly Soldier pairs without sending input")
     parser.add_argument("--input-entry-observer", action="store_true",
         help="require a headless lease with the pre-start input-entry observer and adopt buffered event samples")
+    parser.add_argument("--action-ledger", action="store_true",
+        help="durably record this one ordinary UI intent, UI delivery result, and fixed next-two-tick association")
     parser.add_argument("--wait-ready-seconds", type=int, default=0,
         help="optional 0..10 second initial readiness wait before first selection (execute mode only)")
     parser.add_argument("--source", type=int, help="operator-selected positively visible own source")
@@ -1400,6 +1482,10 @@ def parse_args(argv=None):
         parser.error("--wait-ready-seconds requires --execute")
     if args.execute and (args.source is None or args.destination is None):
         parser.error("--execute requires explicit --source and --destination")
+    if args.action_ledger and not args.execute:
+        parser.error("--action-ledger requires --execute")
+    if args.action_ledger and args.input_entry_observer:
+        parser.error("--action-ledger cannot be combined with --input-entry-observer")
     if args.preflight and (args.execute or args.source is not None or args.destination is not None):
         parser.error("--preflight is preview-only and cannot be combined with execution or explicit endpoints")
     return args

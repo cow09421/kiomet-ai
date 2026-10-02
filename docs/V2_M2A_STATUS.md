@@ -33,6 +33,64 @@ No milestone or performance claim is expanded by these changes. No live browser
 host remains active. See V2_M2A_LISTENER_INVENTORY_VALIDATION.json and
 V2_M2A_LISTENER_SOURCE_VALIDATION.json for portable hash-checked artifacts.
 
+## Ordinary-world causal validation checkpoint — 2026-10-03
+
+CURRENT MILESTONE: M2A ORDINARY WORLD CAUSAL VALIDATION.
+STATUS: IN_PROGRESS. M2 IN_PROGRESS; M3 NOT_STARTED. The earlier sections below
+are historical checkpoints; their callback research and single 100-event gate
+are superseded by this checkpoint and V2_M2A_CAUSAL_VALIDATION_PLAN.md.
+
+Root independently reproduced all 13 existing external-action diagnostic cases
+with the frozen replay helper, unchanged source hash and both historical raw
+recording pins. Original boundaries: Grade A 0 / Grade B 13 / Grade C 0.
+All 13 original birth divergences are repaired under the inferred manual-launch
+hypothesis. Continuous predictions, with no intermediate canonical reset, match
+112 compared tick states, including 56 strictly after the original action tick.
+There are zero predicted-state mismatches within these prefixes, but zero full
+requested horizons: 11 supply-line input refusals, one special-production
+refusal, and one later unresolved Grade-C birth/path boundary. Post-action
+comparison spans only 1–9 ticks. PRIMARY VERDICT MIXED, not full-world PASS.
+
+The shared rule-gap review identifies missing supply-line input, not a proved
+incorrect production formula: eight own-side legacy fields and three enemy-side
+fields are unknown. Fresh own observations can address own-side missing input;
+they cannot backfill these recordings or certify hidden enemy state. Exact
+first unexecuted ticks and contexts are in V2_M2A_EXTERNAL_ACTION_REPLAY.json.
+The requested review checkpoint precedes a 30-dispatch live campaign.
+
+Minimal --action-ledger tooling is prepared and unit-tested, with durable
+pre-gesture intent, explicit mouse delivery status and fixed next-two-tick
+lineage/pair association. Quantity is compared only after unique selection. Successful matching is
+CANDIDATE_MATCHED only: source-inventory depletion versus deterministic production
+is not yet an association gate, so causal attribution remains unvalidated.
+No live ledger experiment was executed in this phase. Experiments 0;
+unique attribution UNKNOWN; ambiguous and failed UI outcomes not tested;
+OWN_ACTION_PROVENANCE PARTIAL / NOT_YET_VALIDATED. Synthetic test attribution
+is not Grade A real-world credit. The current single-intent cohort does not
+yet implement or validate the full proposed stratified campaign.
+
+New phase Grade A Arrival / Reinforcement / Ground / Air / Capture: 0 each;
+target 20 independent cases each. Historical formal evidence remains 1053/1053:
+Production-only 73, Movement 979, and one overlapping Arrival/Capture transition.
+Historical accepted-sample accuracy is 100% for those nonempty buckets, and
+UNKNOWN for empty Reinforcement/Ground/Air buckets. All category coverage and
+historical eligible/rejected denominators remain UNKNOWN, not 100%.
+V2_M2A_CAUSAL_COVERAGE.json preserves these distinctions and old combat candidates.
+
+New qualified 5–10s multievent trajectories 0/10. Grade-B diagnostic trajectories
+13 partial / 0 full. Historical production/movement trajectory results are
+retained separately. No simulator core, performance or M3 claim is expanded.
+Callback/listener/canvas/mouse-consumer/internal-queue research is STOPPED unless
+a concrete failed ledger experiment establishes a necessary hypothesis.
+
+Read-only public sandbox feasibility is documented; NOT_BUILT / NOT_RUN, unresolved
+dependency/build compatibility, and never 2026 live truth. Three existing Luna
+workers supplied bounded tooling, conservation, review and feasibility work;
+Root owns independent reproduction, integration and final gate decisions.
+Accepted evidence was frozen first at 76194804b0ce62a2463405228916bffe391ecb82.
+The old queue-consumer note remains CANDIDATE and the capacity-context note REWORK;
+neither is promoted or included in accepted commits.
+
 ## Registered mouse callback vtable checkpoint — 2026-10-03
 
 Three finite, no-join, no-input probe cohorts are preserved independently. The
@@ -77,7 +135,7 @@ complete visible-world equivalence, Shield/Air/special handling and broader
 context admission are not certified. No combat default was enabled. See
 V2_M2A_TS_FINAL_VECTOR_BOUNDARY_REVIEW.md.
 
-Current rolling Luna work now traces the typed queue consumer, upstream restricted
+At this historical checkpoint, rolling Luna work traced the typed queue consumer, upstream restricted
 combat context, and independent evidence acceptance; Sol owns integration and
 milestone decisions. This checkpoint changes no production source and adds no
 formal events, trajectories, regression-test total or performance measurement.
