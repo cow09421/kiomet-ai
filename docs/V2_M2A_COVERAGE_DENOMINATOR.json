@@ -1,0 +1,1833 @@
+{
+  "status": "ACCEPTED_CURRENT_CORE_DESCRIPTIVE_ANALYSIS_PARTIAL_EVENT_CAUSALITY",
+  "analysis_version": "coverage-denominator-v1",
+  "question": "What share of all observed adjacent tick edges and raw-visible active edges can the current default simulator API execute and match?",
+  "method": {
+    "first_observation": "Retain the first observation in each contiguous scope/world-tick run; repeated polls within that run are not separate edges. Scope is document_id, match_id, player_id.",
+    "all_denominator": "Every adjacent retained distinct-observation edge, including scope changes and skipped/missing ticks. Gaps are explicit rejected edges; same-scope consecutive edges are a separate subdenominator.",
+    "active": "Determined from raw observation values before simulator conversion. Excludes timestamps, world tick, knowledge/provenance wrappers, force observer IDs/confidence. Semantic fields include all known effects and known optional supply-line values. Unknown optional supply-line values alone do not make an otherwise complete signature incomplete. Incomplete signatures remain ACTIVE_UNKNOWN unless a same-known-field semantic difference establishes ACTIVE_KNOWN.",
+    "execution": "For same-scope consecutive edges only: from_canonical(before), step(before) with default Scenario/no inferred actions/combat/supply-line/terminal premises, then exact full signature comparison with from_canonical(after). Success, mismatch, rejection, and coverage gap are mutually exclusive.",
+    "gap_precedence": "Scope/tick discontinuity is classified as REJECTED_OBSERVATION_GAP before execution; it remains in ALL denominator.",
+    "candidate_events": "Observed new force track and raw state-change patterns are independent diagnostics. A new track is only CANDIDATE with actor/cause UNKNOWN; a due production phase is potential, not observed production. Unit increases and owner changes are descriptive candidates, not proof of production, capture, or actor.",
+    "decision_metrics": "Ownership/unit metrics apply to comparable endpoints. Current-leg ETA agreement is predicted motion estimator versus observer estimate, not actual arrival error; actual-arrival tick error remains UNKNOWN. An observed owner change is not automatically a capture or winner label.",
+    "multi_blockers": "Primary blocker is the API's first refusal. Separate per-tower/per-force isolated step probes are overlapping diagnostics only, sampled to a fixed maximum per cohort, never counted as whole-state acceptance.",
+    "sampling_risk": "Six retained, preselected development/holdout sessions are not a random sample of global gameplay."
+  },
+  "inputs": {
+    "cohorts": [
+      "03d032d57e5b",
+      "7d56a775bc4c",
+      "85391858b5d8",
+      "b1f7f9416e92",
+      "daf86d0544b7",
+      "fe678ebb30ce"
+    ],
+    "splits": {
+      "fe678ebb30ce": "development",
+      "03d032d57e5b": "development",
+      "daf86d0544b7": "development",
+      "85391858b5d8": "holdout",
+      "7d56a775bc4c": "holdout",
+      "b1f7f9416e92": "holdout"
+    },
+    "raw_files": {
+      "runtime\\research\\v2\\snapshots-03d032d57e5b.jsonl": {
+        "cohort": "03d032d57e5b",
+        "split": "development",
+        "expected_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "actual_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-7d56a775bc4c.jsonl": {
+        "cohort": "7d56a775bc4c",
+        "split": "holdout",
+        "expected_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "actual_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-85391858b5d8.jsonl": {
+        "cohort": "85391858b5d8",
+        "split": "holdout",
+        "expected_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "actual_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-b1f7f9416e92.jsonl": {
+        "cohort": "b1f7f9416e92",
+        "split": "holdout",
+        "expected_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+        "actual_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-daf86d0544b7.jsonl": {
+        "cohort": "daf86d0544b7",
+        "split": "development",
+        "expected_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+        "actual_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-fe678ebb30ce.jsonl": {
+        "cohort": "fe678ebb30ce",
+        "split": "development",
+        "expected_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "actual_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "matches_manifest": true
+      }
+    },
+    "corpus_manifests": {
+      "runtime\\research\\v2\\luna-corpus\\manager-checkpoint-development-corpus.jsonl": {
+        "expected_sha256": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+        "actual_sha256": "69bda0713b6557d65729cf29fe903ba5963ccd1932b5ec1be4983886f45b9964",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\luna-corpus\\manager-checkpoint-holdout-corpus.jsonl": {
+        "expected_sha256": "45a76f3244043d53ef5a2befac235213c3fd1d4d43870510d2c816fce44acf39",
+        "actual_sha256": "45a76f3244043d53ef5a2befac235213c3fd1d4d43870510d2c816fce44acf39",
+        "matches_manifest": true
+      }
+    },
+    "all_raw_hashes_match": true,
+    "all_corpus_hashes_match": true
+  },
+  "source_hashes_current": {
+    "docs\\V2_M2A_DIFFERENTIAL.json": "54ee24e73173fc9c38752fac79130e32ce31bafa926e6cc03b89c498b578d80c",
+    "docs\\V2_M2A_HOLDOUT.json": "b5b95cd12c3e32ae9c9f37e0bf0fd690d413e3fc6e09e93e4b4d66e9ab4371e2",
+    "docs\\V2_M2A_TRAJECTORIES.json": "95db96effecd2853448b9306f45dad05c41dc18f69a2a3039da12521d9751648",
+    "src\\kiomet_ai\\v2\\control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src\\kiomet_ai\\v2\\state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "src\\kiomet_ai\\v2\\serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "e2fbffd1309b1d1ef71308c123028a478c2a603bf159354e189224f7d1324360",
+    "tools\\v2_sim_differential.py": "e165ffc005f2292251bdc4e1dc149787b338d490fd91f3258b73298d856a4efe"
+  },
+  "historical_source_manifest_mismatches": [
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "src/kiomet_ai/v2/observe/client_fae13.js",
+      "expected": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+      "actual": "17203180aab93faf1e8325db9293180e0e1c40a5fb6103ab4f512551c0a88ff0"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "src/kiomet_ai/v2/observe/extractor.py",
+      "expected": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+      "actual": "a6f6b6fb088d6c2472ec28522d85ffadd878ad21aa487ae6e5f1b562bf57e269"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "src/kiomet_ai/v2/sim/__init__.py",
+      "expected": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+      "actual": "0542c986075654e5465ea9cf03bd9b58f531ea51110bfc73ac2e5db6112d1402"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "src/kiomet_ai/v2/sim/combat.py",
+      "expected": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+      "actual": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "src/kiomet_ai/v2/sim/step.py",
+      "expected": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+      "actual": "e2fbffd1309b1d1ef71308c123028a478c2a603bf159354e189224f7d1324360"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "tests/test_v2_sim.py",
+      "expected": "15dc4658311b6a517790ecd558da428dcba85789898ab36381a3f6ca714c1cbf",
+      "actual": "f6b93ca27160d309063adf504329b991d0ea5d73584be68f7f4d78f3b611058a"
+    },
+    {
+      "manifest": "docs\\V2_M2A_DIFFERENTIAL.json",
+      "path": "tools/v2_headless_research.py",
+      "expected": "f9658c98eff648b8d1129c0ddfd3094565f217f606c34b3244d8299dbf06c38a",
+      "actual": "12234228395ca41393062e567d145d227624ca61c556bd8c06485007aee967e6"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "src/kiomet_ai/v2/observe/client_fae13.js",
+      "expected": "d8a9ff2e3f532fae30512c27e01639c96fda0a50916293cb185341f718dbc6f4",
+      "actual": "17203180aab93faf1e8325db9293180e0e1c40a5fb6103ab4f512551c0a88ff0"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "src/kiomet_ai/v2/observe/extractor.py",
+      "expected": "b6c3c747cdcd31a832d8fe7f3bfa613574c64312ff2a96974ab5cd74cf2a218b",
+      "actual": "a6f6b6fb088d6c2472ec28522d85ffadd878ad21aa487ae6e5f1b562bf57e269"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "src/kiomet_ai/v2/sim/__init__.py",
+      "expected": "9807784a2fa2e5a74fd6dacef9395d5103aa231f35a77c30608f9b0685b665b9",
+      "actual": "0542c986075654e5465ea9cf03bd9b58f531ea51110bfc73ac2e5db6112d1402"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "src/kiomet_ai/v2/sim/combat.py",
+      "expected": "1a92d0666e590f8455ab6bbbc3ca0d7fbbb8805b09b3e33b928324f783ca0eff",
+      "actual": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "src/kiomet_ai/v2/sim/step.py",
+      "expected": "c4b1fd235a78c5113ed96b0d7a01da5e379b05e998723b6f188b4f4ef0cbea14",
+      "actual": "e2fbffd1309b1d1ef71308c123028a478c2a603bf159354e189224f7d1324360"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "tests/test_v2_sim.py",
+      "expected": "15dc4658311b6a517790ecd558da428dcba85789898ab36381a3f6ca714c1cbf",
+      "actual": "f6b93ca27160d309063adf504329b991d0ea5d73584be68f7f4d78f3b611058a"
+    },
+    {
+      "manifest": "docs\\V2_M2A_HOLDOUT.json",
+      "path": "tools/v2_headless_research.py",
+      "expected": "f9658c98eff648b8d1129c0ddfd3094565f217f606c34b3244d8299dbf06c38a",
+      "actual": "12234228395ca41393062e567d145d227624ca61c556bd8c06485007aee967e6"
+    }
+  ],
+  "manifest_consistent_for_raw_data": true,
+  "simulator_manifest_drift": true,
+  "git": {
+    "head": "ac19b028a175b183a0c44293f3c38297af3e60a5",
+    "branch": "v2-rebuild",
+    "dirty": true,
+    "status_porcelain": [
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md",
+      "?? tests/test_v2_coverage_denominator.py",
+      "?? tests/test_v2_temporal_firewall_replay.py",
+      "?? tools/v2_coverage_denominator.py",
+      "?? tools/v2_force_birth_causality.py",
+      "?? tools/v2_temporal_firewall_replay.py"
+    ]
+  },
+  "tool_sha256": "31590fc55fb104e932aa501265bf91a8b642437369c875f9bb1d6f0614aea95a",
+  "cohorts": [
+    {
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "counts": {
+        "raw_records": 4767,
+        "retained_observations": 2394,
+        "initial_observations_without_prior": 1,
+        "same_scope_tick_duplicate_records": 2373,
+        "all_distinct_observed_tick_edges": 2393,
+        "same_scope_consecutive_edges": 2391,
+        "scope_or_tick_gap_edges": 2
+      },
+      "active_counts": {
+        "ACTIVE_KNOWN": 2290,
+        "INACTIVE": 59,
+        "ACTIVE_UNKNOWN": 44
+      },
+      "comparison_status_counts": {
+        "REJECTED": 2176,
+        "SUCCESS": 216,
+        "MISMATCH": 1
+      },
+      "primary_blockers": {
+        "OBSERVATION_GAP:NOT_READY": 89,
+        "OTHER:ACTIVE_UPGRADE_OR_EMP": 197,
+        "OTHER:NEUTRAL_UNIT_DECAY": 2,
+        "EXACT_MATCH:NONE": 216,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 20,
+        "UNKNOWN_PATH:NOT_READY": 1860,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 6,
+        "EXACT_MISMATCH:NONE": 1,
+        "OBSERVATION_GAP:OBSERVATION_GAP": 2
+      },
+      "control_readiness_gap_counts": {
+        "before:source_continuity": 89,
+        "after:force:0:source": 1,
+        "before:force:0:source": 494,
+        "after:force:0:destination": 2,
+        "before:force:0:destination": 579,
+        "before:force:1:source": 273,
+        "before:force:1:destination": 484,
+        "before:force:2:destination": 506,
+        "before:force:2:source": 120,
+        "before:force:3:destination": 595,
+        "before:force:3:source": 39,
+        "before:force:4:destination": 697,
+        "before:force:5:destination": 465,
+        "before:force:6:destination": 534,
+        "before:force:7:destination": 311,
+        "before:force:8:destination": 207,
+        "before:force:9:destination": 125,
+        "before:force:8:source": 62,
+        "before:force:7:source": 98,
+        "before:force:6:source": 84,
+        "before:force:5:source": 56,
+        "before:force:9:source": 62,
+        "before:force:10:source": 70,
+        "before:force:11:source": 25,
+        "before:force:10:destination": 97,
+        "before:force:11:destination": 84,
+        "before:force:12:destination": 42,
+        "before:force:4:source": 17,
+        "after:force:2:destination": 1,
+        "before:force:13:source": 20,
+        "before:force:12:source": 31,
+        "before:force:13:destination": 2,
+        "before:force:14:source": 2,
+        "before:match_id": 88
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "before:source_continuity": 89,
+        "after:force:*:source": 1,
+        "before:force:*:source": 1062,
+        "after:force:*:destination": 3,
+        "before:force:*:destination": 1855,
+        "before:match_id": 88
+      },
+      "control_readiness_bucket_transition_counts": {
+        "before:clock": 89,
+        "after:path_or_force_input": 4,
+        "before:path_or_force_input": 1944
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "NEUTRAL_UNIT_DECAY": 2,
+        "PRODUCTION_SUPPLY_LINE": 23,
+        "MOBILE_OVERFLOW_SUPPLY_LINE": 1,
+        "UNKNOWN_POST_ARRIVAL_PATH": 6
+      },
+      "multi_blocker_probe_edges_sampled": 28,
+      "known_active_metrics": {
+        "known_active_edges": 2290,
+        "active_unknown_edges": 44,
+        "known_active_executable": 163,
+        "known_active_success": 162,
+        "known_active_mismatch": 1,
+        "accuracy_among_comparable_known_active": 0.9938650306748467,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.06983718937446444,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.08868894601542417,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.07117903930131005,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.06983718937446444,
+          0.07117903930131005
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 2393,
+        "same_scope_consecutive": 2391,
+        "executable": 217,
+        "accepted": 217,
+        "rejected": 2176,
+        "mismatches": 1,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.0902632678646051,
+        "accuracy_among_executable": 0.9953917050691244,
+        "coverage_among_consecutive": 0.09075700543705563
+      },
+      "gameplay_candidate_layers": {
+        "rejected": {
+          "REJECTED": 2176
+        },
+        "production_due_potential": {
+          "REJECTED": 424,
+          "SUCCESS": 22
+        },
+        "production_or_arrival_candidate": {
+          "REJECTED": 190,
+          "SUCCESS": 7
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 275,
+          "MISMATCH": 1
+        },
+        "movement_observed": {
+          "REJECTED": 2003,
+          "SUCCESS": 162,
+          "MISMATCH": 1
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 262
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 22
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 5859,
+        "ownership_correct": 5859,
+        "unit_vectors": 5859,
+        "unit_vectors_exact": 5858,
+        "absolute_unit_error": 4,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 281,
+        "eta_exact": 281,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 0.9998293224099676,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          1860
+        ],
+        [
+          "EXACT_MATCH:NONE",
+          216
+        ],
+        [
+          "OTHER:ACTIVE_UPGRADE_OR_EMP",
+          197
+        ],
+        [
+          "OBSERVATION_GAP:NOT_READY",
+          89
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          20
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          6
+        ],
+        [
+          "OBSERVATION_GAP:OBSERVATION_GAP",
+          2
+        ],
+        [
+          "OTHER:NEUTRAL_UNIT_DECAY",
+          2
+        ],
+        [
+          "EXACT_MISMATCH:NONE",
+          1
+        ]
+      ]
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "counts": {
+        "raw_records": 2153,
+        "retained_observations": 1077,
+        "initial_observations_without_prior": 1,
+        "all_distinct_observed_tick_edges": 1076,
+        "same_scope_consecutive_edges": 1076,
+        "same_scope_tick_duplicate_records": 1076
+      },
+      "active_counts": {
+        "ACTIVE_KNOWN": 1057,
+        "ACTIVE_UNKNOWN": 1,
+        "INACTIVE": 18
+      },
+      "comparison_status_counts": {
+        "REJECTED": 924,
+        "SUCCESS": 150,
+        "MISMATCH": 2
+      },
+      "primary_blockers": {
+        "UNKNOWN_PATH:NOT_READY": 720,
+        "EXACT_MATCH:NONE": 150,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 4,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 13,
+        "OTHER:NEUTRAL_UNIT_DECAY": 2,
+        "OTHER:ACTIVE_UPGRADE_OR_EMP": 182,
+        "COMBAT:UNVERIFIED_NORMAL_COMBAT": 3,
+        "EXACT_MISMATCH:NONE": 2
+      },
+      "control_readiness_gap_counts": {
+        "before:force:0:source": 232,
+        "before:force:0:destination": 192,
+        "before:force:3:source": 54,
+        "before:force:2:source": 134,
+        "before:force:4:source": 160,
+        "before:force:1:destination": 21,
+        "before:force:5:source": 96,
+        "after:force:0:source": 1,
+        "before:force:3:destination": 100,
+        "before:force:4:destination": 89,
+        "before:force:2:destination": 53,
+        "before:force:1:source": 92,
+        "before:force:5:destination": 18,
+        "before:force:6:destination": 19,
+        "before:force:7:source": 103,
+        "before:force:6:source": 59,
+        "before:force:8:source": 20,
+        "before:force:9:source": 41,
+        "before:force:10:source": 52,
+        "before:force:11:source": 6,
+        "before:force:12:source": 17,
+        "before:force:13:source": 14,
+        "before:force:8:destination": 26,
+        "before:force:9:destination": 45,
+        "before:force:10:destination": 49,
+        "before:force:11:destination": 53,
+        "before:force:12:destination": 91,
+        "before:force:13:destination": 76,
+        "before:force:14:destination": 13,
+        "before:force:15:source": 7,
+        "before:force:14:source": 11,
+        "before:force:7:destination": 5
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "before:force:*:source": 535,
+        "before:force:*:destination": 517,
+        "after:force:*:source": 1
+      },
+      "control_readiness_bucket_transition_counts": {
+        "before:path_or_force_input": 719,
+        "after:path_or_force_input": 1
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "UNKNOWN_POST_ARRIVAL_PATH": 4,
+        "PRODUCTION_SUPPLY_LINE": 18,
+        "NEUTRAL_UNIT_DECAY": 3,
+        "UNVERIFIED_NORMAL_COMBAT": 3
+      },
+      "multi_blocker_probe_edges_sampled": 22,
+      "known_active_metrics": {
+        "known_active_edges": 1057,
+        "active_unknown_edges": 1,
+        "known_active_executable": 135,
+        "known_active_success": 133,
+        "known_active_mismatch": 2,
+        "accuracy_among_comparable_known_active": 0.9851851851851852,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.1275992438563327,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.1285444234404537,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.12771996215704826,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.1275992438563327,
+          0.12771996215704826
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 1076,
+        "same_scope_consecutive": 1076,
+        "executable": 152,
+        "accepted": 152,
+        "rejected": 924,
+        "mismatches": 2,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.13940520446096655,
+        "accuracy_among_executable": 0.9868421052631579,
+        "coverage_among_consecutive": 0.1412639405204461
+      },
+      "gameplay_candidate_layers": {
+        "movement_observed": {
+          "REJECTED": 870,
+          "SUCCESS": 133,
+          "MISMATCH": 2
+        },
+        "production_due_potential": {
+          "REJECTED": 209,
+          "SUCCESS": 20
+        },
+        "production_or_arrival_candidate": {
+          "REJECTED": 121,
+          "SUCCESS": 10
+        },
+        "rejected": {
+          "REJECTED": 924
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 110
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 25
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 122,
+          "MISMATCH": 2
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 4408,
+        "ownership_correct": 4408,
+        "unit_vectors": 4408,
+        "unit_vectors_exact": 4406,
+        "absolute_unit_error": 6,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 257,
+        "eta_exact": 257,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 0.9995462794918331,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          720
+        ],
+        [
+          "OTHER:ACTIVE_UPGRADE_OR_EMP",
+          182
+        ],
+        [
+          "EXACT_MATCH:NONE",
+          150
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          13
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          4
+        ],
+        [
+          "COMBAT:UNVERIFIED_NORMAL_COMBAT",
+          3
+        ],
+        [
+          "EXACT_MISMATCH:NONE",
+          2
+        ],
+        [
+          "OTHER:NEUTRAL_UNIT_DECAY",
+          2
+        ]
+      ]
+    },
+    {
+      "cohort": "85391858b5d8",
+      "split": "holdout",
+      "counts": {
+        "raw_records": 4794,
+        "retained_observations": 2399,
+        "initial_observations_without_prior": 1,
+        "all_distinct_observed_tick_edges": 2398,
+        "same_scope_consecutive_edges": 2398,
+        "same_scope_tick_duplicate_records": 2395
+      },
+      "active_counts": {
+        "INACTIVE": 1282,
+        "ACTIVE_KNOWN": 1105,
+        "ACTIVE_UNKNOWN": 11
+      },
+      "comparison_status_counts": {
+        "SUCCESS": 1440,
+        "REJECTED": 955,
+        "MISMATCH": 3
+      },
+      "primary_blockers": {
+        "EXACT_MATCH:NONE": 1440,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 130,
+        "OTHER:NEUTRAL_UNIT_DECAY": 4,
+        "UNKNOWN_PATH:NOT_READY": 802,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 11,
+        "EXACT_MISMATCH:NONE": 3,
+        "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE": 2,
+        "OTHER:ACTIVE_UPGRADE_OR_EMP": 6
+      },
+      "control_readiness_gap_counts": {
+        "after:force:0:source": 6,
+        "before:force:0:source": 469,
+        "before:force:1:destination": 178,
+        "before:force:0:destination": 222,
+        "before:force:1:source": 165,
+        "before:force:2:source": 110,
+        "before:force:2:destination": 86,
+        "before:force:3:source": 14,
+        "after:force:2:source": 1
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "after:force:*:source": 7,
+        "before:force:*:source": 559,
+        "before:force:*:destination": 332
+      },
+      "control_readiness_bucket_transition_counts": {
+        "after:path_or_force_input": 7,
+        "before:path_or_force_input": 795
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "PRODUCTION_SUPPLY_LINE": 143,
+        "NEUTRAL_UNIT_DECAY": 8,
+        "UNKNOWN_POST_ARRIVAL_PATH": 9,
+        "MOBILE_OVERFLOW_SUPPLY_LINE": 8
+      },
+      "multi_blocker_probe_edges_sampled": 128,
+      "known_active_metrics": {
+        "known_active_edges": 1105,
+        "active_unknown_edges": 11,
+        "known_active_executable": 252,
+        "known_active_success": 249,
+        "known_active_mismatch": 3,
+        "accuracy_among_comparable_known_active": 0.9880952380952381,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.22580645161290322,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.235663082437276,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.22805429864253393,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.22580645161290322,
+          0.22805429864253393
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 2398,
+        "same_scope_consecutive": 2398,
+        "executable": 1443,
+        "accepted": 1443,
+        "rejected": 955,
+        "mismatches": 3,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.6005004170141784,
+        "accuracy_among_executable": 0.997920997920998,
+        "coverage_among_consecutive": 0.6017514595496247
+      },
+      "gameplay_candidate_layers": {
+        "production_due_potential": {
+          "REJECTED": 273,
+          "SUCCESS": 126,
+          "MISMATCH": 1
+        },
+        "production_or_arrival_candidate": {
+          "REJECTED": 67,
+          "SUCCESS": 24,
+          "MISMATCH": 1
+        },
+        "rejected": {
+          "REJECTED": 955
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 44,
+          "MISMATCH": 3
+        },
+        "movement_observed": {
+          "REJECTED": 821,
+          "SUCCESS": 233
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 20
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 42
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 49062,
+        "ownership_correct": 49062,
+        "unit_vectors": 49062,
+        "unit_vectors_exact": 49059,
+        "absolute_unit_error": 13,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 306,
+        "eta_exact": 306,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 0.9999388528800294,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "EXACT_MATCH:NONE",
+          1440
+        ],
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          802
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          130
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          11
+        ],
+        [
+          "OTHER:ACTIVE_UPGRADE_OR_EMP",
+          6
+        ],
+        [
+          "OTHER:NEUTRAL_UNIT_DECAY",
+          4
+        ],
+        [
+          "EXACT_MISMATCH:NONE",
+          3
+        ],
+        [
+          "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE",
+          2
+        ]
+      ]
+    },
+    {
+      "cohort": "b1f7f9416e92",
+      "split": "holdout",
+      "counts": {
+        "raw_records": 4799,
+        "retained_observations": 2397,
+        "initial_observations_without_prior": 1,
+        "same_scope_tick_duplicate_records": 2402,
+        "all_distinct_observed_tick_edges": 2396,
+        "same_scope_consecutive_edges": 2396
+      },
+      "active_counts": {
+        "INACTIVE": 2293,
+        "ACTIVE_KNOWN": 102,
+        "ACTIVE_UNKNOWN": 1
+      },
+      "comparison_status_counts": {
+        "SUCCESS": 2126,
+        "REJECTED": 270
+      },
+      "primary_blockers": {
+        "EXACT_MATCH:NONE": 2126,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 232,
+        "UNKNOWN_PATH:NOT_READY": 37,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 1
+      },
+      "control_readiness_gap_counts": {
+        "after:force:0:source": 1,
+        "before:force:0:source": 36
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "after:force:*:source": 1,
+        "before:force:*:source": 36
+      },
+      "control_readiness_bucket_transition_counts": {
+        "after:path_or_force_input": 1,
+        "before:path_or_force_input": 36
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "PRODUCTION_SUPPLY_LINE": 128
+      },
+      "multi_blocker_probe_edges_sampled": 128,
+      "known_active_metrics": {
+        "known_active_edges": 102,
+        "active_unknown_edges": 1,
+        "known_active_executable": 59,
+        "known_active_success": 59,
+        "known_active_mismatch": 0,
+        "accuracy_among_comparable_known_active": 1.0,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.5728155339805825,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.5825242718446602,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.5784313725490197,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.5728155339805825,
+          0.5784313725490197
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 2396,
+        "same_scope_consecutive": 2396,
+        "executable": 2126,
+        "accepted": 2126,
+        "rejected": 270,
+        "mismatches": 0,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.8873121869782972,
+        "accuracy_among_executable": 1.0,
+        "coverage_among_consecutive": 0.8873121869782972
+      },
+      "gameplay_candidate_layers": {
+        "production_due_potential": {
+          "SUCCESS": 395,
+          "REJECTED": 243
+        },
+        "production_or_arrival_candidate": {
+          "SUCCESS": 20,
+          "REJECTED": 3
+        },
+        "rejected": {
+          "REJECTED": 270
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 3
+        },
+        "movement_observed": {
+          "REJECTED": 39,
+          "SUCCESS": 40
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 2
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 2
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 80788,
+        "ownership_correct": 80788,
+        "unit_vectors": 80788,
+        "unit_vectors_exact": 80788,
+        "absolute_unit_error": 0,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 40,
+        "eta_exact": 40,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 1.0,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "EXACT_MATCH:NONE",
+          2126
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          232
+        ],
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          37
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          1
+        ]
+      ]
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "counts": {
+        "raw_records": 4798,
+        "retained_observations": 2399,
+        "initial_observations_without_prior": 1,
+        "same_scope_tick_duplicate_records": 2399,
+        "all_distinct_observed_tick_edges": 2398,
+        "same_scope_consecutive_edges": 2398
+      },
+      "active_counts": {
+        "ACTIVE_KNOWN": 1814,
+        "INACTIVE": 581,
+        "ACTIVE_UNKNOWN": 3
+      },
+      "comparison_status_counts": {
+        "REJECTED": 1444,
+        "SUCCESS": 945,
+        "MISMATCH": 9
+      },
+      "primary_blockers": {
+        "UNKNOWN_PATH:NOT_READY": 1326,
+        "EXACT_MATCH:NONE": 945,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 88,
+        "OTHER:NEUTRAL_DOWNGRADE": 1,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 21,
+        "COMBAT:UNVERIFIED_NORMAL_COMBAT": 3,
+        "SPECIAL_PRODUCTION:SPECIAL_PRODUCTION": 4,
+        "EXACT_MISMATCH:NONE": 9,
+        "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE": 1
+      },
+      "control_readiness_gap_counts": {
+        "after:force:0:source": 5,
+        "before:force:0:source": 756,
+        "after:force:0:destination": 1,
+        "before:force:0:destination": 398,
+        "before:force:1:destination": 635,
+        "before:force:2:destination": 311,
+        "before:force:1:source": 105,
+        "before:force:2:source": 45,
+        "before:force:3:source": 75,
+        "before:force:4:destination": 79,
+        "before:force:3:destination": 146,
+        "before:force:4:source": 89,
+        "before:force:5:source": 93,
+        "before:force:6:source": 59,
+        "before:force:7:source": 70,
+        "before:force:8:source": 82,
+        "before:force:9:source": 62,
+        "before:force:10:source": 38,
+        "before:force:11:source": 37,
+        "before:force:10:destination": 12,
+        "before:force:9:destination": 7,
+        "before:force:7:destination": 3,
+        "before:force:6:destination": 39,
+        "before:force:5:destination": 47,
+        "before:force:11:destination": 5,
+        "before:force:12:destination": 3,
+        "before:force:13:destination": 15,
+        "before:force:12:source": 23,
+        "before:force:13:source": 6
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "after:force:*:source": 5,
+        "before:force:*:source": 935,
+        "after:force:*:destination": 1,
+        "before:force:*:destination": 1089
+      },
+      "control_readiness_bucket_transition_counts": {
+        "after:path_or_force_input": 6,
+        "before:path_or_force_input": 1320
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "PRODUCTION_SUPPLY_LINE": 221,
+        "NEUTRAL_DOWNGRADE": 3,
+        "SPECIAL_PRODUCTION": 9,
+        "UNKNOWN_POST_ARRIVAL_PATH": 23,
+        "UNVERIFIED_NORMAL_COMBAT": 3,
+        "MOBILE_OVERFLOW_SUPPLY_LINE": 1
+      },
+      "multi_blocker_probe_edges_sampled": 118,
+      "known_active_metrics": {
+        "known_active_edges": 1814,
+        "active_unknown_edges": 3,
+        "known_active_executable": 407,
+        "known_active_success": 398,
+        "known_active_mismatch": 9,
+        "accuracy_among_comparable_known_active": 0.9778869778869779,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.2239955971381398,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.22564667033571822,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.22436604189636164,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.2239955971381398,
+          0.22436604189636164
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 2398,
+        "same_scope_consecutive": 2398,
+        "executable": 954,
+        "accepted": 954,
+        "rejected": 1444,
+        "mismatches": 9,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.3940783986655546,
+        "accuracy_among_executable": 0.9905660377358491,
+        "coverage_among_consecutive": 0.3978315262718932
+      },
+      "gameplay_candidate_layers": {
+        "movement_observed": {
+          "REJECTED": 1367,
+          "SUCCESS": 376,
+          "MISMATCH": 1
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 185,
+          "MISMATCH": 9
+        },
+        "rejected": {
+          "REJECTED": 1444
+        },
+        "production_due_potential": {
+          "REJECTED": 384,
+          "SUCCESS": 93,
+          "MISMATCH": 1
+        },
+        "production_or_arrival_candidate": {
+          "REJECTED": 158,
+          "SUCCESS": 37,
+          "MISMATCH": 1
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 12
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 186
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 31482,
+        "ownership_correct": 31482,
+        "unit_vectors": 31482,
+        "unit_vectors_exact": 31473,
+        "absolute_unit_error": 21,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 440,
+        "eta_exact": 440,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 0.9997141223556318,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          1326
+        ],
+        [
+          "EXACT_MATCH:NONE",
+          945
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          88
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          21
+        ],
+        [
+          "EXACT_MISMATCH:NONE",
+          9
+        ],
+        [
+          "SPECIAL_PRODUCTION:SPECIAL_PRODUCTION",
+          4
+        ],
+        [
+          "COMBAT:UNVERIFIED_NORMAL_COMBAT",
+          3
+        ],
+        [
+          "OTHER:NEUTRAL_DOWNGRADE",
+          1
+        ],
+        [
+          "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE",
+          1
+        ]
+      ]
+    },
+    {
+      "cohort": "fe678ebb30ce",
+      "split": "development",
+      "counts": {
+        "raw_records": 4797,
+        "retained_observations": 2399,
+        "initial_observations_without_prior": 1,
+        "same_scope_tick_duplicate_records": 2398,
+        "all_distinct_observed_tick_edges": 2398,
+        "same_scope_consecutive_edges": 2398
+      },
+      "active_counts": {
+        "INACTIVE": 2307,
+        "ACTIVE_KNOWN": 90,
+        "ACTIVE_UNKNOWN": 1
+      },
+      "comparison_status_counts": {
+        "REJECTED": 77,
+        "SUCCESS": 2321
+      },
+      "primary_blockers": {
+        "OBSERVATION_GAP:NOT_READY": 1,
+        "EXACT_MATCH:NONE": 2321,
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 38,
+        "UNKNOWN_PATH:NOT_READY": 37,
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 1
+      },
+      "control_readiness_gap_counts": {
+        "before:source_continuity": 1,
+        "after:force:0:source": 1,
+        "before:force:0:source": 36
+      },
+      "control_readiness_gap_transition_counts_normalized": {
+        "before:source_continuity": 1,
+        "after:force:*:source": 1,
+        "before:force:*:source": 36
+      },
+      "control_readiness_bucket_transition_counts": {
+        "before:clock": 1,
+        "after:path_or_force_input": 1,
+        "before:path_or_force_input": 36
+      },
+      "multi_blocker_probe_counts_sampled": {
+        "PRODUCTION_SUPPLY_LINE": 75,
+        "UNKNOWN_POST_ARRIVAL_PATH": 1
+      },
+      "multi_blocker_probe_edges_sampled": 39,
+      "known_active_metrics": {
+        "known_active_edges": 90,
+        "active_unknown_edges": 1,
+        "known_active_executable": 51,
+        "known_active_success": 51,
+        "known_active_mismatch": 0,
+        "accuracy_among_comparable_known_active": 1.0,
+        "coverage_lower_bound_known_active_over_known_plus_unknown": 0.5604395604395604,
+        "coverage_upper_bound_if_all_active_unknown_executable": 0.5714285714285714,
+        "active_unknown_executable": 0,
+        "known_active_coverage": 0.5666666666666667,
+        "tight_coverage_bounds_using_actual_execution": [
+          0.5604395604395604,
+          0.5666666666666667
+        ]
+      },
+      "coverage_metrics": {
+        "all_edges": 2398,
+        "same_scope_consecutive": 2398,
+        "executable": 2321,
+        "accepted": 2321,
+        "rejected": 77,
+        "mismatches": 0,
+        "coverage_gaps": 0,
+        "exact_match_share_all_edges": 0.9678899082568807,
+        "accuracy_among_executable": 1.0,
+        "coverage_among_consecutive": 0.9678899082568807
+      },
+      "gameplay_candidate_layers": {
+        "rejected": {
+          "REJECTED": 77
+        },
+        "production_due_potential": {
+          "SUCCESS": 241,
+          "REJECTED": 42
+        },
+        "production_or_arrival_candidate": {
+          "SUCCESS": 18,
+          "REJECTED": 2
+        },
+        "force_appearance_candidate": {
+          "REJECTED": 2
+        },
+        "movement_observed": {
+          "REJECTED": 35,
+          "SUCCESS": 35
+        },
+        "arrival_or_disappearance_candidate": {
+          "REJECTED": 2
+        },
+        "capture_or_owner_candidate": {
+          "REJECTED": 2
+        }
+      },
+      "decision_metric_totals": {
+        "ownership_pairs": 67309,
+        "ownership_correct": 67309,
+        "unit_vectors": 67309,
+        "unit_vectors_exact": 67309,
+        "absolute_unit_error": 0,
+        "capture_eligible": 0,
+        "capture_correct": 0,
+        "eta_pairs": 35,
+        "eta_exact": 35,
+        "ownership_accuracy": 1.0,
+        "remaining_units_exact_vector_share": 1.0,
+        "capture_accuracy": null,
+        "eta_error_ticks_p25_median_p75_max": {
+          "p25": 0.0,
+          "median": 0.0,
+          "p75": 0.0,
+          "max": 0.0
+        }
+      },
+      "primary_blocker_ranking": [
+        [
+          "EXACT_MATCH:NONE",
+          2321
+        ],
+        [
+          "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+          38
+        ],
+        [
+          "UNKNOWN_PATH:NOT_READY",
+          37
+        ],
+        [
+          "OBSERVATION_GAP:NOT_READY",
+          1
+        ],
+        [
+          "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+          1
+        ]
+      ]
+    }
+  ],
+  "totals": {
+    "counts": {
+      "raw_records": 26108,
+      "retained_observations": 13065,
+      "initial_observations_without_prior": 6,
+      "same_scope_tick_duplicate_records": 13043,
+      "all_distinct_observed_tick_edges": 13059,
+      "same_scope_consecutive_edges": 13057,
+      "scope_or_tick_gap_edges": 2
+    },
+    "active_counts": {
+      "ACTIVE_KNOWN": 6458,
+      "INACTIVE": 6540,
+      "ACTIVE_UNKNOWN": 61
+    },
+    "comparison_status_counts": {
+      "REJECTED": 5846,
+      "SUCCESS": 7198,
+      "MISMATCH": 15
+    },
+    "primary_blockers": {
+      "OBSERVATION_GAP:NOT_READY": 90,
+      "OTHER:ACTIVE_UPGRADE_OR_EMP": 385,
+      "OTHER:NEUTRAL_UNIT_DECAY": 8,
+      "EXACT_MATCH:NONE": 7198,
+      "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE": 521,
+      "UNKNOWN_PATH:NOT_READY": 4782,
+      "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH": 44,
+      "EXACT_MISMATCH:NONE": 15,
+      "OBSERVATION_GAP:OBSERVATION_GAP": 2,
+      "COMBAT:UNVERIFIED_NORMAL_COMBAT": 6,
+      "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE": 3,
+      "OTHER:NEUTRAL_DOWNGRADE": 1,
+      "SPECIAL_PRODUCTION:SPECIAL_PRODUCTION": 4
+    },
+    "coverage_metrics": {
+      "all_edges": 13059,
+      "same_scope_consecutive": 13057,
+      "executable": 7213,
+      "rejected": 5846,
+      "mismatches": 15,
+      "coverage_gaps": 0,
+      "exact_match_share_all_edges": 0.551190749674554,
+      "accuracy_among_executable": 0.9979204214612505
+    },
+    "readiness_gap_occurrences": {
+      "before:source_continuity": 90,
+      "after:force:0:source": 15,
+      "before:force:0:source": 2023,
+      "after:force:0:destination": 3,
+      "before:force:0:destination": 1391,
+      "before:force:1:source": 635,
+      "before:force:1:destination": 1318,
+      "before:force:2:destination": 956,
+      "before:force:2:source": 409,
+      "before:force:3:destination": 841,
+      "before:force:3:source": 182,
+      "before:force:4:destination": 865,
+      "before:force:5:destination": 530,
+      "before:force:6:destination": 592,
+      "before:force:7:destination": 319,
+      "before:force:8:destination": 233,
+      "before:force:9:destination": 177,
+      "before:force:8:source": 164,
+      "before:force:7:source": 271,
+      "before:force:6:source": 202,
+      "before:force:5:source": 245,
+      "before:force:9:source": 165,
+      "before:force:10:source": 160,
+      "before:force:11:source": 68,
+      "before:force:10:destination": 158,
+      "before:force:11:destination": 142,
+      "before:force:12:destination": 136,
+      "before:force:4:source": 266,
+      "after:force:2:destination": 1,
+      "before:force:13:source": 40,
+      "before:force:12:source": 71,
+      "before:force:13:destination": 93,
+      "before:force:14:source": 13,
+      "before:match_id": 88,
+      "before:force:14:destination": 13,
+      "before:force:15:source": 7,
+      "after:force:2:source": 1
+    },
+    "readiness_gap_transitions_normalized": {
+      "before:source_continuity": 90,
+      "after:force:*:source": 16,
+      "before:force:*:source": 3163,
+      "after:force:*:destination": 4,
+      "before:force:*:destination": 3793,
+      "before:match_id": 88
+    },
+    "readiness_bucket_transitions": {
+      "before:clock": 90,
+      "after:path_or_force_input": 20,
+      "before:path_or_force_input": 4850
+    },
+    "gameplay_candidate_layers": {
+      "rejected": {
+        "REJECTED": 5846
+      },
+      "production_due_potential": {
+        "REJECTED": 1575,
+        "SUCCESS": 897,
+        "MISMATCH": 2
+      },
+      "production_or_arrival_candidate": {
+        "REJECTED": 541,
+        "SUCCESS": 116,
+        "MISMATCH": 2
+      },
+      "force_appearance_candidate": {
+        "REJECTED": 631,
+        "MISMATCH": 15
+      },
+      "movement_observed": {
+        "REJECTED": 5135,
+        "SUCCESS": 979,
+        "MISMATCH": 4
+      },
+      "arrival_or_disappearance_candidate": {
+        "REJECTED": 604
+      },
+      "capture_or_owner_candidate": {
+        "REJECTED": 83
+      }
+    },
+    "decision_metric_integer_totals": {
+      "ownership_pairs": 238908,
+      "ownership_correct": 238908,
+      "unit_vectors": 238908,
+      "unit_vectors_exact": 238893,
+      "absolute_unit_error": 44,
+      "capture_eligible": 0,
+      "capture_correct": 0,
+      "eta_pairs": 1359,
+      "eta_exact": 1359
+    },
+    "active_cohort_ranking": [
+      [
+        "03d032d57e5b",
+        2290,
+        44
+      ],
+      [
+        "daf86d0544b7",
+        1814,
+        3
+      ],
+      [
+        "85391858b5d8",
+        1105,
+        11
+      ],
+      [
+        "7d56a775bc4c",
+        1057,
+        1
+      ],
+      [
+        "b1f7f9416e92",
+        102,
+        1
+      ],
+      [
+        "fe678ebb30ce",
+        90,
+        1
+      ]
+    ],
+    "primary_blocker_ranking": [
+      [
+        "EXACT_MATCH:NONE",
+        7198
+      ],
+      [
+        "UNKNOWN_PATH:NOT_READY",
+        4782
+      ],
+      [
+        "SUPPLY_LINE:PRODUCTION_SUPPLY_LINE",
+        521
+      ],
+      [
+        "OTHER:ACTIVE_UPGRADE_OR_EMP",
+        385
+      ],
+      [
+        "OBSERVATION_GAP:NOT_READY",
+        90
+      ],
+      [
+        "UNKNOWN_PATH:UNKNOWN_POST_ARRIVAL_PATH",
+        44
+      ],
+      [
+        "EXACT_MISMATCH:NONE",
+        15
+      ],
+      [
+        "OTHER:NEUTRAL_UNIT_DECAY",
+        8
+      ],
+      [
+        "COMBAT:UNVERIFIED_NORMAL_COMBAT",
+        6
+      ],
+      [
+        "SPECIAL_PRODUCTION:SPECIAL_PRODUCTION",
+        4
+      ],
+      [
+        "SUPPLY_LINE:MOBILE_OVERFLOW_SUPPLY_LINE",
+        3
+      ],
+      [
+        "OBSERVATION_GAP:OBSERVATION_GAP",
+        2
+      ],
+      [
+        "OTHER:NEUTRAL_DOWNGRADE",
+        1
+      ]
+    ]
+  },
+  "analysis_candidate_status": "CANDIDATE_SIMULATOR_MANIFEST_DRIFT",
+  "root_acceptance": {
+    "status": "ACCEPTED_CURRENT_CORE_DESCRIPTIVE_ANALYSIS_PARTIAL_EVENT_CAUSALITY",
+    "independent_reproduction": true,
+    "independent_luna_review": "ACCEPT",
+    "independent_edge_reproduction": "All 13059 edge records agree after normalizing ordering of observer-ID diagnostic lists; all metric totals and hashes agree exactly.",
+    "raw_inventory_independent_check": "runtime/research/v2/root-recording-denominator-inventory.json",
+    "preregistered_method_commit": "ac19b028a175b183a0c44293f3c38297af3e60a5",
+    "historical_manifest_drift": "14 historical core hashes differ. Raw and corpus pins pass. Accepted descriptive results use the explicitly hashed current core; they do not reproduce historical core output.",
+    "known_active": {
+      "denominator": 6458,
+      "comparable": 1067,
+      "exact_matches": 1052,
+      "mismatch": 15,
+      "rejected": 5391,
+      "coverage": 0.1652214307835243,
+      "exact_match_share": 0.16289873025704552,
+      "accuracy_among_comparable": 0.985941893158388
+    },
+    "unknown_activity": {
+      "denominator": 61,
+      "comparable": 0,
+      "coverage_bounds_using_actual_execution": [
+        0.16367541033900906,
+        0.1652214307835243
+      ],
+      "bound_assumption": "Only activity of these 61 unexecutable edges is unknown; hypothetical execution is not credited."
+    },
+    "all": {
+      "denominator": 13059,
+      "comparable": 7213,
+      "exact_matches": 7198,
+      "mismatch": 15,
+      "rejected": 5846,
+      "coverage": 0.5523393828011334,
+      "accuracy": 0.9979204214612505
+    },
+    "execution_stage_counts": {
+      "NOT_ATTEMPTED_GAP:REJECTED": 5822,
+      "EXECUTED:SUCCESS": 7198,
+      "EXECUTED:REJECTED": 24,
+      "EXECUTED:MISMATCH": 15
+    },
+    "known_active_primary_blocker_ranking": [
+      {
+        "category": "UNKNOWN_PATH",
+        "raw_api_code": "NOT_READY",
+        "active_edges": 4766,
+        "share_all_known_active": 0.7379993806131929,
+        "share_rejected_known_active": 0.8840660359859024
+      },
+      {
+        "category": "OTHER",
+        "raw_api_code": "ACTIVE_UPGRADE_OR_EMP",
+        "active_edges": 385,
+        "share_all_known_active": 0.05961598017962218,
+        "share_rejected_known_active": 0.0714153218326841
+      },
+      {
+        "category": "SUPPLY_LINE",
+        "raw_api_code": "PRODUCTION_SUPPLY_LINE",
+        "active_edges": 128,
+        "share_all_known_active": 0.019820377825952307,
+        "share_rejected_known_active": 0.02374327583008718
+      },
+      {
+        "category": "OBSERVATION_GAP",
+        "raw_api_code": "NOT_READY",
+        "active_edges": 47,
+        "share_all_known_active": 0.007277794982966863,
+        "share_rejected_known_active": 0.008718234093860137
+      },
+      {
+        "category": "UNKNOWN_PATH",
+        "raw_api_code": "UNKNOWN_POST_ARRIVAL_PATH",
+        "active_edges": 42,
+        "share_all_known_active": 0.006503561474140601,
+        "share_rejected_known_active": 0.0077907623817473565
+      },
+      {
+        "category": "OTHER",
+        "raw_api_code": "NEUTRAL_UNIT_DECAY",
+        "active_edges": 8,
+        "share_all_known_active": 0.0012387736141220192,
+        "share_rejected_known_active": 0.0014839547393804488
+      },
+      {
+        "category": "COMBAT",
+        "raw_api_code": "UNVERIFIED_NORMAL_COMBAT",
+        "active_edges": 6,
+        "share_all_known_active": 0.0009290802105915144,
+        "share_rejected_known_active": 0.0011129660545353367
+      },
+      {
+        "category": "SPECIAL_PRODUCTION",
+        "raw_api_code": "SPECIAL_PRODUCTION",
+        "active_edges": 4,
+        "share_all_known_active": 0.0006193868070610096,
+        "share_rejected_known_active": 0.0007419773696902244
+      },
+      {
+        "category": "SUPPLY_LINE",
+        "raw_api_code": "MOBILE_OVERFLOW_SUPPLY_LINE",
+        "active_edges": 3,
+        "share_all_known_active": 0.0004645401052957572,
+        "share_rejected_known_active": 0.0005564830272676684
+      },
+      {
+        "category": "OBSERVATION_GAP",
+        "raw_api_code": "OBSERVATION_GAP",
+        "active_edges": 1,
+        "share_all_known_active": 0.0001548467017652524,
+        "share_rejected_known_active": 0.0001854943424225561
+      },
+      {
+        "category": "OTHER",
+        "raw_api_code": "NEUTRAL_DOWNGRADE",
+        "active_edges": 1,
+        "share_all_known_active": 0.0001548467017652524,
+        "share_rejected_known_active": 0.0001854943424225561
+      }
+    ],
+    "next_P0": {
+      "choice": "OTHER",
+      "name": "CURRENT_LEG_PATH_INPUT_COVERAGE",
+      "evidence": "4766 known-active first refusals lack current-leg source/destination inputs; supply and combat are not dominant primary active blockers.",
+      "scope": "Offline audit of field completeness, unknown reasons and visible endpoint recoverability in existing recordings. Preserve Unknown, foreign visibility boundaries and provenance. No inferred terminal routes, hidden state, live collection, callback/queue/canvas research in this phase.",
+      "gate": "Predeclare a bounded repair only after existing-data evidence proves a reliable currently observable endpoint; rerun unchanged ALL/ACTIVE denominators and report coverage gain plus newly exposed blockers. Never relax truthful input gates to inflate coverage."
+    },
+    "new_formal_credit": 0,
+    "true_event_coverage": "UNKNOWN: raw candidate incidences do not certify causal event labels. Missing event truth cannot be dropped.",
+    "mismatch_cause": "All 15 comparable mismatches contain reliable NEW_TRACK candidates; actor/cause UNKNOWN, not 15 proved rule bugs or human actions.",
+    "requested_mutually_exclusive_classes": [
+      {
+        "class": "SUPPORTED_AND_ACCEPTED",
+        "all_count": 7198,
+        "known_active_count": 1052,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.16289873025704552
+      },
+      {
+        "class": "SUPPORTED_BUT_MISMATCH",
+        "all_count": 15,
+        "known_active_count": 15,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.002322700526478786
+      },
+      {
+        "class": "REJECTED_SUPPLY_LINE_UNKNOWN",
+        "all_count": 524,
+        "known_active_count": 131,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.020284917931248064
+      },
+      {
+        "class": "REJECTED_UNKNOWN_PATH",
+        "all_count": 4826,
+        "known_active_count": 4808,
+        "unknown_activity_count": 18,
+        "known_active_share": 0.7445029420873336
+      },
+      {
+        "class": "REJECTED_UNKNOWN_FUEL",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      },
+      {
+        "class": "REJECTED_COMBAT",
+        "all_count": 6,
+        "known_active_count": 6,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0009290802105915144
+      },
+      {
+        "class": "REJECTED_SPECIAL_PRODUCTION",
+        "all_count": 4,
+        "known_active_count": 4,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0006193868070610096
+      },
+      {
+        "class": "REJECTED_SPECIAL_UNIT",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      },
+      {
+        "class": "REJECTED_KING_ELIMINATION",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      },
+      {
+        "class": "REJECTED_OBSERVATION_GAP",
+        "all_count": 92,
+        "known_active_count": 48,
+        "unknown_activity_count": 43,
+        "known_active_share": 0.007432641684732115
+      },
+      {
+        "class": "REJECTED_UNKNOWN_RELATION",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      },
+      {
+        "class": "REJECTED_OTHER",
+        "all_count": 394,
+        "known_active_count": 394,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.06100960049550944
+      },
+      {
+        "class": "EXTERNAL_ACTION_UNACCOUNTED",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      },
+      {
+        "class": "UNKNOWN",
+        "all_count": 0,
+        "known_active_count": 0,
+        "unknown_activity_count": 0,
+        "known_active_share": 0.0
+      }
+    ],
+    "external_action_unaccounted_overlap": {
+      "candidate_edges": 15,
+      "subset_of": "SUPPORTED_BUT_MISMATCH",
+      "authenticated_external_cause": 0,
+      "rule": "Do not double count primary mismatches; actor and cause UNKNOWN."
+    },
+    "requested_gameplay_class_truth": {
+      "Production": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Movement_only": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Launch_external_action": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Arrival": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Friendly_reinforcement": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Ground_combat": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Air_combat": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Capture": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Ownership_relation": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Supply_line": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Special_production": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      },
+      "Other": {
+        "observed_causal_count": null,
+        "accepted_causal_count": null,
+        "rejected_causal_count": null,
+        "mismatch_causal_count": null,
+        "causal_coverage": null,
+        "causal_accuracy": null,
+        "status": "UNKNOWN_CAUSAL_TRUTH_USE_SEPARATE_OBSERVABLE_PATTERNS_AND_PRIMARY_GUARDS"
+      }
+    }
+  },
+  "edge_audit": {
+    "path": "tests/fixtures/v2/coverage-denominator-edges.jsonl.gz",
+    "sha256": "8a67b03919070a1385dc0269207f4622101b62e4c5409fc4df19b99ff9e5346d",
+    "decompressed_sha256": "ea60e2a194953306c18c051e8be06b4adcfaee9571c090259f8798813613cc66",
+    "rows": 13059,
+    "format": "complete original edge with cohort and split per JSONL row; deterministic gzip mtime 0"
+  }
+}

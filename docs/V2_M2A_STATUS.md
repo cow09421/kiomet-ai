@@ -1,3 +1,58 @@
+# Current M2A checkpoint — temporal firewall and coverage, 2026-10-03
+
+CURRENT MILESTONE: M2A. STATUS: IN_PROGRESS / analysis PARTIAL. M2 IN_PROGRESS;
+M3 NOT_STARTED. OLD M1 FAIL, M1B PASS (2212346). Earlier checkpoints below are
+historical and do not override this task's verdict or active coverage priority.
+
+REPLAY VERDICT F / INSUFFICIENT EVIDENCE. Thirteen fixed birth windows yield
+13 unique conserved Grade-B manual-launch shapes and 56 strictly post-birth
+conditional future comparisons (53 movement-only, 3 movement plus production).
+Birth ticks receive no score. No future divergence before first refusal, zero
+full 20-postbirth horizons. Clean horizon p25/median/p75/max = 2/3/7/9 ticks.
+Original causes: likely external 0 / likely internal 0 / AMBIGUOUS 13 / unknown 0.
+All 13 source owners are foreign; prebirth supply/route/relay and linked action
+provenance are unknown. Later stop reasons (11 supply, 1 special production,
+1 later uninferred birth) are not original-cause labels. No new formal credit.
+
+Six complete pinned development/holdout recordings supply ALL=13,059 edges,
+including two gaps; ACTIVE_KNOWN=6,458 / ACTIVE_UNKNOWN=61. Current-core comparable
+coverage ALL=7,213/13,059 (55.234%); known-active=1,067/6,458 (16.522%), tight
+activity-unknown interval 16.368%–16.522%. Comparable accuracy is 99.792% ALL and
+98.594% known-active. True causal event coverage, winner/capture/actual arrival
+ETA remain UNKNOWN. Historical core hashes differ, while all raw/corpus pins
+pass; current hashes are explicit and these are current-core descriptive results.
+
+NEXT P0 = OTHER / CURRENT_LEG_PATH_INPUT_COVERAGE. Active primary families:
+current-leg endpoints 4,766; upgrade/EMP 385; supply line 131. Unknown current-leg
+input is distinct from the 42 active post-arrival route refusals. Next bounded
+offline audit must prove reliable visible endpoint recoverability before any
+repair, retain truthful Unknown, and disclose newly exposed blockers on the same
+denominator. No live collection or full supply/combat implementation this round.
+
+Action Ledger preregistration is DESIGN_ONLY: pilot <=5 next round then freeze;
+40 formal trials = 15 clean + 15 adversarial + 10 variants. False_unique=0,
+clean>=14/15, source conservation and complete unique force enumeration mandatory.
+UI failure alone does not prove no world effect. Callback/queue research STOPPED.
+
+Accepted artifacts: V2_M2A_TEMPORAL_FIREWALL_REPLAY.{json,md},
+V2_M2A_COVERAGE_DENOMINATOR.{json,md}, V2_M2A_REPLAY_COVERAGE_METHOD.md and
+V2_M2A_ACTION_LEDGER_PREREGISTRATION.md. The complete 13,059-edge audit is a
+hash-pinned gzip fixture. Root independently reproduced A/B/C, and Luna independently
+reviewed A/B and preregistration. Formal counts remain historical 1053/1053;
+no new Grade-A action, arrival, reinforcement or ordinary combat proof is added.
+
+Final regression is required after this integration's final commit, on final
+HEAD. Receipt: runtime/research/v2/replay-coverage-final-head-regression.json.
+The older 371-pass ada6180 receipt is STALE for this task; this paragraph declares
+a requirement, not a result. Runtime receipt records actual HEAD/dirty/scope/counts
+and stable source hashes. Do not make a documentation commit after that run.
+
+The two older research notes remain untracked: registered mouse queue consumer
+CANDIDATE / NOT ACCEPTED; TS capacity context REWORK / NOT ACCEPTED. Preserve them;
+do not commit or delete merely to obtain a clean worktree. Main stays untouched.
+
+---
+
 # M2A — deterministic simulator engineering checkpoint
 
 CURRENT MILESTONE: M2A / M2B measurement only

@@ -11,7 +11,9 @@ not this protocol's Grade A validator. No campaign is run in this phase.
 Before ordinary official UI input, fsync a unique intent ID, host-monotonic time,
 current first-observed world sequence, document/match/player/client identity,
 complete source and target snapshots, intended typed vector, UI action type,
-all visible force identities, supply-line/relay facts and outstanding intents.
+a positively complete current visible force collection with known unique force
+identities, supply-line/relay facts and outstanding intents. Unknown or incomplete
+force enumeration refuses Grade A before dispatch.
 Pair a separate UI-delivery record by intent ID and identical player/epoch.
 Mouse delivery alone never establishes server acceptance.
 
