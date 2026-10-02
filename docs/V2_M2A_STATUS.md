@@ -43,6 +43,14 @@ Current affected checks passed separately: 54 URL/observation/control/lifecycle 
 
 Static proofs now tie the arriving Force owner to the ordinary setter candidate, verify Tank/Soldier incoming clipping and preexisting-overflow preservation, and put scheduled production before capture. The complete combat-winner mapping, actual Canvas handler binding, post-arrival path/fuel and changing aura/world admission remain separate unresolved gates. No speculative combat fix or synthetic formal case was added. See V2_M2A_PARTY_ROUTE_READINESS_VALIDATION.json and the owner, T/S capacity, production-order and typed Canvas constructor reviews. No browser host remains active.
 
+## Independent party replay and callback narrowing
+
+Root and Luna independently reproduced the 21-sample diagnostic audit. There are 15 exact adjacent-tick pairs: 14 step predictions, 13 matching existing full signatures, one mismatch at 22→23, and one pre-comparison rejection at 33→34. The mismatch's first field is `/towers/17/5` (morale, predicted false / observed true). The first arrival rejection is `UNKNOWN_POST_ARRIVAL_PATH`; two observed empty-neutral arrival candidates retain terminal and fuel UNKNOWN. These diagnostics add zero formal cases and zero trajectories. The independent reusable tool is `tools/v2_party_admission_audit.py`; portable source/replay evidence is recorded in V2_M2A_PARTY_ADMISSION_AUDIT_VALIDATION.json.
+
+The aura case's packed TowerId decomposition was independently corrected: world coordinates 248/255, chunk key 3855 and local slot 248. Its scheduled phase remains compatible with a refresh but not proven. A visible own-Ruler marker does not establish the private cached-Ruler alias; neither exact rank nor aura-value invariance is inferred. Complete default ordinary combat and dynamic aura remain unresolved.
+
+The new terminal-result review establishes the local T/S result-code truth table under equal terminal vectors and signed score, independently checked by Luna. The Canvas factory trace now identifies a concrete constructor callback vtable and a tag-9 message producer. Its original scope callback and queue-to-app consumer binding remain unresolved. The saved document click handler is target-blind and flushes an opaque callback queue; it stays in the broad listener guard. No semantic WASM call, hidden actor read, arm, troop action, speculative core fix or M3 work follows from these static findings.
+
 ## Current evidence and corrected accounting
 
 Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,

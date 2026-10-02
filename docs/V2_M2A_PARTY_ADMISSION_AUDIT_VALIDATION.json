@@ -1,0 +1,67 @@
+{
+  "QUESTION": "Do two independent replay implementations reproduce all admission failures and pair outcomes for the canonical party cohort?",
+  "BEFORE": "Strict NETWORK readiness is not full simulator admission; terminal route, fuel, aura stability and foreign-world actions remain separately unknown.",
+  "ACTION": "Luna replay and independent Root tool each restore all21 recorded states and run before-only one-tick diagnostics with fixed_morale=True explicitly a diagnostic premise. Root tool builds output from actual replay without copying prior review fields.",
+  "EXPECTED": "Preserve first admission failure and exact mismatch field; no formal case or trajectory added.",
+  "OBSERVED": {
+    "root_luna_aggregate_and_pair_outcomes_match": true,
+    "root_first_admission_failure": [
+      {
+        "sample": 20,
+        "tick": 33,
+        "reason": "UNKNOWN_POST_ARRIVAL_PATH"
+      }
+    ],
+    "root_first_signature_mismatch": [
+      {
+        "field": "/towers/17/5",
+        "predicted": false,
+        "observed": true
+      }
+    ],
+    "pair_timeline": {
+      "repeat_same_tick": 3,
+      "exact_consecutive": 15,
+      "step_pass": 14,
+      "signature_match": 13,
+      "signature_mismatch": 1,
+      "multi_tick_gap": 2,
+      "step_rejected:UNKNOWN_POST_ARRIVAL_PATH": 1
+    }
+  },
+  "SIMULATED": "20 single-state steps;14 exact pair predictions;13 signature matches;one fixed-morale premise mismatch. First arrival remains rejected before comparison.",
+  "DIFF": "Matching diagnostic predictions are not formal admission, quiet/movement padding, or5–10second multi-event trajectories.",
+  "VERDICT": "ROOT_AND_LUNA_REPRODUCED_DIAGNOSTIC_ONLY",
+  "formal_credit": 0,
+  "tool": {
+    "file": "tools/v2_party_admission_audit.py",
+    "sha256": "72268bc94d629b0c486da6e436291f4b219d6a69d1a0959b4825295861db7b1e"
+  },
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/party-route-readiness-20261002/party-supported-simulator-admission-20261002.json.gz",
+      "raw_sha256": "6d296c00b3a35b184d2ce5f957af94b53f4f907bde4a80e5b6a0a903b5986eb0",
+      "compressed_sha256": "7e0bb2c2b718a8af3767f6682c62385afdf7ab3bc3b5e5dbd72d5bc272e54bc6"
+    },
+    {
+      "file": "tests/fixtures/v2/party-route-readiness-20261002/party-supported-simulator-admission-20261002.py.gz",
+      "raw_sha256": "ef14464785aa0fe560a56ce9cad9bb4fd39eee4aa6f2c89fce4beb49d0dc61c0",
+      "compressed_sha256": "b7a93c53c226527de8af824b0fccd63a977190c47982f9e43fe185ff6166980b"
+    },
+    {
+      "file": "tests/fixtures/v2/party-route-readiness-20261002/party-supported-simulator-admission-plan-20261002.json.gz",
+      "raw_sha256": "c479ba8523259a9b3c4bd9774c2fcba1fcaa3cca247340ebda67afdbf67a9a4b",
+      "compressed_sha256": "f99f97258f48816bc76e659a41c65a66c550686a34df43ec70aa2c25b88200e2"
+    },
+    {
+      "file": "tests/fixtures/v2/party-route-readiness-20261002/party-supported-simulator-admission-reproduced-20261002.json.gz",
+      "raw_sha256": "863f1ae62c45c70b87cc1466ed15f3ee6084c35a1222b59c5b43448d361aea66",
+      "compressed_sha256": "0f5457da349777bbd31736614d5ec4d26d8f8f35d482cd84c1603697261b6fdd"
+    },
+    {
+      "file": "tests/fixtures/v2/party-route-readiness-20261002/party-supported-simulator-admission-root-20261002.json.gz",
+      "raw_sha256": "51561f1038a704ce2d6ba68aa655a654b0926570746c68f5a8fcc8eea56dad8a",
+      "compressed_sha256": "aeafcaf3c12ab590c9a800d194b6c63b9f3f61b0aa548a74e681fb026be22946"
+    }
+  ]
+}

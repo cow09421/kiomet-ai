@@ -27,3 +27,5 @@ Therefore the bounded producer/use graph is:
 `func874 --(*(param1) stored at component+56)--> component vtable 0x110a6c --(method 1024)--> func539 --(Rc-header+24/+28)--> func4036 listener clone`
 
 `func1262` and `func874` occupy adjacent table slots, but no direct call or proven argument-forwarding edge joins these paths in the inspected static evidence. Accordingly, the actual source writer/field alias for the callback pair at the `func874` `param1` boundary remains unresolved. The reader/drop/listener identity and the typed wrapper producer are now narrowed concretely; no handler binding is claimed. No runtime memory, actor state, or semantic WASM call was used; no core or guard file was modified.
+
+The subsequent typed-factory review finds func874 and func1262 together at offsets +24/+28 of `0x108f84`, and a concrete func445 boxed-Rc producer carrying that factory record. See `V2_M2A_TYPED_CANVAS_FACTORY_ALIAS_REVIEW.md`. It narrows the earlier missing connection to the actual invocation/source aliases and original semantic handler pair; no live binding is claimed.
