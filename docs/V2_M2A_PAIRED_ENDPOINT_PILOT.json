@@ -1,0 +1,43 @@
+{
+  "controlled-transition-78964b1c5f9b.json": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-controlled-transition-78964b1c5f9b.json.gz",
+    "raw_sha256": "1c2a1626c5563271bdbc8bdf597a3e948c6132604e9ba18c72eb41dea74639b4",
+    "gzip_sha256": "2c8fccf9edb66af1ba8f0dac91e378d1555e22c1f998715ab480f316726b8c97"
+  },
+  "controlled-transition-2fafb60c2e7a.json": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-controlled-transition-2fafb60c2e7a.json.gz",
+    "raw_sha256": "1d9799cd505e3f000c2b44696d6853f3a7d836bc757894ef6243d740aa11c2ad",
+    "gzip_sha256": "4f6a3415ea3e8ee0357452f8a9e8d135669ed4e7f4f7dd8df3e2bfa8d88b3740"
+  },
+  "controlled-transition-a7c8a769c215.json": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-controlled-transition-a7c8a769c215.json.gz",
+    "raw_sha256": "5e8d4e50564c2bb564ed24e28633b8a33b0fe9d70c5fbaea996cb0e6b1daf49f",
+    "gzip_sha256": "886ae57ca1e413793eac6b6328af12c1bb03c08e0c75ae7691b46aeb086dcc15"
+  },
+  "controlled-transition-5f345ffc365e.json": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-controlled-transition-5f345ffc365e.json.gz",
+    "raw_sha256": "b2219a65d27da23e9a3938b515c69f94e9b62d3919f7a3efd9ac10e47d584d6f",
+    "gzip_sha256": "d7692bbcbb517b08e86c808a583cf16cfa79397e9e3218bc573c0558364b7d75"
+  },
+  "paired-layers-726f0775adde.jsonl": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-paired-layers-726f0775adde.jsonl.gz",
+    "raw_sha256": "cedd911764b3644bd51700f56810cc228f3299ecce5dbe31d1ea9bb826bea139",
+    "gzip_sha256": "2f6dd9f7d686b34c49045c5e5490d293e7b1b98e7220acfeb54db84f8b7620ff"
+  },
+  "paired-layers-d9075298573c.jsonl": {
+    "fixture": "tests\\fixtures\\v2\\endpoint-pilot-paired-layers-d9075298573c.jsonl.gz",
+    "raw_sha256": "92680ed6bf9927f2fdc7bac9fcb1a0af6ac7de3bebde41b68d6cee513a163a01",
+    "gzip_sha256": "505e845f09c7ed50e42f32a759a7f1cba830874bb9a079219df258563a6a00d7"
+  },
+  "summary": {
+    "valid_trials": 0,
+    "actual_dispatch_attempts": 0,
+    "execute_preparations": 1,
+    "paired_snapshots": 66,
+    "roundtrip_equal": 66,
+    "ambiguous_mapping_rows": 0,
+    "self_force_rows": 0,
+    "enemy_force_rows": 178,
+    "verdict": "UNKNOWN_BUT_RESEARCH_CLOSED"
+  }
+}
