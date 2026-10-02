@@ -1,0 +1,7 @@
+# Official party-route admission review
+
+The official UI party flow was observed selecting Party and pressing Play in the dialog. The resulting page used the exact `https://kiomet.com/<six uppercase ASCII letters>/` route shape. This is route-shape evidence from ordinary UI navigation, not a URL-derived match or world certificate.
+
+`ClientExtractor.attach()` accepts only either the existing exact root URL `https://kiomet.com/` or a full-string match of `https://kiomet.com/[A-Z]{6}/`. The recorder uses that same `is_official_client_url()` helper when selecting a page, while retaining its existing context-0 selection and exactly-one-page ambiguity check. The route validator rejects query strings, fragments, ports, credentials, subdomains, percent-encoded path characters, alternate path depths, lowercase letters, and any other spelling. The synthetic test route `ABCDEF` is only a boundary-test value; no actual party path is recorded here.
+
+This change only removes the root-path assumption at the initial page admission check. `attach()` still requires exactly one official `client_bg.wasm` script and the pinned SHA-256 `fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c`, then retains its existing owner, memory, visibility, NETWORK, lifecycle, and freshness requirements. A matching URL alone does not qualify a page for world observation or control; all existing client and world guards remain necessary.

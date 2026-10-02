@@ -33,6 +33,16 @@ No milestone or performance claim is expanded by these changes. No live browser
 host remains active. See V2_M2A_LISTENER_INVENTORY_VALIDATION.json and
 V2_M2A_LISTENER_SOURCE_VALIDATION.json for portable hash-checked artifacts.
 
+## Official party-route checkpoint — 2026-10-02
+
+The restored three Luna workers completed bounded route support, owner/capacity/production audits and typed CanvasProps tracing. Root independently accepted the shared exact official party URL shape with the existing pinned-client, memory, source, lifecycle and visibility guards. A normal Party/Play flow then produced 21 canonical NETWORK samples in a finite five-second survey with zero control-readiness gaps. All 1,991 serialized UNKNOWN facts retained null values and their knowledge status; visible coverage is not a whole-world certificate. No troop command or observer arm was dispatched.
+
+A read-only friendly preflight found one positively visible Soldier pair with a before-snapshot direct route certificate. It remained CAPTURE_ONLY: future route, fuel and boosted-morale speed gates were retained. The subsequent execute attempt refused an absent owned lease before browser connection; the host terminal exit was independently confirmed. These observations add zero formal events or trajectories. Formal one-tick counts remain 1053/1053, ordinary arrival/capture 1/100, friendly/combat zero, newly qualified multi-event trajectories zero. M2A ordinary world complete remains NO, M2 NOT_YET_PASS, M3 NOT_STARTED.
+
+Current affected checks passed separately: 54 URL/observation/control/lifecycle tests and 67 recorder/route/input-entry/launch-audit tests. The earlier full v2 293-pass run below predates this route change and remains historical. No simulator performance rerun occurred; the historical quiet-world median of 51,135 states/s is not expanded-world performance qualification.
+
+Static proofs now tie the arriving Force owner to the ordinary setter candidate, verify Tank/Soldier incoming clipping and preexisting-overflow preservation, and put scheduled production before capture. The complete combat-winner mapping, actual Canvas handler binding, post-arrival path/fuel and changing aura/world admission remain separate unresolved gates. No speculative combat fix or synthetic formal case was added. See V2_M2A_PARTY_ROUTE_READINESS_VALIDATION.json and the owner, T/S capacity, production-order and typed Canvas constructor reviews. No browser host remains active.
+
 ## Current evidence and corrected accounting
 
 Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,
@@ -53,7 +63,7 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **293 passed, 1363 deselected**, including narrow
+Earlier full v2 regression run: **293 passed, 1363 deselected**, including narrow
 Shield-retaining rule/context, topology-only evidence and readiness-refusal
 regressions. The initial run had one temporary-directory setup error; after
 creating the workspace-local parent, the full rerun exited successfully. Prior

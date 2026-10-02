@@ -5,6 +5,7 @@ from dataclasses import replace
 import hashlib
 import math
 from pathlib import Path
+import re
 import time
 from uuid import uuid4
 import psutil
@@ -17,6 +18,12 @@ from .upgrades import UpgradeTracker
 from . import rules
 
 CLIENT_SHA256 = "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c"
+_OFFICIAL_CLIENT_URL = re.compile(r"https://kiomet\.com/(?:[A-Z]{6}/)?")
+
+
+def is_official_client_url(url):
+    """Accept only the official root page or the observed party route shape."""
+    return isinstance(url, str) and _OFFICIAL_CLIENT_URL.fullmatch(url) is not None
 
 
 async def connect_dedicated(pw, root):
@@ -266,7 +273,7 @@ class ClientExtractor:
     async def attach(self):
         if self.cdp is not None:
             raise RuntimeError("extractor already attached")
-        if self.page.url != "https://kiomet.com/":
+        if not is_official_client_url(self.page.url):
             raise ValueError("official client page required")
         self.cdp = await self.page.context.new_cdp_session(self.page)
         scripts = []

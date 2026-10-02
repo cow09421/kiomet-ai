@@ -1,0 +1,612 @@
+{
+  "QUESTION": "What normal UI scene choices appear after exactly one click on the visible Play with friends button?",
+  "BEFORE": "Main menu has visible Play and Play with friends; server/region selector was not displayed. No host currently owns the dedicated profile.",
+  "ACTION": {
+    "host_seconds_max": 90,
+    "join": false,
+    "observer": false,
+    "normal_button_click_limit": 1,
+    "normal_button_selector": "#play_with_friends_button",
+    "choices_selected": 0,
+    "invite_or_copy_actions": 0,
+    "troop_gestures": 0,
+    "normal_button_click_attempted": true,
+    "normal_button_click_completed": true
+  },
+  "EXPECTED": "Observe the indicated dialog and only visible labels; stop before choosing options, creating/joining any party, copying codes, or sending invitations.",
+  "OBSERVED": {
+    "url_path": "https://kiomet.com/play-with-friends/",
+    "document_origin_ms": 1790920155893,
+    "observer_present": false,
+    "controls": [
+      {
+        "tag": "INPUT",
+        "id": "alias_input",
+        "type": "text",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": "Nickname",
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_button",
+        "type": null,
+        "label": "Play",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_with_friends_button",
+        "type": null,
+        "label": "Play with friends",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Discord",
+        "title": "Discord",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Google Play",
+        "title": "Google Play",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "GitHub",
+        "title": "GitHub",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "YouTube",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Softbear",
+        "aria_label": "Softbear",
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Help",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Feedback",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Privacy",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Terms",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Sign in",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "候選人",
+        "aria_label": null,
+        "title": "Rank",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Language",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Volume",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Go offline",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Settings",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Day",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Week",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "All",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "x",
+        "type": null,
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "INPUT",
+        "id": "accept",
+        "type": "radio",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "type": "text",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": "Invite Code",
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "INPUT",
+        "id": "public",
+        "type": "radio",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "INPUT",
+        "id": "party",
+        "type": "radio",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "OK",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Cancel",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      }
+    ],
+    "headings": [
+      "Play with friends"
+    ],
+    "host_terminal_exit_code": 0,
+    "choices_selected": 0,
+    "network_first_click_effects": "UNKNOWN_NOT_MEASURED"
+  },
+  "SIMULATED": "NOT_APPLICABLE",
+  "DIFF": "One ordinary menu click; visible controls only; no choice, invite submission, clipboard action, storage read or actor/world access.",
+  "VERDICT": "ORDINARY_DIALOG_AND_PARTY_CHOICE_OBSERVED; NO_CHOICE_OR_CREATION_PERFORMED",
+  "lease_margin_ms": 71610,
+  "BEFORE_OBSERVED": {
+    "url_path": "https://kiomet.com/",
+    "document_origin_ms": 1790920155893,
+    "observer_present": false,
+    "controls": [
+      {
+        "tag": "INPUT",
+        "id": "alias_input",
+        "type": "text",
+        "label": "",
+        "aria_label": null,
+        "title": null,
+        "placeholder": "Nickname",
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_button",
+        "type": null,
+        "label": "Play",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "play_with_friends_button",
+        "type": null,
+        "label": "Play with friends",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Discord",
+        "title": "Discord",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "Google Play",
+        "title": "Google Play",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "",
+        "aria_label": "GitHub",
+        "title": "GitHub",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "YouTube",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Softbear",
+        "aria_label": "Softbear",
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Help",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Feedback",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Privacy",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Terms",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "Sign in",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "type": null,
+        "label": "候選人",
+        "aria_label": null,
+        "title": "Rank",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Language",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Volume",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Go offline",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": "button",
+        "label": "",
+        "aria_label": null,
+        "title": "Settings",
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Day",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "Week",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "type": null,
+        "label": "All",
+        "aria_label": null,
+        "title": null,
+        "placeholder": null,
+        "role": null,
+        "selected_option_labels": null
+      }
+    ],
+    "headings": []
+  },
+  "formal_credit": 0,
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/play-with-friends-options-20261002.json.gz",
+      "raw_sha256": "0d6470de105b61201e68a14df904b593ebe11c3315b2a06954c56ebd52df2736",
+      "compressed_sha256": "afffe469c65599aa603383884af0ff57708971c43ae8792b8fe6c8845a3d5935"
+    },
+    {
+      "file": "tests/fixtures/v2/play-with-friends-options-20261002.py.gz",
+      "raw_sha256": "d594c57543793c6fb3ef5cd4266b8b78e9716ebe0d2e381d9b1abec2be0d5dba",
+      "compressed_sha256": "dfc991bde2e8b60b71c30787b4165ef54340b288e3f4f7c7ab47583a6232f3d4"
+    },
+    {
+      "file": "tests/fixtures/v2/play-with-friends-options-plan-20261002.json.gz",
+      "raw_sha256": "80c2b4e8659f085b5b52bd37ca748d784dd16d1badcb7ad50ecb971dda6982b2",
+      "compressed_sha256": "511a02cc79a40442dd752167c0e0c550c529a09525b27dfb15d190c8ca668d5a"
+    }
+  ],
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0,
+  "formal_one_tick": {
+    "matched": 1053,
+    "total": 1053
+  },
+  "ordinary_events": 1,
+  "friendly_events": 0,
+  "combat_events": 0,
+  "new_multievent_trajectories": 0,
+  "M2A": "IN_PROGRESS",
+  "M2": "NOT_YET_PASS",
+  "M3": "NOT_STARTED"
+}

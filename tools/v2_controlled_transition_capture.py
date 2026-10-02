@@ -842,7 +842,9 @@ async def _sample_ready(extractor):
 async def run(args):
     import atexit
     import psutil
-    from kiomet_ai.v2.observe.extractor import ClientExtractor, connect_dedicated
+    from kiomet_ai.v2.observe.extractor import (
+        ClientExtractor, connect_dedicated, is_official_client_url,
+    )
     from playwright.async_api import async_playwright
 
     out = ROOT / "runtime/research/v2"
@@ -908,7 +910,7 @@ async def run(args):
     try:
         async with async_playwright() as pw:
             browser = await connect_dedicated(pw, ROOT)
-            pages = [p for p in browser.contexts[0].pages if p.url == "https://kiomet.com/"]
+            pages = [p for p in browser.contexts[0].pages if is_official_client_url(p.url)]
             if len(pages) != 1:
                 raise ValueError("dedicated official page absent or ambiguous")
             page = pages[0]
