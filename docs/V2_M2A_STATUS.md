@@ -51,6 +51,37 @@ The aura case's packed TowerId decomposition was independently corrected: world 
 
 The new terminal-result review establishes the local T/S result-code truth table under equal terminal vectors and signed score, independently checked by Luna. The Canvas factory trace now identifies a concrete constructor callback vtable and a tag-9 message producer. Its original scope callback and queue-to-app consumer binding remain unresolved. The saved document click handler is target-blind and flushes an opaque callback queue; it stays in the broad listener guard. No semantic WASM call, hidden actor read, arm, troop action, speculative core fix or M3 work follows from these static findings.
 
+## Restored Luna rolling checkpoint — callback metadata and cleanup order
+
+Three GPT-6 Luna workers have resumed bounded source research, independent review
+and artifact preparation. The restricted Tank/Soldier zero-score cleanup queue
+is now independently verified: little-endian [0,1] is reversed precisely when
+the defender has a pending-aware next candidate, matching Python's defender-first
+condition. This proves queue order only; held-casualty/vector equivalence and
+complete ordinary combat admission remain separate gates. See
+V2_M2A_TS_ZERO_SCORE_ITERATOR_ORDER_REVIEW.md. No combat default was enabled.
+
+The Canvas capture block's queue-related front words are proven, while matching
+receiver offsets, neighboring function-table entries and synthetic function names
+do not establish a common app receiver or the final listener-to-app route. Those
+aliases remain UNKNOWN. A finite metadata-only experiment refused the actual
+canvas handler identity before any closure-scope read, preserving the first
+failure OFFICIAL_CANVAS_HANDLER_IDENTITY_MISMATCH. Its pristine observer remained
+disarmed; zero mouse/troop commands and zero formal cases were added. Root confirmed
+host session 34938 terminal exit 0 and the absent lease after normal shutdown.
+The source-site guard was retained. No browser host remains active.
+The immutable helper, plan and sanitized refusal are independently hash/round-trip
+checked in V2_M2A_CANVAS_CALLBACK_METADATA_VALIDATION.json. This failed attempt
+read no closure descriptors; the planned successful path's transient CDP scope
+descriptor enumeration remains an explicitly recorded diagnostic limitation.
+
+Formal counts remain 1053/1053, ordinary arrival/capture 1/100, friendly/combat
+zero and newly qualified multi-event trajectories zero. The separately recorded
+54 and 67 affected test results remain the current route-change validation;
+this static/diagnostic checkpoint changes no production source and adds no test
+or expanded-world performance claim. Ordinary world complete remains NO,
+M2 NOT_YET_PASS and M3 NOT_STARTED.
+
 ## Current evidence and corrected accounting
 
 Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,

@@ -1,0 +1,89 @@
+{
+  "artifact": "M2A canvas callback metadata package validation",
+  "date": "2026-10-02",
+  "scope": "Independent packaging and static artifact validation only; no formal credit, listener topology qualification, or callback binding.",
+  "files": [
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-2-20261002.py",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-20261002/canvas-callback-scope-metadata-2-20261002.py.gz",
+      "raw_bytes": 21068,
+      "raw_sha256": "100ec4deb24e8cc70cc50c5b8be8af630c274096366c1150e1568ce81ecf669d",
+      "gzip_bytes": 5983,
+      "gzip_sha256": "60675f51efb33090f7c28a292fea465b18dffb7c4372199655248a2472a462b5",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "source_parse": "python_ast"
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-2-plan-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-20261002/canvas-callback-scope-metadata-2-plan-20261002.json.gz",
+      "raw_bytes": 6148,
+      "raw_sha256": "b04713f14f8723de97fb9c329bb2b139068a6771ded53baed6314536ebb97dad",
+      "gzip_bytes": 2610,
+      "gzip_sha256": "b8db1c590d5fbec46899fee12b8b3d8c82185afc5d2746f28b4357d8a127f46b",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "source_parse": "json_loads"
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-2-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-20261002/canvas-callback-scope-metadata-2-20261002.json.gz",
+      "raw_bytes": 6183,
+      "raw_sha256": "70909fac10cd5b0f464037296cb5e6ef0f85d8a3e0a2bce40377ca673caf73ae",
+      "gzip_bytes": 2638,
+      "gzip_sha256": "af9b801776c1e259a8a46fc56b2d94025db2a4c925d18d726dbb9e3fd6ed4e97",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "source_parse": "json_loads"
+    }
+  ],
+  "source_receipt_checks": {
+    "status": "FAIL_CLOSED",
+    "failure_stage": "OFFICIAL_CANVAS_LISTENER_LOOKUP",
+    "failure_class": "RuntimeError",
+    "failure_reason": "OFFICIAL_CANVAS_HANDLER_IDENTITY_MISMATCH",
+    "event_count": 0,
+    "callbacks": [],
+    "raw_closure_refs_persisted": false,
+    "result_source": "packaged source receipt; no reinterpretation"
+  },
+  "host_execution": {
+    "status": "PARENT_REPORTED_TERMINAL_EXIT_0",
+    "terminal_host_id": 34938,
+    "terminal_exit_code": 0,
+    "lease": "NONE",
+    "independent_verification": "NOT_PERFORMED; parent-reported only",
+    "live_run_by_reviewer": false
+  },
+  "reviewer_caveats": [
+    "CDP Runtime.getProperties on a Closure scope transiently returns all closure-binding descriptors; helper filters to state and does not follow or persist other binding values. This is narrower than requesting only one descriptor from CDP, but not a guarantee that CDP itself omitted other closure metadata.",
+    "The helper requires function/handler objectId fields for identity checks; unavailable IDs can cause a conservative OFFICIAL_CANVAS_HANDLER_IDENTITY_MISMATCH refusal even if logical function identity would otherwise match. This fail-closed refusal is not evidence of a missing canvas listener."
+  ],
+  "interpretation": {
+    "handler_rows": 0,
+    "scope_reads": 0,
+    "input_events": 0,
+    "listener_topology_qualified": false,
+    "callback_binding_proven": false,
+    "inner_callback_vtable": "UNKNOWN",
+    "formal_credit": 0
+  },
+  "validation": {
+    "all_gzip_mtimes_zero": true,
+    "all_roundtrips_exact": true,
+    "all_sources_parsed": true
+  },
+  "pinned_generated_javascript_sha256": "05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e",
+  "pinned_client_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "root_acceptance": {
+    "roundtrip_hash_length_mtime_parsing_checks": "PASS",
+    "actual_party_codes_present": false,
+    "terminal_session": 34938,
+    "terminal_exit_code": 0,
+    "lease_absent": true,
+    "first_refusal_preserved": true,
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0,
+    "pin_labels_corrected": "JS hash is distinct from WASM client hash"
+  }
+}
