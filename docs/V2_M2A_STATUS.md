@@ -106,6 +106,46 @@ this static/diagnostic checkpoint changes no production source and adds no test
 or expanded-world performance claim. Ordinary world complete remains NO,
 M2 NOT_YET_PASS and M3 NOT_STARTED.
 
+## Current Luna dispatch and authenticated outer callback — 2026-10-02
+
+The user reconfirmed Luna availability and immediate Luna-first rolling dispatch.
+All three existing GPT-6 Luna workers are active: bounded callback-tool
+construction, pinned shim/location source research, and independent tool review.
+Sol retains architecture, acceptance and integration. The unfinished phase-B
+draft was rejected because its paths and behavior still matched phase A;
+it was not run and the accepted phase-A receipt was preserved.
+
+A finite cohort-3 diagnostic independently confirmed all three actual Canvas
+mouse callback wrappers against pinned source/site/capture, stable logical
+function references, and the fixed outer adapter record. Closure state was
+reported only as sanitized predicates. It read zero control or actor memory
+bytes, sampled no world state, armed no observer and sent no input. The inner
+callback remains UNKNOWN_NOT_READ and the full listener topology is unqualified.
+Root verified host session 63273 terminal exit 0 and absent lease. The helper,
+plan and receipt are preserved as three gzip fixtures; Root reproduced hashes,
+lengths, parsing and the exact two-field receipt redaction. See
+V2_M2A_CANVAS_CALLBACK_METADATA_3_VALIDATION.json.
+
+The accepted static envelope review identifies only the dispatch word at +4
+as the minimal next control-metadata comparison, under separately verified live
+closure provenance and bounds. The +0 callback pointer and capture data must
+not be followed. The generated shim source hash and declaration are verified,
+while browser FunctionLocation column semantics remain uncertified pending
+bounded primary-source review. No prepared phase-B tool is accepted yet.
+
+The manual Soldier first-leg fuel proof separates launch initialization and
+preservation from arrival-time ownership, terminal-path, inventory and explicit
+no-line predicates. Launch facts do not establish those facts at arrival. The
+own-Ruler cache writer remains unidentified: event-vector append, chunk-event
+application and 56-byte player DTO copies do not prove a writer of the 64-byte
+World player slot. No private cache or hidden actor was read.
+
+Formal counts remain 1053/1053, ordinary arrival/capture 1/100, friendly/combat
+zero and newly qualified multi-event trajectories zero. This checkpoint changes
+no production code; the earlier 54 and 67 affected checks retain their recorded
+scope. No expanded-world performance measurement or new test claim is added.
+Ordinary world complete NO; M2 NOT_YET_PASS; M3 NOT_STARTED.
+
 ## Current evidence and corrected accounting
 
 Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,

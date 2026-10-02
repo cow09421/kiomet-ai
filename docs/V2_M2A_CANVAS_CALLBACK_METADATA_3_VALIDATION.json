@@ -1,0 +1,106 @@
+{
+  "artifact": "M2A canvas callback metadata cohort-3 fixture validation",
+  "date": "2026-10-02",
+  "scope": "Independent fixture packaging and artifact validation; no live host access, formal credit, listener topology qualification, or inner callback binding.",
+  "pinned_generated_javascript_sha256": "05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e",
+  "pinned_client_wasm_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+  "files": [
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-3-20261002.py",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-3-20261002/canvas-callback-scope-metadata-3-20261002.py.gz",
+      "source_raw_bytes": 23555,
+      "source_raw_sha256": "11094c7f5a1f0de195f8b408c1c3e6099b03e55d3dd1a3695d8e665b7b0f4e5e",
+      "packaged_raw_bytes": 23555,
+      "packaged_raw_sha256": "11094c7f5a1f0de195f8b408c1c3e6099b03e55d3dd1a3695d8e665b7b0f4e5e",
+      "gzip_bytes": 6399,
+      "gzip_sha256": "80930f2cfbae5cec6551651b8a3d19343c8dcf33d0b238a041fc8a5b57e403ac",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed_as": "python_ast",
+      "redacted_fields": []
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-3-plan-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-3-20261002/canvas-callback-scope-metadata-3-plan-20261002.json.gz",
+      "source_raw_bytes": 7323,
+      "source_raw_sha256": "59f091f1ac59f72635a1d7cf770559755a0173173e7a072c6738d80c64b6b436",
+      "packaged_raw_bytes": 7323,
+      "packaged_raw_sha256": "59f091f1ac59f72635a1d7cf770559755a0173173e7a072c6738d80c64b6b436",
+      "gzip_bytes": 2988,
+      "gzip_sha256": "b1b41a1bf8765d6219aa33473d5340db4cac805300343928d098310ab861ca60",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed_as": "json_loads",
+      "redacted_fields": []
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-scope-metadata-3-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-callback-metadata-3-20261002/canvas-callback-scope-metadata-3-20261002.json.gz",
+      "source_raw_bytes": 9677,
+      "source_raw_sha256": "a7b86b18f56f47b08787e0819c95d30fd54c5724b3014892f22af2386628fe33",
+      "packaged_raw_bytes": 9416,
+      "packaged_raw_sha256": "cda835e9fdd444d0bd8cb44e712690d57fb734d1fb77fb0117b293ad5ac5521c",
+      "gzip_bytes": 3337,
+      "gzip_sha256": "5388244529f4171da31d960eeb1d309ef7760b24bfd17558c254ce0fdbeddfd8",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed_as": "json_loads",
+      "redacted_fields": [
+        "BEFORE.document_id",
+        "BEFORE.time_origin_ms"
+      ]
+    }
+  ],
+  "phase_a_receipt_checks": {
+    "status": "SANITIZED_METADATA_CAPTURED",
+    "verified_official_canvas_mouse_handlers": 3,
+    "events": [
+      "mousemove",
+      "mousedown",
+      "mouseup"
+    ],
+    "source_site_capture_and_function_reference_checks": true,
+    "fixed_adapter_record_matches_all_three": true,
+    "outer_closure_state_sanitized_fields": [
+      "a_nonzero",
+      "b_matches_fixed_adapter_0x13e700",
+      "cnt_positive",
+      "dtor_absent"
+    ],
+    "inner_callback_vtable": "UNKNOWN_NOT_READ",
+    "full_listener_topology_qualified": false,
+    "raw_closure_refs_persisted": false,
+    "world_state_sampled": false,
+    "observer_pristine_before_and_after": true,
+    "input_arms_gestures_handler_invocations_application_wasm_invocations_memory_dereferences": 0,
+    "formal_credit": 0
+  },
+  "host_termination": {
+    "status": "PARENT_VERIFIED_NORMAL_STOP",
+    "terminal_exit_code": 0,
+    "lease_absent": true,
+    "evidence_source": "parent-reported terminal check; not independently rechecked by packaging reviewer"
+  },
+  "reviewer_caveats": [
+    "CDP Runtime.getProperties on a Closure scope transiently returns all binding descriptors; the helper filters to the state binding and does not follow or persist the other values. This does not mean CDP itself omitted their descriptors.",
+    "The packaged copy omits transient BEFORE.document_id and BEFORE.time_origin_ms. The original source receipt remains unchanged; source and packaged hashes are both recorded."
+  ],
+  "validation": {
+    "all_gzip_mtimes_zero": true,
+    "all_gzip_roundtrips_exact_to_packaged_bytes": true,
+    "helper_ast_parsed": true,
+    "plans_and_receipt_json_parsed": true
+  },
+  "root_acceptance": {
+    "hash_length_mtime_parsing_checks": "PASS",
+    "redaction_exactly_reproduced": true,
+    "all_three_wrappers_and_logical_reference_checks": true,
+    "host_session": 63273,
+    "host_terminal_exit_code": 0,
+    "lease_absent": true,
+    "actor_or_control_memory_bytes_read": 0,
+    "inner_vtable_still_unknown": true,
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0
+  }
+}
