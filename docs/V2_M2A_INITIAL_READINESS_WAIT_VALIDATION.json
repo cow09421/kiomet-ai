@@ -1,0 +1,52 @@
+{
+  "status": "ROOT_ACCEPTED_BOUNDED_INITIAL_READINESS_WAIT",
+  "QUESTION": "Can execution wait briefly before its first selection without replacing unknown facts, changing identity, or exceeding the existing cohort deadline?",
+  "BEFORE": "Default single-sample readiness refusal; unknown visible-force endpoints prevent controlled friendly experiments.",
+  "ACTION": "Luna implemented explicit optional wait 0..10 seconds; root reviewed runner ordering and independently ran affected control regression modules.",
+  "EXPECTED": "Default zero retains existing behavior; positive wait journals each rejection and validates one unchanged session and explicit pair before selection.",
+  "OBSERVED": {
+    "root_tests": {
+      "passed": 67,
+      "modules": [
+        "test_v2_controlled_capture.py",
+        "test_v2_direct_route_certificate.py",
+        "test_v2_input_entry_capture.py",
+        "test_v2_controlled_launch_audit.py"
+      ]
+    },
+    "live_hosts": 0,
+    "troop_gestures": 0,
+    "observer_arms": 0,
+    "before_first_selection_deadline_gate": true,
+    "default_zero_scenario_before_readiness": true,
+    "shared_memory_and_broad_listener_guards": "UNCHANGED",
+    "local_wait_deadline_gate": true,
+    "elapsed_metadata": "ACTUAL_MEASURED_NOT_CLIPPED"
+  },
+  "SIMULATED": "Synthetic asynchronous test sequences only; no live transition or formal simulator differential admitted.",
+  "DIFF": "Readiness can become ready naturally in the same known live session. A sample reaching either the local wait deadline or total cohort deadline is durably rejected; unknown endpoints and all other control guards still refuse.",
+  "VERDICT": "ACCEPT_TOOLING_CHANGE; M2A IN_PROGRESS; M2 NOT_YET_PASS; M3 NOT_STARTED",
+  "formal_one_tick": {
+    "matched": 1053,
+    "total": 1053
+  },
+  "ordinary_events": 1,
+  "friendly_events": 0,
+  "combat_events": 0,
+  "new_multievent_trajectories": 0,
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0,
+  "full_v2_suite_rerun": false,
+  "full_v2_last_checkpoint_passed": 293,
+  "source_sha256": {
+    "tools/v2_controlled_transition_capture.py": "bb95fb40f72241ff1d9ab3fc0bad4f3c174c1af166f4eff837d8178e6e9cda0b",
+    "tests/test_v2_controlled_capture.py": "60903dc1fe99b78d058438004d43dad66420b3fdf8713261c4f3d5c6cf4127ed",
+    "docs/V2_M2A_INITIAL_READINESS_WAIT.md": "bcd458392df323b10c277a2a7794f94b02f96202f5987cda62dc5eaa09db8af4"
+  },
+  "main_preserved": "234cfad918381adfd2a48a183ca17d35b64970e0",
+  "limits": [
+    "No guarantee a live session becomes ready.",
+    "No changes to after-selection or armed-action retry behavior.",
+    "No callback-binding, aura-refresh currentness, or world-continuity proof supplied by this wait."
+  ]
+}

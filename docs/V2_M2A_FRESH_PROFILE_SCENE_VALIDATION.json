@@ -1,0 +1,93 @@
+{
+  "status": "FRESH_PROFILE_AND_ONE_WHEEL_DO_NOT_RESOLVE_ENDPOINT_READINESS",
+  "QUESTION": "Does one ordinary zoom-out reveal missing visible-force endpoints in the fresh owned profile?",
+  "BEFORE": "Previous2hosts sameplayer31 refused unknownvisibleforceendpoints; originalprojectprofile whollypreserved",
+  "ACTION": {
+    "fresh_owned_network_host": 1,
+    "seconds_max": 180,
+    "new_player": 107,
+    "previous_player": 31,
+    "normal_wheels": 1,
+    "delta_y": 240,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "host_terminal_exit_code": 0
+  },
+  "EXPECTED": "If missing endpoints were only outside the viewport, one normal zoom-out could clear readiness; all required facts must remain observed before any selection or arm.",
+  "OBSERVED": {
+    "fresh_preview_gaps": [
+      "force:0:source",
+      "force:1:source",
+      "force:19:source",
+      "force:20:destination",
+      "force:21:destination"
+    ],
+    "before_wheel_gaps": [
+      "force:2:source",
+      "force:3:source",
+      "force:20:destination",
+      "force:21:source",
+      "force:22:source",
+      "force:23:source",
+      "force:24:destination",
+      "force:25:source",
+      "force:30:source"
+    ],
+    "after_wheel_gaps": [
+      "force:2:source",
+      "force:22:destination",
+      "force:23:source",
+      "force:24:destination",
+      "force:25:destination",
+      "force:26:destination",
+      "force:27:source"
+    ],
+    "post_wheel_samples": 34,
+    "towers_after": 35,
+    "own_sources_near_visible_Ruler": "actualOBSERVED MORALE_BOOST=true; knowntrue is notunknown",
+    "observer_before_after": "DISARMED armed_onceFalse",
+    "original_profile_restored": true,
+    "fresh_profile_preserved": "runtime/browser-profile-fresh-m2a-20261002",
+    "profile_contents_read": false,
+    "fog_vs_viewport_endpoint_cause": "UNKNOWN"
+  },
+  "SIMULATED": "NOT_APPLICABLE; no troop gesture or admitted input/arrival transition",
+  "DIFF": "Unknownforceendpointguards retained; one wheel and newordinaryplayer did not clear readiness",
+  "VERDICT": "Stop viewport/profile retries for thisdiagnosis; pursue callbackbinding, bounded pre-input readiness waiting, ordinarycombat rules",
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/fresh-profile-preview-20261002.json.gz",
+      "raw_sha256": "449e97c98248a52edef08e6ac85fe438f50f50fca652f8349dfa0da5f5463163",
+      "compressed_sha256": "904d1f8f01797d98b3f11d9e6324af02df549dce800e74b968867c682bc0f234"
+    },
+    {
+      "file": "tests/fixtures/v2/fresh-profile-one-wheel-20261002.py.gz",
+      "raw_sha256": "82ed01d3c496d322b0ee324ee36d6a6d327d5cee1e24c61614703d74bf7df727",
+      "compressed_sha256": "b40b4498b7942487a57f75dee515ebaadcbc30fe17d22ebedb4d4eac399e468d"
+    },
+    {
+      "file": "tests/fixtures/v2/fresh-profile-one-wheel-20261002.json.gz",
+      "raw_sha256": "a2c9d9f208a28aadfef2c57b5cc079e2882834d3b1e5417aa0a890cc6b401dd3",
+      "compressed_sha256": "8b523a8ada2cccfa6b92e8ff6456704af5f20f3a4d2ede12002fd6ba851c6dc5"
+    },
+    {
+      "file": "tests/fixtures/v2/fresh-profile-cohort-plan-20261002.json.gz",
+      "raw_sha256": "a28d2f7a1c4268b7cf63df9a884c5418f630276ff8cb3fe9c728b35f77d646f1",
+      "compressed_sha256": "fcb5b8f66066b4ed99962f3158c2565e40da8c09b54c15b2e3c2af1bec76006b"
+    }
+  ],
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0,
+  "formal_one_tick": {
+    "matched": 1053,
+    "total": 1053
+  },
+  "ordinary_events": 1,
+  "friendly_events": 0,
+  "combat_events": 0,
+  "new_multievent_trajectories": 0,
+  "M2A": "IN_PROGRESS",
+  "M2": "NOT_YET_PASS",
+  "M3": "NOT_STARTED",
+  "main_preserved": "234cfad918381adfd2a48a183ca17d35b64970e0"
+}

@@ -1,0 +1,21 @@
+# M2A server and region selection review
+
+**Result: UNKNOWN; no ordinary server or region selector is evidenced by the retained menu material.** The pinned public client UI source wires its main menu Play overlay to a `Spawn(alias)` event, then sends `Command::Spawn(alias)`. Its visible app-level props contain no server or region selection. This supports the ordinary matchmaking path, but does not prove that no selector exists inside the external `SpawnOverlay` component or another current production menu element.
+
+## Evidence inspected
+
+- The public client UI renders `SpawnOverlay {on_play}` when the player is not alive; `on_play` reforms the UI event to `KiometUiEvent::Spawn`. The game handler sends `Command::Spawn(alias)`. See `vendor/kiomet-ref/client/src/ui/game_ui.rs` around lines 81 and 154–167, and `vendor/kiomet-ref/client/src/game.rs` around lines 704–705. In this app layer, only the alias is passed through the Play handler.
+- Public game constants set `geodns_enabled: true` and list internal server names (`Asgard`, `Camelot`, `Olympus`, `Svarga`, `Valhalla`), while the server service declares a temporary-server limit. These are server configuration values; the inspected menu code does not bind them to a player-facing selector. See `vendor/kiomet-ref/common/src/lib.rs` around lines 46–49 and `vendor/kiomet-ref/server/src/service.rs` around line 67.
+- The pinned client WASM contains internal strings and symbols such as `available_servers`, `arena_id`, `cohort_id`, `server_id`, `ClientContext::choose_server_id`, `CommonSettings::set_server_id`, and `Unknown server`. The retained WAT places a `choose_server_id` call inside `ClientBroker::socket_update`. These establish internal server negotiation/configuration paths, not a user-facing control or safe UI action. The WASM string `public_server` also has no retained menu binding. I did not invoke these functions.
+- The older retained spectator feasibility review records `https://kiomet.com/` without a match query or fragment, and `#play_button` as “Play Again”; it describes Play as server matchmaking rather than joining a selected match. That review rules against an evidenced match-ID join path, but did not inventory every current menu control. See `docs/spectator_camera_blocker.md` around lines 25–48.
+- The fresh-profile cohort produced player 107 instead of the earlier player 31, but its saved preview was captured after joining. Its retained DOM metadata contains the page title, root path, canvas and an empty heading list; it does not contain a main-menu control inventory. The one normal wheel event did not clear the force endpoint gaps. See `runtime/research/v2/fresh-profile-cohort-plan-20261002.json` and `runtime/research/v2/fresh-profile-preview-20261002.json`.
+
+The vendored source is read-only semantic reference and is not a production UI census. The external `SpawnOverlay` implementation is not present in the inspected client source tree, and retained DOM metadata does not include every visible button, form control, option, or link. Therefore the review does not claim that a selector is absent.
+
+## Narrow follow-up if a selector is needed
+
+Use one finite, read-only visit to the normal menu with `--join` omitted and no observer. Inventory only currently visible menu text, buttons, links, selects, and their visible labels/targets. Do not click controls, inspect storage or credentials, invoke server-ID functions, or infer a region from server names. If the visible menu exposes a selector, record its exact ordinary UI path and displayed choices. If it does not, keep server/region choice unknown and stop; do not try URL parameters or hidden settings.
+
+Even a confirmed selector would only provide a scene choice. It would not clear unknown force endpoints or establish `PLAYER_VISIBLE_COMPLETE` control readiness. Preserve the current force-member readiness checks, and treat the fresh profile's observed own-source `MORALE_BOOST=true` as an actual fact that excludes any scenario requiring a known-false source; do not relabel that observation as unknown or unsupported.
+
+No host was started, no menu or game input was sent, and no credentials or browser storage were read for this review.

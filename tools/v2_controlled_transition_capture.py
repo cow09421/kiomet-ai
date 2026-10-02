@@ -189,6 +189,98 @@ def _preflight_identity(state):
     return identity
 
 
+def _readiness_wait_identity(state):
+    """Identity that an initial-readiness wait is allowed to remain within."""
+    identity = _preflight_identity(state)
+    source_mode = getattr(getattr(state, "source_mode", None), "value", None)
+    if identity is None or source_mode is None:
+        return None
+    return (*identity, source_mode)
+
+
+def _wait_ready_seconds(value):
+    if type(value) is not int or not 0 <= value <= 10:
+        raise ValueError("wait_ready_seconds must be an exact integer from 0 to 10")
+    return value
+
+
+async def wait_initial_readiness(extractor, initial_state, initial_raw, *, wait_seconds,
+                                 total_deadline, persist_rejection,
+                                 clock=time.monotonic,
+                                 host_now_ms=lambda: time.monotonic_ns() // 1_000_000,
+                                 sleep=asyncio.sleep):
+    """Wait only before first selection, staying within one known live session.
+
+    Every unready sample is synchronously persisted before another sample can
+    be requested. Returns the newest snapshot and its exact readiness gaps.
+    """
+    wait_seconds = _wait_ready_seconds(wait_seconds)
+    baseline = _readiness_wait_identity(initial_state)
+    current, current_raw = initial_state, initial_raw
+    attempts = 0
+
+    def inspect(state, raw, *, deadline_exhausted=False, wait_deadline_exhausted=False):
+        nonlocal attempts
+        now_ms = host_now_ms()
+        gaps = list(control_readiness_gaps(state, now_ms))
+        if baseline is None:
+            gaps.append("initial_identity_unknown")
+        elif _readiness_wait_identity(state) != baseline:
+            gaps.append("initial_identity_changed")
+        if deadline_exhausted:
+            gaps.append("total_deadline_exhausted")
+        if wait_deadline_exhausted:
+            gaps.append("wait_deadline_exhausted")
+        if gaps:
+            persist_rejection(initial_readiness_rejection_record(state, raw, gaps, now_ms))
+        return gaps
+
+    gaps = inspect(current, current_raw,
+        deadline_exhausted=(wait_seconds > 0 and clock() >= total_deadline))
+    if not gaps:
+        return current, current_raw, gaps, {"sample_attempts": attempts, "waited_seconds": 0.0}
+    if (wait_seconds == 0 or baseline is None or
+            getattr(getattr(initial_state, "lifecycle", None), "value", None) != Lifecycle.IN_MATCH or
+            getattr(getattr(initial_state, "source_mode", None), "value", None) != "NETWORK"):
+        return current, current_raw, gaps, {"sample_attempts": attempts, "waited_seconds": 0.0}
+
+    started = clock()
+    deadline = min(started + wait_seconds, total_deadline)
+    while clock() < deadline:
+        remaining = deadline - clock()
+        if remaining <= 0:
+            break
+        try:
+            current, current_raw = await asyncio.wait_for(_sample_ready(extractor), timeout=remaining)
+        except asyncio.TimeoutError:
+            break
+        attempts += 1
+        gaps = inspect(current, current_raw,
+            deadline_exhausted=(clock() >= total_deadline),
+            wait_deadline_exhausted=(clock() >= started + wait_seconds))
+        if "initial_identity_changed" in gaps:
+            break
+        if "total_deadline_exhausted" in gaps or "wait_deadline_exhausted" in gaps:
+            break
+        if not gaps:
+            break
+        remaining = deadline - clock()
+        if remaining > 0:
+            await sleep(min(0.1, remaining))
+    wait_expired = clock() >= started + wait_seconds
+    total_expired = clock() >= total_deadline
+    if ((wait_expired and "wait_deadline_exhausted" not in gaps) or
+            (total_expired and "total_deadline_exhausted" not in gaps)):
+        gaps = inspect(current, current_raw, deadline_exhausted=total_expired,
+                       wait_deadline_exhausted=wait_expired)
+    return current, current_raw, gaps, {
+        "sample_attempts": attempts,
+        "waited_seconds": max(0.0, clock() - started),
+        "wait_limit_seconds": wait_seconds,
+        "deadline_remaining_seconds": max(0.0, total_deadline - clock()),
+    }
+
+
 def _bounded_warm_seconds(value):
     if (isinstance(value, bool) or not isinstance(value, (int, float)) or
             not math.isfinite(value) or value < 0):
@@ -871,6 +963,27 @@ async def run(args):
                 elif args.source is None or args.destination is None:
                     raise ValueError("supply one observed --source and --destination pair; no automatic target search")
                 else:
+                    if args.execute:
+                        wait_seconds = _wait_ready_seconds(getattr(args, "wait_ready_seconds", 0))
+
+                        if wait_seconds:
+                            def persist_initial_rejection(record):
+                                with path.open("a", encoding="utf8") as stream:
+                                    durable_before(stream, record)
+
+                            initial, initial_raw, gaps, _wait_metadata = await wait_initial_readiness(
+                                ex, initial, initial_raw,
+                                wait_seconds=wait_seconds,
+                                total_deadline=started + args.seconds,
+                                persist_rejection=persist_initial_rejection)
+                            persist_initial_rejection({"kind": "INITIAL_READINESS_WAIT",
+                                "status": "READY" if not gaps else "NOT_READY",
+                                "wait_limit_seconds": wait_seconds,
+                                "wait_metadata": _wait_metadata,
+                                "snapshot": _preflight_snapshot_metadata(initial),
+                                "input_sent": False})
+                            if gaps:
+                                raise ValueError("control readiness gaps: " + ",".join(gaps))
                     initial_check = validate_scenario(initial, args.source, args.destination)
                     if isinstance(initial_check, str):
                         exclusions.append({"source": args.source, "destination": args.destination,
@@ -891,7 +1004,7 @@ async def run(args):
                             stream.flush()
                         events.append(plan)
                 else:
-                    with path.open("w", encoding="utf8") as stream:
+                    with path.open("a", encoding="utf8") as stream:
                         checked, before = initial_check, initial
                         if args.input_entry_observer:
                             durable_before(stream, {"kind": "INPUT_ENTRY_STARTUP_PROOF",
@@ -927,6 +1040,12 @@ async def run(args):
                         sx, sy = project(source, initial_raw)
                         if not safe_point(sx, sy):
                             raise ValueError("source_outside_safe_canvas")
+                        if (getattr(args, "wait_ready_seconds", 0) and
+                                time.monotonic() >= started + args.seconds):
+                            deadline_ms = time.monotonic_ns() // 1_000_000
+                            durable_before(stream, initial_readiness_rejection_record(
+                                before, initial_raw, ("total_deadline_exhausted",), deadline_ms))
+                            raise ValueError("control readiness wait exhausted total cohort deadline before selection")
                         selection = initial_raw.get("selected_tower")
                         if selection != source.id:
                             durable_before(stream, {"kind": "SELECTION_INTENT", "source": source.id,
@@ -1262,6 +1381,8 @@ def parse_args(argv=None):
         help="preview currently visible eligible friendly Soldier pairs without sending input")
     parser.add_argument("--input-entry-observer", action="store_true",
         help="require a headless lease with the pre-start input-entry observer and adopt buffered event samples")
+    parser.add_argument("--wait-ready-seconds", type=int, default=0,
+        help="optional 0..10 second initial readiness wait before first selection (execute mode only)")
     parser.add_argument("--source", type=int, help="operator-selected positively visible own source")
     parser.add_argument("--destination", type=int, help="operator-selected adjacent own or empty neutral destination")
     parser.add_argument("--max-commands", type=int, default=1)
@@ -1271,6 +1392,10 @@ def parse_args(argv=None):
         parser.error("--max-commands must be 1..6")
     if not 5 <= args.seconds <= 180:
         parser.error("--seconds must be 5..180")
+    if type(args.wait_ready_seconds) is not int or not 0 <= args.wait_ready_seconds <= 10:
+        parser.error("--wait-ready-seconds must be an exact integer from 0 to 10")
+    if args.wait_ready_seconds and not args.execute:
+        parser.error("--wait-ready-seconds requires --execute")
     if args.execute and (args.source is None or args.destination is None):
         parser.error("--execute requires explicit --source and --destination")
     if args.preflight and (args.execute or args.source is not None or args.destination is not None):

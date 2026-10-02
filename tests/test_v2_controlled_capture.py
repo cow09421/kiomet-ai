@@ -19,7 +19,7 @@ from tools.v2_controlled_transition_capture import (
     record_before_gesture, require_deselected_selection_evidence,
     supply_line_guard_passed, validate_fresh_intent,
     validate_scenario, friendly_candidate_preflight, warm_friendly_candidate_preflight,
-    parse_args, apply_preflight_hit_tests,
+    parse_args, apply_preflight_hit_tests, wait_initial_readiness,
 )
 
 
@@ -247,6 +247,169 @@ def test_preflight_rejects_invalid_warm_bounds(value):
         asyncio.run(warm_friendly_candidate_preflight(None, object(), {}, {}, warm_seconds=value))
 
 
+def _wait_state(sequence=1, *, match="match-A", lifecycle=Lifecycle.IN_MATCH,
+                mode="NETWORK", ready=False):
+    return NS(document_id="doc-A", match_id=fact(match), player_id=fact(7),
+        lifecycle=fact(lifecycle), source_mode=fact(mode), sequence=sequence,
+        ready=ready)
+
+
+def test_initial_readiness_wait_journals_gap_then_returns_same_identity_ready_sample(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda current, _now: () if current.ready else ("force:0:source",))
+    clock = [0.0]
+    receipts = []
+
+    async def sleep(seconds):
+        clock[0] += seconds
+
+    class Extractor:
+        calls = 0
+
+        async def sample(self):
+            self.calls += 1
+            return _wait_state(2, ready=True), {"selected_tower": None}
+
+    initial = _wait_state()
+    extractor = Extractor()
+    latest, raw, gaps, metadata = asyncio.run(wait_initial_readiness(
+        extractor, initial, {"selected_tower": None, "transport_mode": "NETWORK"},
+        wait_seconds=2, total_deadline=5, persist_rejection=receipts.append,
+        clock=lambda: clock[0], host_now_ms=lambda: 1000, sleep=sleep))
+    assert latest.sequence == 2 and raw["selected_tower"] is None and not gaps
+    assert extractor.calls == 1 and len(receipts) == 1
+    assert receipts[0]["kind"] == "INITIAL_READINESS_REJECTION"
+    assert receipts[0]["gaps"] == ["force:0:source"]
+    assert metadata["sample_attempts"] == 1
+
+
+def test_initial_readiness_wait_timeout_preserves_each_rejection_and_total_deadline(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda *_args: ("forces",))
+    clock = [0.0]
+    receipts = []
+
+    async def sleep(seconds):
+        clock[0] += seconds
+
+    class Extractor:
+        calls = 0
+
+        async def sample(self):
+            self.calls += 1
+            return _wait_state(self.calls + 1), {"selected_tower": None}
+
+    extractor = Extractor()
+    latest, _raw, gaps, metadata = asyncio.run(wait_initial_readiness(
+        extractor, _wait_state(), {"selected_tower": None}, wait_seconds=8,
+        total_deadline=0.25, persist_rejection=receipts.append, clock=lambda: clock[0],
+        host_now_ms=lambda: 1000, sleep=sleep))
+    assert gaps == ["forces", "total_deadline_exhausted"]
+    assert latest.sequence == extractor.calls + 1
+    assert len(receipts) == extractor.calls + 2  # initial, samples, and durable deadline refusal
+    assert all(row["kind"] == "INITIAL_READINESS_REJECTION" for row in receipts)
+    assert receipts[-1]["gaps"] == ["forces", "total_deadline_exhausted"]
+    assert metadata["waited_seconds"] <= 0.25
+
+
+@pytest.mark.parametrize("changed", [
+    {"match": "match-B"},
+    {"mode": "REPLAY"},
+    {"lifecycle": Lifecycle.RESULT},
+])
+def test_initial_readiness_wait_stops_on_identity_or_lifecycle_change(monkeypatch, changed):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda current, _now: ("forces",) if current.sequence == 1 else ())
+    receipts = []
+
+    class Extractor:
+        async def sample(self):
+            return _wait_state(2, **changed), {"selected_tower": None}
+
+    latest, _raw, gaps, metadata = asyncio.run(wait_initial_readiness(
+        Extractor(), _wait_state(), {"selected_tower": None}, wait_seconds=5,
+        total_deadline=10, persist_rejection=receipts.append,
+        clock=lambda: 0.0, host_now_ms=lambda: 1000))
+    assert latest.sequence == 2
+    assert gaps == ["initial_identity_changed"]
+    assert len(receipts) == 2 and receipts[-1]["gaps"] == ["initial_identity_changed"]
+    assert metadata["sample_attempts"] == 1
+
+
+def test_initial_readiness_wait_default_zero_checks_once_and_missing_facts_stay_unready(monkeypatch):
+    calls = []
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda current, _now: calls.append(current.sequence) or ("forces",))
+    receipts = []
+
+    class NeverSample:
+        async def sample(self):
+            raise AssertionError("zero wait must not resample")
+
+    latest, _raw, gaps, metadata = asyncio.run(wait_initial_readiness(
+        NeverSample(), _wait_state(), {}, wait_seconds=0, total_deadline=10,
+        persist_rejection=receipts.append, host_now_ms=lambda: 1000))
+    assert latest.sequence == 1 and gaps == ["forces"]
+    assert calls == [1] and len(receipts) == 1 and metadata["sample_attempts"] == 0
+
+
+def test_initial_readiness_wait_refuses_ready_snapshot_at_total_deadline(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda *_args: ())
+    receipts = []
+    latest, _raw, gaps, _metadata = asyncio.run(wait_initial_readiness(
+        None, _wait_state(ready=True), {}, wait_seconds=2, total_deadline=5,
+        persist_rejection=receipts.append, clock=lambda: 5.0, host_now_ms=lambda: 1000))
+    assert latest.ready and gaps == ["total_deadline_exhausted"]
+    assert len(receipts) == 1 and receipts[0]["gaps"] == ["total_deadline_exhausted"]
+
+
+def test_initial_readiness_wait_refuses_sample_that_becomes_ready_at_total_deadline(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda current, _now: ("forces",) if not current.ready else ())
+    clock = [0.0]
+    receipts = []
+
+    class Extractor:
+        async def sample(self):
+            clock[0] = 1.0
+            return _wait_state(2, ready=True), {"selected_tower": None}
+
+    latest, _raw, gaps, _metadata = asyncio.run(wait_initial_readiness(
+        Extractor(), _wait_state(), {}, wait_seconds=2, total_deadline=1.0,
+        persist_rejection=receipts.append, clock=lambda: clock[0],
+        host_now_ms=lambda: 1000))
+    assert latest.ready and gaps == ["total_deadline_exhausted"]
+    assert len(receipts) == 2 and receipts[-1]["gaps"] == ["total_deadline_exhausted"]
+
+
+def test_initial_readiness_wait_refuses_ready_sample_at_wait_deadline(monkeypatch):
+    monkeypatch.setattr("tools.v2_controlled_transition_capture.control_readiness_gaps",
+        lambda current, _now: ("forces",) if not current.ready else ())
+    clock = [0.0]
+    receipts = []
+
+    class Extractor:
+        async def sample(self):
+            clock[0] = 1.0
+            return _wait_state(2, ready=True), {"selected_tower": None}
+
+    latest, _raw, gaps, metadata = asyncio.run(wait_initial_readiness(
+        Extractor(), _wait_state(), {}, wait_seconds=1, total_deadline=10,
+        persist_rejection=receipts.append, clock=lambda: clock[0],
+        host_now_ms=lambda: 1000))
+    assert latest.ready and gaps == ["wait_deadline_exhausted"]
+    assert len(receipts) == 2 and receipts[-1]["gaps"] == ["wait_deadline_exhausted"]
+    assert metadata["waited_seconds"] == 1.0
+
+
+@pytest.mark.parametrize("value", [True, False, 1.0, "1", -1, 11])
+def test_initial_readiness_wait_bound_requires_exact_integer(value):
+    with pytest.raises(ValueError, match="exact integer"):
+        asyncio.run(wait_initial_readiness(None, _wait_state(), {}, wait_seconds=value,
+            total_deadline=10, persist_rejection=lambda _record: None))
+
+
 def test_preflight_cli_cannot_be_combined_with_actions_or_endpoints():
     preview = parse_args(["--preflight"])
     assert preview.preflight and not preview.execute
@@ -254,6 +417,14 @@ def test_preflight_cli_cannot_be_combined_with_actions_or_endpoints():
         parse_args(["--preflight", "--execute", "--source", "1", "--destination", "2"])
     with pytest.raises(SystemExit):
         parse_args(["--preflight", "--source", "1", "--destination", "2"])
+    assert parse_args(["--execute", "--source", "1", "--destination", "2"]).wait_ready_seconds == 0
+    assert parse_args(["--execute", "--source", "1", "--destination", "2",
+                       "--wait-ready-seconds", "2"]).wait_ready_seconds == 2
+    with pytest.raises(SystemExit):
+        parse_args(["--source", "1", "--destination", "2", "--wait-ready-seconds", "1"])
+    with pytest.raises(SystemExit):
+        parse_args(["--execute", "--source", "1", "--destination", "2",
+                    "--wait-ready-seconds", "11"])
 
 
 def test_refuses_nonempty_neutral_weapons_ruler_morale_and_overflow():
