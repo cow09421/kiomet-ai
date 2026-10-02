@@ -1,0 +1,313 @@
+{
+  "status": "ACCEPTED_ANALYSIS_ONLY",
+  "analysis_version": "force-appearance-causality-v1",
+  "fixed_universe": {
+    "authority": "tests/fixtures/v2/coverage-denominator-edges.jsonl.gz",
+    "coverage_report": "docs/V2_M2A_COVERAGE_DENOMINATOR.json",
+    "fixture_rows": 13059,
+    "appearance_candidate_edges": 646,
+    "appearance_candidate_entities": 694,
+    "cohort_count": 6,
+    "not_the_legacy_13_case_set": true
+  },
+  "git_state_before_artifacts": {
+    "head": "ebffa6407069b83ea87211416a4e37d769d0bd95",
+    "branch": "v2-rebuild",
+    "dirty": true,
+    "status_porcelain": [
+      "?? docs/V2_M2A_ENDPOINT_AUDIT_METHOD.md",
+      "?? docs/V2_M2A_HORIZON_BASELINES.json",
+      "?? docs/V2_M2A_HORIZON_BASELINES.md",
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md",
+      "?? tests/fixtures/v2/horizon-baseline-starts.jsonl.gz",
+      "?? tests/test_v2_endpoint_lineage.py",
+      "?? tests/test_v2_factorized_coverage.py",
+      "?? tests/test_v2_force_appearance_causality.py",
+      "?? tests/test_v2_horizon_baselines.py",
+      "?? tools/v2_endpoint_lineage.py",
+      "?? tools/v2_factorized_coverage.py",
+      "?? tools/v2_force_appearance_causality.py",
+      "?? tools/v2_horizon_baselines.py"
+    ]
+  },
+  "source_hashes": {
+    "coverage_edge_fixture": "8a67b03919070a1385dc0269207f4622101b62e4c5409fc4df19b99ff9e5346d",
+    "coverage_report": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "snapshot:03d032d57e5b": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+    "snapshot:7d56a775bc4c": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+    "snapshot:85391858b5d8": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+    "snapshot:b1f7f9416e92": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+    "snapshot:daf86d0544b7": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+    "snapshot:fe678ebb30ce": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+  },
+  "analysis_script_sha256": "94a732e646fde00cdd6f50fd85b93f9e9d3e0806bcd540511d690a6d5ab5f61c",
+  "fixture_sha256_matches_accepted_report": true,
+  "snapshot_sha256_matches_accepted_report": true,
+  "development_rule": {
+    "rule_version": "force-causality-rule-v1",
+    "likely_external": "Only a positive independently recorded case-linked ACTION_INTENT/UI_ACTION_RESULT matching scope, player, source, destination, and aggregate vector.",
+    "likely_internal": "A complete reliable birth with exact source-vector conservation, a known-true prebirth source line, at least two strictly prebirth equal source-birth intervals, current interval equal to that repeated interval, and exact aggregate batch composition recurrence.",
+    "ambiguous": "Complete reliable zero-progress fresh birth plus complete visible source inventory, with no uniquely supported cause; exact source depletion alone never establishes external action.",
+    "unknown": "Any missing source/destination/vector, incomplete scope/tick/force collection, or unproved zero-progress fresh identity remains UNKNOWN.",
+    "initial_observation": "Left-censored; never counted as a reliable prior birth.",
+    "new_track": "NEW_TRACK confidence alone is insufficient; require observed progress 0 and absence from the complete immediately preceding force set.",
+    "holdout_tuning": "No thresholds or categories are changed after development; holdout is evaluation only.",
+    "dev_candidate_edges": 472,
+    "dev_entity_candidates": 512,
+    "dev_classification_counts": {
+      "UNKNOWN": 195,
+      "AMBIGUOUS": 277
+    },
+    "rule_sha256": "9f0eb39c4255ba37e3705c8528a861e36f2c40343e60ed28296f1438c252e17b"
+  },
+  "holdout_protocol": "Rule hash frozen after development-only analysis; same classifier applies to holdout without threshold updates.",
+  "classification_counts_by_edge": {
+    "UNKNOWN": 262,
+    "AMBIGUOUS": 384
+  },
+  "classification_counts_by_split": {
+    "development": {
+      "UNKNOWN": 195,
+      "AMBIGUOUS": 277
+    },
+    "holdout": {
+      "AMBIGUOUS": 107,
+      "UNKNOWN": 67
+    }
+  },
+  "classification_counts_by_cohort": {
+    "03d032d57e5b": {
+      "UNKNOWN": 112,
+      "AMBIGUOUS": 164
+    },
+    "7d56a775bc4c": {
+      "AMBIGUOUS": 84,
+      "UNKNOWN": 40
+    },
+    "85391858b5d8": {
+      "UNKNOWN": 26,
+      "AMBIGUOUS": 21
+    },
+    "b1f7f9416e92": {
+      "UNKNOWN": 1,
+      "AMBIGUOUS": 2
+    },
+    "daf86d0544b7": {
+      "UNKNOWN": 82,
+      "AMBIGUOUS": 112
+    },
+    "fe678ebb30ce": {
+      "UNKNOWN": 1,
+      "AMBIGUOUS": 1
+    }
+  },
+  "candidate_entity_counts": {
+    "UNRESOLVED": 267,
+    "RELIABLE_NEWBORN": 427
+  },
+  "candidate_entity_age_counts": {
+    "UNKNOWN_AGE": 267,
+    "NEWBORN": 427
+  },
+  "candidate_entity_force_owner_counts": {
+    "ENEMY": 694
+  },
+  "candidate_entity_source_owner_counts": {
+    "UNKNOWN_OWNER": 130,
+    "NEUTRAL": 58,
+    "ENEMY": 505,
+    "SELF": 1
+  },
+  "candidate_entity_strata_by_split": {
+    "development": {
+      "age": {
+        "UNKNOWN_AGE": 200,
+        "NEWBORN": 312
+      },
+      "force_owner": {
+        "ENEMY": 512
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 88,
+        "NEUTRAL": 28,
+        "ENEMY": 396
+      },
+      "entity_status": {
+        "UNRESOLVED": 200,
+        "RELIABLE_NEWBORN": 312
+      }
+    },
+    "holdout": {
+      "age": {
+        "NEWBORN": 115,
+        "UNKNOWN_AGE": 67
+      },
+      "force_owner": {
+        "ENEMY": 182
+      },
+      "source_owner": {
+        "NEUTRAL": 30,
+        "UNKNOWN_OWNER": 42,
+        "ENEMY": 109,
+        "SELF": 1
+      },
+      "entity_status": {
+        "RELIABLE_NEWBORN": 115,
+        "UNRESOLVED": 67
+      }
+    }
+  },
+  "candidate_entity_strata_by_cohort": {
+    "03d032d57e5b": {
+      "age": {
+        "UNKNOWN_AGE": 113,
+        "NEWBORN": 184
+      },
+      "force_owner": {
+        "ENEMY": 297
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 41,
+        "NEUTRAL": 15,
+        "ENEMY": 241
+      },
+      "entity_status": {
+        "UNRESOLVED": 113,
+        "RELIABLE_NEWBORN": 184
+      }
+    },
+    "7d56a775bc4c": {
+      "age": {
+        "NEWBORN": 91,
+        "UNKNOWN_AGE": 40
+      },
+      "force_owner": {
+        "ENEMY": 131
+      },
+      "source_owner": {
+        "NEUTRAL": 15,
+        "UNKNOWN_OWNER": 26,
+        "ENEMY": 89,
+        "SELF": 1
+      },
+      "entity_status": {
+        "RELIABLE_NEWBORN": 91,
+        "UNRESOLVED": 40
+      }
+    },
+    "85391858b5d8": {
+      "age": {
+        "UNKNOWN_AGE": 26,
+        "NEWBORN": 22
+      },
+      "force_owner": {
+        "ENEMY": 48
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 15,
+        "NEUTRAL": 13,
+        "ENEMY": 20
+      },
+      "entity_status": {
+        "UNRESOLVED": 26,
+        "RELIABLE_NEWBORN": 22
+      }
+    },
+    "b1f7f9416e92": {
+      "age": {
+        "UNKNOWN_AGE": 1,
+        "NEWBORN": 2
+      },
+      "force_owner": {
+        "ENEMY": 3
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 1,
+        "NEUTRAL": 2
+      },
+      "entity_status": {
+        "UNRESOLVED": 1,
+        "RELIABLE_NEWBORN": 2
+      }
+    },
+    "daf86d0544b7": {
+      "age": {
+        "UNKNOWN_AGE": 86,
+        "NEWBORN": 127
+      },
+      "force_owner": {
+        "ENEMY": 213
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 46,
+        "NEUTRAL": 12,
+        "ENEMY": 155
+      },
+      "entity_status": {
+        "UNRESOLVED": 86,
+        "RELIABLE_NEWBORN": 127
+      }
+    },
+    "fe678ebb30ce": {
+      "age": {
+        "UNKNOWN_AGE": 1,
+        "NEWBORN": 1
+      },
+      "force_owner": {
+        "ENEMY": 2
+      },
+      "source_owner": {
+        "UNKNOWN_OWNER": 1,
+        "NEUTRAL": 1
+      },
+      "entity_status": {
+        "UNRESOLVED": 1,
+        "RELIABLE_NEWBORN": 1
+      }
+    }
+  },
+  "candidate_entity_count_per_edge_histogram": {
+    "1": 602,
+    "2": 41,
+    "3": 2,
+    "4": 1
+  },
+  "prebirth_causal_feature_edge_counts": {
+    "has_visible_inbound": 422,
+    "has_mobile_production_due": 14,
+    "has_overflow_cleanup_due": 1,
+    "all_sources_line_yes": 0,
+    "all_sources_line_no": 0,
+    "all_sources_line_unknown": 646,
+    "prior_recurrence_repeated_batch": 0,
+    "prior_recurrence_other": 646
+  },
+  "source_removal_equals_candidate_batch": {
+    "UNKNOWN_OR_PARTIAL": 125,
+    "NOT_EXACT_AT_LEAST_ONE_SOURCE": 402,
+    "EXACT_ALL_SOURCES": 119
+  },
+  "runtime_candidate_rows_gzip": {
+    "path": "tests/fixtures/v2/force-appearance-causality-edges.jsonl.gz",
+    "sha256": "ba353110170d3adf64bf8d3c66f713e734841a911b69279d88ee9f77be922679",
+    "rows": 646,
+    "mtime": 0,
+    "format": "deterministic gzip JSONL; one edge per line with all candidate entity records"
+  },
+  "causal_limits": [
+    "Source depletion/force-vector conservation alone is not evidence of external player action.",
+    "No case-linked durable ActionIntent/UI action records are included in the accepted coverage fixture.",
+    "NEW_TRACK confidence alone is insufficient; reliability also requires complete consecutive scope, zero observed progress, and fresh identity.",
+    "Supply-line, production-clock, overflow and incoming-force facts are evaluated only from the immediate prebirth/current birth observations; prior recurrence uses strictly earlier complete births.",
+    "These six preselected recordings are not a random sample of gameplay; holdout is descriptive evaluation, not a population estimate.",
+    "Classifications do not prove the actual actor; every candidate carries zero formal credit."
+  ],
+  "root_acceptance": {
+    "independently_reproduced": true,
+    "independent_review": "Luna A / ACCEPT",
+    "formal_credit": 0,
+    "production_changes": 0,
+    "final_head_regression_receipt": "runtime/research/v2/endpoint-audit-final-head-regression.json"
+  }
+}
