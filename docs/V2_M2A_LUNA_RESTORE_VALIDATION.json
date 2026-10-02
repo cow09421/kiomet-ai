@@ -1,0 +1,40 @@
+{
+  "status": "EXPLICIT_CANDIDATE_ONLY_ZERO_FORMAL_CREDIT",
+  "mechanic": "Pinned Shield-retaining Tank/Soldier defense with independent root/Luna acceptance",
+  "root_v2_regression": {
+    "passed": 293,
+    "deselected": 1363,
+    "exit_code": 0,
+    "initial_setup_error": "basetemp parent absent; created workspace-local parent and full rerun passed"
+  },
+  "affected_sim_combat_context": 77,
+  "listener_and_control_before_context": 34,
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0,
+  "defaults_changed": false,
+  "core_source_sha256": {
+    "src/kiomet_ai/v2/sim/combat.py": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "src/kiomet_ai/v2/sim/step.py": "e2fbffd1309b1d1ef71308c123028a478c2a603bf159354e189224f7d1324360",
+    "tools/v2_input_listener_evidence.py": "8e42bfecdb3d8fabca42f3fadd71a5e90bcaf84f790b422ddf2c5b4554eaa8d8",
+    "tools/v2_controlled_transition_capture.py": "1d9d4e13291da81eee9d79e05e01fdc0197fe2496c01a72cd6d04d9561a3a77b"
+  },
+  "remaining_gates": [
+    "Actual registered input callback target binding",
+    "Valid reset-free armed friendly receipt and terminal lineage",
+    "Independent complete-world combat admission/external-action exclusion",
+    "Aura/King context for multievent trajectories"
+  ],
+  "M2": "NOT_YET_PASS",
+  "M3": "NOT_STARTED",
+  "retained_combat_admission": {
+    "verdict": "DEVELOPMENT_ONLY",
+    "ticks": "23737->23738 and46518->46519; intervening polls same beforetick",
+    "missing": [
+      "Actual cached before Tower+45 morale",
+      "Independent external-action exclusion",
+      "Own supply-line in complete stored signature"
+    ],
+    "audit": "docs/V2_M2A_SHIELD_DEFENSE_ADMISSION_AUDIT.md",
+    "formal_delta": 0
+  }
+}

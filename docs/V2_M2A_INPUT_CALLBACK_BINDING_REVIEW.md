@@ -1,0 +1,24 @@
+# M2A input callback binding review
+
+## Verdict
+
+**Canvas mouseup to ClientBroker::mouse / Game::peek_mouse is UNKNOWN, not independently proven.** The pinned artifacts prove that the official canvas registers mouse event listeners and that a Rust method named ClientBroker::mouse handles mousedown, mouseup, and mousemove, including a peek_mouse call. They do not expose a static, identity-preserving edge from the listener's concrete closure environment through the generated adapter to that Rust method. The generic listener/closure evidence is insufficient for route-continuity credit.
+
+## Pinned artifacts and exact locations
+
+- The reviewed client WASM is fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c.wasm. Its static data section contains mousedown at linear-memory address 0x125844 (9 bytes) and mouseup at 0x12584d (7 bytes). The same data region is used by WAT function $func539 (runtime/research/v2/disassembly.json, WAT line range 183018 onward): it obtains $canvas at WAT line 183123, builds descriptors containing those exact pointer/length pairs at lines 183135–183142, and passes each descriptor through call $listen at line 183193. This establishes the event names and canvas target.
+- The generic Rust/WASM listener helper $listen (WAT lines 520352–520395) wraps its supplied callback pair with __wbindgen_cast_0000000000000004 and calls $func3509. The generated cast in runtime/research/v2/client.js around lines 1868–1873 is a mutable one-argument JsValue closure using shim index 83. $func3509 (WAT lines 570309–570339) calls the four-argument addEventListener import. The companion $func4055 (WAT lines 579627–579650) calls the five-argument overload. Those helpers establish generic registration mechanics, not the semantic target of this particular callback.
+- The callback pair in $func539 is assembled through $func4036 (WAT lines 579330–579357) from values loaded from the runtime event descriptor/component state. The static constructor shows event descriptors and closure creation, but the captured callback identity is indirect. No reviewed artifact maps this concrete capture to a function-table entry or named Rust method.
+- Separately, the vendored reference runtime/research/v2/kodiak-source/client/src/broker/client_broker.rs:280–324 defines ClientBroker::mouse; this Rust file is contextual source, not independently matched to the pinned release. It calls peek_mouse for raw mouse input, handles "mousedown" | "mouseup" using event.button(), and calls peek_mouse again for the button event. This describes the reference method, but does not prove that the pinned canvas listener invokes it or that the release implementation is identical.
+- Candidate generated handlers exist in the WAT around $func1359 (WAT line 408406 onward), $func1370 (414345 onward), and $func1371 (414480 onward). They compare the same mouse event strings and read mouse-button data. The reviewed static material does not tie any of these candidates to the $func539 closure capture or identify one as the ClientBroker::mouse implementation.
+- The official generated JavaScript listener source captured under runtime/research/v2/listener-source-captures-20261002/ confirms that the actual canvas bubble registrations are at **2270:17** for mousemove, mousedown, and mouseup. The separate rows at 2245:17 are other generated listeners, not the canvas mouseup row. This corrects the earlier imprecise 2245 reference.
+
+## What remains unproven
+
+The missing edge is the concrete callback identity between $func539's dynamically assembled closure and the candidate mouse-handler implementation, followed by proof that the handler reaches the ClientBroker::mouse behavior above. The shim index identifies a generic closure ABI; it does not identify the captured Rust callback. Function names in this release disassembly are synthetic indices, and the available pinned Rust source has no constructor/event-registration callsite that bridges the two.
+
+Other browser listeners remain relevant to event semantics. The observer's reset listeners and Playwright's global interception listener are independently guarded by the existing inventory checks. The document click callback is an ad-manager one-shot listener at the captured document location; its source removes that listener and flushes a callback queue. Its execution is later in the click lifecycle and does not establish the synchronous canvas mouseup route. Unknown callbacks or unreviewed same-event effects must continue to fail closed.
+
+## Consequence
+
+Keep the broad listener inventory and reject unreviewed entries. A valid canvas registration plus a valid input-entry receipt proves only that the ordinary browser input reached a sampled canvas event boundary. Until the concrete callback-to-ClientBroker::mouse binding is proven, record route continuity and resulting game-command dispatch as **UNKNOWN** and award no formal command/transition credit.

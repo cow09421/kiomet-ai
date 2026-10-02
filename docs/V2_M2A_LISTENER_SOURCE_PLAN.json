@@ -1,0 +1,50 @@
+{
+  "QUESTION": "Which JavaScript sources own broad relevant input listeners on the current official headless document, including the previously unknown click-listener source?",
+  "BEFORE": {
+    "host": "one already-running project-owned headless Chromium host",
+    "host_seconds_bound": 60,
+    "lease_required_remaining_ms": 25000,
+    "capture_bound_seconds": 20,
+    "profile": "runtime/browser-profile",
+    "page": "exactly one https://kiomet.com/ page",
+    "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "memory": "type evidence only from the existing ClientExtractor memories handle; no buffer bytes"
+  },
+  "ACTION": {
+    "hosts": 1,
+    "host_seconds_bound": 60,
+    "capture_seconds_bound": 20,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "wheel_events": 0,
+    "keyboard_events": 0,
+    "DOM_mutations": 0,
+    "CDP": [
+      "read main-frame and loader identity",
+      "enumerate window, document, html, body, every canvas and each canvas ancestor",
+      "query DOMDebugger listener metadata for broad relevant event types",
+      "retrieve Debugger.getScriptSource once per distinct listener scriptId in that same CDP session",
+      "save exact UTF-8 source bytes by SHA-256 and persist listener locations/scriptId mapping"
+    ]
+  },
+  "EXPECTED": {
+    "same_document_frame_loader_origin_before_after": true,
+    "source_files_addressed_by_sha256": true,
+    "unknown_click_listener_sha256_to_check": "7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1",
+    "route_or_gesture_certificate": "NONE",
+    "formal_credit": 0
+  },
+  "OBSERVED": {
+    "host_session": 4887,
+    "host_exit_code": 0,
+    "listener_rows": 28,
+    "distinct_sources": 4,
+    "all_sources_saved": true,
+    "identity_stable": true,
+    "observer_pristine": true,
+    "unknown_click_source": "captured pinned ad-manager.js source; callback effects/phase remain under independent review"
+  },
+  "SIMULATED": "Not applicable; no game command or simulation is performed.",
+  "DIFF": "Unknown until the saved listener sources are independently reviewed against pinned client and browser event paths.",
+  "VERDICT": "DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT; source retrieval complete, no route or gesture certificate granted."
+}

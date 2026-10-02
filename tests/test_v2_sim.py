@@ -178,6 +178,10 @@ def test_retained_complete_ground_transition_matches_all_visible_state(fixture):
     assert json.loads(json.dumps(actual))==receipt['expected']
     wider=step(state,scenario=Scenario(ordinary_combat=True))
     assert wider==result
+    # Independently pinned narrow formula, still an explicit scenario: these
+    # retained development receipts do not prove external-action isolation.
+    narrow=step(state,scenario=Scenario(shield_retaining_combat=True))
+    assert narrow==result
 
 
 def test_ordinary_bomber_air_damage_to_surface_and_air_targets():

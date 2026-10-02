@@ -1,0 +1,17 @@
+{
+  "QUESTION": "Can the same private controlled document provide actual non-shared buffer-type evidence and a complete source-pinned DOM listener inventory, without removing either existing rejection boundary?",
+  "BEFORE": "Pinned normal official client in one private headless host; pre-start observer disabled. Existing extractor-owned memory handles are the only memory objects used.",
+  "ACTION": "At most one 60-second host with normal Play entry. Read only existing buffer object type/count/origin metadata and public DOM listener topology/source hashes. No buffer contents, actor payloads, observer arming, troops, wheels, semantic WASM calls or game writes.",
+  "EXPECTED": "Exactly one valid non-shared WebAssembly.Memory buffer can supply the retained shared-memory guard. Broader input listeners remain inspected; unknown or unreviewed callbacks keep topology unqualified rather than being ignored.",
+  "OBSERVED": "One 60-second host completed normally (host session 29466 exit 0). Actual existing owned memory type: one WebAssembly.Memory with non-shared ArrayBuffer. Full broad listener inventory rejected UNEXPECTED_ANCESTOR_INPUT_LISTENER; registered reset, pointer, touch, click and wheel callbacks were retained. Document click source SHA256 7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1 remains unreviewed.",
+  "SIMULATED": "Not applicable; no world command.",
+  "DIFF": "Retain protocol errors, source/location/order mismatches, incomplete ancestry and existing-boundary refusals.",
+  "VERDICT": "DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT; non-shared type evidence obtained; listener topology rejected; no arming or troop gesture.",
+  "limits": {
+    "hosts": 1,
+    "host_seconds": 60,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "wheel_events": 0
+  }
+}

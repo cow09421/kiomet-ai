@@ -10,10 +10,12 @@ from types import SimpleNamespace as NS
 
 import pytest
 from kiomet_ai.v2.state import Lifecycle, Relation
+from kiomet_ai.v2.serialization import state_from_dict
 from tools.v2_controlled_transition_capture import (
     _ui_quantity_evidence, capture_distinct_ticks, collect_new_force_births,
     collect_new_force_lineage,
     durable_before, force_lineage_credit, is_project_headless_browser_process,
+    initial_readiness_rejection_record,
     record_before_gesture, require_deselected_selection_evidence,
     supply_line_guard_passed, validate_fresh_intent,
     validate_scenario, friendly_candidate_preflight, warm_friendly_candidate_preflight,
@@ -53,6 +55,37 @@ def state(source=None, destination=None):
     return NS(lifecycle=fact(Lifecycle.IN_MATCH), match_id=fact("match-A"),
               player_id=fact(7), coverage="PLAYER_VISIBLE_COMPLETE",
               forces=fact(()), towers=(source, destination))
+
+
+def test_initial_readiness_rejection_receipt_preserves_canonical_state_and_safe_raw_metadata():
+    fixture = Path(__file__).parent / "fixtures/v2/controlled-transition-77636cad4e97.jsonl.gz"
+    events = [json.loads(line) for line in gzip.decompress(fixture.read_bytes()).decode("utf8").splitlines()]
+    before = state_from_dict(next(row["state"] for row in events if row.get("kind") == "BEFORE_INTENT"))
+    raw = {"document_time_origin": 1234.5, "sampled_at_ms": 60000, "tick": before.tick.value,
+           "player_id": before.player_id.value, "match_id": before.match_id.value,
+           "coverage": "PLAYER_VISIBLE_COMPLETE", "active": True, "online": True,
+           "transport_connected": True, "transport_mode": "NETWORK",
+           "visible_pending": False, "expanded_visibility": False,
+           "selected_tower": None, "root_candidate": 123456, "root_slot_candidate": 654321}
+    record = initial_readiness_rejection_record(before, raw, ("force:0:source",), 60001)
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "receipt.jsonl"
+        with path.open("w", encoding="utf8") as stream:
+            durable_before(stream, record)
+        persisted = json.loads(path.read_text(encoding="utf8"))
+    assert persisted["kind"] == "INITIAL_READINESS_REJECTION"
+    assert persisted["status"] == "REJECTED"
+    assert persisted["reason"] == "control_readiness_gaps"
+    assert persisted["gaps"] == ["force:0:source"]
+    assert persisted["snapshot"]["document_id"] == before.document_id
+    assert persisted["snapshot"]["tick"] == before.tick.value
+    assert persisted["snapshot"]["sampled_at_ms"] == before.sampled_at_ms
+    assert persisted["raw_clock_metadata"]["document_time_origin"] == 1234.5
+    assert persisted["raw_clock_metadata"]["sampled_at_ms"] == 60000
+    assert persisted["raw_selection"] == {"present": True, "value": None}
+    assert persisted["state"]["document_id"] == before.document_id
+    assert "root_candidate" not in persisted["raw_clock_metadata"]
+    assert "root_slot_candidate" not in persisted["raw_clock_metadata"]
 
 
 def test_plan_requires_adjacent_visible_own_source_and_empty_neutral_destination():

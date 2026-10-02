@@ -32,6 +32,38 @@ def fight_ordinary(attacker,defender,defender_capacity,defender_is_tower=True,
     return _fight(attacker,defender,defender_is_tower,attacker_morale,defender_morale,defender_capacity)
 
 
+def shield_retaining_defense(attacker,defender,attacker_morale,defender_morale):
+    """Pinned shield-retaining ordinary defense subcase; not a full fight model."""
+    for vector in (attacker, defender):
+        if (not isinstance(vector, (tuple, list)) or len(vector) != 10 or
+                any(type(count) is not int or count < 0 or count > 255
+                    for count in vector)):
+            raise UnsupportedState('INVALID_COMBAT_VECTOR')
+    if type(attacker_morale) is not bool or type(defender_morale) is not bool:
+        raise UnsupportedState('UNKNOWN_COMBAT_MORALE')
+
+    if (attacker[0] != 0 or any(attacker[i] for i in (1, 2, 3, 6, 7, 8, 9)) or
+            attacker[4] + attacker[5] == 0):
+        raise UnsupportedState('UNPROVED_SHIELD_RETAINING_DEFENSE')
+    if (any(defender[i] for i in (1, 2, 3, 6, 7, 8, 9)) or
+            defender[4] + defender[5] == 0):
+        raise UnsupportedState('UNPROVED_SHIELD_RETAINING_DEFENSE')
+
+    tanks, soldiers = attacker[4], attacker[5]
+    attack_bonus = (min(3, (tanks + soldiers) // 2)
+                    if attacker_morale and not defender_morale else 0)
+    defense_bonus = (min(3, (defender[4] + defender[5]) // 2)
+                     if defender_morale and not attacker_morale else 0)
+    shield_retention_bound = 3 * tanks + soldiers + min(3, (tanks + soldiers) // 2)
+    if defender[0] <= shield_retention_bound:
+        raise UnsupportedState('UNPROVED_SHIELD_RETAINING_DEFENSE')
+
+    shield_loss = max(0, 3 * tanks + soldiers + attack_bonus - defense_bonus)
+    remaining = list(defender)
+    remaining[0] -= shield_loss
+    return GroundFight('DEFENDER', (0,) * 10, tuple(remaining), False, False)
+
+
 def _fight(attacker,defender,defender_is_tower,attacker_morale,defender_morale,defender_capacity):
     if type(attacker_morale) is not bool or type(defender_morale) is not bool:
         raise UnsupportedState('UNKNOWN_COMBAT_MORALE')

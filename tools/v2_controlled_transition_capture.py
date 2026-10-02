@@ -156,6 +156,31 @@ def _preflight_snapshot_metadata(state):
             "source_update_window_ms": known(update_window)}
 
 
+def initial_readiness_rejection_record(state, raw, gaps, checked_at_host_monotonic_ms):
+    """Preserve the already-read visible sample when dispatch readiness fails.
+
+    Keep only public identity/clock/selection diagnostics from the raw decoder;
+    never persist its client-root or memory-slot candidates.
+    """
+    raw = raw if isinstance(raw, dict) else {}
+    raw_clock_keys = ("document_time_origin", "sampled_at_ms", "tick", "player_id",
+                      "match_id", "coverage", "active", "online",
+                      "transport_connected", "transport_mode", "visible_pending",
+                      "expanded_visibility")
+    return {
+        "kind": "INITIAL_READINESS_REJECTION",
+        "status": "REJECTED",
+        "reason": "control_readiness_gaps",
+        "gaps": list(gaps),
+        "checked_at_host_monotonic_ms": checked_at_host_monotonic_ms,
+        "snapshot": _preflight_snapshot_metadata(state),
+        "raw_clock_metadata": {key: raw[key] for key in raw_clock_keys if key in raw},
+        "raw_selection": {"present": "selected_tower" in raw,
+                          "value": raw.get("selected_tower")},
+        "state": state,
+    }
+
+
 def _preflight_identity(state):
     metadata = _preflight_snapshot_metadata(state)
     identity = tuple(metadata[key] for key in ("document_id", "match_id", "player_id", "lifecycle"))
@@ -880,6 +905,8 @@ async def run(args):
                         now_ms = time.monotonic_ns() // 1_000_000
                         gaps = control_readiness_gaps(before, now_ms)
                         if gaps:
+                            durable_before(stream, initial_readiness_rejection_record(
+                                before, initial_raw, gaps, now_ms))
                             raise ValueError("control readiness gaps: " + ",".join(gaps))
                         prior_force_ids = {f.id.value for f in (before.forces.value or ()) if f.id.value}
                         durable_before(stream, {"kind": "BEFORE_SNAPSHOT", "state": before,

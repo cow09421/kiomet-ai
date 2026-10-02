@@ -4,22 +4,34 @@ CURRENT MILESTONE: M2A / M2B measurement only
 STATUS: IN_PROGRESS. M2 has not passed; M3 has not started.
 OLD M1 FAIL documents remain unchanged. M1B PASS checkpoint: 2212346.
 
-Latest integration adds the narrow pinned terminal ground-friendly merge fuel
-correction (V2_M2A_FRIENDLY_FUEL_RULE.md), positive-cell gap diagnostics with
-unchanged coverage, and the concrete actor-update currentness proof. None of
-these adds a genuine event or trajectory. Luna-first rolling dispatch is active;
-three existing Luna workers completed bounded implementation and independent
-reviews, with root retaining integration and milestone decisions.
+Luna-first rolling dispatch is restored and verified by successful local source
+reviews, bounded edits and passing tests from three existing Luna workers. Sol
+retains architecture, independent acceptance, integration and milestone decisions;
+the concurrency cap remains three Luna and no Codex setting was changed.
 
-The latest finite friendly-scene cohort found three non-Ruler friendly preview
-pairs with complete positive-actor coverage. Its explicit execute request was
-rejected before selection/arming because a new force's source was unavailable.
-The host exited normally, with zero observer arms and zero troop gestures.
-V2_M2A_FRIENDLY_SCENE_VALIDATION.json retains the refusal and full DOM ancestry
-listener inventory. The preceding slot diagnostic had 175 complete 32/32 samples
-and no gap instance; no absence certificate was inferred from that result.
+The current integration adds an isolated pinned Shield-retaining ground-defense
+formula, available only through the explicit `shield_retaining_combat` scenario.
+It does not call the broader fight hypothesis. Normal mode and broader combat
+remain default-off, and both retained ground fixtures remain development-only.
+See V2_M2A_SHIELD_RETAINING_DEFENSE_REVIEW.md. The earlier terminal ground-friendly
+fuel correction remains intact.
+
+Input readiness refusals now preserve the actual canonical visible state and
+allowlisted clock/selection diagnostics before raising. A new topology-only
+helper rejects malformed evidence, changed document/canvas/ancestry, non-pristine
+observer startup, unknown listeners, and unproven/shared memory. Two bounded
+readonly cohorts ended normally with zero arms and troop gestures: the first
+proved an actual unique non-shared ArrayBuffer and retained a rejected broad
+listener inventory; the second saved all 28 listener rows and all four exact
+source files, including the unknown document-click ad-manager source. Retrieval
+does not imply callback harmlessness or a gesture/route certificate. Generic
+WASM callback target binding remains a separate construction gate.
+
 Formal counts remain 1053/1053, including only one ordinary arrival/capture;
 friendly reinforcement and combat remain zero, new multi-event trajectories zero.
+No milestone or performance claim is expanded by these changes. No live browser
+host remains active. See V2_M2A_LISTENER_INVENTORY_VALIDATION.json and
+V2_M2A_LISTENER_SOURCE_VALIDATION.json for portable hash-checked artifacts.
 
 ## Current evidence and corrected accounting
 
@@ -41,7 +53,12 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **258 passed, 1363 deselected**, including the terminal ground-friendly fuel correction and current decoder diagnostic regressions. Node observer 12, visible-slot boundary and privacy checks pass. The preceding **228 passed** checkpoint followed integration of
+Current v2 regression run: **293 passed, 1363 deselected**, including narrow
+Shield-retaining rule/context, topology-only evidence and readiness-refusal
+regressions. The initial run had one temporary-directory setup error; after
+creating the workspace-local parent, the full rerun exited successfully. Prior
+Node observer 12, visible-slot boundary and privacy checks remain the unchanged
+source validation; JavaScript was not modified in this checkpoint. The preceding **228 passed** checkpoint followed integration of
 LaunchAll, quantity-independent newborn recording, before-only route certificates,
 chronological entry adoption and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
 passing tests. No performance rerun was
@@ -290,7 +307,7 @@ used to claim a fully supported long capture trajectory. The bounded friendly
 preflight had only one ordinary own source and a Ruler destination; it ended with
 zero input rather than relocating the Ruler. No active live agent remains.
 
-Latest bounded integration: observed own presence and exact identity/provenance
+Historical manager integration (preceding the controlled-capture checkpoint): observed own presence and exact identity/provenance
 checks; stale capture relation repair; pinned same-destination inbound-order and
 neutral initialization evidence. Complete comparison now also checks tower
 context, force acceleration/relation and destination queue order. The current

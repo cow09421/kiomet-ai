@@ -4,7 +4,7 @@ from ..state import Units
 from ..observe.forces import motion
 from ..observe.rules import DOWNGRADE, production
 from .model import SimulationState, SimForce, UnsupportedState
-from .combat import fight_ground, fight_ordinary
+from .combat import fight_ground, fight_ordinary, shield_retaining_defense
 
 
 @dataclass(frozen=True,slots=True)
@@ -34,6 +34,7 @@ class Scenario:
     opponent_launches: tuple[Launch,...]=()
     ordinary_combat: bool=False  # Separate wider hypothesis; never enabled implicitly.
     no_supply_line_towers: tuple[int,...]=()  # Explicit before-input scenario, never inferred from terminal path.
+    shield_retaining_combat: bool=False  # Pinned narrow rule; whole-world admission still pending.
 
 
 @lru_cache(maxsize=4096)
@@ -171,13 +172,21 @@ def step(state: SimulationState, actions: tuple[Launch|LaunchAll,...]=(), scenar
             continue
         same_owner_before_arrival=dst.owner==force.owner
         if dst.owner!=force.owner and (dst.owner or any(dst.units)):
-            if not (scenario.ground_combat or scenario.ordinary_combat): raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
+            if not (scenario.ground_combat or scenario.ordinary_combat or scenario.shield_retaining_combat): raise UnsupportedState('UNVERIFIED_NORMAL_COMBAT')
             known_enemy=(dst.owner==state.player and force.relation=='ENEMY' or
                          force.owner==state.player and dst.relation=='ENEMY' or dst.owner==0)
             if not known_enemy: raise UnsupportedState('UNKNOWN_PAIR_RELATION')
-            fight=(fight_ordinary(force.units,dst.units,dst.capacity,attacker_morale=force.accelerated,defender_morale=dst.morale)
-                   if scenario.ordinary_combat else
-                   fight_ground(force.units,dst.units,attacker_morale=force.accelerated,defender_morale=dst.morale))
+            if scenario.shield_retaining_combat:
+                if (type(dst.owner) is not int or dst.owner<=0 or
+                        type(dst.id) is not int or dst.id<=0 or
+                        type(dst.kind) is not int or not 0<=dst.kind<27):
+                    raise UnsupportedState('UNPROVED_SHIELD_RETAINING_CONTEXT')
+                fight=shield_retaining_defense(force.units,dst.units,
+                    attacker_morale=force.accelerated,defender_morale=dst.morale)
+            else:
+                fight=(fight_ordinary(force.units,dst.units,dst.capacity,attacker_morale=force.accelerated,defender_morale=dst.morale)
+                       if scenario.ordinary_combat else
+                       fight_ground(force.units,dst.units,attacker_morale=force.accelerated,defender_morale=dst.morale))
             if fight.attacker_ruler_lost or fight.defender_ruler_lost:
                 raise UnsupportedState('UNVERIFIED_RULER_ELIMINATION')
             towers[dst.id]=dst=replace(dst,units=fight.defender)

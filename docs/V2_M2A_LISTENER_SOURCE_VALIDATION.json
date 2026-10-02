@@ -1,0 +1,81 @@
+{
+  "QUESTION": "Which JavaScript sources own broad relevant input listeners on the current official headless document, including the previously unknown click-listener source?",
+  "BEFORE": {
+    "host": "one already-running project-owned headless Chromium host",
+    "host_seconds_bound": 60,
+    "lease_required_remaining_ms": 25000,
+    "capture_bound_seconds": 20,
+    "profile": "runtime/browser-profile",
+    "page": "exactly one https://kiomet.com/ page",
+    "client_sha256": "fae13d1d0a7683726db520ec5c687d67d701c874a5708aeb9bff6eaacf2f054c",
+    "memory": "type evidence only from the existing ClientExtractor memories handle; no buffer bytes"
+  },
+  "ACTION": {
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "wheel_events": 0,
+    "keyboard_events": 0,
+    "DOM_mutations": 0,
+    "CDP_listener_source_queries": true
+  },
+  "EXPECTED": {
+    "same_document_frame_loader_origin_before_after": true,
+    "source_files_addressed_by_sha256": true,
+    "unknown_click_listener_sha256_to_check": "7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1",
+    "route_or_gesture_certificate": "NONE",
+    "formal_credit": 0
+  },
+  "OBSERVED": {
+    "host_session": 4887,
+    "host_exit_code": 0,
+    "listener_rows": 28,
+    "distinct_sources": 4,
+    "all_sources_saved": true,
+    "identity_stable": true,
+    "observer_pristine": true,
+    "unknown_click_source": "captured pinned ad-manager.js source; callback effects/phase remain under independent review"
+  },
+  "SIMULATED": "Not applicable; no world command or game simulation.",
+  "DIFF": "All prior source hashes reproduced. The document click callback source was successfully saved. Collection does not freeze listeners or grant input-route continuity. Broad event inspection and mandatory shared-memory rejection remain retained.",
+  "VERDICT": "DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT; source retrieval complete, no route or gesture certificate granted.",
+  "artifacts": [
+    {
+      "file": "tests/fixtures/v2/listener-source-probe-20261002.json.gz",
+      "raw_sha256": "8067962d23b7520d6c4e90f5eb1e72ff3da48828e25645fd4067c7db96368318",
+      "gzip_sha256": "a2e9fc0ffbebef75fb30e4d60e216edbe5fad9489987a07962335b37ff0f97a0",
+      "raw_bytes": 21707
+    },
+    {
+      "file": "tests/fixtures/v2/listener-source-probe-20261002.py.gz",
+      "raw_sha256": "5c121b1e84c00ca914b44888f49b03cf7710f0eb519d33edc5fd5f7fa4109cdb",
+      "gzip_sha256": "40f068b56f1915e8943ba72fd9fb1e1e34c497b0e389182b2b304e185b879091",
+      "raw_bytes": 18522
+    },
+    {
+      "file": "tests/fixtures/v2/listener-source-7f70c845fa7f430271e6fa9f7d132470291a505fba10c1a489de92296da30ccf.js.gz",
+      "raw_sha256": "7f70c845fa7f430271e6fa9f7d132470291a505fba10c1a489de92296da30ccf",
+      "gzip_sha256": "f203d4daf1a144998211a01a85070761cf2ca12249c23c086b2474318fa08953",
+      "raw_bytes": 15382
+    },
+    {
+      "file": "tests/fixtures/v2/listener-source-1fa3e0fe90b287cb49f0e4b458356120c1da419f16017060562caa1184c09b8a.js.gz",
+      "raw_sha256": "1fa3e0fe90b287cb49f0e4b458356120c1da419f16017060562caa1184c09b8a",
+      "gzip_sha256": "b68a010f0f489c761cc0f7db5d94547abaa4e43a71ab53bed409b2fe5f0d7a45",
+      "raw_bytes": 321146
+    },
+    {
+      "file": "tests/fixtures/v2/listener-source-05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e.js.gz",
+      "raw_sha256": "05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e",
+      "gzip_sha256": "fa812dfee4d1336a907f1d5bcdeb34285720511c2fb7a957f156e1e8e0db0bf2",
+      "raw_bytes": 117757
+    },
+    {
+      "file": "tests/fixtures/v2/listener-source-7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1.js.gz",
+      "raw_sha256": "7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1",
+      "gzip_sha256": "1947a175b8aed430316b6f4145c8a438408052881b1f1ec54cc1451b376adc25",
+      "raw_bytes": 1083904
+    }
+  ],
+  "formal_events_added": 0,
+  "formal_trajectories_added": 0
+}

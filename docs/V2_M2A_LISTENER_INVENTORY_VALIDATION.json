@@ -1,0 +1,31 @@
+{
+  "QUESTION": "Can the same private controlled document provide actual non-shared buffer-type evidence and a complete source-pinned DOM listener inventory, without removing either existing rejection boundary?",
+  "BEFORE": "Pinned normal official client in one private headless host; pre-start observer disabled. Existing extractor-owned memory handles are the only memory objects used.",
+  "ACTION": {
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "wheel_events": 0
+  },
+  "EXPECTED": "Exactly one valid non-shared WebAssembly.Memory buffer can supply the retained shared-memory guard. Broader input listeners remain inspected; unknown or unreviewed callbacks keep topology unqualified rather than being ignored.",
+  "OBSERVED": "One 60-second host completed normally (host session 29466 exit 0). Actual existing owned memory type: one WebAssembly.Memory with non-shared ArrayBuffer. Full broad listener inventory rejected UNEXPECTED_ANCESTOR_INPUT_LISTENER; registered reset, pointer, touch, click and wheel callbacks were retained. Document click source SHA256 7aa7f8a0357267423b6a42499e6cfb4ab34bed6c84bce4ee5134ed9f20662df1 remains unreviewed.",
+  "SIMULATED": "Not applicable; no world command.",
+  "DIFF": "Actual broad listeners exceed the conservative three mouse callback inventory. Unknown document click source retained, not ignored. Frozen diagnostic version predates latest frame/loader and final ancestry guards; those improvements receive no retroactive live validation.",
+  "VERDICT": "DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT; non-shared type evidence obtained; listener topology rejected; no arming or troop gesture.",
+  "artifacts": [
+    {
+      "file": "tests/fixtures/v2/listener-inventory-probe-20261002.json.gz",
+      "uncompressed_sha256": "c43386c038e8ed1ffd5f33e5b66847fb249b9415f0299e3016b88396db155cf1",
+      "gzip_sha256": "f847b6f8f60d6d68f47c7e4d0e9ee40e886cabb6c793b839fdc386e084d16509",
+      "uncompressed_bytes": 11596
+    },
+    {
+      "file": "tests/fixtures/v2/listener-evidence-frozen-20261002.py.gz",
+      "uncompressed_sha256": "c31a7b91e16c15c8997671a67f111e5ce740a58ae7e6f09a66a89f224358731a",
+      "gzip_sha256": "cb0aa33f4c2592e8e4f6bb9d9b958ee9066a0e454d7533e15df55f2ca7980480",
+      "uncompressed_bytes": 20361
+    }
+  ],
+  "formal_event_delta": 0,
+  "formal_trajectory_delta": 0,
+  "boundaries": "Mandatory non-shared-memory guard and broad event inspection retained after automatic review rejected their removal/narrowing. Actual safe type-only evidence obtained without reading memory contents."
+}
