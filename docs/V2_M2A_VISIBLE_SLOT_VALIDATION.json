@@ -1,0 +1,57 @@
+{
+  "QUESTION": "Classify positive-ref decoder omissions without relaxing canonical coverage",
+  "BEFORE": "Pinned normal private official client; raw gap diagnostics behind positive sensor gates. No hidden payload reads.",
+  "ACTION": {
+    "finite_hosts": 2,
+    "host_seconds_each": 90,
+    "ordinary_play_only": true,
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "camera_events": 0
+  },
+  "EXPECTED": "Separate missing chunks from present-chunk tower None, if a gap is observed.",
+  "OBSERVED": {
+    "attempt_1": {
+      "host_exit_code": 0,
+      "probe_exit_code": 1,
+      "samples": 0,
+      "reason": "finite host margin inadequate; confirmed terminal before second attempt"
+    },
+    "attempt_2": {
+      "host_exit_code": 0,
+      "probe_exit_code": 0,
+      "samples": 175,
+      "errors": {
+        "ValueError: current visibility cache pending": 3
+      },
+      "signatures": [
+        {
+          "coverage": "PLAYER_VISIBLE_COMPLETE",
+          "positive_refs": 32,
+          "decoded_towers": 32,
+          "gap_reason_counts": {},
+          "samples": 175
+        }
+      ]
+    }
+  },
+  "SIMULATED": "Not applicable: no force gesture.",
+  "DIFF": "The sampled match had no gap instance; complete coverage was already admitted under the unchanged equation. Do not extrapolate an absence certificate from zero gaps.",
+  "VERDICT": "DIAGNOSTIC_ADMITTED_NO_REAL_GAP_INSTANCE; zero formal credit. Static aliases/currentness independently reviewed; canonical absence certificate remains pending.",
+  "fixture": {
+    "file": "tests/fixtures/v2/visible-slot-probe-20261002.json.gz",
+    "raw_sha256": "57177b0aaf1418c3dd5b3c08ad9a179fcebae451af4051d30c84b641a9214b04",
+    "compressed_sha256": "4a595c2298532f6885acb51e16c69a03871a9410a93d747f02ee41a3ac0502ec"
+  },
+  "decoder_sha256": "17203180aab93faf1e8325db9293180e0e1c40a5fb6103ab4f512551c0a88ff0",
+  "validation": {
+    "python_affected_tests": 43,
+    "node_input_entry_tests": 12,
+    "node_visible_slot_diagnostics": "PASS",
+    "node_adapter_privacy": "PASS",
+    "canonical_coverage_changed": false,
+    "new_formal_events": 0,
+    "new_formal_trajectories": 0
+  },
+  "next_P0": "Prioritize genuine non-Ruler friendly arrival and ordinary combat/capture evidence. Complete positive actor scenes exist; implement a present-chunk absence certificate only if an actual gap blocks this mainline, while retaining missing chunks as unknown."
+}

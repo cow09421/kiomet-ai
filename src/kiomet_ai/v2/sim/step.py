@@ -189,8 +189,22 @@ def step(state: SimulationState, actions: tuple[Launch|LaunchAll,...]=(), scenar
                                       relation=_captured_relation(force.owner,state.player,force.relation),
                                       supply_line_present=False if force.owner==state.player else None)
         if index not in terminals and force.terminal is not True: raise UnsupportedState('UNKNOWN_POST_ARRIVAL_PATH')
-        if force.fuel is None: raise UnsupportedState('UNKNOWN_ARRIVAL_FUEL')
-        if force.fuel<=0: raise UnsupportedState('EXPIRED_ARRIVAL')
+        # A terminal ground Many merge (Shield/Tank/Soldier only) into a
+        # visibly line-free tower that already had the same owner discards the
+        # force at arrival. Pinned arrival ordering does not consult fuel on
+        # this branch. This depends on observed absence, never the broader
+        # no-supply-line hypothesis; air and special vectors remain guarded.
+        unsupported_merge_kinds=(1,2,3,6,7,8,9)
+        fuel_irrelevant_merge=(same_owner_before_arrival and
+            dst.supply_line_present is False and
+            any(force.units[i] for i in (4,5)) and
+            not any(force.units[i] for i in unsupported_merge_kinds) and
+            not any(dst.units[i] for i in unsupported_merge_kinds))
+        if force.fuel is None and not fuel_irrelevant_merge:
+            raise UnsupportedState('UNKNOWN_ARRIVAL_FUEL')
+        if force.fuel is not None and (force.fuel<0 or
+                force.fuel==0 and not fuel_irrelevant_merge):
+            raise UnsupportedState('EXPIRED_ARRIVAL')
         if force.units[9]: raise UnsupportedState('RULER_ARRIVAL_AURA')
         if dst.owner==force.owner:
             # A terminal Many force can acquire the destination supply line

@@ -4,6 +4,23 @@ CURRENT MILESTONE: M2A / M2B measurement only
 STATUS: IN_PROGRESS. M2 has not passed; M3 has not started.
 OLD M1 FAIL documents remain unchanged. M1B PASS checkpoint: 2212346.
 
+Latest integration adds the narrow pinned terminal ground-friendly merge fuel
+correction (V2_M2A_FRIENDLY_FUEL_RULE.md), positive-cell gap diagnostics with
+unchanged coverage, and the concrete actor-update currentness proof. None of
+these adds a genuine event or trajectory. Luna-first rolling dispatch is active;
+three existing Luna workers completed bounded implementation and independent
+reviews, with root retaining integration and milestone decisions.
+
+The latest finite friendly-scene cohort found three non-Ruler friendly preview
+pairs with complete positive-actor coverage. Its explicit execute request was
+rejected before selection/arming because a new force's source was unavailable.
+The host exited normally, with zero observer arms and zero troop gestures.
+V2_M2A_FRIENDLY_SCENE_VALIDATION.json retains the refusal and full DOM ancestry
+listener inventory. The preceding slot diagnostic had 175 complete 32/32 samples
+and no gap instance; no absence certificate was inferred from that result.
+Formal counts remain 1053/1053, including only one ordinary arrival/capture;
+friendly reinforcement and combat remain zero, new multi-event trajectories zero.
+
 ## Current evidence and corrected accounting
 
 Latest controlled-input checkpoint: **1053/1053 formal one-tick transitions**,
@@ -24,7 +41,7 @@ hypothesis rollout matches all forty intermediate worlds without a reset, but
 is **calibration only**: post-capture aura/cache eligibility remains unproved.
 It adds zero formal trajectories. The next-tick match is diagnostic only.
 
-Current v2 regression run: **228 passed, 1363 deselected** after integrating
+Current v2 regression run: **258 passed, 1363 deselected**, including the terminal ground-friendly fuel correction and current decoder diagnostic regressions. Node observer 12, visible-slot boundary and privacy checks pass. The preceding **228 passed** checkpoint followed integration of
 LaunchAll, quantity-independent newborn recording, before-only route certificates,
 chronological entry adoption and the original-before no-reset audit. The capture checkpoint 361d2a4 had 148
 passing tests. No performance rerun was
@@ -164,6 +181,13 @@ Boolean; missing historical fields remain UNKNOWN. It never exports a route or
 fuel and does not change the M1B minimum gate. No live friendly-arrival accuracy
 claim is made. Known True refuses unsupported relay and cannot be overridden by
 a scenario absence premise. Invalid scenario tower references are rejected.
+
+The ground terminal merge now permits unknown or zero fuel only when the
+destination was already same-owner, its no-line flag is directly explicit false,
+and incoming/destination vectors are ordinary Shield/Tank/Soldier with incoming
+Tank or Soldier. It preserves unknown fuel without guessing; other arrival
+branches retain fuel guards. See V2_M2A_FRIENDLY_FUEL_RULE.md. This static rule
+correction has no independent live friendly event credit yet.
 
 Root independently corrected morale bonus to min(3, headcount//2): pinned select
 at 0xffb43..0xffb51 selects 3 when half>=3. The old max interpretation and previous

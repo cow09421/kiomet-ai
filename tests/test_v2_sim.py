@@ -271,6 +271,117 @@ def test_terminal_friendly_arrival_requires_independent_no_supply_line_premise()
         step(state,scenario=Scenario(no_supply_line_towers=(99,)))
 
 
+@pytest.mark.parametrize('fuel',[None,0,150])
+def test_observed_no_line_terminal_many_merge_ignores_only_arrival_fuel(fuel):
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,0,0,0,0,19,0,0,0,0),
+        capacity=(10,)*10,production=(),relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,(0,0,0,0,0,4,0,0,0,0),88,False,
+        relation='SELF',terminal=True,fuel=fuel)
+    result=step(replace(state,towers=(state.towers[0],destination),forces=(force,)))
+    assert not result.forces
+    assert result.towers[1].units==(0,0,0,0,0,20,0,0,0,0)
+
+
+def test_observed_no_line_merge_keeps_negative_fuel_invalid():
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,)*10,production=(),
+        relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,
+        relation='SELF',terminal=True,fuel=-1)
+    with pytest.raises(UnsupportedState,match='EXPIRED_ARRIVAL'):
+        step(replace(state,towers=(state.towers[0],destination),forces=(force,)))
+
+
+@pytest.mark.parametrize('fuel',[None,0,150])
+def test_ground_many_merge_can_include_shields_tank_and_soldiers(fuel):
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,)*10,production=(),
+        relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,(2,0,0,0,1,3,0,0,0,0),89,False,
+        relation='SELF',terminal=True,fuel=fuel)
+    result=step(replace(state,towers=(state.towers[0],destination),forces=(force,)))
+    assert not result.forces
+    assert result.towers[1].units==(2,0,0,0,1,3,0,0,0,0)
+
+
+def test_scenario_terminal_force_annotation_unlocks_only_the_existing_terminal_gate():
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,)*10,production=(),
+        relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,
+        relation='SELF',terminal=None,fuel=None)
+    result=step(replace(state,towers=(state.towers[0],destination),forces=(force,)),
+                scenario=Scenario(terminal_forces=(0,)))
+    assert not result.forces and result.towers[1].units[5]==3
+
+
+def test_merge_fuel_exception_does_not_use_scenario_line_hypothesis_or_cover_other_arrivals():
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=(0,)*10,production=(),
+        relation='SELF',supply_line_present=None)
+    unknown_fuel=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,
+        relation='SELF',terminal=True,fuel=None)
+    no_line_scenario=Scenario(no_supply_line_towers=(4,))
+    with pytest.raises(UnsupportedState,match='UNKNOWN_ARRIVAL_FUEL'):
+        step(replace(state,towers=(state.towers[0],destination),forces=(unknown_fuel,)),
+             scenario=no_line_scenario)
+    with pytest.raises(UnsupportedState,match='EXPIRED_ARRIVAL'):
+        step(replace(state,towers=(state.towers[0],destination),forces=(replace(unknown_fuel,fuel=0),)),
+             scenario=no_line_scenario)
+
+    explicit_line=replace(destination,supply_line_present=True)
+    with pytest.raises(UnsupportedState,match='UNKNOWN_ARRIVAL_FUEL'):
+        step(replace(state,towers=(state.towers[0],explicit_line),forces=(unknown_fuel,)),
+             scenario=no_line_scenario)
+    with pytest.raises(UnsupportedState,match='UNSUPPORTED_REINFORCEMENT_SUPPLY_LINE'):
+        step(replace(state,towers=(state.towers[0],explicit_line),
+                     forces=(replace(unknown_fuel,fuel=150),)),scenario=no_line_scenario)
+
+    nonterminal=replace(unknown_fuel,terminal=None)
+    line_free=replace(destination,supply_line_present=False)
+    with pytest.raises(UnsupportedState,match='UNKNOWN_POST_ARRIVAL_PATH'):
+        step(replace(state,towers=(state.towers[0],line_free),forces=(nonterminal,)))
+
+
+@pytest.mark.parametrize('units,destination_units',[
+    ((1,0,0,0,0,0,0,0,0,0),(0,)*10),
+    ((0,0,0,0,0,3,1,0,0,0),(0,)*10),
+    ((0,0,0,0,0,3,0,0,0,0),(0,0,0,0,0,0,1,0,0,0)),
+    ((0,0,0,0,0,3,0,0,0,0),(0,0,0,0,0,0,0,0,0,1)),
+    ((0,1,0,0,0,0,0,0,0,0),(0,)*10),
+    ((0,0,1,0,0,0,0,0,0,0),(0,)*10),
+    ((0,0,0,1,0,0,0,0,0,0),(0,)*10),
+    ((0,0,0,0,0,3,0,0,0,0),(0,1,0,0,0,0,0,0,0,0)),
+    ((0,0,0,0,0,3,0,0,0,0),(0,0,1,0,0,0,0,0,0,0)),
+    ((0,0,0,0,0,3,0,0,0,0),(0,0,0,1,0,0,0,0,0,0)),
+])
+def test_non_ground_many_air_special_or_ruler_vectors_never_use_no_fuel_merge_exception(units,destination_units):
+    state=empty_world()
+    destination=replace(state.towers[1],owner=7,units=destination_units,
+        capacity=(10,)*10,production=(),relation='SELF',supply_line_present=False)
+    force=SimForce(7,3,4,units,88,False,relation='SELF',terminal=True,fuel=None)
+    with pytest.raises(UnsupportedState,match='UNKNOWN_ARRIVAL_FUEL'):
+        step(replace(state,towers=(state.towers[0],destination),forces=(force,)))
+
+
+def test_combat_arrival_does_not_use_same_owner_merge_fuel_exception():
+    state=empty_world()
+    enemy=replace(state.towers[1],owner=8,units=(0,0,0,0,0,1,0,0,0,0),
+        production=(),relation='ENEMY',supply_line_present=None)
+    force=SimForce(7,3,4,(0,0,0,0,0,3,0,0,0,0),88,False,
+        relation='SELF',terminal=True,fuel=None)
+    with pytest.raises(UnsupportedState,match='UNVERIFIED_NORMAL_COMBAT'):
+        step(replace(state,towers=(state.towers[0],enemy),forces=(force,)))
+    attacker_wins=replace(force,units=(0,0,0,0,0,5,0,0,0,0))
+    combat_state=replace(state,towers=(state.towers[0],enemy),forces=(attacker_wins,))
+    with pytest.raises(UnsupportedState,match='UNKNOWN_ARRIVAL_FUEL'):
+        step(combat_state,scenario=Scenario(ordinary_combat=True))
+    with pytest.raises(UnsupportedState,match='EXPIRED_ARRIVAL'):
+        step(replace(combat_state,forces=(replace(attacker_wins,fuel=0),)),
+             scenario=Scenario(ordinary_combat=True))
+
+
 def test_scenario_validation_does_not_lose_bool_int_aliases_in_sets():
     state=empty_world()
     state=replace(state,towers=(replace(state.towers[0],id=1),state.towers[1]))

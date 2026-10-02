@@ -1,0 +1,74 @@
+{
+  "QUESTION": "Can a fresh complete own non-Ruler pair qualify a real guarded friendly drag?",
+  "BEFORE": {
+    "preview_tick": 60947,
+    "coverage": "PLAYER_VISIBLE_COMPLETE",
+    "candidate_count": 4,
+    "friendly_candidate_count": 3,
+    "listener_inventory": "window/document/html/body/all canvas ancestors/canvas"
+  },
+  "ACTION": {
+    "hosts": 1,
+    "host_seconds_bound": 180,
+    "execute_request": {
+      "source": 18809128,
+      "destination": 18809127,
+      "observer_requested": true
+    },
+    "observer_arms": 0,
+    "troop_gestures": 0,
+    "preparation_gestures": 0,
+    "wheel_events": 0
+  },
+  "EXPECTED": "Recorder revalidates the whole world before selection or arming. Preview cannot authorize a stale or incomplete world.",
+  "OBSERVED": {
+    "events": 0,
+    "error": [
+      "ValueError: control readiness gaps: force:0:source"
+    ],
+    "observer_initial_status": "DISARMED",
+    "host_exit_code": 0
+  },
+  "SIMULATED": "Not applicable; pre-arm refusal, no input state transition.",
+  "DIFF": "Preview eligibility changed before execution: current force source unavailable. Keep rejection; no inferred hidden source.",
+  "VERDICT": "PRE_ARM_READINESS_REJECTION_ZERO_CREDIT",
+  "fixtures": [
+    {
+      "file": "tests/fixtures/v2/friendly-scene-preview-A-20261002.json.gz",
+      "raw_sha256": "e26fc631abf26f48ab887e0948e718509ffe8d5a1c617ee1f24dd83613d9b993",
+      "compressed_sha256": "4e79ba993813825bc3b8c481868ad28ea6c10eb8ca55a7e9ab9b72c96131e9e9"
+    },
+    {
+      "file": "tests/fixtures/v2/controlled-transition-4b302c1f9dde.json.gz",
+      "raw_sha256": "67ac04fab8841609ea665057ddd97112a66ed75f2c77c8f8c5488f5f70629583",
+      "compressed_sha256": "578434fbc75a7a52e8db783344d698d1e931af99cda5fdf1a5dc6ba68b6f7a06"
+    }
+  ],
+  "new_formal_events": 0,
+  "new_formal_trajectories": 0,
+  "listener_source_fixtures": [
+    {
+      "file": "tests/fixtures/v2/friendly-scene-observer-script3-20261002.js.gz",
+      "raw_sha256": "7f70c845fa7f430271e6fa9f7d132470291a505fba10c1a489de92296da30ccf",
+      "compressed_sha256": "f203d4daf1a144998211a01a85070761cf2ca12249c23c086b2474318fa08953"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-camera-probeA-20261002-script37.js.gz",
+      "raw_sha256": "1fa3e0fe90b287cb49f0e4b458356120c1da419f16017060562caa1184c09b8a",
+      "compressed_sha256": "b68a010f0f489c761cc0f7db5d94547abaa4e43a71ab53bed409b2fe5f0d7a45"
+    },
+    {
+      "file": "tests/fixtures/v2/friendly-camera-probeA-20261002-script8.js.gz",
+      "raw_sha256": "05b51675785a3f6568f4d80562dabb4f59a6130504c7a04c7de9cf777c33094e",
+      "compressed_sha256": "fa812dfee4d1336a907f1d5bcdeb34285720511c2fb7a957f156e1e8e0db0bf2"
+    }
+  ],
+  "validation": {
+    "v2_python_regression": 258,
+    "deselected": 1363,
+    "node_input_entry": 12,
+    "node_visible_slot_diagnostics": "PASS",
+    "node_privacy": "PASS",
+    "initial_node_filename_error": "Wrong test path v2_input_entry.cjs; corrected to v2_input_entry_observer.cjs and all12 passed."
+  }
+}

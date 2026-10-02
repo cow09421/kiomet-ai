@@ -142,18 +142,29 @@ function (mode = "world", watchedIds = [], ownerStates = []) {
   const roadPtr = u32(1365240);
   if (u8(1365244) !== 3 || !range(roadPtr, 512 * 512)) throw Error("road table unavailable");
   const towers = [];
+  const visibleSlotGaps = [];
   let positiveRefs = 0;
   for (let y = bounds[1]; y <= bounds[3]; y++) {
     for (let x = bounds[0]; x <= bounds[2]; x++) {
       const count = u16(refs + 2 * (x - bounds[0] + (y - bounds[1]) * width));
       if (count === 0) continue; // Fog boundary BEFORE any tower payload read.
       positiveRefs++;
+      const id = (x | y << 16) >>> 0;
       const chunk = root + 664 + (y >> 4) * 1408 + (x >> 4) * 44;
-      if (!range(chunk, 44) || u32(chunk) === 0x80000000) continue;
+      if (!range(chunk, 44)) continue; // Malformed/unreadable is unknown, never an empty-cell claim.
+      const chunkTag = u32(chunk);
+      if (chunkTag === 0x80000000) {
+        visibleSlotGaps.push({id, reason: "CHUNK_ABSENT"});
+        continue;
+      }
       const ptr = u32(chunk + 36);
       if (!range(ptr, 256 * 48)) throw Error("invalid chunk tower array");
       const tower = ptr + ((y & 15) * 16 + (x & 15)) * 48;
-      if (u32(tower) === 0x80000000) continue;
+      const towerTag = u32(tower);
+      if (towerTag === 0x80000000) {
+        visibleSlotGaps.push({id, reason: "TOWER_NONE"});
+        continue;
+      }
       const offset = u8(offsetPtr + y * 512 + x);
       if ((offset & 15) > 4 || (offset >> 4) > 4) throw Error("invalid world-position offset");
       const owner = u16(tower + 36);
@@ -250,7 +261,8 @@ function (mode = "world", watchedIds = [], ownerStates = []) {
   const adTag=u32(root+48964),rankTag=u8(core+255);
   const ownUpgradePolicy={rewarded_ad_available:adTag<=3 ? adTag!==0 : null,
     rank_requires_unlocks:rankTag>=1 && rankTag<=7 ? rankTag<3 || rankTag===7 : null};
-  return {...metadata, towers, positive_refs: positiveRefs, own_unlocks:ownUnlocks,
+  return {...metadata, towers, positive_refs: positiveRefs, visible_slot_gaps: visibleSlotGaps,
+    own_unlocks:ownUnlocks,
     own_upgrade_policy:ownUpgradePolicy,
     // Normal current-player prerequisite presentation; no hidden tower IDs.
     own_tower_counts: Array.from({length:27},(_,i)=>u16(root+592+i*2)),

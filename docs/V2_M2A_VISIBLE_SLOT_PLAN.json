@@ -1,0 +1,16 @@
+{
+  "QUESTION": "Are positive sensor cells omitted by the strict decoder missing chunks or exact Tower OptionNone within present chunks in an ordinary, normally updating client?",
+  "BEFORE": "New raw visible_slot_gaps diagnostic uses only existing tags behind positive Visible.refs; strict coverage stays unchanged. No prior partial sample is retroactively reclassified.",
+  "ACTION": "At most two private finite official headless hosts, 90 seconds each; ordinary Play only; no camera input, no observer arming, no troop gestures. Sample for up to 20 seconds, preserve gaps/errors/identity/tick and canonical partial coverage. The second attempt starts its prepared probe immediately after startup.",
+  "EXPECTED": "Classify actual omissions without inferring absence. Concrete static ActorUpdate mapping is under independent review; live metadata alone earns no absence certificate.",
+  "OBSERVED": {
+    "attempt_1": {
+      "host_terminal_exit_code": 0,
+      "samples": 0,
+      "reason": "Probe refused because host had less than 30 seconds remaining; host is confirmed ended, not inferred from a timeout."
+    }
+  },
+  "SIMULATED": "Not applicable; no troops. Zero M2 credit.",
+  "DIFF": "PENDING; group CHUNK_ABSENT and TOWER_NONE separately; no hidden actor reads.",
+  "VERDICT": "PENDING; strict coverage retained, no count padding."
+}
