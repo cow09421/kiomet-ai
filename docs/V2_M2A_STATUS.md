@@ -91,6 +91,14 @@ Accepted evidence was frozen first at 76194804b0ce62a2463405228916bffe391ecb82.
 The old queue-consumer note remains CANDIDATE and the capacity-context note REWORK;
 neither is promoted or included in accepted commits.
 
+Final selected-v2 regression executed at HEAD
+ada618037c2291fc16ec1886887399a1e607e62c with only the two retained candidate/rework
+documents untracked. Scope: tests -k v2 -q. PASS 371 / FAIL 0 / SKIP 0 / ERROR 0 /
+DESELECTED 1363. Head and all hashed Python sources stayed unchanged. This includes
+11 ledger and 10 external-action replay tests. The receipt is
+V2_M2A_CAUSAL_REGRESSION.json; later reporting-only commits do not change tested
+code. No real-world provenance, coverage or milestone credit follows from tests.
+
 ## Registered mouse callback vtable checkpoint — 2026-10-03
 
 Three finite, no-join, no-input probe cohorts are preserved independently. The
