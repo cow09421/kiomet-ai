@@ -75,6 +75,30 @@ checked in V2_M2A_CANVAS_CALLBACK_METADATA_VALIDATION.json. This failed attempt
 read no closure descriptors; the planned successful path's transient CDP scope
 descriptor enumeration remains an explicitly recorded diagnostic limitation.
 
+A subsequent same-host scalar pair isolated the missing handler descriptors:
+all three no-group rows matched source, location and capture mode but omitted
+handler objects; all three grouped rows exposed function/object-ID descriptors
+and passed the individual identity predicates. The grouped recheck still refused
+HANDLER_ROW_IDENTITY_CHANGED. Remote-ID equality does not settle logical function
+identity, and no callback/closure scope was inspected. All source guards remain.
+Six portable artifacts are Root hash/round-trip checked in
+V2_M2A_CANVAS_LISTENER_IDENTITY_PAIR_VALIDATION.json. Root confirmed host session
+36846 exit 0 and absent lease after normal shutdown. No browser host remains.
+
+The held-casualty cleanup pairing is also independently accepted for T/S only:
+both implementations remove the prior held unit once and retain the old marker
+when no new candidate exists. An initial documentation claim that Python cleared
+that marker was corrected against its actual conditional assignment; production
+code needed no change. See V2_M2A_TS_HELD_CASUALTY_CONSUME_REVIEW.md. Complete fight,
+arrival route/fuel and changing aura admission remain unresolved.
+
+The narrowed own-manual Soldier launch review separates movement increment from
+acceleration: composition determines Soldier speed 2, while the copied source
+morale byte changes the initial segment's progress threshold. This initial-leg
+source result does not identify an arbitrary drag as DeployForce or establish
+future route/fuel, combat or full arrival admission. See
+V2_M2A_TS_MORALE_TRAVEL_SPEED_REVIEW.md; the recorder's wider refusal remains.
+
 Formal counts remain 1053/1053, ordinary arrival/capture 1/100, friendly/combat
 zero and newly qualified multi-event trajectories zero. The separately recorded
 54 and 67 affected test results remain the current route-change validation;

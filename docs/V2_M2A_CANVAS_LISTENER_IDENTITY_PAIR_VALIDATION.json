@@ -1,0 +1,121 @@
+{
+  "title": "Canvas listener identity paired validation",
+  "date": "2026-10-02",
+  "status": "PAIRED_RUNS_COMPLETE_TERMINAL_EXIT_0_NO_LEASE_RETAINED",
+  "execution": "Parent-reported terminal outcome: original no-group helper then group variant on the same owned host; process exited 0 and no lease remained. This report records the separately saved sanitized receipts.",
+  "paired_run": {
+    "same_host": true,
+    "same_page_sequence": "Original scalar helper without objectGroup ran first, followed by group variant.",
+    "original_receipt_verdict": "IDENTITY_MISMATCH_ISOLATED_DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT",
+    "group_receipt_verdict": "IDENTITY_MISMATCH_ISOLATED_DIAGNOSTIC_ONLY_ZERO_FORMAL_CREDIT",
+    "observer_pristine_both_runs": true,
+    "scope_reads_both_runs": 0,
+    "input_or_handler_invocations_both_runs": 0,
+    "application_wasm_calls_or_memory_reads_both_runs": 0
+  },
+  "comparison": {
+    "expected_events": [
+      "mousemove",
+      "mousedown",
+      "mouseup"
+    ],
+    "for_each_run_event_count": 3,
+    "event_multiplicity_both_runs": {
+      "mousemove": 1,
+      "mousedown": 1,
+      "mouseup": 1
+    },
+    "source_hash_location_and_capture_predicates": "All three rows in both receipts matched pinned source SHA, raw CDP location 2270/17, and useCapture=false.",
+    "no_group_handler_and_original_handler": "Both absent on all three event rows; first mismatch `mousemove:HANDLER_IS_FUNCTION`.",
+    "group_handler_and_original_handler": "Both present on all three rows as Function descriptors with objectId-present=true; every per-row identity predicate passed.",
+    "group_liveness_recheck": "The group variant ended with `HANDLER_ROW_IDENTITY_CHANGED`; ephemeral CDP object identity did not remain stable across its row recheck.",
+    "interpretation": "The paired result is consistent with object-group-dependent RemoteObject availability in this Chromium run. It does not establish whether handler identity changed, wrappers were rematerialized, or the same logical function persisted; no cross-run function identity comparison was performed.",
+    "originalHandler_substitution": "None. The field was diagnostic only."
+  },
+  "limits": {
+    "listener_topology_or_route_qualification": "NONE",
+    "callback_scope_or_inner_vtable": "UNKNOWN",
+    "formal_credit": 0,
+    "no_global_negative_claim": true
+  },
+  "fixtures": [
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-diagnostic-20261002.py",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-diagnostic-20261002.py.gz",
+      "source_bytes": 18641,
+      "gzip_bytes": 5514,
+      "source_sha256": "a171f345843631f42c80a538f65233afc95df6981196aa3b00591ffd4bae4913",
+      "gzip_sha256": "9369e6da9045b38d4150e36fb4378e6a8768246c1c3319c0e4692d2d6455c6ed",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    },
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-diagnostic-run-plan-20261002.json",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-diagnostic-run-plan-20261002.json.gz",
+      "source_bytes": 3265,
+      "gzip_bytes": 1625,
+      "source_sha256": "be795e9eb5d2d0378c097c44d8109e1da872e165f5d9033d1fc3b58dc50210b2",
+      "gzip_sha256": "236bb6502891c1ec943ac109dec73070adc5052c72940062365de9f2a32c7800",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    },
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-diagnostic-20261002.json",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-diagnostic-20261002.json.gz",
+      "source_bytes": 8404,
+      "gzip_bytes": 2135,
+      "source_sha256": "0b1e988a64f9c0719d3c109bd9ae15efe9cd7fd3789160cb09a6179260192049",
+      "gzip_sha256": "332c414874fcf93fc98f47e293ed9f50bb035d0bd70146d7a58d0c12e5843cb4",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    },
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-group-diagnostic-20261002.py",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-group-diagnostic-20261002.py.gz",
+      "source_bytes": 19112,
+      "gzip_bytes": 5591,
+      "source_sha256": "7e985304383eadb66322494ae9b3f88c3da6ee5c4a28fc3556a153fd22c5af49",
+      "gzip_sha256": "3682b0c64f01f6385696dffa5f01b87f25158ac9e4768f10f602cf6030864688",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    },
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-group-diagnostic-run-plan-20261002.json",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-group-diagnostic-run-plan-20261002.json.gz",
+      "source_bytes": 5111,
+      "gzip_bytes": 2243,
+      "source_sha256": "3621c378949a5e6b86ef4732974743d542ab157b77c15ff3b13c3dce9db1520b",
+      "gzip_sha256": "4f626b238eee94d2d5cfd7fc0db37127ecd86112f2d548212244d3ebee0633c7",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    },
+    {
+      "source": "runtime/research/v2/canvas-metadata-identity-group-diagnostic-20261002.json",
+      "fixture": "tests/fixtures/v2/canvas-listener-identity-pair-20261002/canvas-metadata-identity-group-diagnostic-20261002.json.gz",
+      "source_bytes": 9858,
+      "gzip_bytes": 2687,
+      "source_sha256": "b236ec8d52500729e7fe3f570cb2f08aa3196fac4bc599267dda4e9407be1d2d",
+      "gzip_sha256": "2a2857f908fb32f0a6ce8d161a3fcdff1bbb6cd1bf506f78676a3be4be6317c0",
+      "gzip_mtime_unix": 0,
+      "roundtrip_exact": true,
+      "parsed": true
+    }
+  ],
+  "root_acceptance": {
+    "six_hashes_roundtrips_lengths_mtimes_parses": "PASS",
+    "row_predicates_independently_recomputed_from_receipts": true,
+    "group_source_and_location_checks_retained": true,
+    "actual_party_codes_present": false,
+    "host_session": 36846,
+    "host_terminal_exit_code": 0,
+    "lease_absent": true,
+    "same_logical_function_identity": "UNKNOWN",
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0
+  }
+}
