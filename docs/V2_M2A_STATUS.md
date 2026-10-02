@@ -33,6 +33,59 @@ No milestone or performance claim is expanded by these changes. No live browser
 host remains active. See V2_M2A_LISTENER_INVENTORY_VALIDATION.json and
 V2_M2A_LISTENER_SOURCE_VALIDATION.json for portable hash-checked artifacts.
 
+## Registered mouse callback vtable checkpoint — 2026-10-03
+
+Three finite, no-join, no-input probe cohorts are preserved independently. The
+first refused CAPTURED_SHIM_LOCATION_OBJECT_UNAVAILABLE with exactly zero control
+reads. The second exposed a tool NameError: the progress record was not passed
+through the handler-inspection call. It also read zero bytes. Python AST parsing
+had not detected that execution error. The corrected third helper explicitly
+threads the record; builder, independent reviewer and Root reproduced its actual
+inspect-to-authentication path offline with seven metadata calls and no memory
+or callback calls. A standard symbol-table audit found no unresolved globals.
+Neither earlier helper, plan nor failure receipt was overwritten.
+
+The third actual probe authenticated the captured invocation shim against exact
+pinned script/location/body, revalidated own closure data descriptors within the
+same synchronous task as each read, and compared only the envelope +4 word.
+All three registered mouse handlers matched candidate 0x1137a8. Three completed
+reads total exactly 12 control bytes. The Rc pointer, captures, actors and world
+state were not read; no observer arm or input was sent. Logical function identity,
+state pointer/adapter/count, document/source/lease and pristine-observer checks
+passed. No transient document IDs, time-origin values or raw references occur in
+the portable receipt. Root confirmed all three original host sessions 75018,
+68690 and 23230 reached terminal exit 0 after normal stop; no host lease remains.
+
+The comparison corroborates the pinned static invoke mapping to func4041 and the
+tag-9 queue producer. It does not assert that any message was dispatched or
+consumed. The typed queue-consumer/application-handler edge and full 28-listener
+topology qualification remain unresolved, so no input or transition credit is
+granted. All existing broad-listener and nonshared-memory guards remain intact.
+See the three V2_M2A_CANVAS_ENVELOPE_CONTROL*_VALIDATION.json manifests and the
+FUNCTION_LOCATION_COLUMN/SERIALIZATION source reviews. Root independently
+verified all nine gzip fixtures' raw/gzip hashes, sizes, mtime zero, parsing and
+exact round trips. Host logs remain ignored and are not packaged.
+
+A separate accepted restricted combat proof connects selected T/S enums through
+held-unit consumption and signed damage back to repeated selection, including
+the zero-score defender-availability gate and non-Ruler fallback. Combined with
+the prior cleanup and terminal proofs, it establishes local fighter-loop vector
+accounting only for equal entry vectors with Shield zero and known reviewed
+inputs. Initial documentation offsets for the defender enum were corrected:
+scratch+64 supplies the enum; scratch+65 supplies its tag/field. Arrival/postlude,
+complete visible-world equivalence, Shield/Air/special handling and broader
+context admission are not certified. No combat default was enabled. See
+V2_M2A_TS_FINAL_VECTOR_BOUNDARY_REVIEW.md.
+
+Current rolling Luna work now traces the typed queue consumer, upstream restricted
+combat context, and independent evidence acceptance; Sol owns integration and
+milestone decisions. This checkpoint changes no production source and adds no
+formal events, trajectories, regression-test total or performance measurement.
+The separately recorded 54 and 67 affected checks retain their original scope.
+Formal one-tick 1053/1053; ordinary arrival/capture 1/100; friendly/combat zero;
+new qualified multi-event trajectories zero. Ordinary world complete NO;
+M2 NOT_YET_PASS; M3 NOT_STARTED.
+
 ## Official party-route checkpoint — 2026-10-02
 
 The restored three Luna workers completed bounded route support, owner/capacity/production audits and typed CanvasProps tracing. Root independently accepted the shared exact official party URL shape with the existing pinned-client, memory, source, lifecycle and visibility guards. A normal Party/Play flow then produced 21 canonical NETWORK samples in a finite five-second survey with zero control-readiness gaps. All 1,991 serialized UNKNOWN facts retained null values and their knowledge status; visible coverage is not a whole-world certificate. No troop command or observer arm was dispatched.

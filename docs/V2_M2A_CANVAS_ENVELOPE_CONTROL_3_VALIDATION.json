@@ -1,0 +1,93 @@
+{
+  "status": "PACKAGED_READ_ONLY_VALIDATION",
+  "scope": "Independent packaging/hash/roundtrip and receipt-structure checks for the frozen B3 helper, plan, and actual receipt. The live host observation is attributed separately below.",
+  "artifacts": [
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-3-20261003.py",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-3-20261003/canvas-callback-envelope-control-probe-3-20261003.py.gz",
+      "raw_bytes": 36989,
+      "raw_sha256": "331fcb92b034f27f89508adc620b95a0bcaa0e75a813226b67d011798bfe1fd2",
+      "gzip_bytes": 9430,
+      "gzip_sha256": "897a1399e4d83c670c0bd1d5b8f9247ff87c194cfdc25c7437253b3b0e0bc731",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-3-plan-20261003.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-3-20261003/canvas-callback-envelope-control-probe-3-plan-20261003.json.gz",
+      "raw_bytes": 9463,
+      "raw_sha256": "7686fe005f67a405245608d15f9a70ed499a0e4e6453ca9cba61d75502eb8b86",
+      "gzip_bytes": 4004,
+      "gzip_sha256": "5f149e496b1b7659fbcaf5807fcf6bea5bb607b6a0090c34d9cd1d4e7e96fca6",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-3-20261003.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-3-20261003/canvas-callback-envelope-control-probe-3-20261003.json.gz",
+      "raw_bytes": 12528,
+      "raw_sha256": "b4abbde75c35ad894c2e94f1c01d122115a6942e06d05b8c688375823c0fa501",
+      "gzip_bytes": 4536,
+      "gzip_sha256": "13c18ef6ac452c9d7cfc6c9f0a92838ba170e1c1301f67c996800760c00d9856",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    }
+  ],
+  "offline_review": {
+    "actual_inspect_to_authentication_fake_cdp_smoke": "PASS",
+    "metadata_calls": 7,
+    "debugger_get_script_source_calls": 2,
+    "runtime_get_properties_calls": 5,
+    "inline_function_location": "validated pinned line 1975, column 125 and pinned full-script/shim hashes",
+    "memory_or_runtime_call_function_calls": 0,
+    "control_memory_reads": 0,
+    "unresolved_global_references": [],
+    "provenance": "Independently performed by reviewer against B3 helper with fake CDP; no browser/host attached."
+  },
+  "receipt_observed": {
+    "verdict": "CONTROL_ENVELOPE_CANDIDATE_COMPARISONS_COMPLETE_ZERO_FORMAL_CREDIT",
+    "status": "SANITIZED_METADATA_CAPTURED",
+    "canvas_count": 1,
+    "matching_official_mouse_handlers": 3,
+    "candidate_matches": 3,
+    "control_word_reads_started": 3,
+    "completed_control_word_reads": 3,
+    "control_memory_bytes_read": 12,
+    "control_memory_bytes_read_per_handler": 4,
+    "raw_closure_refs_persisted": false,
+    "world_state_sampled": false,
+    "full_listener_topology_qualification": "NOT_ATTEMPTED",
+    "callback_queue_consumer_and_application_route": "UNKNOWN",
+    "formal_credit": 0,
+    "receipt_raw_sha256": "b4abbde75c35ad894c2e94f1c01d122115a6942e06d05b8c688375823c0fa501",
+    "world_trajectory_count": 0,
+    "world_trajectory_count_basis": "Receipt states no simulation/world action and world_state_sampled=false; no trajectory was captured."
+  },
+  "terminal_status": {
+    "session_id": 23230,
+    "exit_code": 0,
+    "normal_stop": true,
+    "lease_absent": true,
+    "provenance": "Parent-reported terminal and lease checks; not independently captured by packaging reviewer."
+  },
+  "limits": [
+    "This records bounded candidate equality comparisons only, not full listener topology or callback queue consumer/application route.",
+    "No actor/world state was sampled and formal credit remains zero.",
+    "No host log, object identifiers, memory pointers, document IDs, time-origin values, credentials, or actor data are packaged."
+  ],
+  "root_acceptance": {
+    "fixture_hash_length_mtime_roundtrip_parsing": "PASS",
+    "originals_preserved": true,
+    "host_session": 23230,
+    "host_terminal_exit_code": 0,
+    "lease_absent": true,
+    "control_memory_bytes_read": 12,
+    "actor_memory_bytes_read": 0,
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0,
+    "application_consumer_still_unknown": true,
+    "full_listener_topology_qualified": false,
+    "independent_offline_actual_call_path_metadata_calls": 7,
+    "undefined_global_references": []
+  }
+}

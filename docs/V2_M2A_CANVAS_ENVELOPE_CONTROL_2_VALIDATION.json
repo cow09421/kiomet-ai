@@ -1,0 +1,72 @@
+{
+  "status": "PACKAGED_READ_ONLY_VALIDATION",
+  "scope": "Independent gzip/hash/roundtrip audit of frozen phase-B2 helper, plan, and actual receipt; no helper execution during packaging.",
+  "artifacts": [
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-2-20261002.py",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-2-20261003/canvas-callback-envelope-control-probe-2-20261002.py.gz",
+      "raw_bytes": 36953,
+      "raw_sha256": "0fb1842d9815eb51af7c9cdb4c89473bd2aa5745c53b316f3c8fe6b46f2397a8",
+      "gzip_bytes": 9429,
+      "gzip_sha256": "ee4a0e5f0721e91749ffcec4d31414e9d348da2373df5f588087d69a659f124c",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-2-plan-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-2-20261003/canvas-callback-envelope-control-probe-2-plan-20261002.json.gz",
+      "raw_bytes": 9244,
+      "raw_sha256": "9d94a8b05c6e65ce25f9a5a632c0b932d75b322726888583213012c49d59bb80",
+      "gzip_bytes": 3897,
+      "gzip_sha256": "f587c2259a14143edcab6132083d44c6aff9685fc499d0f2ad648ba2e95edf38",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-2-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-2-20261003/canvas-callback-envelope-control-probe-2-20261002.json.gz",
+      "raw_bytes": 9635,
+      "raw_sha256": "e9b25bdf0d45936c00463c5e723d925990ac46983e5af0eaff385d072d5e6826",
+      "gzip_bytes": 4039,
+      "gzip_sha256": "15e4f97f2673646d3e2f85463192e33dd35512380c756230618e588fe8c25950",
+      "gzip_mtime": 0,
+      "roundtrip_verified": true
+    }
+  ],
+  "receipt_observed": {
+    "status": "FAIL_CLOSED",
+    "failure_stage": "OFFICIAL_CANVAS_LISTENER_LOOKUP",
+    "failure_class": "NameError",
+    "event_count": 0,
+    "failure_reason": "UNPUBLISHED_EXCEPTION_DETAIL",
+    "control_word_reads_started": 0,
+    "completed_control_word_reads": 0,
+    "control_memory_bytes_read": 0,
+    "maximum_possible_control_memory_bytes_read": 0,
+    "raw_closure_refs_persisted": false
+  },
+  "terminal_status": {
+    "session_id": 68690,
+    "exit_code": 0,
+    "lease_absent": true,
+    "provenance": "Parent-reported normal terminal completion and lease absence; not independently captured by packaging review."
+  },
+  "review_limits": [
+    "The B2 helper failed closed with NameError in OFFICIAL_CANVAS_LISTENER_LOOKUP before any event rows or control reads.",
+    "The actual receipt contains no callback rows or raw closure references.",
+    "No host log, object IDs, URLs, credentials, actor state, or callback binding claims are included."
+  ],
+  "root_acceptance": {
+    "fixture_hash_length_mtime_roundtrip_parsing": "PASS",
+    "originals_preserved": true,
+    "host_session": 68690,
+    "host_terminal_exit_code": 0,
+    "lease_absent": true,
+    "control_memory_bytes_read": 0,
+    "actor_memory_bytes_read": 0,
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0,
+    "application_consumer_still_unknown": true,
+    "full_listener_topology_qualified": false
+  }
+}

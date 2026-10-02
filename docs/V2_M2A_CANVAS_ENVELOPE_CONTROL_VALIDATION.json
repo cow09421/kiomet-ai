@@ -1,0 +1,71 @@
+{
+  "status": "PACKAGED_READ_ONLY_VALIDATION",
+  "scope": "Independent packaging/hash/roundtrip audit of the accepted phase-B helper, immutable plan, and receipt. No helper execution in this packaging task.",
+  "artifacts": [
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-20261002.py",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-20261002/canvas-callback-envelope-control-probe-20261002.py.gz",
+      "raw_bytes": 34545,
+      "raw_sha256": "4ae5f192051a8d27438318660c13fa51b5bda79ab0863dc538255012fdcb4a39",
+      "gzip_bytes": 8738,
+      "gzip_sha256": "37d050663dc4ce1e8c7377d48ebc07743c842064cc32f8a5fef947ce545d704d",
+      "roundtrip_verified": true,
+      "gzip_mtime": 0
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-plan-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-20261002/canvas-callback-envelope-control-probe-plan-20261002.json.gz",
+      "raw_bytes": 7782,
+      "raw_sha256": "52383ff678aef3cc597deda3417c2c98b8a7ae82d397f57070ac4a6e3f0de8b7",
+      "gzip_bytes": 3364,
+      "gzip_sha256": "b8d9b1f80351c1e59ee90d5a4adb3652ac0e3eade7c5f39ae8606f4d2edae7c2",
+      "roundtrip_verified": true,
+      "gzip_mtime": 0
+    },
+    {
+      "source_path": "runtime/research/v2/canvas-callback-envelope-control-probe-20261002.json",
+      "fixture_path": "tests/fixtures/v2/canvas-envelope-control-20261002/canvas-callback-envelope-control-probe-20261002.json.gz",
+      "raw_bytes": 8158,
+      "raw_sha256": "a28e91ef91c410eb2dfd22b53051d83562ceb4cc9bd17600088b2e7af136e08d",
+      "gzip_bytes": 3511,
+      "gzip_sha256": "6a6f79e92ec8ed04f018c0cad4995ec4aa07ffc75c6d896dc98a15142f750c0d",
+      "roundtrip_verified": true,
+      "gzip_mtime": 0
+    }
+  ],
+  "receipt_observed": {
+    "status": "FAIL_CLOSED",
+    "failure_stage": "OFFICIAL_CANVAS_LISTENER_LOOKUP",
+    "failure_reason": "CAPTURED_SHIM_LOCATION_OBJECT_UNAVAILABLE",
+    "event_count": 0,
+    "control_word_reads_started": 0,
+    "completed_control_word_reads": 0,
+    "control_memory_bytes_read": 0,
+    "maximum_possible_control_memory_bytes_read": 0,
+    "raw_closure_refs_persisted": false,
+    "source_receipt_sha256": "a28e91ef91c410eb2dfd22b53051d83562ceb4cc9bd17600088b2e7af136e08d"
+  },
+  "terminal_status": {
+    "session_id": 75018,
+    "exit_code": 0,
+    "provenance": "Parent-reported terminal observation; not independently captured by this packaging review.",
+    "lease_absent": true,
+    "provenance_note": "Parent-reported after normal stop; not inferred from the packaged receipt."
+  },
+  "review_limits": [
+    "The packaged receipt reports CAPTURED_SHIM_LOCATION_OBJECT_UNAVAILABLE before any event rows or control-word reads.",
+    "No host log, transient object ID, raw closure reference, credentials, or browser identity data is included.",
+    "No topology, callback binding, actor state, or formal equivalence claim is made."
+  ],
+  "root_acceptance": {
+    "fixture_hash_length_mtime_parsing_roundtrip": "PASS",
+    "originals_preserved": true,
+    "host_session": 75018,
+    "host_terminal_exit_code": 0,
+    "lease_absent": true,
+    "formal_event_delta": 0,
+    "formal_trajectory_delta": 0,
+    "control_memory_bytes_read": 0,
+    "actor_memory_bytes_read": 0
+  }
+}
