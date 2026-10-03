@@ -1,0 +1,1056 @@
+{
+  "status": "UNFILTERED_REPLAY_COMPLETE",
+  "version": "unfiltered-arrival-settlement-replay-v1",
+  "freeze": {
+    "initial_rule": "docs/V2_M2A_SETTLEMENT_RULE_FREEZE.json",
+    "initial_rule_sha256": "449e4a33584d1f82a897bc32f7d14023ad85023a2d531b4cfbc4e925b09ddb50",
+    "final_premise": "docs/V2_M2A_SETTLEMENT_PREMISE_FREEZE.json",
+    "final_premise_sha256": "a63ec93476c8c5d83e5b5083ed4563764db185b335adaeaa9dd7a669431632f6",
+    "holdout_scored_after_final_premise_freeze": true
+  },
+  "population": {
+    "total_known_due_opportunities": 413,
+    "boundary_supported": 295,
+    "boundary_excluded_retained": 118,
+    "supported_by_branch": {
+      "EMPTY_NEUTRAL_CAPTURE": 45,
+      "SAME_OWNER_REINFORCEMENT": 219,
+      "NO_NAIVE_SETTLEMENT_BRANCH": 31
+    },
+    "raw_candidate_branch_counts_all_cases": {
+      "EMPTY_NEUTRAL_CAPTURE": 51,
+      "NO_NAIVE_SETTLEMENT_BRANCH": 45,
+      "SAME_OWNER_REINFORCEMENT": 317
+    }
+  },
+  "all_scoring": {
+    "MATCH": 29,
+    "MISMATCH": 235,
+    "UNSCORABLE": 149
+  },
+  "branch_naive_scores": {
+    "EMPTY_NEUTRAL_CAPTURE": {
+      "match": 13,
+      "mismatch": 32,
+      "unscorable": 6,
+      "accuracy_scored": 0.28888888888888886
+    },
+    "SAME_OWNER_REINFORCEMENT": {
+      "match": 16,
+      "mismatch": 203,
+      "unscorable": 98,
+      "accuracy_scored": 0.0730593607305936
+    }
+  },
+  "all_413_force_status": {
+    "t_plus_1": {
+      "DISAPPEARED": 57,
+      "TRANSFORMED": 215,
+      "AMBIGUOUS": 128,
+      "CONTINUES": 12,
+      "UNKNOWN": 1
+    },
+    "t_plus_2": {
+      "DISAPPEARED": 56,
+      "TRANSFORMED": 213,
+      "AMBIGUOUS": 128,
+      "CONTINUES": 14,
+      "UNKNOWN": 2
+    }
+  },
+  "capture_owner_inventory_observations": {
+    "supported_cases": 45,
+    "owner_after_matches_incoming": 45,
+    "observed_inventory_zero_after": 32,
+    "first_difference_counts": {
+      "inventory_after": 32
+    },
+    "supported_inventory_mismatch_before_context": {
+      "cases": 32,
+      "production_due_true": 0,
+      "target_delay_nonzero": 0,
+      "source_delay_nonzero": 0,
+      "special_destination_true": 0,
+      "confirmed_local_relay_true": 0,
+      "local_relay_unknown": 32,
+      "possible_unknown_destination_inbound": 15,
+      "incomplete_local_inbound_context": 15,
+      "capacity_status_counts": {
+        "WITHIN_NORMAL_CAPACITY": 8,
+        "WITHIN_PINNED_GROUND_OVERFLOW": 8,
+        "CLIPPING_OR_CAPACITY_AMBIGUITY": 16
+      }
+    }
+  },
+  "splits": {
+    "development": {
+      "cases": 312,
+      "boundary_supported": 226,
+      "boundary_excluded": 86,
+      "branch_candidate_counts": {
+        "EMPTY_NEUTRAL_CAPTURE": 24,
+        "NO_NAIVE_SETTLEMENT_BRANCH": 26,
+        "SAME_OWNER_REINFORCEMENT": 262
+      },
+      "score_counts": {
+        "EMPTY_NEUTRAL_CAPTURE:MATCH": 3,
+        "EMPTY_NEUTRAL_CAPTURE:MISMATCH": 21,
+        "NO_NAIVE_SETTLEMENT_BRANCH:UNSCORABLE": 26,
+        "SAME_OWNER_REINFORCEMENT:MATCH": 13,
+        "SAME_OWNER_REINFORCEMENT:MISMATCH": 167,
+        "SAME_OWNER_REINFORCEMENT:UNSCORABLE": 82
+      },
+      "force_status_t_plus_1": {
+        "DISAPPEARED": 43,
+        "TRANSFORMED": 167,
+        "AMBIGUOUS": 92,
+        "CONTINUES": 9,
+        "UNKNOWN": 1
+      },
+      "force_status_t_plus_2": {
+        "DISAPPEARED": 42,
+        "TRANSFORMED": 166,
+        "AMBIGUOUS": 92,
+        "CONTINUES": 11,
+        "UNKNOWN": 1
+      },
+      "eligibility_without_terminal_proxy": {
+        "capture": {
+          "cases": 8,
+          "groups": 8,
+          "recordings": 3
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "final_frozen_eligibility": {
+        "capture": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "strict_world_eligible": {
+        "capture": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "naive_scores_within_eligibility": {
+        "eligibility_without_terminal_proxy": {
+          "capture": {
+            "cases": 8,
+            "match": 2,
+            "mismatch": 6,
+            "unscorable": 0,
+            "accuracy_scored": 0.25,
+            "groups": 8,
+            "recordings": 3
+          },
+          "reinforcement": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          }
+        },
+        "final_frozen_eligibility": {
+          "capture": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          },
+          "reinforcement": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          }
+        }
+      },
+      "force_status_supported_branch_cases": {
+        "EMPTY_NEUTRAL_CAPTURE": {
+          "t_plus_1": {
+            "DISAPPEARED": 3,
+            "TRANSFORMED": 15,
+            "AMBIGUOUS": 6
+          },
+          "t_plus_2": {
+            "DISAPPEARED": 3,
+            "TRANSFORMED": 15,
+            "AMBIGUOUS": 6
+          }
+        },
+        "SAME_OWNER_REINFORCEMENT": {
+          "t_plus_1": {
+            "TRANSFORMED": 113,
+            "AMBIGUOUS": 56,
+            "DISAPPEARED": 11
+          },
+          "t_plus_2": {
+            "TRANSFORMED": 112,
+            "AMBIGUOUS": 55,
+            "CONTINUES": 3,
+            "DISAPPEARED": 10
+          }
+        },
+        "NO_NAIVE_SETTLEMENT_BRANCH": {
+          "t_plus_1": {
+            "AMBIGUOUS": 8,
+            "DISAPPEARED": 14
+          },
+          "t_plus_2": {
+            "AMBIGUOUS": 8,
+            "DISAPPEARED": 14
+          }
+        }
+      },
+      "capacity_status_counts": {
+        "WITHIN_NORMAL_CAPACITY": 73,
+        "WITHIN_PINNED_GROUND_OVERFLOW": 50,
+        "CLIPPING_OR_CAPACITY_AMBIGUITY": 188,
+        "UNKNOWN": 1
+      },
+      "residuals": {
+        "production_due": 3,
+        "multiple_or_unresolved_inbound": 265,
+        "active_delay": 7,
+        "special_destination": 13,
+        "confirmed_local_relay": 0,
+        "unknown_local_relay": 312,
+        "capacity_clipping_or_ambiguity": 188,
+        "capacity_pinned_ground_overflow": 50
+      }
+    },
+    "holdout": {
+      "cases": 101,
+      "boundary_supported": 69,
+      "boundary_excluded": 32,
+      "branch_candidate_counts": {
+        "EMPTY_NEUTRAL_CAPTURE": 27,
+        "SAME_OWNER_REINFORCEMENT": 55,
+        "NO_NAIVE_SETTLEMENT_BRANCH": 19
+      },
+      "score_counts": {
+        "EMPTY_NEUTRAL_CAPTURE:MATCH": 10,
+        "EMPTY_NEUTRAL_CAPTURE:MISMATCH": 11,
+        "EMPTY_NEUTRAL_CAPTURE:UNSCORABLE": 6,
+        "NO_NAIVE_SETTLEMENT_BRANCH:UNSCORABLE": 19,
+        "SAME_OWNER_REINFORCEMENT:MATCH": 3,
+        "SAME_OWNER_REINFORCEMENT:MISMATCH": 36,
+        "SAME_OWNER_REINFORCEMENT:UNSCORABLE": 16
+      },
+      "force_status_t_plus_1": {
+        "DISAPPEARED": 14,
+        "AMBIGUOUS": 36,
+        "TRANSFORMED": 48,
+        "CONTINUES": 3
+      },
+      "force_status_t_plus_2": {
+        "DISAPPEARED": 14,
+        "AMBIGUOUS": 36,
+        "TRANSFORMED": 47,
+        "CONTINUES": 3,
+        "UNKNOWN": 1
+      },
+      "eligibility_without_terminal_proxy": {
+        "capture": {
+          "cases": 11,
+          "groups": 11,
+          "recordings": 3
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "final_frozen_eligibility": {
+        "capture": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "strict_world_eligible": {
+        "capture": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        },
+        "reinforcement": {
+          "cases": 0,
+          "groups": 0,
+          "recordings": 0
+        }
+      },
+      "naive_scores_within_eligibility": {
+        "eligibility_without_terminal_proxy": {
+          "capture": {
+            "cases": 11,
+            "match": 5,
+            "mismatch": 6,
+            "unscorable": 0,
+            "accuracy_scored": 0.45454545454545453,
+            "groups": 11,
+            "recordings": 3
+          },
+          "reinforcement": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          }
+        },
+        "final_frozen_eligibility": {
+          "capture": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          },
+          "reinforcement": {
+            "cases": 0,
+            "match": 0,
+            "mismatch": 0,
+            "unscorable": 0,
+            "accuracy_scored": null,
+            "groups": 0,
+            "recordings": 0
+          }
+        }
+      },
+      "force_status_supported_branch_cases": {
+        "EMPTY_NEUTRAL_CAPTURE": {
+          "t_plus_1": {
+            "DISAPPEARED": 6,
+            "TRANSFORMED": 8,
+            "AMBIGUOUS": 7
+          },
+          "t_plus_2": {
+            "DISAPPEARED": 6,
+            "TRANSFORMED": 7,
+            "AMBIGUOUS": 7,
+            "UNKNOWN": 1
+          }
+        },
+        "SAME_OWNER_REINFORCEMENT": {
+          "t_plus_1": {
+            "AMBIGUOUS": 13,
+            "TRANSFORMED": 26
+          },
+          "t_plus_2": {
+            "AMBIGUOUS": 13,
+            "TRANSFORMED": 26
+          }
+        },
+        "NO_NAIVE_SETTLEMENT_BRANCH": {
+          "t_plus_1": {
+            "DISAPPEARED": 6,
+            "AMBIGUOUS": 3
+          },
+          "t_plus_2": {
+            "DISAPPEARED": 6,
+            "AMBIGUOUS": 3
+          }
+        }
+      },
+      "capacity_status_counts": {
+        "WITHIN_PINNED_GROUND_OVERFLOW": 33,
+        "CLIPPING_OR_CAPACITY_AMBIGUITY": 42,
+        "WITHIN_NORMAL_CAPACITY": 26
+      },
+      "residuals": {
+        "production_due": 2,
+        "multiple_or_unresolved_inbound": 66,
+        "active_delay": 1,
+        "special_destination": 0,
+        "confirmed_local_relay": 0,
+        "unknown_local_relay": 101,
+        "capacity_clipping_or_ambiguity": 42,
+        "capacity_pinned_ground_overflow": 33
+      }
+    }
+  },
+  "source_hashes": {
+    "tests/fixtures/v2/arrival-settlement-replay-development.json.gz": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "tests/fixtures/v2/arrival-settlement-replay-holdout.json.gz": "07d67410076ecc013754ec02d1691f3f346f25799b03a861e35d36fc90d807a6",
+    "docs/V2_M2A_COVERAGE_DENOMINATOR.json": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "tests/fixtures/v2/arrival-factor-edge-audit.jsonl.gz": "b5671b5f9f2362cebd872f44b3c5a4e3cf1a0a3c9c3ad09ead98c7c0fb94ff16",
+    "arrival_factor_edge_audit_decompressed_sha256": "5f66c49b01253af461fbe92c8576f344a0d8c15c0ddb07fe5d9249ea93e5d755",
+    "tools/v2_arrival_settlement_replay.py": "09269bd9dd37b14f557f7d2d317a9db34bafce6d6a0cf0b66790c590263860fc"
+  },
+  "raw_source_hashes": {
+    "runtime\\research\\v2\\snapshots-03d032d57e5b.jsonl": {
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "expected_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "actual_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "matches_manifest": true
+    },
+    "runtime\\research\\v2\\snapshots-7d56a775bc4c.jsonl": {
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "expected_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "actual_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "matches_manifest": true
+    },
+    "runtime\\research\\v2\\snapshots-85391858b5d8.jsonl": {
+      "cohort": "85391858b5d8",
+      "split": "holdout",
+      "expected_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "actual_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "matches_manifest": true
+    },
+    "runtime\\research\\v2\\snapshots-b1f7f9416e92.jsonl": {
+      "cohort": "b1f7f9416e92",
+      "split": "holdout",
+      "expected_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+      "actual_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+      "matches_manifest": true
+    },
+    "runtime\\research\\v2\\snapshots-daf86d0544b7.jsonl": {
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "expected_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "actual_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "matches_manifest": true
+    },
+    "runtime\\research\\v2\\snapshots-fe678ebb30ce.jsonl": {
+      "cohort": "fe678ebb30ce",
+      "split": "development",
+      "expected_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+      "actual_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+      "matches_manifest": true
+    }
+  },
+  "separate_previous_context": {
+    "fixture": "tests/fixtures/v2/ordinary-arrival-scene-ae45ad53c1b4.json.gz",
+    "fixture_sha256": "6cfa35fdde490eb083330e703192264be0cc9592d1e8ce45a066916ea28f4d14",
+    "not_in_413_population": true,
+    "not_holdout": true,
+    "formal_credit": 0,
+    "raw_observations": 175,
+    "unique_scope_tick_states": 81,
+    "adjacent_scope_tick_pairs": 80,
+    "known_due_candidates": 4,
+    "branch_counts": {
+      "SUPPORTED:CAPTURE_REQUIRED": 4
+    },
+    "excluded_reasons": {},
+    "arrival_owner_and_inventory_exact_matches": 4,
+    "cases": [
+      {
+        "before_sequence": 50,
+        "before_tick": 34,
+        "arrival_tick": 35,
+        "following_tick": 36,
+        "source_id": 16974089,
+        "target_id": 16908553,
+        "branch": "CAPTURE_REQUIRED",
+        "boundary_status": "SUPPORTED",
+        "incoming_owner": 1,
+        "incoming_vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_arrival_owner": 1,
+        "observed_arrival_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_following_owner": 1,
+        "observed_following_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arrival_force_signature_status": "DISAPPEARED",
+        "following_force_signature_status": "DISAPPEARED"
+      },
+      {
+        "before_sequence": 71,
+        "before_tick": 43,
+        "arrival_tick": 44,
+        "following_tick": 45,
+        "source_id": 16974089,
+        "target_id": 16908552,
+        "branch": "CAPTURE_REQUIRED",
+        "boundary_status": "SUPPORTED",
+        "incoming_owner": 1,
+        "incoming_vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_arrival_owner": 1,
+        "observed_arrival_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_following_owner": 1,
+        "observed_following_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arrival_force_signature_status": "DISAPPEARED",
+        "following_force_signature_status": "DISAPPEARED"
+      },
+      {
+        "before_sequence": 71,
+        "before_tick": 43,
+        "arrival_tick": 44,
+        "following_tick": 45,
+        "source_id": 16974089,
+        "target_id": 16974088,
+        "branch": "CAPTURE_REQUIRED",
+        "boundary_status": "SUPPORTED",
+        "incoming_owner": 1,
+        "incoming_vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_arrival_owner": 1,
+        "observed_arrival_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_following_owner": 1,
+        "observed_following_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arrival_force_signature_status": "DISAPPEARED",
+        "following_force_signature_status": "DISAPPEARED"
+      },
+      {
+        "before_sequence": 91,
+        "before_tick": 52,
+        "arrival_tick": 53,
+        "following_tick": 54,
+        "source_id": 16974089,
+        "target_id": 17039625,
+        "branch": "CAPTURE_REQUIRED",
+        "boundary_status": "SUPPORTED",
+        "incoming_owner": 1,
+        "incoming_vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_arrival_owner": 1,
+        "observed_arrival_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "observed_following_owner": 1,
+        "observed_following_inventory": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "arrival_force_signature_status": "DISAPPEARED",
+        "following_force_signature_status": "DISAPPEARED"
+      }
+    ]
+  },
+  "previously_accepted_grade_b_context": {
+    "source_report": "docs/V2_M2A_ARRIVAL_BOUNDARY_VALIDATION.json",
+    "source_sha256": "47d9bf833614ea951b97c59562a3552cd269aba8425223da93835ecf5fc1e30f",
+    "previously_accepted_grade_b_count": 8,
+    "mapped_count": 8,
+    "independent_world_transition_groups": 7,
+    "formal_credit": 0,
+    "cases": [
+      {
+        "cohort": "03d032d57e5b",
+        "before_tick": 22670,
+        "source_id": 13828326,
+        "target_id": 13893863,
+        "source_type": "PINNED_413_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "case_id": "03d032d57e5b:1897:0",
+          "classification": "MATCH",
+          "branch_candidate": "SAME_OWNER_REINFORCEMENT",
+          "arrival_force_signature_status": "AMBIGUOUS",
+          "following_force_signature_status": "AMBIGUOUS",
+          "observed_arrival_owner": 10,
+          "observed_arrival_inventory": [
+            15,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 10,
+          "observed_following_inventory": [
+            15,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "85391858b5d8",
+        "before_tick": 32781,
+        "source_id": 14876886,
+        "target_id": 14942422,
+        "source_type": "PINNED_413_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "case_id": "85391858b5d8:2255:0",
+          "classification": "MATCH",
+          "branch_candidate": "SAME_OWNER_REINFORCEMENT",
+          "arrival_force_signature_status": "TRANSFORMED",
+          "following_force_signature_status": "TRANSFORMED",
+          "observed_arrival_owner": 64,
+          "observed_arrival_inventory": [
+            3,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 64,
+          "observed_following_inventory": [
+            4,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "daf86d0544b7",
+        "before_tick": 25874,
+        "source_id": 17301773,
+        "target_id": 17236237,
+        "source_type": "PINNED_413_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "case_id": "daf86d0544b7:2200:0",
+          "classification": "MATCH",
+          "branch_candidate": "SAME_OWNER_REINFORCEMENT",
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED",
+          "observed_arrival_owner": 24,
+          "observed_arrival_inventory": [
+            10,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 24,
+          "observed_following_inventory": [
+            10,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "daf86d0544b7",
+        "before_tick": 25926,
+        "source_id": 17236238,
+        "target_id": 17170702,
+        "source_type": "PINNED_413_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "case_id": "daf86d0544b7:2252:0",
+          "classification": "MATCH",
+          "branch_candidate": "SAME_OWNER_REINFORCEMENT",
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED",
+          "observed_arrival_owner": 24,
+          "observed_arrival_inventory": [
+            15,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 24,
+          "observed_following_inventory": [
+            15,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "live-ae45ad53c1b4",
+        "before_tick": 34,
+        "source_id": 16974089,
+        "target_id": 16908553,
+        "source_type": "PREVIOUSLY_SEEN_LIVE_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "before_sequence": 50,
+          "before_tick": 34,
+          "arrival_tick": 35,
+          "following_tick": 36,
+          "source_id": 16974089,
+          "target_id": 16908553,
+          "branch": "CAPTURE_REQUIRED",
+          "boundary_status": "SUPPORTED",
+          "observed_arrival_owner": 1,
+          "observed_arrival_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 1,
+          "observed_following_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED"
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "live-ae45ad53c1b4",
+        "before_tick": 43,
+        "source_id": 16974089,
+        "target_id": 16908552,
+        "source_type": "PREVIOUSLY_SEEN_LIVE_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "before_sequence": 71,
+          "before_tick": 43,
+          "arrival_tick": 44,
+          "following_tick": 45,
+          "source_id": 16974089,
+          "target_id": 16908552,
+          "branch": "CAPTURE_REQUIRED",
+          "boundary_status": "SUPPORTED",
+          "observed_arrival_owner": 1,
+          "observed_arrival_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 1,
+          "observed_following_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED"
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "live-ae45ad53c1b4",
+        "before_tick": 43,
+        "source_id": 16974089,
+        "target_id": 16974088,
+        "source_type": "PREVIOUSLY_SEEN_LIVE_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "before_sequence": 71,
+          "before_tick": 43,
+          "arrival_tick": 44,
+          "following_tick": 45,
+          "source_id": 16974089,
+          "target_id": 16974088,
+          "branch": "CAPTURE_REQUIRED",
+          "boundary_status": "SUPPORTED",
+          "observed_arrival_owner": 1,
+          "observed_arrival_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 1,
+          "observed_following_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED"
+        },
+        "formal_credit": 0
+      },
+      {
+        "cohort": "live-ae45ad53c1b4",
+        "before_tick": 52,
+        "source_id": 16974089,
+        "target_id": 17039625,
+        "source_type": "PREVIOUSLY_SEEN_LIVE_CONTEXT",
+        "mapping_status": "MATCHED",
+        "current_observation": {
+          "before_sequence": 91,
+          "before_tick": 52,
+          "arrival_tick": 53,
+          "following_tick": 54,
+          "source_id": 16974089,
+          "target_id": 17039625,
+          "branch": "CAPTURE_REQUIRED",
+          "boundary_status": "SUPPORTED",
+          "observed_arrival_owner": 1,
+          "observed_arrival_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "observed_following_owner": 1,
+          "observed_following_inventory": [
+            15,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0
+          ],
+          "arrival_force_signature_status": "DISAPPEARED",
+          "following_force_signature_status": "DISAPPEARED"
+        },
+        "formal_credit": 0
+      }
+    ]
+  },
+  "interpretation": {
+    "force_status": "Signature-level visibility only. TRANSFORMED means a unique same-owner/same-vector new leg starts at the prior target; it is continuation-compatible evidence, not physical force genealogy. Unknown plausible aliases remain AMBIGUOUS. DISAPPEARED means the original signature is absent from a complete visible collection, not proof of permanent consumption.",
+    "settlement": "A capture owner transition with zero observed target inventory is a mismatch to the frozen owner+inventory capture rule. It remains in the score even when post-arrival force or downstream context is uncertain; current-deposit attribution is unresolved.",
+    "eligibility": "The no-terminal-proxy and final frozen eligibility counts use before-only fields. Eligibility never filters original naive replay scores."
+  },
+  "formal_credit": 0
+}
