@@ -16,7 +16,7 @@
     "holdout": ["85391858b5d8", "7d56a775bc4c", "b1f7f9416e92"]
   },
   "protocol": "Score naive rule without outcome eligibility. Inspect development only for at most two premise revisions per branch. Freeze final premises before holdout scoring. Existing selected live cases are previously seen corroboration, never fresh prospective holdout.",
-  "combat": "Passive only: pinned fight_ordinary(attacker, defender, capacity, defender_is_tower=True, attacker_morale=source morale, defender_morale=target morale). Attacker victory predicts owner incoming and surviving attacker vector; defender victory predicts owner unchanged and surviving defender vector. Unknown aura, production or simultaneous arrival must be explicit. No formula revision or production promotion.",
+  "combat": "Passive only: pinned fight_ordinary(attacker, defender, capacity, defender_is_tower=True, attacker_morale=force accelerated retained morale flag, defender_morale=target morale), matching the pinned step candidate. Source current morale is supplemental and cannot replace the retained force flag. Attacker victory predicts owner incoming and surviving attacker vector; defender victory predicts owner unchanged and surviving defender vector. Unknown aura, production or simultaneous arrival must be explicit. No formula revision or production promotion.",
   "combat_source_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
   "formal_credit": 0
 }
