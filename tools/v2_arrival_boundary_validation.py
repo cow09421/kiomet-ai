@@ -15,6 +15,7 @@ from kiomet_ai.v2.sim import ordinary_arrival_boundary, UnsupportedState
 from kiomet_ai.v2.sim.step import phase
 
 FIXTURE = ROOT / 'tests/fixtures/v2/arrival-boundary-candidates.json.gz'
+LIVE_FIXTURE = ROOT / 'tests/fixtures/v2/arrival-boundary-live-candidates.json.gz'
 
 
 def validate_case(case):
@@ -39,6 +40,8 @@ def validate_case(case):
     if missing:
         return {'accepted_grade_b': False, 'reason': 'FORCE_INPUT_UNKNOWN'}
     force = _infer_pinned_acceleration(force, raw_force, towers)
+    acceleration_basis = ('OBSERVED_CURRENT_FORCE_ACCELERATION' if
+        type(val(raw_force.get('accelerated'))) is bool else 'UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY')
     others = []
     complete = True
     for row in rows:
@@ -58,7 +61,7 @@ def validate_case(case):
         return {'accepted_grade_b': False, 'reason': str(exc)}
     target_after = after['source_and_target_facts']['target']['visible_fact_object']
     target_next = following['source_and_target_facts']['target']['visible_fact_object']
-    potential_production = [unit for unit, period in target.production
+    potential_production = [unit for unit, period in target.production if target.owner
         if phase(candidate['arrival_observation_tick'], target.id) % period == 0
         and target.units[unit] < target.capacity[unit]]
     scopes_equal = all(o['scope']['document_id'] == before['scope']['document_id']
@@ -72,7 +75,8 @@ def validate_case(case):
                         val(o['visible_actor_fields_all_forces'])) for o in (after, following))
     inventory_match = vector(target_after, 'units') == tuple(
         target.units[i] + force.units[i] for i in range(10))
-    owner_match = val(target_after['owner']) == val(target_next['owner']) == force.owner == target.owner
+    owner_match = (val(target_after['owner']) == val(target_next['owner']) == force.owner
+        and (target.owner == force.owner or target.owner == 0 and not any(target.units)))
     tick_match = event is not None and event.tick == ticks[1]
     next_inventory_known = vector(target_next, 'units') is not None
     identity_match = source.id == candidate['source_tower'] and all(
@@ -80,12 +84,13 @@ def validate_case(case):
     accepted = (tick_match and consecutive and absent and inventory_match and owner_match
                 and next_inventory_known and identity_match and not potential_production)
     return {'accepted_grade_b': accepted, 'formal_grade_a': False,
+        'acceleration_basis': acceleration_basis,
         'event': asdict(event) if event else None,
         'checks': {'arrival_tick': tick_match, 'three_contiguous_scoped_observations': consecutive,
             'force_signature_absent_after_and_next': absent, 'target_vector_delta': inventory_match,
             'target_owner_next_tick': owner_match, 'target_production_due': potential_production,
             'next_tick_inventory_observed': next_inventory_known, 'endpoint_identity': identity_match},
-        'premises': ['acceleration uniquely recovered from retained pinned ETA estimator, not independently observed',
+        'premises': [acceleration_basis,
                      'fixed morale over this one tick; no launch attribution',
                      'current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof'],
         'reason': 'CORROBORATED_CURRENT_LEG_BOUNDARY' if accepted else 'UNQUALIFIED_BOUNDARY_CANDIDATE'}
@@ -93,15 +98,22 @@ def validate_case(case):
 
 def run():
     fixture = json.loads(gzip.decompress(FIXTURE.read_bytes()))
+    cases = list(fixture['cases'])
+    if LIVE_FIXTURE.exists():
+        cases.extend(json.loads(gzip.decompress(LIVE_FIXTURE.read_bytes()))['cases'])
     results = [{'cohort': case['candidate']['cohort'], 'tick': case['candidate']['before_tick'],
                 'source': case['candidate']['source_tower'], 'target': case['candidate']['target_tower'],
-                **validate_case(case)} for case in fixture['cases']]
+                'kind': case['candidate']['kind'], **validate_case(case)} for case in cases]
     accepted = [r for r in results if r['accepted_grade_b']]
+    groups = {(r['cohort'], r['tick']) for r in accepted}
     report = {'status': 'PARTIAL', 'formal_grade_a_added': 0, 'accepted_grade_b_boundary_added': len(accepted),
-        'five_case_goal_met': len(accepted) >= 5,
+        'independent_world_transition_groups': len(groups),
+        'five_case_goal_met': len(groups) >= 5,
+        'independence_limit': 'distinct observed transition groups, not independent randomized trials; shared matches/source/composition retained',
         'accepted_contexts': len({r['cohort'] for r in accepted}),
         'full_reinforcement_credit_added': 0, 'capture_credit_added': 0,
         'fixture_sha256': hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
+        'live_fixture_sha256': hashlib.sha256(LIVE_FIXTURE.read_bytes()).hexdigest() if LIVE_FIXTURE.exists() else None,
         'source_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
             for p in (Path(__file__), ROOT/'src/kiomet_ai/v2/sim/arrival.py')},
         'cases': results}

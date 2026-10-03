@@ -1,8 +1,9 @@
 from copy import deepcopy
 import gzip
+import hashlib
 import json
 import pytest
-from tools.v2_arrival_boundary_validation import FIXTURE, validate_case
+from tools.v2_arrival_boundary_validation import FIXTURE, LIVE_FIXTURE, validate_case
 
 
 def cases():
@@ -46,3 +47,33 @@ def test_v2_real_arrival_next_tick_inventory_missing_does_not_qualify():
     units['knowledge'] = 'UNKNOWN'
     units['value'] = None
     assert not validate_case(case)['accepted_grade_b']
+
+
+@pytest.mark.parametrize('index', range(4))
+def test_v2_live_neutral_arrival_is_corroborated_boundary_not_full_capture(index):
+    case = json.loads(gzip.decompress(LIVE_FIXTURE.read_bytes()))['cases'][index]
+    result = validate_case(case)
+    assert result['accepted_grade_b'] and not result['formal_grade_a']
+    assert result['event']['branch'] == 'CAPTURE_REQUIRED'
+    assert result['acceleration_basis'] == 'OBSERVED_CURRENT_FORCE_ACCELERATION'
+    assert result['event']['status'] == 'SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN'
+    assert result['checks']['arrival_tick'] and result['checks']['target_owner_next_tick']
+    assert result['checks']['target_vector_delta'] and result['checks']['next_tick_inventory_observed']
+    altered = deepcopy(case)
+    altered['observations'][1]['source_and_target_facts']['target']['visible_fact_object']['owner']['value'] = 0
+    assert not validate_case(altered)['accepted_grade_b']
+
+
+def test_v2_live_projection_matches_archived_actual_scene_without_added_actor_facts():
+    projected = json.loads(gzip.decompress(LIVE_FIXTURE.read_bytes()))
+    payload = gzip.decompress((LIVE_FIXTURE.parent/'ordinary-arrival-scene-ae45ad53c1b4.json.gz').read_bytes())
+    assert hashlib.sha256(payload).hexdigest() == projected['source_sha256']
+    receipt = json.loads(payload)
+    assert receipt['troop_dispatch_attempts'] == 0 and len(receipt['observations']) == 175
+    for case in projected['cases']:
+        for observation in case['observations']:
+            raw = receipt['observations'][observation['raw_source']['json_observations_array_index']]
+            assert observation['visible_actor_fields_all_forces'] == raw['forces']
+            towers = {tower['id']: tower for tower in raw['towers']}
+            for endpoint in observation['source_and_target_facts'].values():
+                assert endpoint['visible_fact_object'] == towers[endpoint['tower_id']]
