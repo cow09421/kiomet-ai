@@ -220,7 +220,7 @@ def _get_tower(state, tower_id):
     return found[0] if len(found) == 1 else None
 
 
-def verify_upgrade(before_state, ui_result: dict, after_states: list, target_type: int) -> dict:
+def verify_upgrade(before_state, ui_result: dict, after_states: list, target_type: int, *, candidate_fn=None) -> dict:
     """Verify a direct upgrade on consecutive positive own-tower observations."""
     reasons = []
     if type(target_type) is not int or target_type not in ALLOWED_TARGETS:
@@ -240,9 +240,14 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
             ui_result.get(key) is not False for key in ("locked_glyph", "hidden_lock_icon")):
         reasons.append("NORMAL_BUTTON_STATE_FIELDS_MISSING_OR_UNSAFE")
     tower_id = ui_result.get("selected_tower_id")
+    if candidate_fn is not None:
+        public_source = ui_result.get("public_source_certificate")
+        if (not isinstance(public_source, dict) or public_source.get("eligible") is not True or
+                public_source.get("tower_id") != tower_id or ui_result.get("fresh_panel_barrier") is not True):
+            reasons.append("PUBLIC_SOURCE_AND_FRESH_PANEL_PROOF_REQUIRED")
     if type(tower_id) is not int or ui_result.get("target_type") != target_type:
         reasons.append("SELECTED_TOWER_OR_TARGET_UNKNOWN")
-    target_rows = [r for r in candidate_rows(before_state)
+    target_rows = [r for r in (candidate_fn or candidate_rows)(before_state)
                    if r["tower_id"] == tower_id and r["target_type"] == target_type]
     if len(target_rows) != 1 or not target_rows[0]["eligible"]:
         reasons.append("BEFORE_PREREQUISITE_LOCK_OR_CAPACITY_NOT_ELIGIBLE")
@@ -262,6 +267,7 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
     before_tick_ok, before_tick = _known(before_state.tick, before_state)
     previous = before_tick if before_tick_ok else None
     contradictory = False
+    prior_delay = None
     for index, state in enumerate(after_states[:2], 1):
         current_identity = _state_identity(state)
         tick_ok, tick = _known(getattr(state, "tick", None), state)
@@ -269,8 +275,12 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
         if current_identity != identity:
             reasons.append("EPOCH_PLAYER_OR_CLIENT_CHANGED")
             continue
-        if not tick_ok or previous is None or tick != ((previous + 1) & 0xFFFF):
-            reasons.append("TICK_NOT_CONSECUTIVE")
+        tick_delta = ((tick - previous) & 0xFFFF) if tick_ok and previous is not None else None
+        if candidate_fn is None:
+            if tick_delta != 1:
+                reasons.append("TICK_NOT_CONSECUTIVE")
+        elif tick_delta is None or not 1 <= tick_delta <= 8:
+            reasons.append("AFTER_TICKS_NOT_DISTINCT_WITHIN_BOUNDED_TWO_SECOND_WINDOW")
         previous = tick if tick_ok else None
         observed = _get_tower(state, tower_id)
         if observed is None:
@@ -284,7 +294,17 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
         nominal = rules.UPGRADE_DELAY[target_type]
         expected_type = target_type
         expected_delay = nominal if index == 1 else nominal - 1
-        if observed_type != expected_type or observed_delay != expected_delay:
+        if candidate_fn is not None:
+            # Goal011 verifies the actual type transition, not a guessed command
+            # arrival phase. Known delay remains bounded and tick-consistent.
+            if (type(observed_delay) is not int or not 0 <= observed_delay <= nominal or
+                    (prior_delay is not None and (tick_delta is None or observed_delay != max(0, prior_delay-tick_delta)))):
+                reasons.append("AFTER_DELAY_NOT_KNOWN_BOUNDED_OR_TICK_CONSISTENT")
+            if observed_type != expected_type:
+                contradictory = True
+                reasons.append("KNOWN_TYPE_OR_DELAY_DIFFERS_FROM_FROZEN_EXPECTATION")
+            prior_delay = observed_delay
+        elif observed_type != expected_type or observed_delay != expected_delay:
             contradictory = True
             reasons.append("KNOWN_TYPE_OR_DELAY_DIFFERS_FROM_FROZEN_EXPECTATION")
     reasons = list(dict.fromkeys(reasons))
@@ -348,14 +368,14 @@ async def _dom_snapshot(page):
     }""")
 
 
-async def _read_candidate_state(ex, tower_id, target_type):
+async def _read_candidate_state(ex, tower_id, target_type, *, candidate_fn=None):
     state, raw = await ex.sample()
-    row = next((r for r in candidate_rows(state)
+    row = next((r for r in (candidate_fn or candidate_rows)(state)
                 if r["tower_id"] == tower_id and r["target_type"] == target_type), None)
     return state, raw, row
 
 
-async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity, deadline):
+async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity, deadline, *, protocol=None, fresh_panel=False):
     """Poll one ordinary selection for at most two seconds and durably record each witness."""
     local_deadline = min(deadline, time.monotonic() + 2.0)
     attempts = 0
@@ -370,7 +390,7 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
             state, raw = await asyncio.wait_for(ex.sample(), timeout=remaining)
             current_identity = _state_identity(state)
             remaining = max(0.01, local_deadline - time.monotonic())
-            dom = await asyncio.wait_for(_dom_snapshot(page), timeout=remaining)
+            dom = await asyncio.wait_for((protocol.dom_snapshot if protocol else _dom_snapshot)(page), timeout=remaining)
             remaining = max(0.01, local_deadline - time.monotonic())
             after_state, after_raw = await asyncio.wait_for(ex.sample(), timeout=remaining)
             after_identity = _state_identity(after_state)
@@ -379,7 +399,7 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
             heading = heading_matches[0] if len(heading_matches) == 1 else None
             heading_reason = ("SOURCE_HEADING_NOT_EXACT" if not heading_matches else
                               "SOURCE_HEADING_NOT_UNIQUE" if len(heading_matches) != 1 else None)
-            rows = [r for r in candidate_rows(state)
+            rows = [r for r in (protocol.bounded_candidate_rows if protocol else candidate_rows)(state)
                     if r["tower_id"] == tower_id and r["source_type"] == source_type]
             titles = sorted({b.get("title") for b in dom.get("buttons", [])
                              if isinstance(b, dict) and b.get("visible") is True and
@@ -399,8 +419,12 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
                                          if after_tower else (False, None))
             actor_stable = (before_type_ok and after_type_ok and
                             before_type == source_type and after_type == source_type)
+            source_certificate = (protocol.certify_inventory_panel(state, dom, tower_id) if protocol else None)
+            after_certificate = (protocol.certify_inventory_panel(after_state, dom, tower_id) if protocol else None)
+            source_bound = (fresh_panel and source_certificate["eligible"] and after_certificate["eligible"]
+                            if protocol else selected_id == tower_id and selected_after_id == tower_id)
             matched = (current_identity == identity and after_identity == identity and
-                       selected_id == tower_id and selected_after_id == tower_id and
+                       source_bound and
                        own_visible and own_after_visible and actor_stable and heading is not None)
             row = {"kind": "SELECTION_WITNESS_ATTEMPT", "tower_id": tower_id,
                    "expected_source_type": source_type, "attempt": attempts,
@@ -412,8 +436,10 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
                    "after_sampled_at_ms": getattr(after_state, "sampled_at_ms", None),
                    "after_received_at_ms": getattr(after_state, "received_at_ms", None),
                    "after_identity_current": after_identity == identity,
-                   "observed_selected_tower_id": selected_id,
-                   "after_selected_tower_id": selected_after_id,
+                   "source_certificate": source_certificate, "after_source_certificate": after_certificate,
+                   "fresh_panel_barrier": fresh_panel if protocol else None,
+                   "observed_selected_tower_id": selected_id if protocol is None else None,
+                   "after_selected_tower_id": selected_after_id if protocol is None else None,
                    "own_tower_positively_visible": own_visible,
                    "own_tower_positively_visible_after_dom": own_after_visible,
                    "observed_source_type": before_type if before_type_ok else None,
@@ -424,8 +450,9 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
                    "matched": matched,
                    "reasons": (["EPOCH_OR_NETWORK_IDENTITY_MISMATCH"] if current_identity != identity else []) +
                               (["EPOCH_OR_NETWORK_IDENTITY_CHANGED_DURING_DOM_READ"] if after_identity != identity else []) +
-                              (["SELECTED_TOWER_ID_MISMATCH"] if selected_id != tower_id else []) +
-                              (["SELECTED_TOWER_ID_CHANGED_DURING_DOM_READ"] if selected_after_id != tower_id else []) +
+                              (["PUBLIC_PANEL_SOURCE_UNPROVEN"] if protocol and not source_bound else []) +
+                              (["SELECTED_TOWER_ID_MISMATCH"] if protocol is None and selected_id != tower_id else []) +
+                              (["SELECTED_TOWER_ID_CHANGED_DURING_DOM_READ"] if protocol is None and selected_after_id != tower_id else []) +
                               (["OWN_TOWER_NOT_POSITIVELY_VISIBLE"] if not own_visible else []) +
                               (["OWN_TOWER_NOT_POSITIVELY_VISIBLE_AFTER_DOM"] if not own_after_visible else []) +
                               (["SOURCE_TYPE_NOT_STABLE_AROUND_DOM_READ"] if not actor_stable else []) +
@@ -504,7 +531,128 @@ def _writer_lease(seconds: int):
         release_writer(path, token)
 
 
-async def run_probe(args):
+def visible_blue_hints(png: bytes, *, limit=6):
+    """Normal page-pixel selection hints; never entity/owner/route certificates."""
+    import struct
+    import zlib
+    if png[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError("normal screenshot is not PNG")
+    offset, compressed, header = 8, bytearray(), None
+    while offset + 12 <= len(png):
+        size = struct.unpack(">I", png[offset:offset+4])[0]
+        kind = png[offset+4:offset+8]
+        payload = png[offset+8:offset+8+size]
+        checksum = png[offset+8+size:offset+12+size]
+        if len(checksum) != 4 or zlib.crc32(kind+payload) != struct.unpack(">I", checksum)[0]:
+            raise ValueError("invalid screenshot PNG chunk")
+        if kind == b"IHDR":
+            header = struct.unpack(">IIBBBBB", payload)
+        elif kind == b"IDAT":
+            compressed.extend(payload)
+        elif kind == b"IEND":
+            break
+        offset += size + 12
+    if header is None:
+        raise ValueError("screenshot dimensions unknown")
+    width, height, depth, color, method, filtering, interlace = header
+    if (not 0 < width * height <= 4_000_000 or depth != 8 or color not in (2, 6) or
+            method or filtering or interlace):
+        raise ValueError("unsupported normal screenshot PNG format")
+    channels = 3 if color == 2 else 4
+    stride = width * channels
+    decoder = zlib.decompressobj()
+    raw = decoder.decompress(compressed, (stride+1)*height+1)
+    if len(raw) != (stride+1)*height or not decoder.eof:
+        raise ValueError("screenshot PNG size mismatch")
+    rows, previous = [], bytearray(stride)
+    for y in range(height):
+        filtering = raw[y*(stride+1)]
+        row = bytearray(raw[y*(stride+1)+1:(y+1)*(stride+1)])
+        if filtering not in range(5):
+            raise ValueError("unsupported PNG scanline filter")
+        for i in range(stride):
+            left = row[i-channels] if i >= channels else 0
+            up = previous[i]
+            upper_left = previous[i-channels] if i >= channels else 0
+            if filtering == 1:
+                prediction = left
+            elif filtering == 2:
+                prediction = up
+            elif filtering == 3:
+                prediction = (left+up)//2
+            elif filtering == 4:
+                estimate = left+up-upper_left
+                distances = (abs(estimate-left), abs(estimate-up), abs(estimate-upper_left))
+                prediction = (left, up, upper_left)[distances.index(min(distances))]
+            else:
+                prediction = 0
+            row[i] = (row[i]+prediction)&255
+        rows.append(row)
+        previous = row
+    selected = set()
+    for y in range(height):
+        for x in range(width):
+            red, green, blue = rows[y][x*channels:x*channels+3]
+            if blue >= 110 and green >= 65 and blue >= red * 1.3 and blue >= green * 1.08:
+                selected.add((x, y))
+    groups = []
+    while selected:
+        seed = min(selected, key=lambda point: (point[1], point[0]))
+        selected.remove(seed)
+        queue, component = [seed], []
+        while queue:
+            x, y = queue.pop()
+            component.append((x, y))
+            for point in ((x-1, y), (x+1, y), (x, y-1), (x, y+1)):
+                if point in selected:
+                    selected.remove(point)
+                    queue.append(point)
+        if len(component) < 8:
+            continue
+        xs, ys = zip(*component)
+        if max(xs)-min(xs) > 80 or max(ys)-min(ys) > 80:
+            continue
+        center = ((min(xs)+max(xs))/2, (min(ys)+max(ys))/2)
+        if 2 < center[0] < width-2 and 2 < center[1] < height-2:
+            groups.append((len(component), center))
+    groups.sort(key=lambda group: (-group[0], group[1][1], group[1][0]))
+    hints = []
+    for _, center in groups:
+        if all((center[0]-p[0])**2+(center[1]-p[1])**2 > 18**2 for p in hints):
+            hints.append(center)
+            if len(hints) >= limit:
+                break
+    return hints
+
+
+async def _inventory_selection_click(page, x, y, deadline, protocol):
+    """Stationary normal selection with a public absent-to-present refresh barrier.
+
+    This is bounded UI protocol evidence, not an atomic DOM/world tick token.
+    The normal client hides its tower overlay while a drag is down, then a
+    stationary release selects/deselects. No target movement or force launch.
+    """
+    fresh = False
+    async def frames():
+        remaining = min(0.75, deadline - time.monotonic())
+        if remaining <= 0:
+            raise TimeoutError("selection frame deadline")
+        await asyncio.wait_for(page.evaluate(
+            "() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))"),
+            timeout=remaining)
+    try:
+        await page.mouse.move(x, y)
+        await page.mouse.down()
+        await frames()
+        snapshot = await asyncio.wait_for(protocol.dom_snapshot(page), timeout=0.5)
+        fresh = snapshot.get("panels") == [] and not snapshot.get("errors")
+    finally:
+        await asyncio.wait_for(page.mouse.up(), timeout=2)
+    await frames()
+    return fresh
+
+
+async def run_probe(args, *, protocol=None):
     started = time.monotonic()
     deadline = started + args.seconds
     run_id = uuid4().hex
@@ -550,7 +698,7 @@ async def run_probe(args):
                         state, raw = await ex.sample()
                         sample_count += 1
                         ident = _state_identity(state)
-                        rows = candidate_rows(state)
+                        rows = (protocol.bounded_candidate_rows if protocol else candidate_rows)(state)
                         _append(stream, {"kind": "SAMPLE_ATTEMPT", "attempt": sample_attempts,
                                          "status": "SNAPSHOT", "tick": state.tick.value,
                                          "coverage": state.coverage,
@@ -608,18 +756,33 @@ async def run_probe(args):
                     left:r.left,top:r.top,rw:r.width,rh:r.height,tag:c.tagName};}""")
                 if not view or view["dpr"] != 1 or view["tag"] != "CANVAS":
                     raise RuntimeError("normal canvas projection unavailable")
+                hints = None
+                if protocol:
+                    # Position hints come only from normal game-page pixels. They
+                    # carry no source identity and are never compared to heap data.
+                    png = await page.locator("canvas").screenshot(scale="css")
+                    hints = visible_blue_hints(png)
+                    own_ids = list(range(len(hints)))
+                    _append(stream, {"kind": "PUBLIC_PAGE_SELECTION_HINTS", "count": len(hints),
+                                     "png_sha256": __import__("hashlib").sha256(png).hexdigest(),
+                                     "semantics": "position hints only, no owner/entity certificate"})
                 tries = 0
                 for tower_id in own_ids:
                     if tries >= 6 or time.monotonic() >= deadline:
                         break
-                    pre = next((t for t in state.towers if t.id == tower_id and _tower_visible_own(state, t)), None)
-                    if pre is None:
-                        continue
-                    pos_ok, pos = _known(pre.position, state)
-                    camera = raw.get("camera_candidate")
-                    if not pos_ok or not isinstance(camera, list) or len(camera) != 3:
-                        continue
-                    x, y = world_to_page(*pos, *camera, view["w"], view["h"], 1, view["left"], view["top"])
+                    if protocol:
+                        x, y = hints[tower_id]
+                        x, y = x + view["left"], y + view["top"]
+                        camera = None
+                    else:
+                        pre = next((t for t in state.towers if t.id == tower_id and _tower_visible_own(state, t)), None)
+                        if pre is None:
+                            continue
+                        pos_ok, pos = _known(pre.position, state)
+                        camera = raw.get("camera_candidate")
+                        if not pos_ok or not isinstance(camera, list) or len(camera) != 3:
+                            continue
+                        x, y = world_to_page(*pos, *camera, view["w"], view["h"], 1, view["left"], view["top"])
                     if not (view["left"] < x < view["left"] + view["rw"] and
                             view["top"] < y < view["top"] + view["rh"]):
                         continue
@@ -627,24 +790,37 @@ async def run_probe(args):
                     if not canvas_hit:
                         continue
                     tries += 1
-                    source_type = next(r["source_type"] for r in available if r["tower_id"] == tower_id)
+                    source_type = 7 if protocol else next(r["source_type"] for r in available if r["tower_id"] == tower_id)
                     click_error = None
+                    fresh_panel = False
                     try:
-                        await _page_click(page, x, y)
+                        if protocol:
+                            fresh_panel = await _inventory_selection_click(page, x, y, deadline, protocol)
+                        else:
+                            await _page_click(page, x, y)
                     except Exception as exc:
                         click_error = f"{type(exc).__name__}:{str(exc)[:120]}"
                     _append(stream, {"kind": "OWN_SELECTION_CLICK", "attempt": tries,
-                                     "clicked_tower_id": tower_id, "expected_source_type": source_type,
+                                     "clicked_tower_id": None if protocol else tower_id, "expected_source_type": source_type,
                                      "before_tick": state.tick.value, "page_xy": [x, y],
                                      "camera_candidate": camera, "time_monotonic": time.monotonic(),
                                      "click_error": click_error,
                                      "click_status": "SUCCESS" if click_error is None else "UNKNOWN"})
+                    if protocol:
+                        selected_state, _ = await ex.sample()
+                        selected_dom = await protocol.dom_snapshot(page)
+                        selected_certificate = protocol.certify_inventory_panel(selected_state, selected_dom, None)
+                        if not fresh_panel or not selected_certificate["eligible"]:
+                            _append(stream, {"kind": "PUBLIC_SOURCE_REFUSAL", "certificate": selected_certificate,
+                                             "fresh_panel_barrier": fresh_panel})
+                            continue
+                        tower_id = selected_certificate["tower_id"]
                     witness = await _selection_roundtrip(ex, page, stream, tower_id,
-                                                         source_type, ident, deadline)
+                                                         source_type, ident, deadline, protocol=protocol, fresh_panel=fresh_panel)
                     if not witness["matched"]:
                         continue
                     fresh, fresh_raw, dom = witness["state"], witness["raw"], witness["dom"]
-                    choices = [r for r in candidate_rows(fresh)
+                    choices = [r for r in (protocol.bounded_candidate_rows if protocol else candidate_rows)(fresh)
                                if r["tower_id"] == tower_id and r["eligible"] and
                                r["source_type"] == source_type]
                     for row in choices:
@@ -654,13 +830,23 @@ async def run_probe(args):
                         if not title_check["eligible"]:
                             continue
                         # Recheck selected identity and exact visible button immediately before fsync.
-                        fresh2, fresh_raw2, fresh_row = await _read_candidate_state(ex, tower_id, row["target_type"])
-                        if (_state_identity(fresh2) != ident or fresh_raw2.get("selected_tower") != tower_id or
+                        fresh2, fresh_raw2, fresh_row = await _read_candidate_state(ex, tower_id, row["target_type"], candidate_fn=protocol.bounded_candidate_rows if protocol else None)
+                        if (_state_identity(fresh2) != ident or (protocol is None and fresh_raw2.get("selected_tower") != tower_id) or
                                 fresh_row is None or not fresh_row["eligible"] or
                                 fresh_row["source_type"] != row["source_type"]):
                             continue
-                        current_dom = await _dom_snapshot(page)
+                        current_dom = await (protocol.dom_snapshot if protocol else _dom_snapshot)(page)
                         guard = inspect_upgrade_dom(current_dom, row["source_type"], row["target_type"])
+                        public_source = None
+                        if protocol:
+                            public_source = protocol.certify_inventory_panel(fresh2, current_dom, tower_id)
+                            fresh3, _, row3 = await _read_candidate_state(
+                                ex, tower_id, row["target_type"], candidate_fn=protocol.bounded_candidate_rows)
+                            after_source = protocol.certify_inventory_panel(fresh3, current_dom, tower_id)
+                            if (not fresh_panel or not public_source["eligible"] or not after_source["eligible"] or
+                                    _state_identity(fresh3) != ident or not row3 or not row3["eligible"]):
+                                continue
+                            fresh2, fresh_row = fresh3, row3
                         if not guard["eligible"]:
                             continue
                         bbox = guard["bbox"]
@@ -684,7 +870,9 @@ async def run_probe(args):
                                   "expected_nominal_delay": row["nominal_delay"],
                                   "source_shield_capacity": row["shield_before"],
                                   "target_shield_capacity": row["shield_after"],
-                                  "selected_tower_id": fresh_raw2.get("selected_tower"),
+                                  "selected_tower_id": tower_id if protocol else fresh_raw2.get("selected_tower"),
+                                  "public_source_certificate": public_source,
+                                  "fresh_panel_barrier": fresh_panel if protocol else None,
                                   "source_heading": heading_name,
                                   "dom_guard": guard, "candidate": fresh_row,
                                   "state": fresh2, "coverage_preserved": fresh2.coverage}
@@ -715,8 +903,10 @@ async def run_probe(args):
                                 _append(stream, {"kind": "AFTER_TICK", "offset": 2,
                                                  "tick": second.tick.value, "state": second})
                         ui_norm = {**ui_result, "source_heading": heading_name,
-                                   "dom_guard_passed": guard["eligible"]}
-                        verdict = verify_upgrade(fresh2, ui_norm, after, row["target_type"])
+                                   "dom_guard_passed": guard["eligible"],
+                                   "public_source_certificate": public_source,
+                                   "fresh_panel_barrier": fresh_panel if protocol else None}
+                        verdict = verify_upgrade(fresh2, ui_norm, after, row["target_type"], candidate_fn=protocol.bounded_candidate_rows if protocol else None)
                         _append(stream, {"kind": "VERDICT", **verdict})
                         return {**verdict, "out": str(out), "selection_clicks": tries}
                 _append(stream, {"kind": "PROBE_RESULT", "status": "UNKNOWN",
@@ -747,13 +937,17 @@ async def run_probe(args):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true", help="permit one explicit normal UI upgrade click")
+    parser.add_argument("--inventory-cliff-quarry", action="store_true", help="Goal011 explicit public inventory identity and bounded Cliff-to-Quarry protocol")
     parser.add_argument("--seconds", type=int, default=60, help="hard wall-time bound, 1..60 seconds")
     parser.add_argument("--out", type=Path, help="new JSONL evidence path; must not already exist")
     args = parser.parse_args(argv)
     if not 1 <= args.seconds <= 60:
         parser.error("--seconds must be between 1 and 60")
     try:
-        result = asyncio.run(asyncio.wait_for(run_probe(args), timeout=args.seconds + 15))
+        protocol = None
+        if args.inventory_cliff_quarry:
+            from tools import v2_goal_inventory_upgrade as protocol
+        result = asyncio.run(asyncio.wait_for(run_probe(args, protocol=protocol), timeout=args.seconds + 15))
     except asyncio.TimeoutError:
         result = {"status": "UNKNOWN", "reasons": ["PROBE_WALL_TIME_BOUND_EXPIRED"]}
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
