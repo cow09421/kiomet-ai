@@ -1,0 +1,46 @@
+{
+  "version": "post-arrival-disposition-hypotheses-v1",
+  "baseline_head": "54d0c5a0ba37712ee448586a2de91c64aae749a4",
+  "frozen_at_utc": "2026-10-03T04:41:58.061507+00:00",
+  "population": "All 45 previously scored EMPTY_NEUTRAL_CAPTURE cases, retaining 13 inventory MATCH and 32 zero-inventory MISMATCH; original development/holdout split unchanged. This is retrospective diagnosis, not fresh holdout or certification.",
+  "hypotheses": {
+    "H1": "Zero inventory may be associated with a compatible outgoing visible from captured target in offsets 0..2. Auxiliary only; MATCH need not have no outgoing.",
+    "H2": "Primary: inventory at arrival may equal incoming minus all newly observed same-owner outgoing vectors at arrival. No cherry-picked subset of outgoing forces. Window 0..2 accounting is supplementary lagged association, not a same-tick forecast.",
+    "H3": "Automatic relay, existing multi-leg continuation, immediate relaunch, or other cause unresolved; no causal attribution.",
+    "OWNER_ONLY_CAPTURE": "Empty neutral ordinary established arrival -> owner_after=incoming_owner. Hypothesis only; production requires new recording acquired after this freeze, >=10 qualifying groups / >=2 contexts / >=90% owner accuracy / no unexplained high-impact mismatch."
+  },
+  "time": "arrival=a, offset0=a, offset1=a+1, offset2=a+2; before=a-1. Do not confuse the prior fixture following=a+1 with a+2. Exact same document/match/player/time-origin scope and consecutive ticks; use first retained observation per tick. Missing states remain UNKNOWN.",
+  "outgoing": "List all visible forces whose known source equals captured target, including owner/vector/destination/progress and supplemental observer ID. Compatible means owner equals new owner and nonzero typed vector componentwise <=incoming. Accounting includes all newly observed same-owner source-target vectors, not only compatible vectors; oversized vectors remain counterexamples. Destination may be UNKNOWN and must not be guessed. Wrong-owner forces are retained but not subtracted.",
+  "first_appearance": "First observable source/owner/vector/destination signature after before. Subtract already-present before signature multiplicities. Deduplicate a persisting signature across offset snapshots; simultaneous same-signature multiplicity is retained and duplicate/genealogy ambiguity reported. Observer ID alone cannot prove birth. Before unknown-endpoint aliases are explicitly reported as uncertain first appearance; first visible is not launch time.",
+  "accounting": "Primary compares incoming - sum(new same-owner visible outgoing at offset0) with observed inventory at offset0. Report exact/mismatch/unknown and positive-outgoing explanations separately from no-outgoing equality. Negative components are mismatches, never clipped. Unknown plausible outgoing vector/source/owner or incomplete census must be UNKNOWN for complete accounting; an observed-only arithmetic equality may be reported separately without calling it complete. Supplemental window accounting uses unique first-observed signatures over0..2; do not use future outgoing as proof of same-tick cause.",
+  "false_explanation": "Keep every MATCH and ZERO case. Count outgoing-positive accounting disagreements and unknowns, plus frozen source/owner/vector/time negative controls; do not search a favorable subset of outgoing vectors. No-outgoing MATCH equality alone is not positive continuation evidence.",
+  "gate": "STRONG_CONTINUATION_PATTERN only if primary complete accounting exact >=90% of the 21 original scored holdout captures (UNKNOWN remains in denominator), and outgoing-positive exact precision >=90% with at least10 positive explained conservative groups in >=2 contexts; no causal or predictive production credit. Otherwise explicitly report FALSIFIED for observable failed accounting, or INFORMATION_CEILING when missing/ambiguous visibility prevents deciding. H1 alone cannot decide.",
+  "before_trigger": "Only predeclared existing before fields may be explored: visible local line fact, terminal flag, capacity class, production due, inbound completeness, current source/target delay. Freeze at most one development-derived Boolean trigger before evaluating old holdout; >=90% holdout accuracy and no evident negative-control false positives are required for next-round candidate consideration, never production on these already-seen recordings. No ID/cohort/tower memorization. If all before fields are constant or UNKNOWN, no trigger exists in this bounded candidate set; stop.",
+  "limits": {
+    "max_working_days": 3,
+    "max_hypothesis_revisions": 1,
+    "new_passive_recordings_max": 2,
+    "new_recordings_only_if_existing_holdout_evaluable_insufficient": true,
+    "live_dispatch": false,
+    "production_default": "NONE",
+    "no_second_supply_archaeology": true
+  },
+  "prohibited": [
+    "full supply or relay topology",
+    "endpoint reopening",
+    "hidden state",
+    "callback/queue/canvas/WASM",
+    "packet injection",
+    "reinforcement expansion",
+    "combat production",
+    "planner/MPC/MCTS/beam",
+    "evidence or coverage framework",
+    "dashboard"
+  ],
+  "source_sha256": {
+    "tests/fixtures/v2/arrival-settlement-replay-development.json.gz": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "tests/fixtures/v2/arrival-settlement-replay-holdout.json.gz": "07d67410076ecc013754ec02d1691f3f346f25799b03a861e35d36fc90d807a6",
+    "docs/V2_M2A_UNFILTERED_SETTLEMENT.json": "05bc70084f1838b5f18138dc443ccee842c954c383d9f90f7a5931df494af004"
+  },
+  "new_formal_credit": 0
+}
