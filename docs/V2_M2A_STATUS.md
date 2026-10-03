@@ -1,4 +1,22 @@
-# Current M2A post-arrival inventory disposition checkpoint - 2026-10-03
+# Current continuation-aware combat diagnostic checkpoint - 2026-10-03
+
+Legacy diagnostic outcome INSUFFICIENT_INFORMATION: all31 retained, original
+26MATCH/5MISMATCH, qualification4/27 unchanged. Complete accounting27EXACT /
+0MISMATCH / 4UNKNOWN; qualified4EXACT. Flips3MIS_TO_MATCH / 0MATCH_TO_MIS /
+24NONE / 4UNKNOWN. Observed-only equality31/31 is conditional, not validation.
+ControlA100:0positive/7UNKNOWN, PASS; B50 actualtargets:40positive/3UNKNOWN,
+11availabledecoys:0positive/4UNKNOWN, FAIL. No resampling or definition tuning.
+Previously inspectedYES with partialscope:31genericstatus, only5explicitnewlegs.
+Formula/core/production unchanged; all new evidence credit0; no live/recording.
+See V2_M2A_CONTINUATION_COMBAT_CHECKPOINT.md and corresponding JSON reports.
+Actual evaluated HEAD/counts: continuation-combat-final-head-regression.json.
+The newer Goal contract supersedes legacy next-P0 rankings: completion is
+Final V PASS AND L PASS AND Invariant INTACT, not completion of an M2A report.
+Existing M1/M1B/M2A/M2/M3 milestones below are historical only.
+
+## Historical post-arrival inventory disposition checkpoint
+
+# M2A post-arrival inventory disposition checkpoint - 2026-10-03
 
 CURRENT: OLD M1 FAIL / M1B PASS / M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.
 P0 disposition diagnostic RESOLVED: STRONG_CONTINUATION_PATTERN, limited to
