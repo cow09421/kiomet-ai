@@ -1,3 +1,35 @@
+# Current M2A post-arrival inventory disposition checkpoint - 2026-10-03
+
+CURRENT: OLD M1 FAIL / M1B PASS / M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.
+P0 disposition diagnostic RESOLVED: STRONG_CONTINUATION_PATTERN, limited to
+conditional observed inventory accounting, not a deterministic relay predictor.
+All 45 original captures retained: 13 inventory MATCH / 32 zero-inventory MISMATCH;
+original Dev 24 / Holdout 21 split unchanged. Observed-only incoming minus ALL new
+same-owner visible outgoing at arrival is exact 45/45. Complete accounting is
+43 EXACT / 0 MISMATCH / 2 UNKNOWN; holdout 19/21 (UNKNOWN kept in denominator).
+Positive outgoing explains 32 zero cases observationally; 31/32 complete exact.
+Holdout positive 10/11 complete exact across 10 groups / 3 contexts. No-outgoing
+MATCH equality is a separate tautological check, not extra continuation support.
+Both unknown cases retain plausible same-owner unknown-source aliases; no
+physical genealogy or automatic relay / relaunch cause is certified.
+Offsets 0/1/2 are relative to arrival; 44 full windows, 1 recording-end partial.
+NO_BEFORE_TRIGGER_FOUND in frozen development-only field screen. No holdout
+trigger tuning, no cohort/tower memorization, no hypothesis revisions.
+Production changes NONE; owner-only Capture remains hypothesis only. It requires
+new post-freeze prospective passive recording, >=10 groups / >=2 contexts / >=90%
+owner agreement with no unexplained high-impact mismatch before promotion.
+New passive recordings 0 / live dispatch 0 / new Grade A 0 / Grade B 0 / formal 0.
+Stop this bounded Supply-local question; NEXT P0 CONTROLLED / PASSIVE COMBAT
+under existing readiness. No second Supply archaeology, topology, planner, or
+Combat production. Endpoint UNKNOWN_BUT_RESEARCH_CLOSED.
+Strict baseline remains 131 supported / 116 correct; 17 core hashes unchanged.
+Full results: V2_M2A_POST_ARRIVAL_INVENTORY_DISPOSITION.json/.md.
+Final actual HEAD/branch/dirty/source hashes/counts are bound by
+runtime/research/v2/inventory-disposition-final-head-regression.json.
+All final documents precede that final-HEAD regression; no docs commit after it.
+
+## Historical unfiltered settlement checkpoint (superseded P0 ranking)
+
 # Current M2A unfiltered settlement checkpoint - 2026-10-03
 
 CURRENT: OLD M1 FAIL / M1B PASS / M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.
