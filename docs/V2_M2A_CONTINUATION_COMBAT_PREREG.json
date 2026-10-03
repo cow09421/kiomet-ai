@@ -1,0 +1,322 @@
+{
+  "version": "continuation-aware-combat-preregister-v1",
+  "baseline_head": "65e9b462676e4e5fa317b37f05a1e22f7ebc0d40",
+  "preregistered_at_utc": "2026-10-03T06:16:45.666581+00:00",
+  "deadline_utc": "2026-10-03T10:00:00Z",
+  "deadline_taipei": "2026-10-03 18:00 Asia/Taipei",
+  "deadline_policy": "Conservative four-hour engineering hard stop, including final reporting/testing; at expiry select one allowed outcome, no extension request.",
+  "purpose": "Retrospective diagnosis only; old holdout is already seen, never new validation.",
+  "selection": {
+    "all31_case_ids": [
+      "03d032d57e5b:1245:0",
+      "03d032d57e5b:1363:0",
+      "03d032d57e5b:1438:0",
+      "03d032d57e5b:1515:0",
+      "03d032d57e5b:1622:0",
+      "03d032d57e5b:1678:0",
+      "03d032d57e5b:1837:0",
+      "03d032d57e5b:1917:0",
+      "03d032d57e5b:304:0",
+      "7d56a775bc4c:1027:0",
+      "7d56a775bc4c:424:0",
+      "7d56a775bc4c:456:0",
+      "7d56a775bc4c:550:0",
+      "7d56a775bc4c:572:0",
+      "7d56a775bc4c:574:0",
+      "7d56a775bc4c:744:0",
+      "7d56a775bc4c:861:0",
+      "7d56a775bc4c:951:0",
+      "daf86d0544b7:1512:0",
+      "daf86d0544b7:1678:0",
+      "daf86d0544b7:1869:0",
+      "daf86d0544b7:1986:0",
+      "daf86d0544b7:2049:0",
+      "daf86d0544b7:2105:0",
+      "daf86d0544b7:2121:1",
+      "daf86d0544b7:2236:0",
+      "daf86d0544b7:2291:0",
+      "daf86d0544b7:2346:0",
+      "daf86d0544b7:55:0",
+      "daf86d0544b7:63:0",
+      "daf86d0544b7:912:0"
+    ],
+    "rule": "Exactly the prior31 unique COMBAT_REQUIRED cases; symmetric replay without filtering original outcomes. Legacy4 remain aliases and add0.",
+    "development": 22,
+    "holdout": 9,
+    "original_match": 26,
+    "original_mismatch": 5
+  },
+  "formula": {
+    "name": "fight_ordinary",
+    "source_path": "src/kiomet_ai/v2/sim/combat.py",
+    "source_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "pinned_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "defender_is_tower": true,
+    "attacker_morale": "retained force.accelerated; unique pinned known-leg ETA inversion only when directly observed flag is absent",
+    "defender_morale": "target tower morale at before tick",
+    "source_current_morale": "supplementary context only; never substituted for force.accelerated",
+    "production_or_formula_change": false
+  },
+  "qualification": {
+    "rules": "Unchanged prior hostility-known, inbound-complete, production/aura/special/delay/capacity/continuity guards. Recompute only with existing frozen scorer and assert per-case agreement; no relaxation, reachability exclusion, or repaired endpoint.",
+    "qualified_map": {
+      "03d032d57e5b:304:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "03d032d57e5b:1245:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1363:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1438:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1515:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1622:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1678:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "03d032d57e5b:1837:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "03d032d57e5b:1917:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "daf86d0544b7:55:0": {
+        "qualified": false,
+        "blockers": [
+          "PAIR_RELATION"
+        ]
+      },
+      "daf86d0544b7:63:0": {
+        "qualified": true,
+        "blockers": []
+      },
+      "daf86d0544b7:912:0": {
+        "qualified": true,
+        "blockers": []
+      },
+      "daf86d0544b7:1512:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:1678:0": {
+        "qualified": false,
+        "blockers": [
+          "PAIR_RELATION"
+        ]
+      },
+      "daf86d0544b7:1869:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:1986:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:2049:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:2105:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:2121:1": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "daf86d0544b7:2236:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:2291:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "daf86d0544b7:2346:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "7d56a775bc4c:424:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "7d56a775bc4c:456:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "7d56a775bc4c:550:0": {
+        "qualified": false,
+        "blockers": [
+          "PAIR_RELATION"
+        ]
+      },
+      "7d56a775bc4c:572:0": {
+        "qualified": true,
+        "blockers": []
+      },
+      "7d56a775bc4c:574:0": {
+        "qualified": true,
+        "blockers": []
+      },
+      "7d56a775bc4c:744:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "7d56a775bc4c:861:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      },
+      "7d56a775bc4c:951:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN",
+          "PAIR_RELATION"
+        ]
+      },
+      "7d56a775bc4c:1027:0": {
+        "qualified": false,
+        "blockers": [
+          "MULTIPLE_INBOUND_UNKNOWN"
+        ]
+      }
+    },
+    "qualified_count": 4,
+    "unqualified_count": 27
+  },
+  "continuation_accounting": "Predicted owner must equal observed owner AND predicted survivor vector must equal observed inventory + SUM(all compatible newly observable outgoing at offset0). Preserve partial retained inventory and partial outgoing; no subset search, clipping, or outgoing==survivor requirement. Known source-target oversized vectors stay included as counterexamples.",
+  "compatible_outgoing": "Same first-retained document/match/player/time-origin scope and arrival tick; known source==combat target, known owner==observed post-combat owner, complete known nonnegative typed vector. Destination may remain UNKNOWN. No amount/budget filter. Count new signature multiplicity above before baseline, using owner/source/destination/vector; IDs supplemental only. Same signature persisting across frames is not counted again. Unknown before endpoint/vector aliases flag uncertain first appearance.",
+  "unknown_policy": "Missing/incomplete census or plausible same-observed-owner unknown source/owner/vector prevents complete NO or complete accounting; never substitute zero. Preserve a separate observed-only arithmetic result. Do not use formula survivor size to discard unknown-source aliases. Relevant before-alias uncertainty also remains UNKNOWN. Known owner mismatch or known vector contradiction is a true mismatch only if relevant accounting inputs are complete.",
+  "timing": "offset0=arrival; +1/+2 extracted from existing pinned raw sources are EXPLORATORY and cannot change primary score, flips, or verdict. Same known four-part scope and consecutive ticks mandatory.",
+  "scoring": {
+    "original_status": "Retain prior26MATCH/5MISMATCH independently.",
+    "primary_status": "EXACT, MISMATCH, UNKNOWN; owner and vector accounted separately.",
+    "outgoing_status": "YES if a known new compatible member exists; NO only with complete census/newness excluding plausible aliases; otherwise UNKNOWN. YES may still have UNKNOWN accounting completeness.",
+    "flip_direction": "EXACT against original MISMATCH -> MISMATCH_TO_MATCH; MISMATCH against original MATCH -> MATCH_TO_MISMATCH; known unchanged -> NONE; any indeterminate -> UNKNOWN. Count both directions over all31 and report qualified subset separately.",
+    "known_counterexample": "Existing qualified case whose original and aware accounting both mismatch with known relevant fields OR original qualified MATCH genuinely becomes known aware MISMATCH."
+  },
+  "controls": {
+    "seed_salt": "kiomet-v2-continuation-combat-20261003-v1",
+    "sampling": "Smallest SHA256(salt|group|cohort|before_sequence|target_id) ranks. Freeze pool rules before detector runs. Never select by observed outgoing/accounting result. Retain sampled UNKNOWNs; do not replace them.",
+    "A": {
+      "target_N": 100,
+      "pool": "Existing comparable consecutive raw/audit edges and before-visible ordinary nonneutral towers with known positive inventory. Certify no due visible arrival to this tower using existing before-known destination and ETA/current-leg audit; any potentially incoming force unresolved prevents non-arrival certification. No after-outcome filters or projection-match filtering.",
+      "false_positive": "Known same-tick outgoing detection on certified non-arrival control is background positive for the event-association claim; not proof that source extraction is wrong. Report YES/NO/UNKNOWN and eligible pool size.",
+      "gate": "Known positives/N >10% -> mandatory INSUFFICIENT_INFORMATION. Accept only when (known positives+UNKNOWN)/N <=10% and N>=90; otherwise insufficient controls."
+    },
+    "B": {
+      "target_N": 50,
+      "pool": "All264 supported existing EMPTY_NEUTRAL_CAPTURE or SAME_OWNER_REINFORCEMENT arrivals; sample without using their MATCH/MISMATCH outcome. No new noncombat simulator or reinforcement expansion.",
+      "actual_target": "Apply identical detector to the actual noncombat arrival target. Report compatible outgoing YES/NO/UNKNOWN rate; genuine noncombat continuation is not automatically a false-positive.",
+      "paired_specificity_control": "For each sampled arrival choose a deterministic same-owner before-visible ordinary decoy tower (prefer observed neighbor, else other visible tower), with no certified due arrival, excluding the actual target. Keep event and decoy identities distinct; never substitute the arrival target. This tests accidental pairing of nearby arrival/outgoing. Missing decoy is UNKNOWN, not synthetic evidence.",
+      "false_pairing": "Detector-positive on the independently non-arriving paired decoy is the B background/mispair statistic. >10% known positives -> mandatory INSUFFICIENT_INFORMATION; acceptance requires (positive+UNKNOWN)/available_decoys<=10% and >=20 available decoys. Report actual-target presence separately so generic true continuation is not mislabeled as detector error."
+    }
+  },
+  "outcomes": {
+    "allowed": [
+      "FORMULA_FALSIFIED",
+      "FORMULA_DIAGNOSTICALLY_SUPPORTED",
+      "INSUFFICIENT_INFORMATION"
+    ],
+    "mandatory_hard_stops": "Control failure, second definition revision, prohibited information need, or time expiry -> INSUFFICIENT_INFORMATION. Otherwise test FALSIFIED first, then SUPPORTED, else INSUFFICIENT.",
+    "FORMULA_FALSIFIED": "At least1 qualified fully-known counterexample as frozen above. No formula edit this round.",
+    "FORMULA_DIAGNOSTICALLY_SUPPORTED": "At least4/5 original mismatches become primary complete EXACT; zero true original-MATCH->MISMATCH; zero qualified fully-known residual mismatch; unchanged4 qualified cases remain complete exact (avoid vacuous qualification); controls pass; no second definition revision. Still diagnostic only, no credit.",
+    "INSUFFICIENT_INFORMATION": "Every other situation; next improved-field prospective passive recording, never another replay of old corpus."
+  },
+  "previously_inspected": "Audit existing reports/tools to answer YES/NO/UNKNOWN. This does not create diagnostic independence.",
+  "limits": {
+    "formula_revisions": 0,
+    "compatible_definition_revision_max": 1,
+    "compatible_definition_revisions_used": 0,
+    "production_changes": "NONE",
+    "new_recording": 0,
+    "live": 0,
+    "formal_credit_change": 0,
+    "new_grade_a": 0,
+    "new_grade_b": 0,
+    "new_certified_combat": 0
+  },
+  "prohibited": [
+    "production simulator changes",
+    "formula/damage/morale/shield tuning",
+    "live combat",
+    "endpoint",
+    "supply archaeology",
+    "planner",
+    "uncertainty engine",
+    "qualification relaxation"
+  ],
+  "source_sha256": {
+    "docs/V2_M2A_COMBAT_PASSIVE_REPLAY.json": "cf6235cb3f11629671d6b7b13589db5d477c6bdde465ae92beb70a12151b7deb",
+    "tests/fixtures/v2/combat-passive-replay.json.gz": "dcdd714ad077f39366a8a0fdfaa8016399c8f0080dd6f6c605e18eeea4efc4b0",
+    "tools/v2_combat_passive_replay.py": "ea74baffbf69b93f2578c90a66dc6782c733e4777c484f5824c38c6edd7b0c59",
+    "docs/V2_M2A_SETTLEMENT_RULE_FREEZE.json": "449e4a33584d1f82a897bc32f7d14023ad85023a2d531b4cfbc4e925b09ddb50",
+    "tests/fixtures/v2/arrival-factor-edge-audit.jsonl.gz": "b5671b5f9f2362cebd872f44b3c5a4e3cf1a0a3c9c3ad09ead98c7c0fb94ff16",
+    "tests/fixtures/v2/arrival-settlement-replay-development.json.gz": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "tests/fixtures/v2/arrival-settlement-replay-holdout.json.gz": "07d67410076ecc013754ec02d1691f3f346f25799b03a861e35d36fc90d807a6"
+  }
+}
