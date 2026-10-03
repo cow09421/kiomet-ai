@@ -163,15 +163,23 @@ def _names(type_id: int) -> set[str]:
     return result
 
 
+def _target_names(type_id: int) -> set[str]:
+    """Exact target labels currently pinned to the public English client catalog."""
+    if type(type_id) is not int or type_id not in range(len(TOWER_TYPES)):
+        return set()
+    return {TOWER_TYPES[type_id]}
+
+
 def inspect_upgrade_dom(dom_snapshot: dict, source_type: int, target_type: int) -> dict:
     """Pure fail-closed check of exact heading and one visible normal upgrade title."""
     reasons = []
-    source_names, target_names = _names(source_type), _names(target_type)
+    source_names = _names(source_type)
     headings = dom_snapshot.get("headings") if isinstance(dom_snapshot, dict) else None
-    if not isinstance(headings, list) or not source_names.intersection(
-            str(h).strip() for h in headings):
+    heading_matches = ([str(h).strip() for h in headings if str(h).strip() in source_names]
+                       if isinstance(headings, list) else [])
+    if len(heading_matches) != 1:
         reasons.append("SOURCE_HEADING_NOT_EXACT")
-    titles = {f"Upgrade to {name}" for name in target_names}
+    titles = {f"Upgrade to {name}" for name in _target_names(target_type)}
     buttons = dom_snapshot.get("buttons") if isinstance(dom_snapshot, dict) else None
     if not isinstance(buttons, list):
         reasons.append("UPGRADE_BUTTONS_UNKNOWN")
@@ -212,7 +220,7 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
         reasons.append("OFFICIAL_UI_CLICK_NOT_CONFIRMED")
     if ui_result.get("dom_guard_passed") is not True:
         reasons.append("NORMAL_UPGRADE_DOM_GUARD_NOT_CONFIRMED")
-    expected_titles = {f"Upgrade to {name}" for name in _names(target_type)}
+    expected_titles = {f"Upgrade to {name}" for name in _target_names(target_type)}
     if ui_result.get("upgrade_title") not in expected_titles:
         reasons.append("UPGRADE_TITLE_NOT_EXACT_FOR_TARGET")
     if any(ui_result.get(key) is not True for key in
@@ -308,6 +316,9 @@ async def _dom_snapshot(page):
       const vis=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();
         return !!(r.width&&r.height&&s.display!=='none'&&s.visibility!=='hidden'&&s.opacity!=='0');};
       const headings=[...document.querySelectorAll('h2')].filter(vis).map(e=>e.innerText.trim());
+      const visible_titles=[...document.querySelectorAll('[title]')].filter(vis).slice(0,80).map(e=>({
+        tag:e.tagName,title:(e.getAttribute('title')||'').slice(0,160),
+        text:(e.innerText||'').trim().slice(0,100)}));
       const buttons=[...document.querySelectorAll('[title^=\\"Upgrade to \\"]')].map(e=>{
         const r=e.getBoundingClientRect(),s=getComputedStyle(e),text=(e.innerText||'').trim();
         const descendants=[...e.querySelectorAll('*')];
@@ -320,7 +331,7 @@ async def _dom_snapshot(page):
           pointer_events:s.pointerEvents!=='none',locked_glyph:lockGlyph,hidden_lock_icon:lockMarker,
           bbox:[r.x,r.y,r.width,r.height]};
       });
-      return {headings,buttons};
+      return {headings,buttons,visible_titles};
     }""")
 
 
@@ -329,6 +340,99 @@ async def _read_candidate_state(ex, tower_id, target_type):
     row = next((r for r in candidate_rows(state)
                 if r["tower_id"] == tower_id and r["target_type"] == target_type), None)
     return state, raw, row
+
+
+async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity, deadline):
+    """Poll one ordinary selection for at most two seconds and durably record each witness."""
+    local_deadline = min(deadline, time.monotonic() + 2.0)
+    attempts = 0
+    last = {"matched": False, "state": None, "raw": None, "dom": None,
+            "source_heading": None, "attempts": attempts,
+            "witness": {"tower_id": tower_id, "expected_source_type": source_type,
+                        "matched": False, "reasons": ["NO_CURRENT_SAMPLE_WITHIN_SELECTION_WINDOW"]}}
+    while time.monotonic() < local_deadline:
+        attempts += 1
+        try:
+            remaining = max(0.01, local_deadline - time.monotonic())
+            state, raw = await asyncio.wait_for(ex.sample(), timeout=remaining)
+            current_identity = _state_identity(state)
+            remaining = max(0.01, local_deadline - time.monotonic())
+            dom = await asyncio.wait_for(_dom_snapshot(page), timeout=remaining)
+            remaining = max(0.01, local_deadline - time.monotonic())
+            after_state, after_raw = await asyncio.wait_for(ex.sample(), timeout=remaining)
+            after_identity = _state_identity(after_state)
+            heading_matches = [str(h).strip() for h in dom.get("headings", [])
+                               if str(h).strip() in _names(source_type)]
+            heading = heading_matches[0] if len(heading_matches) == 1 else None
+            heading_reason = ("SOURCE_HEADING_NOT_EXACT" if not heading_matches else
+                              "SOURCE_HEADING_NOT_UNIQUE" if len(heading_matches) != 1 else None)
+            rows = [r for r in candidate_rows(state)
+                    if r["tower_id"] == tower_id and r["source_type"] == source_type]
+            titles = sorted({b.get("title") for b in dom.get("buttons", [])
+                             if isinstance(b, dict) and b.get("visible") is True and
+                             isinstance(b.get("title"), str)})
+            guards = [{"target_type": r["target_type"],
+                       **inspect_upgrade_dom(dom, source_type, r["target_type"])}
+                      for r in rows]
+            selected_id = raw.get("selected_tower")
+            selected_after_id = after_raw.get("selected_tower")
+            own_visible = _get_tower(state, tower_id) is not None
+            own_after_visible = _get_tower(after_state, tower_id) is not None
+            before_tower = _get_tower(state, tower_id)
+            after_tower = _get_tower(after_state, tower_id)
+            before_type_ok, before_type = (_known(before_tower.tower_type, state, coherent=True)
+                                           if before_tower else (False, None))
+            after_type_ok, after_type = (_known(after_tower.tower_type, after_state, coherent=True)
+                                         if after_tower else (False, None))
+            actor_stable = (before_type_ok and after_type_ok and
+                            before_type == source_type and after_type == source_type)
+            matched = (current_identity == identity and after_identity == identity and
+                       selected_id == tower_id and selected_after_id == tower_id and
+                       own_visible and own_after_visible and actor_stable and heading is not None)
+            row = {"kind": "SELECTION_WITNESS_ATTEMPT", "tower_id": tower_id,
+                   "expected_source_type": source_type, "attempt": attempts,
+                   "tick": getattr(getattr(state, "tick", None), "value", None),
+                   "sampled_at_ms": getattr(state, "sampled_at_ms", None),
+                   "received_at_ms": getattr(state, "received_at_ms", None),
+                   "identity_current": current_identity == identity,
+                   "after_tick": getattr(getattr(after_state, "tick", None), "value", None),
+                   "after_sampled_at_ms": getattr(after_state, "sampled_at_ms", None),
+                   "after_received_at_ms": getattr(after_state, "received_at_ms", None),
+                   "after_identity_current": after_identity == identity,
+                   "observed_selected_tower_id": selected_id,
+                   "after_selected_tower_id": selected_after_id,
+                   "own_tower_positively_visible": own_visible,
+                   "own_tower_positively_visible_after_dom": own_after_visible,
+                   "observed_source_type": before_type if before_type_ok else None,
+                   "observed_source_type_after_dom": after_type if after_type_ok else None,
+                   "source_heading": heading, "headings": dom.get("headings", []),
+                   "all_visible_titles": dom.get("visible_titles", []),
+                   "visible_upgrade_titles": titles, "candidate_title_guards": guards,
+                   "matched": matched,
+                   "reasons": (["EPOCH_OR_NETWORK_IDENTITY_MISMATCH"] if current_identity != identity else []) +
+                              (["EPOCH_OR_NETWORK_IDENTITY_CHANGED_DURING_DOM_READ"] if after_identity != identity else []) +
+                              (["SELECTED_TOWER_ID_MISMATCH"] if selected_id != tower_id else []) +
+                              (["SELECTED_TOWER_ID_CHANGED_DURING_DOM_READ"] if selected_after_id != tower_id else []) +
+                              (["OWN_TOWER_NOT_POSITIVELY_VISIBLE"] if not own_visible else []) +
+                              (["OWN_TOWER_NOT_POSITIVELY_VISIBLE_AFTER_DOM"] if not own_after_visible else []) +
+                              (["SOURCE_TYPE_NOT_STABLE_AROUND_DOM_READ"] if not actor_stable else []) +
+                              ([heading_reason] if heading_reason else [])}
+            _append(stream, row)
+            last = {"matched": matched, "state": state, "raw": raw, "dom": dom,
+                    "source_heading": heading, "attempts": attempts, "witness": row}
+            if matched:
+                _append(stream, {**row, "kind": "SELECTION_WITNESS_SUMMARY", "attempts": attempts})
+                return last
+        except (ValueError, RuntimeError, asyncio.TimeoutError) as exc:
+            _append(stream, {"kind": "SELECTION_WITNESS_ATTEMPT", "tower_id": tower_id,
+                             "expected_source_type": source_type, "attempt": attempts,
+                             "matched": False, "reasons": ["CURRENT_SAMPLE_OR_DOM_UNKNOWN"],
+                             "error": f"{type(exc).__name__}:{str(exc)[:120]}"})
+        await asyncio.sleep(.08)
+    last["attempts"] = attempts
+    _append(stream, {**last["witness"], "kind": "SELECTION_WITNESS_SUMMARY",
+                     "attempts": attempts, "matched": False})
+    return last
 
 
 async def _next_distinct(ex, prior_tick, deadline):
@@ -406,10 +510,11 @@ async def run_probe(args):
             reason = f"{type(exc).__name__}: {str(exc)[:180]}"
             _append(stream, {"kind": "PROBE_ABORTED", "status": "UNKNOWN", "reason": reason})
             return {"status": "UNKNOWN", "reasons": [reason], "out": str(out)}
-        pw_context = async_playwright()
+        pw_context = None
         pw = None
         ex = None
         try:
+            pw_context = async_playwright()
             pw = await asyncio.wait_for(pw_context.start(), timeout=5)
             browser = await connect_dedicated(pw, ROOT)
             official = [p for ctx in browser.contexts for p in ctx.pages if is_official_client_url(p.url)]
@@ -508,18 +613,27 @@ async def run_probe(args):
                     canvas_hit = await page.evaluate("([x,y])=>document.elementFromPoint(x,y)?.tagName==='CANVAS'", [x, y])
                     if not canvas_hit:
                         continue
-                    await _page_click(page, x, y)
                     tries += 1
-                    fresh, fresh_raw = await ex.sample()
-                    if (fresh_raw.get("selected_tower") != tower_id or
-                            _state_identity(fresh) != ident):
+                    source_type = next(r["source_type"] for r in available if r["tower_id"] == tower_id)
+                    click_error = None
+                    try:
+                        await _page_click(page, x, y)
+                    except Exception as exc:
+                        click_error = f"{type(exc).__name__}:{str(exc)[:120]}"
+                    _append(stream, {"kind": "OWN_SELECTION_CLICK", "attempt": tries,
+                                     "clicked_tower_id": tower_id, "expected_source_type": source_type,
+                                     "before_tick": state.tick.value, "page_xy": [x, y],
+                                     "camera_candidate": camera, "time_monotonic": time.monotonic(),
+                                     "click_error": click_error,
+                                     "click_status": "SUCCESS" if click_error is None else "UNKNOWN"})
+                    witness = await _selection_roundtrip(ex, page, stream, tower_id,
+                                                         source_type, ident, deadline)
+                    if not witness["matched"]:
                         continue
-                    tower_now = _get_tower(fresh, tower_id)
-                    if tower_now is None:
-                        continue
-                    dom = await _dom_snapshot(page)
+                    fresh, fresh_raw, dom = witness["state"], witness["raw"], witness["dom"]
                     choices = [r for r in candidate_rows(fresh)
-                               if r["tower_id"] == tower_id and r["eligible"]]
+                               if r["tower_id"] == tower_id and r["eligible"] and
+                               r["source_type"] == source_type]
                     for row in choices:
                         if time.monotonic() >= deadline:
                             break
@@ -610,7 +724,7 @@ async def run_probe(args):
         finally:
             try:
                 if pw is not None:
-                    await asyncio.wait_for(pw_context.stop(), timeout=6)
+                    await asyncio.wait_for(pw.stop(), timeout=6)
             except Exception:
                 pass
             finally:

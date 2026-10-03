@@ -1,8 +1,10 @@
 from dataclasses import replace
 import asyncio
 import json
+from contextlib import contextmanager
 from pathlib import Path
 import shutil
+import time
 from types import SimpleNamespace
 from uuid import uuid4
 
@@ -126,6 +128,26 @@ def after_state(tick, typ=TARGET, delay=NOMINAL, **kwargs):
     return make_state(tower=tower, tick=tick, **kwargs)
 
 
+def barracks_state(tick=100):
+    source, target = 3, 1
+    counts = [0] * 27
+    counts[9], counts[14] = 1, 1
+    candidates = ((target, ((9, 1, 1), (14, 1, 1)), True),)
+    tower = make_tower(source=source, candidates=candidates, locks=((target, False),),
+                       capacity=rules.capacity(source, False), at=NOW + tick)
+    return make_state(tower=tower, tick=tick, resources=tuple(enumerate(counts)))
+
+
+def barracks_ui_result():
+    return {
+        "click_status": "SUCCESS", "selected_tower_id": TOWER_ID,
+        "target_type": 1, "source_heading": "Barracks",
+        "upgrade_title": "Upgrade to 軍械庫", "dom_guard_passed": True,
+        "button_visible": True, "button_enabled": True, "pointer_events": True,
+        "locked_glyph": False, "hidden_lock_icon": False,
+    }
+
+
 def test_partial_coverage_does_not_block_positive_visible_own_candidate():
     row = target_row(make_state(coverage="PARTIAL"))
     assert row["eligible"] is True
@@ -223,6 +245,123 @@ def test_dom_guard_refuses_wrong_or_ambiguous_button_and_wrong_heading():
     wrong_heading = valid_dom()
     wrong_heading["headings"] = ["Helipad"]
     assert inspect_upgrade_dom(wrong_heading, SOURCE, TARGET)["eligible"] is False
+    duplicate_heading = valid_dom()
+    duplicate_heading["headings"] = ["Airfield", "Airfield"]
+    assert inspect_upgrade_dom(duplicate_heading, SOURCE, TARGET)["eligible"] is False
+
+
+def test_dom_guard_refuses_unverified_language_label():
+    unknown_language = valid_dom()
+    unknown_language["buttons"][0]["title"] = "Upgrade in an unverified language"
+    assert inspect_upgrade_dom(unknown_language, SOURCE, TARGET)["eligible"] is False
+
+
+@pytest.mark.parametrize("field,value", [
+    ("selected_tower_id", TOWER_ID + 1),
+    ("source_heading", "Helipad"),
+    ("upgrade_title", "Upgrade in an unverified language"),
+    ("locked_glyph", True),
+    ("hidden_lock_icon", True),
+    ("button_enabled", False),
+])
+def test_ui_identity_heading_title_or_lock_mismatch_never_verifies(field, value):
+    before = make_state(tick=100)
+    ui = valid_ui_result()
+    ui[field] = value
+    result = verify_upgrade(before, ui,
+                            [after_state(101), after_state(102, delay=NOMINAL - 1)], TARGET)
+    assert result["status"] == "UNKNOWN"
+
+
+def test_unverified_chinese_upgrade_title_stays_unknown():
+    dom = {
+        "headings": ["Barracks"],
+        "buttons": [{"title": "Upgrade to 軍械庫", "visible": True, "enabled": True,
+                     "pointer_events": True, "locked_glyph": False,
+                     "hidden_lock_icon": False, "bbox": [10, 20, 100, 40]}],
+    }
+    assert inspect_upgrade_dom(dom, 3, 1)["eligible"] is False
+    before = barracks_state(100)
+    ui = barracks_ui_result()
+    after1 = after_state(101, typ=1, delay=rules.UPGRADE_DELAY[1])
+    after2 = after_state(102, typ=1, delay=rules.UPGRADE_DELAY[1] - 1)
+    assert verify_upgrade(before, ui, [after1, after2], 1)["status"] == "UNKNOWN"
+
+
+def _run_selection_roundtrip(monkeypatch, tmp_file, before, after, before_id, after_id,
+                             dom=None, identity=None):
+    class FakeExtractor:
+        def __init__(self):
+            self.samples = iter(((before, {"selected_tower": before_id}),
+                                 (after, {"selected_tower": after_id})))
+
+        async def sample(self):
+            return next(self.samples)
+
+    async def get_dom(_page):
+        return valid_dom() if dom is None else dom
+
+    monkeypatch.setattr(probe, "_dom_snapshot", get_dom)
+    expected_identity = probe._state_identity(before) if identity is None else identity
+    with tmp_file.open("x", encoding="utf-8") as stream:
+        result = asyncio.run(probe._selection_roundtrip(
+            FakeExtractor(), object(), stream, TOWER_ID, SOURCE, expected_identity,
+            time.monotonic() + 0.02))
+    rows = [json.loads(line) for line in tmp_file.read_text(encoding="utf-8").splitlines()]
+    tmp_file.unlink()
+    return result, rows
+
+
+def test_roundtrip_requires_stable_selected_id_around_dom_and_writes_failure_immediately(monkeypatch):
+    evidence = Path(__file__).parents[1] / "runtime" / "cache" / "pytest" / f"selection-{uuid4().hex}.jsonl"
+    before = make_state(tick=100)
+    after = make_state(tick=101)
+    result, rows = _run_selection_roundtrip(monkeypatch, evidence, before, after,
+                                            TOWER_ID, TOWER_ID + 1)
+    assert result["matched"] is False
+    assert rows[0]["kind"] == "SELECTION_WITNESS_ATTEMPT"
+    assert rows[0]["after_selected_tower_id"] == TOWER_ID + 1
+    assert "SELECTED_TOWER_ID_CHANGED_DURING_DOM_READ" in rows[0]["reasons"]
+
+
+def test_roundtrip_rejects_identity_change_during_dom_and_persists_reason(monkeypatch):
+    evidence = Path(__file__).parents[1] / "runtime" / "cache" / "pytest" / f"selection-{uuid4().hex}.jsonl"
+    before = make_state(tick=100)
+    after = make_state(tick=101, document="document-b")
+    result, rows = _run_selection_roundtrip(monkeypatch, evidence, before, after,
+                                            TOWER_ID, TOWER_ID)
+    assert result["matched"] is False
+    assert "EPOCH_OR_NETWORK_IDENTITY_CHANGED_DURING_DOM_READ" in rows[0]["reasons"]
+
+
+def test_roundtrip_rejects_wrong_heading_and_accepts_stable_english_witness(monkeypatch):
+    workspace = Path(__file__).parents[1] / "runtime" / "cache" / "pytest"
+    before = make_state(tick=100)
+    after = make_state(tick=101)
+    bad_dom = {"headings": ["Helipad"], "buttons": valid_dom()["buttons"]}
+    result, rows = _run_selection_roundtrip(monkeypatch, workspace / f"selection-{uuid4().hex}.jsonl",
+                                            before, after, TOWER_ID, TOWER_ID, dom=bad_dom)
+    assert result["matched"] is False
+    assert "SOURCE_HEADING_NOT_EXACT" in rows[0]["reasons"]
+    result, rows = _run_selection_roundtrip(monkeypatch, workspace / f"selection-{uuid4().hex}.jsonl",
+                                            before, after, TOWER_ID, TOWER_ID)
+    assert result["matched"] is True
+    assert result["source_heading"] == "Airfield"
+    assert rows[0]["matched"] is True
+
+
+def test_roundtrip_rejects_ambiguous_source_heading_and_keeps_titles_diagnostic_only(monkeypatch):
+    workspace = Path(__file__).parents[1] / "runtime" / "cache" / "pytest"
+    before = make_state(tick=100)
+    after = make_state(tick=101)
+    ambiguous_dom = {"headings": ["Airfield", "Airfield"], "buttons": valid_dom()["buttons"]}
+    result, rows = _run_selection_roundtrip(monkeypatch, workspace / f"selection-{uuid4().hex}.jsonl",
+                                            before, after, TOWER_ID, TOWER_ID, dom=ambiguous_dom)
+    assert result["matched"] is False
+    assert rows[0]["matched"] is False
+    assert rows[0]["visible_upgrade_titles"] == ["Upgrade to Helipad"]
+    assert all(not guard["eligible"] for guard in rows[0]["candidate_title_guards"])
+    assert "SOURCE_HEADING_NOT_UNIQUE" in rows[0]["reasons"]
 
 
 def test_dom_click_or_progress_alone_is_not_success():
@@ -374,6 +513,27 @@ def test_sync_output_file_context_is_not_used_with_async_with():
                                 isinstance(expr.func.value, ast.Name) and expr.func.value.id == "out")
 
 
+def test_probe_keeps_six_selection_and_one_upgrade_click_bounds():
+    import ast
+    import inspect
+
+    tree = ast.parse(inspect.getsource(probe.run_probe))
+    selection_bound = any(
+        isinstance(node, ast.Compare) and isinstance(node.left, ast.Name) and node.left.id == "tries" and
+        len(node.ops) == 1 and isinstance(node.ops[0], ast.GtE) and
+        len(node.comparators) == 1 and isinstance(node.comparators[0], ast.Constant) and
+        node.comparators[0].value == 6
+        for node in ast.walk(tree))
+    upgrade_clicks = [node for node in ast.walk(tree)
+                      if isinstance(node, ast.Await) and isinstance(node.value, ast.Call) and
+                      isinstance(node.value.func, ast.Name) and node.value.func.id == "_page_click" and
+                      len(node.value.args) >= 3 and isinstance(node.value.args[1], ast.Name) and
+                      node.value.args[1].id == "click_x" and isinstance(node.value.args[2], ast.Name) and
+                      node.value.args[2].id == "click_y"]
+    assert selection_bound
+    assert len(upgrade_clicks) == 1
+
+
 def test_read_only_runtime_denial_writes_durable_unknown_without_browser(monkeypatch):
     workspace = Path(__file__).parents[1]
     tmp_root = workspace / "runtime" / "cache" / "pytest" / f"upgrade-smoke-{uuid4().hex}"
@@ -409,6 +569,60 @@ def test_writer_lease_releases_reserved_token_on_exit(monkeypatch):
         assert len(reserved) == 1
         assert released == []
     assert released == [(reserved[0][0], "token")]
+
+
+def test_runtime_stops_started_playwright_and_releases_writer_on_no_page(monkeypatch):
+    workspace = Path(__file__).parents[1]
+    tmp_root = workspace / "runtime" / "cache" / "pytest" / f"runtime-cleanup-{uuid4().hex}"
+    destination = tmp_root / "runtime" / "research" / "v2" / "goal" / "probe.jsonl"
+    events = []
+
+    class FakePlaywright:
+        def __init__(self):
+            self.stopped = False
+
+        async def stop(self):
+            self.stopped = True
+
+    class FakePlaywrightContext:
+        def __init__(self):
+            self.value = FakePlaywright()
+
+        async def start(self):
+            return self.value
+        # Deliberately no stop(); cleanup belongs to the started Playwright object.
+
+    class EmptyBrowser:
+        contexts = []
+
+    manager = FakePlaywrightContext()
+
+    @contextmanager
+    def writer_lease(_seconds):
+        events.append("writer-enter")
+        try:
+            yield
+        finally:
+            events.append("writer-exit")
+
+    async def connect(_pw, _root):
+        return EmptyBrowser()
+
+    monkeypatch.setattr(probe, "ROOT", tmp_root)
+    monkeypatch.setattr(probe, "async_playwright", lambda: manager)
+    monkeypatch.setattr(probe, "_writer_lease", writer_lease)
+    monkeypatch.setattr(probe, "connect_dedicated", connect)
+    try:
+        result = asyncio.run(probe.run_probe(SimpleNamespace(seconds=1, out=destination, execute=False)))
+        assert result["status"] == "UNKNOWN"
+        assert manager.value.stopped is True
+        assert events == ["writer-enter", "writer-exit"]
+        rows = [json.loads(line) for line in destination.read_text(encoding="utf-8").splitlines()]
+        assert rows[-1]["kind"] == "PROBE_ABORTED"
+        assert "expected exactly one owned official-client page" in rows[-1]["reason"]
+    finally:
+        if tmp_root.exists():
+            shutil.rmtree(tmp_root)
 
 
 @pytest.mark.parametrize("observed", [(TARGET, NOMINAL - 1), (SOURCE, NOMINAL),
