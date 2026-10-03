@@ -1,0 +1,15 @@
+# Goal014 source objective and L1 utility compatibility
+
+Outcome HYPOTHESIS_FALSIFIED for the preferred exact official-score realization with strict qualifying dominance ordering. Source audit completed inside the20minute window. No baseline DEV episode, Planner outcome, utility sanity run, live/passive/Final or production edit occurred.
+
+Pinned public score is the current sum of active owned tower weights, recomputed once per second and available only while alive. Active means absent delay. Supported harness weights are1 exceptFactory9 andTown25, which are2. Source hashes and exact line anchors are in goal014-source-audit.json. Cached leaderboard ordering and deployed-source parity remain unknown. Rulerloss is elimination within the measured fixed episode; respawn is available outside it.
+
+Concrete counterexample: an active owned Barracks has Soldier3 in Bad andSoldier4 in Good; all tower types/ownership, production capacity and survival are the same. Both worlds have selfscore2/opponentscore1 before and after. For every s>0, both official utilities are clip((1-1)/s,-1,1)=0. Good has strictly more knownforce but utility ties. Similarly Generator10 andBarracks3 both score1 whileBarracks has additional Soldier production, with otherwise equal state and zero score delta.
+
+The L1 contract prioritizes a reasonable official scalar and prescribes exact score-delta normalization. Its sanity rule requires200 dominance pairs where all of control/production/force/survival are no worse and at least one improves, with100%strict U_good>U_bad. Qualifying force-only/production-only pairs are therefore material hardcontrols, not unknowns or numerical bugs. Selecting only control-improving pairs would hide the known mismatch rather than demonstrate compatibility. No synthetic zero scale, epsilon score term or unofficial score substitution was introduced.
+
+A baseline-derived scale cannot fix equal scalar deltas. The existing composite0.7control/0.2production/0.1force can distinguish these nonterminal unsaturated cases, but automatically replacing a reasonable existing official scalar would change its prescribed preference/eligibility. Alternatively an official-scalar branch can require nondecrease on force/production-only pairs and strict increase on score-improving pairs; that changes the strict sanity condition. Both decisions belong to L1 authorization, not ordinary tuning.
+
+Concrete decision proposed: authorize the already specified composite branch for this demonstrated scalar/sanity conflict while retaining its weights, baseline-only unitless normalization,200dominance+20anti-proxy100% requirements and all V/L thresholds. Alternative: retain official scalar and explicitly allow ties for dominance improvements outside its score/terminal features. Neither option is applied yet.
+
+Global30info9live0passive0Final. V/L remainINSUFFICIENT; InvariantINTACT; no Gate movement, streak1. The exact P0 is closed. Further utility implementation is waiting for the L1 decision; old Combat corpus remains diagnostic and untouched.

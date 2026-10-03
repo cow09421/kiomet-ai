@@ -1,0 +1,122 @@
+{
+  "ID": "goal-014",
+  "utc": "2026-10-03T22:34:36.817040+00:00",
+  "vendor_commit": "d3f0956f27f48f6cac9ac9991f948fa7f90ba77c",
+  "source_sha256": {
+    "runtime/research/v2/goal/goal006-source/server__src__service.rs": "df620c3a3ea0756ad2a157906f6979447e394b5489c8eea097e6833ee4d89ee4",
+    "runtime/research/v2/goal/goal006-source/common__src__tower.rs": "ee82623ba74437470b9ab28b84c293f2559753083854e0a4101917a2bf62dff7",
+    "runtime/research/v2/goal/goal006-source/macros__src__lib.rs": "b1b05b90b94308eda3db6d05ba85bed18215c34cc055ff85cb2f5e24a424900f",
+    "runtime/research/v2/goal/goal006-source/server__src__world.rs": "cc7a06c37b5a7f26abd24cfd9690c8bb485a0cbe7ddd9a5c01bbc4b96cae5be3",
+    "runtime/research/v2/goal/goal006-source/common__src__ticks.rs": "485a813171b735354a08b29d4a28a92b047cc0c1408be3c21fb35db7588f2dcf",
+    "runtime/research/v2/goal/goal007-source/client__src__ui__game_ui.rs": "1e4db8019441fdbf7ce442ae99a0c393ee9777c6cb4143920e98306ac266c1d8",
+    "tools/v2_goal_decision_harness.py": "12678193b0aa8807f2a6f3d0da3cb5f22e4d030377522dd678ab53180da0dc76",
+    "docs/V2_GOAL_L1_CONTRACT.md": "08877f8bf584785e1607fc5b6031f09133fd849f4617a938c03d1a6d434a0f41"
+  },
+  "source_findings": {
+    "score": "service342 freshu32score every1second;352 ownedset;410-411 inactive skip;414 saturating score_weight add;424 cache assignment;286-291 living scoreSome deadNone",
+    "active": "tower85-86 delay.is_none",
+    "weights": "tower261 City5;271Factory2;302Mine2;309Quarry2;323Refinery3;342Town2; macro230-234 default1; commentedMetropolis12 NOTlive",
+    "supported_kind_weights": {
+      "3": 1,
+      "4": 1,
+      "7": 1,
+      "9": 2,
+      "10": 1,
+      "15": 1,
+      "17": 1,
+      "25": 2,
+      "26": 1
+    },
+    "terminal": "service529-537 Rulerloss queues death;442-445 nextboundarykill; world347-349 alivefalse. Respawn exists; absorbing only fixed measuredepisode, not irreversibleglobalmatchend.",
+    "normal_ui": "game_ui174-177 liveLeaderboardOverlay whilealive&&!nexus; dependency sorting/tie and actualdeploymentparity remainUNKNOWN",
+    "harness": "ExistingcomputedTowerdelay notexported. Minimal delayoutcomeexport needed if officialsource-equivalentmetric bridge proceeds; nophysics orpolicyview modification occurred."
+  },
+  "constructive_counterexamples": [
+    {
+      "id": "official-score-force-only",
+      "basis": "DIAGNOSTIC source-derived logical counterexample, not episode/validation",
+      "bad": {
+        "own_active_core_weight": 1,
+        "own_active_other_tower_weight": 1,
+        "opponent_active_core_weight": 1,
+        "initial_self_score": 2,
+        "initial_opponent_score": 1,
+        "final_self_score": 2,
+        "final_opponent_score": 1,
+        "self_alive": true,
+        "opponent_alive": true,
+        "own_core_lost": false,
+        "opponent_core_lost": false,
+        "other_tower_kind": 3,
+        "other_tower_soldier": 3,
+        "other_tower_shield": 1
+      },
+      "good": {
+        "own_active_core_weight": 1,
+        "own_active_other_tower_weight": 1,
+        "opponent_active_core_weight": 1,
+        "initial_self_score": 2,
+        "initial_opponent_score": 1,
+        "final_self_score": 2,
+        "final_opponent_score": 1,
+        "self_alive": true,
+        "opponent_alive": true,
+        "own_core_lost": false,
+        "opponent_core_lost": false,
+        "other_tower_kind": 3,
+        "other_tower_soldier": 4,
+        "other_tower_shield": 1
+      },
+      "ordering": "sameactiveownedtower kinds/score/control/production capacity/survival, strictlygreater knownordinaryforce, bothbelowBarracksSoldiercapacity12",
+      "utility_proof": "For any valid s>0: both Delta(self_score-opponent_score)=0; clip(0/s,-1,1)=0. U_good=U_bad=0, violating strict inequality for this qualifying dominance pair."
+    },
+    {
+      "id": "official-score-production-only",
+      "basis": "DIAGNOSTIC source-derived logical counterexample, not episode/validation",
+      "bad": {
+        "own_active_core_weight": 1,
+        "own_active_other_tower_weight": 1,
+        "opponent_active_core_weight": 1,
+        "initial_self_score": 2,
+        "initial_opponent_score": 1,
+        "final_self_score": 2,
+        "final_opponent_score": 1,
+        "self_alive": true,
+        "opponent_alive": true,
+        "own_core_lost": false,
+        "opponent_core_lost": false,
+        "other_tower_kind": 10,
+        "other_tower_soldier": 3,
+        "other_tower_shield": 1
+      },
+      "good": {
+        "own_active_core_weight": 1,
+        "own_active_other_tower_weight": 1,
+        "opponent_active_core_weight": 1,
+        "initial_self_score": 2,
+        "initial_opponent_score": 1,
+        "final_self_score": 2,
+        "final_opponent_score": 1,
+        "self_alive": true,
+        "opponent_alive": true,
+        "own_core_lost": false,
+        "opponent_core_lost": false,
+        "other_tower_kind": 3,
+        "other_tower_soldier": 3,
+        "other_tower_shield": 1
+      },
+      "ordering": "Generator10 andBarracks3 bothweight1; sameknownunits/activecontrol/survival; Barracks additionallygeneratesSoldier whiledefaultShieldgeneration unchanged",
+      "utility_proof": "For any valid s>0: sameinitialandfinalsourceScoreDifference, bothDelta0 =>bothU0. Moreproductioncapacity cannot strictlyincrease this exactofficialscalar."
+    }
+  ],
+  "conclusion": "Preferred exact source-official scalar and a sanity suite honestly including qualifying force-only/production-only dominance pairs cannot jointly meet100%strictordering. Avoid omitting those qualifying hardpairs to fabricate utilityPASS. This falsifies the Goal014 exact preferred utility realization premise before DEV episodes; it does not falsify officialscore rule, all utility formulations, or all V/L architecture.",
+  "resources": {
+    "information_attempts": 1,
+    "baseline_DEV_episodes": 0,
+    "Planner_outcomes": 0,
+    "live_sessions": 0,
+    "passive_batches": 0,
+    "Final_cycles": 0
+  },
+  "validity": "Source-bound falsification only; currentdeployedscore/sourceparity and fullutilityperformance unestablished"
+}
