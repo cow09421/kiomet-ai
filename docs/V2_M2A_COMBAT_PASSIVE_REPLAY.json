@@ -1,0 +1,6517 @@
+{
+  "version": "combat-passive-replay-v1",
+  "status": "PASSIVE_ANALYSIS_COMPLETE",
+  "freeze": {
+    "path": "docs/V2_M2A_SETTLEMENT_RULE_FREEZE.json",
+    "sha256": "449e4a33584d1f82a897bc32f7d14023ad85023a2d531b4cfbc4e925b09ddb50",
+    "version": "naive-v1-before-unfiltered-results",
+    "combat_clause": "Passive only: pinned fight_ordinary(attacker, defender, capacity, defender_is_tower=True, attacker_morale=force accelerated retained morale flag, defender_morale=target morale), matching the pinned step candidate. Source current morale is supplemental and cannot replace the retained force flag. Attacker victory predicts owner incoming and surviving attacker vector; defender victory predicts owner unchanged and surviving defender vector. Unknown aura, production or simultaneous arrival must be explicit. No formula revision or production promotion.",
+    "formal_credit": 0
+  },
+  "formula": {
+    "name": "fight_ordinary",
+    "source_path": "src/kiomet_ai/v2/sim/combat.py",
+    "source_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "pinned_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "defender_is_tower": true,
+    "attacker_morale": "retained force.accelerated; unique pinned known-leg ETA inversion only when directly observed flag is absent",
+    "defender_morale": "target tower morale at before tick",
+    "source_current_morale": "supplementary context only; never substituted for force.accelerated",
+    "production_or_formula_change": false
+  },
+  "timeline": {
+    "before": "audit tick t; fight inputs",
+    "arrival": "audit tick t+1; combat projection comparison",
+    "following": "same-scope tick t+2; observed follow-up comparison only, not a combat forecast",
+    "force_status_t_plus_1": "arrival snapshot",
+    "force_status_t_plus_2": "following snapshot"
+  },
+  "provenance": {
+    "audit_path": "tests/fixtures/v2/arrival-factor-edge-audit.jsonl.gz",
+    "audit_sha256": "b5671b5f9f2362cebd872f44b3c5a4e3cf1a0a3c9c3ad09ead98c7c0fb94ff16",
+    "settlement_source_manifest": "docs/V2_M2A_UNFILTERED_SETTLEMENT.json",
+    "development_fixture": {
+      "path": "tests/fixtures/v2/arrival-settlement-replay-development.json.gz",
+      "case_count": 312,
+      "source_hashes": {
+        "runtime/research/v2/snapshots-fe678ebb30ce.jsonl": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "runtime/research/v2/snapshots-03d032d57e5b.jsonl": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "runtime/research/v2/snapshots-daf86d0544b7.jsonl": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144"
+      }
+    },
+    "holdout_fixture": {
+      "path": "tests/fixtures/v2/arrival-settlement-replay-holdout.json.gz",
+      "case_count": 101,
+      "source_hashes": {
+        "runtime/research/v2/snapshots-85391858b5d8.jsonl": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "runtime/research/v2/snapshots-7d56a775bc4c.jsonl": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "runtime/research/v2/snapshots-b1f7f9416e92.jsonl": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937"
+      }
+    },
+    "all_six_pinned_raw_sources": {
+      "runtime\\research\\v2\\snapshots-03d032d57e5b.jsonl": {
+        "cohort": "03d032d57e5b",
+        "split": "development",
+        "expected_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "actual_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-7d56a775bc4c.jsonl": {
+        "cohort": "7d56a775bc4c",
+        "split": "holdout",
+        "expected_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "actual_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-85391858b5d8.jsonl": {
+        "cohort": "85391858b5d8",
+        "split": "holdout",
+        "expected_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "actual_sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-b1f7f9416e92.jsonl": {
+        "cohort": "b1f7f9416e92",
+        "split": "holdout",
+        "expected_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+        "actual_sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-daf86d0544b7.jsonl": {
+        "cohort": "daf86d0544b7",
+        "split": "development",
+        "expected_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+        "actual_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+        "matches_manifest": true
+      },
+      "runtime\\research\\v2\\snapshots-fe678ebb30ce.jsonl": {
+        "cohort": "fe678ebb30ce",
+        "split": "development",
+        "expected_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "actual_sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "matches_manifest": true
+      }
+    },
+    "scored_case_sources_verified_against_six_file_manifest": true
+  },
+  "population": {
+    "primary_audit_rule": "factor_observations.arrival[*].current_leg_boundary.branch == COMBAT_REQUIRED",
+    "primary_count": 31,
+    "primary_unique_case_ids": 31,
+    "primary_by_split": {
+      "development": 22,
+      "holdout": 9
+    },
+    "legacy_transition_corpus_count": 4,
+    "legacy_transition_corpus_categories": {
+      "ground_combat_arrival": 2,
+      "ordinary_air_unit_combat_arrival": 2
+    },
+    "legacy_transition_model_matches": 3,
+    "legacy_transition_model_mismatches": 1,
+    "submitted_rows_including_aliases": 35,
+    "dedup_key": [
+      "cohort",
+      "before_tick",
+      "target_id"
+    ],
+    "union_unique_cases": 31,
+    "legacy_new_unique_cases": 0,
+    "legacy_candidates_are_formula_scored_from_exact_raw_timeline_aliases": true
+  },
+  "summary": {
+    "candidate_count": 31,
+    "formula_scored": 31,
+    "evaluable": 4,
+    "unevaluable": 27,
+    "winner_counts": {
+      "ATTACKER": 5,
+      "DEFENDER": 26
+    },
+    "arrival_owner_match": 31,
+    "arrival_owner_compared": 31,
+    "arrival_vector_match": 26,
+    "arrival_vector_compared": 31,
+    "arrival_exact_match": 26,
+    "arrival_exact_compared": 31,
+    "following_owner_match": 31,
+    "following_vector_match": 24,
+    "following_snapshot_exact_agreement": 24,
+    "evaluable_arrival_exact_match": 4,
+    "evaluable_arrival_compared": 4,
+    "contamination_counts": {
+      "production": {
+        "false": 31
+      },
+      "aura": {
+        "false": 31
+      },
+      "multiple_inbound": {
+        "null": 24,
+        "false": 7
+      },
+      "special": {
+        "false": 31
+      },
+      "pair_relation": {
+        "true": 9,
+        "false": 22
+      },
+      "active_delay": {
+        "false": 31
+      },
+      "capacity_uncertainty": {
+        "false": 31
+      },
+      "continuity": {
+        "false": 31
+      }
+    },
+    "pair_relation_status_counts": {
+      "UNKNOWN_PAIR_RELATION": 9,
+      "KNOWN_HOSTILE": 22
+    },
+    "post_arrival_force_status": {
+      "t_plus_1": {
+        "AMBIGUOUS": 26,
+        "DISAPPEARED": 5
+      },
+      "t_plus_2": {
+        "AMBIGUOUS": 26,
+        "DISAPPEARED": 5
+      }
+    },
+    "post_arrival_force_status_basis": {
+      "t_plus_1": {
+        "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 5,
+        "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 21,
+        "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 5
+      },
+      "t_plus_2": {
+        "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 5,
+        "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 21,
+        "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 5
+      }
+    },
+    "force_continuation_uncertain_cases": 26
+  },
+  "by_split": {
+    "development": {
+      "candidate_count": 22,
+      "formula_scored": 22,
+      "evaluable": 2,
+      "unevaluable": 20,
+      "winner_counts": {
+        "ATTACKER": 2,
+        "DEFENDER": 20
+      },
+      "arrival_owner_match": 22,
+      "arrival_owner_compared": 22,
+      "arrival_vector_match": 20,
+      "arrival_vector_compared": 22,
+      "arrival_exact_match": 20,
+      "arrival_exact_compared": 22,
+      "following_owner_match": 22,
+      "following_vector_match": 18,
+      "following_snapshot_exact_agreement": 18,
+      "evaluable_arrival_exact_match": 2,
+      "evaluable_arrival_compared": 2,
+      "contamination_counts": {
+        "production": {
+          "false": 22
+        },
+        "aura": {
+          "false": 22
+        },
+        "multiple_inbound": {
+          "null": 18,
+          "false": 4
+        },
+        "special": {
+          "false": 22
+        },
+        "pair_relation": {
+          "true": 6,
+          "false": 16
+        },
+        "active_delay": {
+          "false": 22
+        },
+        "capacity_uncertainty": {
+          "false": 22
+        },
+        "continuity": {
+          "false": 22
+        }
+      },
+      "pair_relation_status_counts": {
+        "UNKNOWN_PAIR_RELATION": 6,
+        "KNOWN_HOSTILE": 16
+      },
+      "post_arrival_force_status": {
+        "t_plus_1": {
+          "AMBIGUOUS": 19,
+          "DISAPPEARED": 3
+        },
+        "t_plus_2": {
+          "AMBIGUOUS": 19,
+          "DISAPPEARED": 3
+        }
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": {
+          "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 2,
+          "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 17,
+          "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 3
+        },
+        "t_plus_2": {
+          "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 2,
+          "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 17,
+          "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 3
+        }
+      },
+      "force_continuation_uncertain_cases": 19
+    },
+    "holdout": {
+      "candidate_count": 9,
+      "formula_scored": 9,
+      "evaluable": 2,
+      "unevaluable": 7,
+      "winner_counts": {
+        "DEFENDER": 6,
+        "ATTACKER": 3
+      },
+      "arrival_owner_match": 9,
+      "arrival_owner_compared": 9,
+      "arrival_vector_match": 6,
+      "arrival_vector_compared": 9,
+      "arrival_exact_match": 6,
+      "arrival_exact_compared": 9,
+      "following_owner_match": 9,
+      "following_vector_match": 6,
+      "following_snapshot_exact_agreement": 6,
+      "evaluable_arrival_exact_match": 2,
+      "evaluable_arrival_compared": 2,
+      "contamination_counts": {
+        "production": {
+          "false": 9
+        },
+        "aura": {
+          "false": 9
+        },
+        "multiple_inbound": {
+          "null": 6,
+          "false": 3
+        },
+        "special": {
+          "false": 9
+        },
+        "pair_relation": {
+          "false": 6,
+          "true": 3
+        },
+        "active_delay": {
+          "false": 9
+        },
+        "capacity_uncertainty": {
+          "false": 9
+        },
+        "continuity": {
+          "false": 9
+        }
+      },
+      "pair_relation_status_counts": {
+        "KNOWN_HOSTILE": 6,
+        "UNKNOWN_PAIR_RELATION": 3
+      },
+      "post_arrival_force_status": {
+        "t_plus_1": {
+          "AMBIGUOUS": 7,
+          "DISAPPEARED": 2
+        },
+        "t_plus_2": {
+          "AMBIGUOUS": 7,
+          "DISAPPEARED": 2
+        }
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": {
+          "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 4,
+          "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 3,
+          "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 2
+        },
+        "t_plus_2": {
+          "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS": 4,
+          "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR": 3,
+          "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT": 2
+        }
+      },
+      "force_continuation_uncertain_cases": 7
+    }
+  },
+  "verdict": {
+    "status": "PARTIAL",
+    "evaluable_n": 4,
+    "exact_matches": 4,
+    "exact_match_rate": 1.0,
+    "support_gate": {
+      "minimum_evaluable": 20,
+      "minimum_accuracy": 0.9
+    },
+    "controlled_evidence_gate": {
+      "fewer_than_evaluable": 10,
+      "accuracy_below": 0.7
+    },
+    "next_step": "Gather controlled evidence; this passive sample cannot support formula promotion.",
+    "production_promotion": false,
+    "formula_tuning": false
+  },
+  "cases": [
+    {
+      "case_id": "03d032d57e5b:304:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 304,
+      "ordinal": 0,
+      "target_id": 13828329,
+      "before_tick": 21076,
+      "arrival_tick": 21077,
+      "following_tick": 21078,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 607,
+      "arrival_sequence": 609,
+      "following_sequence": 611,
+      "input_scope_continuity": true,
+      "incoming_owner": 10,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 55,
+      "target_vector_before": [
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 55,
+      "target_capacity": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 10,
+      "capacity_vector_after_observed": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "ATTACKER",
+        "owner": 10,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 10,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": false,
+      "raw_formula_match_arrival": false,
+      "observed_following": {
+        "owner": 10,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 10,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": true
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR",
+        "t_plus_2": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "UNKNOWN_AFTER_OWNER_CHANGE",
+      "following_snapshot_production_due": true,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        607,
+        609
+      ],
+      "audit_lines": [
+        607,
+        609
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1245:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1245,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22017,
+      "arrival_tick": 22018,
+      "following_tick": 22019,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 2490,
+      "arrival_sequence": 2492,
+      "following_sequence": 2494,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          15,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          15,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          15,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          15,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        2490,
+        2492
+      ],
+      "audit_lines": [
+        2490,
+        2492
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1363:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1363,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22136,
+      "arrival_tick": 22137,
+      "following_tick": 22138,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 2732,
+      "arrival_sequence": 2734,
+      "following_sequence": 2736,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          13,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": true,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        2732,
+        2734
+      ],
+      "audit_lines": [
+        2732,
+        2734
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1438:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1438,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22211,
+      "arrival_tick": 22212,
+      "following_tick": 22213,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 2882,
+      "arrival_sequence": 2884,
+      "following_sequence": 2886,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        2882,
+        2884
+      ],
+      "audit_lines": [
+        2882,
+        2884
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1515:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1515,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22288,
+      "arrival_tick": 22289,
+      "following_tick": 22290,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 3037,
+      "arrival_sequence": 3039,
+      "following_sequence": 3041,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          9,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          9,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          9,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          9,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3037,
+        3039
+      ],
+      "audit_lines": [
+        3037,
+        3039
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1622:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1622,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22395,
+      "arrival_tick": 22396,
+      "following_tick": 22397,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 3251,
+      "arrival_sequence": 3253,
+      "following_sequence": 3255,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          12,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3251,
+        3253
+      ],
+      "audit_lines": [
+        3251,
+        3253
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1678:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1678,
+      "ordinal": 0,
+      "target_id": 13697256,
+      "before_tick": 22451,
+      "arrival_tick": 22452,
+      "following_tick": 22453,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 3363,
+      "arrival_sequence": 3365,
+      "following_sequence": 3367,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 75,
+      "target_vector_before": [
+        15,
+        4,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 75,
+      "target_capacity": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 75,
+      "capacity_vector_after_observed": [
+        15,
+        4,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 75,
+        "vector": [
+          10,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 75,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3363,
+        3365
+      ],
+      "audit_lines": [
+        3363,
+        3365
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1837:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1837,
+      "ordinal": 0,
+      "target_id": 13566185,
+      "before_tick": 22610,
+      "arrival_tick": 22611,
+      "following_tick": 22612,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 3681,
+      "arrival_sequence": 3683,
+      "following_sequence": 3685,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        1,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        30,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3681,
+        3683
+      ],
+      "audit_lines": [
+        3681,
+        3683
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "03d032d57e5b:1917:0",
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edge_index": 1917,
+      "ordinal": 0,
+      "target_id": 13566185,
+      "before_tick": 22690,
+      "arrival_tick": 22691,
+      "following_tick": 22692,
+      "source_path": "runtime/research/v2/snapshots-03d032d57e5b.jsonl",
+      "source_sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "before_sequence": 3841,
+      "arrival_sequence": 3843,
+      "following_sequence": 3845,
+      "input_scope_continuity": true,
+      "incoming_owner": 77,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "UNIQUE_PINNED_ETA_INVERSION_KNOWN_LEG",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        16,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 77,
+      "capacity_vector_after_observed": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "ATTACKER",
+        "owner": 77,
+        "vector": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 77,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": false,
+      "raw_formula_match_arrival": false,
+      "observed_following": {
+        "owner": 77,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 77,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": true
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR",
+        "t_plus_2": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "UNKNOWN_AFTER_OWNER_CHANGE",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3841,
+        3843
+      ],
+      "audit_lines": [
+        3841,
+        3843
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:55:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 55,
+      "ordinal": 0,
+      "target_id": 17170703,
+      "before_tick": 23729,
+      "arrival_tick": 23730,
+      "following_tick": 23731,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 109,
+      "arrival_sequence": 111,
+      "following_sequence": 113,
+      "input_scope_continuity": true,
+      "incoming_owner": 27,
+      "incoming_vector": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 24,
+      "target_vector_before": [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 24,
+      "target_capacity": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 24,
+      "capacity_vector_after_observed": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 24,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 24,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 24,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 24,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "DISAPPEARED",
+        "t_plus_2": "DISAPPEARED"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT",
+        "t_plus_2": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT"
+      },
+      "force_continuation_uncertain": false,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        109,
+        111
+      ],
+      "audit_lines": [
+        109,
+        111
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:63:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 63,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 23737,
+      "arrival_tick": 23738,
+      "following_tick": 23739,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 125,
+      "arrival_sequence": 127,
+      "following_sequence": 129,
+      "input_scope_continuity": true,
+      "incoming_owner": 24,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          19,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          19,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          19,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          19,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": true,
+      "evaluability_blockers": [],
+      "post_arrival_force_status": {
+        "t_plus_1": "DISAPPEARED",
+        "t_plus_2": "DISAPPEARED"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT",
+        "t_plus_2": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT"
+      },
+      "force_continuation_uncertain": false,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        125,
+        127
+      ],
+      "audit_lines": [
+        125,
+        127
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:912:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 912,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 24586,
+      "arrival_tick": 24587,
+      "following_tick": 24588,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 1823,
+      "arrival_sequence": 1825,
+      "following_sequence": 1827,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": true,
+      "evaluability_blockers": [],
+      "post_arrival_force_status": {
+        "t_plus_1": "DISAPPEARED",
+        "t_plus_2": "DISAPPEARED"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT",
+        "t_plus_2": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT"
+      },
+      "force_continuation_uncertain": false,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": true,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1823,
+        1825
+      ],
+      "audit_lines": [
+        1823,
+        1825
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:1512:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 1512,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25186,
+      "arrival_tick": 25187,
+      "following_tick": 25188,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 3023,
+      "arrival_sequence": 3025,
+      "following_sequence": 3027,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3023,
+        3025
+      ],
+      "audit_lines": [
+        3023,
+        3025
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:1678:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 1678,
+      "ordinal": 0,
+      "target_id": 17236241,
+      "before_tick": 25352,
+      "arrival_tick": 25353,
+      "following_tick": 25354,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 3355,
+      "arrival_sequence": 3357,
+      "following_sequence": 3359,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 27,
+      "target_vector_before": [
+        9,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 27,
+      "target_capacity": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 27,
+      "capacity_vector_after_observed": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 27,
+        "vector": [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 27,
+        "vector": [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 27,
+        "vector": [
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 27,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3355,
+        3357
+      ],
+      "audit_lines": [
+        3355,
+        3357
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:1869:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 1869,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25543,
+      "arrival_tick": 25544,
+      "following_tick": 25545,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 3737,
+      "arrival_sequence": 3739,
+      "following_sequence": 3741,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3737,
+        3739
+      ],
+      "audit_lines": [
+        3737,
+        3739
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:1986:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 1986,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25660,
+      "arrival_tick": 25661,
+      "following_tick": 25662,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 3971,
+      "arrival_sequence": 3973,
+      "following_sequence": 3975,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        3971,
+        3973
+      ],
+      "audit_lines": [
+        3971,
+        3973
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2049:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2049,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25723,
+      "arrival_tick": 25724,
+      "following_tick": 25725,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4097,
+      "arrival_sequence": 4099,
+      "following_sequence": 4101,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4097,
+        4099
+      ],
+      "audit_lines": [
+        4097,
+        4099
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2105:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2105,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25779,
+      "arrival_tick": 25780,
+      "following_tick": 25781,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4209,
+      "arrival_sequence": 4211,
+      "following_sequence": 4213,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4209,
+        4211
+      ],
+      "audit_lines": [
+        4209,
+        4211
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2121:1",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2121,
+      "ordinal": 1,
+      "target_id": 17236241,
+      "before_tick": 25795,
+      "arrival_tick": 25796,
+      "following_tick": 25797,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4241,
+      "arrival_sequence": 4243,
+      "following_sequence": 4245,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 27,
+      "target_vector_before": [
+        26,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 27,
+      "target_capacity": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 27,
+      "capacity_vector_after_observed": [
+        30,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 27,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 27,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 27,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 27,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4241,
+        4243
+      ],
+      "audit_lines": [
+        4241,
+        4243
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2236:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2236,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25910,
+      "arrival_tick": 25911,
+      "following_tick": 25912,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4471,
+      "arrival_sequence": 4473,
+      "following_sequence": 4475,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4471,
+        4473
+      ],
+      "audit_lines": [
+        4471,
+        4473
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2291:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2291,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 25965,
+      "arrival_tick": 25966,
+      "following_tick": 25967,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4581,
+      "arrival_sequence": 4583,
+      "following_sequence": 4585,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4581,
+        4583
+      ],
+      "audit_lines": [
+        4581,
+        4583
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "daf86d0544b7:2346:0",
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edge_index": 2346,
+      "ordinal": 0,
+      "target_id": 17301775,
+      "before_tick": 26020,
+      "arrival_tick": 26021,
+      "following_tick": 26022,
+      "source_path": "runtime/research/v2/snapshots-daf86d0544b7.jsonl",
+      "source_sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "before_sequence": 4691,
+      "arrival_sequence": 4693,
+      "following_sequence": 4695,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 83,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 83,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 83,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 83,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 83,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        4691,
+        4693
+      ],
+      "audit_lines": [
+        4691,
+        4693
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:424:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 424,
+      "ordinal": 0,
+      "target_id": 17760518,
+      "before_tick": 46370,
+      "arrival_tick": 46371,
+      "following_tick": 46372,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 846,
+      "arrival_sequence": 848,
+      "following_sequence": 850,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        846,
+        848
+      ],
+      "audit_lines": [
+        846,
+        848
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:456:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 456,
+      "ordinal": 0,
+      "target_id": 17826054,
+      "before_tick": 46402,
+      "arrival_tick": 46403,
+      "following_tick": 46404,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 910,
+      "arrival_sequence": 912,
+      "following_sequence": 914,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 43,
+      "target_vector_before": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 43,
+      "target_capacity": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 30,
+      "capacity_vector_after_observed": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "ATTACKER",
+        "owner": 30,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 30,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": false,
+      "raw_formula_match_arrival": false,
+      "observed_following": {
+        "owner": 30,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 30,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": true
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR",
+        "t_plus_2": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "UNKNOWN_AFTER_OWNER_CHANGE",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        910,
+        912
+      ],
+      "audit_lines": [
+        910,
+        912
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:550:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 550,
+      "ordinal": 0,
+      "target_id": 17826054,
+      "before_tick": 46496,
+      "arrival_tick": 46497,
+      "following_tick": 46498,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1098,
+      "arrival_sequence": 1100,
+      "following_sequence": 1102,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 30,
+      "target_vector_before": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 30,
+      "target_capacity": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 43,
+      "capacity_vector_after_observed": [
+        5,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "ATTACKER",
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": false,
+      "raw_formula_match_arrival": false,
+      "observed_following": {
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 43,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": true
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR",
+        "t_plus_2": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "UNKNOWN_AFTER_OWNER_CHANGE",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1098,
+        1100
+      ],
+      "audit_lines": [
+        1098,
+        1100
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:572:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 572,
+      "ordinal": 0,
+      "target_id": 17760516,
+      "before_tick": 46518,
+      "arrival_tick": 46519,
+      "following_tick": 46520,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1142,
+      "arrival_sequence": 1144,
+      "following_sequence": 1146,
+      "input_scope_continuity": true,
+      "incoming_owner": 30,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        12,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          17,
+          0,
+          0,
+          0,
+          0,
+          12,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": true,
+      "evaluability_blockers": [],
+      "post_arrival_force_status": {
+        "t_plus_1": "DISAPPEARED",
+        "t_plus_2": "DISAPPEARED"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT",
+        "t_plus_2": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT"
+      },
+      "force_continuation_uncertain": false,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1142,
+        1144
+      ],
+      "audit_lines": [
+        1142,
+        1144
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:574:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 574,
+      "ordinal": 0,
+      "target_id": 17760518,
+      "before_tick": 46520,
+      "arrival_tick": 46521,
+      "following_tick": 46522,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1146,
+      "arrival_sequence": 1148,
+      "following_sequence": 1150,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          20,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": false,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": true,
+      "evaluability_blockers": [],
+      "post_arrival_force_status": {
+        "t_plus_1": "DISAPPEARED",
+        "t_plus_2": "DISAPPEARED"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT",
+        "t_plus_2": "COMPLETE_CENSUS_ORIGINAL_ROUTE_SIGNATURE_ABSENT"
+      },
+      "force_continuation_uncertain": false,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1146,
+        1148
+      ],
+      "audit_lines": [
+        1146,
+        1148
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:744:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 744,
+      "ordinal": 0,
+      "target_id": 17760518,
+      "before_tick": 46690,
+      "arrival_tick": 46691,
+      "following_tick": 46692,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1486,
+      "arrival_sequence": 1488,
+      "following_sequence": 1490,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          13,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          13,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          13,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          13,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1486,
+        1488
+      ],
+      "audit_lines": [
+        1486,
+        1488
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:861:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 861,
+      "ordinal": 0,
+      "target_id": 17760518,
+      "before_tick": 46807,
+      "arrival_tick": 46808,
+      "following_tick": 46809,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1720,
+      "arrival_sequence": 1722,
+      "following_sequence": 1724,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        20,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 39,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 39,
+        "vector": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 39,
+        "vector": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 39,
+        "vector": [
+          16,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 39,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1720,
+        1722
+      ],
+      "audit_lines": [
+        1720,
+        1722
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:951:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 951,
+      "ordinal": 0,
+      "target_id": 17826053,
+      "before_tick": 46897,
+      "arrival_tick": 46898,
+      "following_tick": 46899,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 1900,
+      "arrival_sequence": 1902,
+      "following_sequence": 1904,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 30,
+      "target_vector_before": [
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": false,
+      "target_capacity_owner": 30,
+      "target_capacity": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 30,
+      "capacity_vector_after_observed": [
+        10,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "UNKNOWN_PAIR_RELATION",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "DEFENDER",
+        "owner": 30,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 30,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "observed_following": {
+        "owner": 30,
+        "vector": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": true,
+      "projection_matches_following_observation": true,
+      "capacity_owner_after_predicted": 30,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": true,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": false
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN",
+        "PAIR_RELATION"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS",
+        "t_plus_2": "UNRESOLVED_FORCE_ENDPOINT_OR_VECTOR_ALIAS"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "SAME_OWNER_CAPACITY_CONTEXT",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        1900,
+        1902
+      ],
+      "audit_lines": [
+        1900,
+        1902
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    },
+    {
+      "case_id": "7d56a775bc4c:1027:0",
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edge_index": 1027,
+      "ordinal": 0,
+      "target_id": 17760518,
+      "before_tick": 46973,
+      "arrival_tick": 46974,
+      "following_tick": 46975,
+      "source_path": "runtime/research/v2/snapshots-7d56a775bc4c.jsonl",
+      "source_sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "before_sequence": 2052,
+      "arrival_sequence": 2054,
+      "following_sequence": 2056,
+      "input_scope_continuity": true,
+      "incoming_owner": 43,
+      "incoming_vector": [
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "attacker_morale": false,
+      "attacker_morale_basis": "OBSERVED_RETAINED_FORCE_ACCELERATED",
+      "source_current_morale_supplemental": false,
+      "target_owner_before": 39,
+      "target_vector_before": [
+        8,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      "target_morale": true,
+      "target_capacity_owner": 39,
+      "target_capacity": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "capacity_owner_after_observed": 43,
+      "capacity_vector_after_observed": [
+        20,
+        0,
+        0,
+        0,
+        2,
+        4,
+        0,
+        0,
+        0,
+        1
+      ],
+      "input_gaps": [],
+      "pair_relation_status": "KNOWN_HOSTILE",
+      "raw_formula_status": "SCORED",
+      "prediction": {
+        "winner": "ATTACKER",
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_survivors": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "defender_survivors": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "attacker_ruler_lost": false,
+        "defender_ruler_lost": false
+      },
+      "observed_arrival": {
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_arrival": true,
+      "vector_match_arrival": false,
+      "raw_formula_match_arrival": false,
+      "observed_following": {
+        "owner": 43,
+        "vector": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "owner_match_following": true,
+      "vector_match_following": false,
+      "projection_matches_following_observation": false,
+      "capacity_owner_after_predicted": 43,
+      "predicted_capacity_after": null,
+      "contamination": {
+        "production": false,
+        "aura": false,
+        "multiple_inbound": null,
+        "special": false,
+        "pair_relation": false,
+        "active_delay": false,
+        "capacity_uncertainty": false,
+        "continuity": false,
+        "production_after_capture_capacity": null,
+        "post_capture_capacity_owner_change": true
+      },
+      "evaluable": false,
+      "evaluability_blockers": [
+        "MULTIPLE_INBOUND_UNKNOWN"
+      ],
+      "post_arrival_force_status": {
+        "t_plus_1": "AMBIGUOUS",
+        "t_plus_2": "AMBIGUOUS"
+      },
+      "post_arrival_force_status_basis": {
+        "t_plus_1": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR",
+        "t_plus_2": "NEW_LEG_COMPATIBLE_OWNER_AND_SURVIVOR_VECTOR"
+      },
+      "force_continuation_uncertain": true,
+      "downstream_capacity": "UNKNOWN_AFTER_OWNER_CHANGE",
+      "following_snapshot_production_due": false,
+      "following_snapshot_warning": "OBSERVED_STATE_ONLY_NOT_A_COMBAT_FORECAST",
+      "audit_sequence": [
+        2052,
+        2054
+      ],
+      "audit_lines": [
+        2052,
+        2054
+      ],
+      "boundary_branch": "COMBAT_REQUIRED",
+      "source_manifest_match": true
+    }
+  ],
+  "legacy_transition_corpus_cases": [
+    {
+      "cohort": "daf86d0544b7",
+      "before_tick": 23737,
+      "before_sequence": 125,
+      "after_sequence": 127,
+      "event_categories": [
+        "ground_combat_arrival"
+      ],
+      "source_transition_match": true,
+      "corpus_force_destinations": [
+        17301775
+      ],
+      "dedup_key": [
+        "daf86d0544b7",
+        23737,
+        17301775
+      ],
+      "duplicate_of_case_id": "daf86d0544b7:63:0",
+      "duplicate_population_case": true,
+      "formula_scoring_reused_from_exact_raw_case": true,
+      "raw_formula_status": "SCORED",
+      "predicted_winner": "DEFENDER",
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "evaluable": true,
+      "mapping_candidates": [
+        "daf86d0544b7:63:0"
+      ]
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "before_tick": 24586,
+      "before_sequence": 1823,
+      "after_sequence": 1825,
+      "event_categories": [
+        "ordinary_air_unit_combat_arrival"
+      ],
+      "source_transition_match": true,
+      "corpus_force_destinations": [
+        17301775
+      ],
+      "dedup_key": [
+        "daf86d0544b7",
+        24586,
+        17301775
+      ],
+      "duplicate_of_case_id": "daf86d0544b7:912:0",
+      "duplicate_population_case": true,
+      "formula_scoring_reused_from_exact_raw_case": true,
+      "raw_formula_status": "SCORED",
+      "predicted_winner": "DEFENDER",
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "evaluable": true,
+      "mapping_candidates": [
+        "daf86d0544b7:912:0"
+      ]
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "before_tick": 46518,
+      "before_sequence": 1142,
+      "after_sequence": 1144,
+      "event_categories": [
+        "ground_combat_arrival"
+      ],
+      "source_transition_match": true,
+      "corpus_force_destinations": [
+        17694980,
+        17760516,
+        17760518,
+        17891589
+      ],
+      "dedup_key": [
+        "7d56a775bc4c",
+        46518,
+        17760516
+      ],
+      "duplicate_of_case_id": "7d56a775bc4c:572:0",
+      "duplicate_population_case": true,
+      "formula_scoring_reused_from_exact_raw_case": true,
+      "raw_formula_status": "SCORED",
+      "predicted_winner": "DEFENDER",
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "evaluable": true,
+      "mapping_candidates": [
+        "7d56a775bc4c:572:0"
+      ]
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "before_tick": 46520,
+      "before_sequence": 1146,
+      "after_sequence": 1148,
+      "event_categories": [
+        "ordinary_air_unit_combat_arrival"
+      ],
+      "source_transition_match": false,
+      "corpus_force_destinations": [
+        17694980,
+        17760518,
+        17891589
+      ],
+      "dedup_key": [
+        "7d56a775bc4c",
+        46520,
+        17760518
+      ],
+      "duplicate_of_case_id": "7d56a775bc4c:574:0",
+      "duplicate_population_case": true,
+      "formula_scoring_reused_from_exact_raw_case": true,
+      "raw_formula_status": "SCORED",
+      "predicted_winner": "DEFENDER",
+      "owner_match_arrival": true,
+      "vector_match_arrival": true,
+      "raw_formula_match_arrival": true,
+      "evaluable": true,
+      "mapping_candidates": [
+        "7d56a775bc4c:574:0"
+      ]
+    }
+  ],
+  "interpretation": {
+    "raw_formula_outcome": "All 31 fights are passively scored from exact before-tick vectors, shield, target capacity, and the frozen morale inputs; raw matches retain contaminated cases.",
+    "owner_proxy": "Owner agreement is reported independently from surviving-vector agreement.",
+    "following_observation": "The t+2 comparison checks the observed state against the t+1 combat projection; it is not a full next-tick prediction and can include later world changes.",
+    "force_continuation": "AMBIGUOUS means a new-leg-compatible force is visible but physical genealogy is not established. DISAPPEARED means the original typed route signature is absent from a complete visible force census at that observation; it does not establish permanent consumption.",
+    "capacity": "The defender capacity owner/vector are the before-tick inputs. A predicted owner change leaves post-capture capacity downstream and unknown in this replay."
+  }
+}
