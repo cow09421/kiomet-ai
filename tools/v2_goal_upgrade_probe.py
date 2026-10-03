@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT))
 os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(ROOT / "runtime/browsers"))
 
 from kiomet_ai.camera import world_to_page
-from kiomet_ai.observe import TOWER_TYPES, TOWER_TYPE_ZH
+from tools.v2_goal_upgrade_titles import official_tower_labels, match_upgrade_title
 from kiomet_ai.v2.observe import rules
 from kiomet_ai.v2.observe.extractor import (
     CLIENT_SHA256, ClientExtractor, connect_dedicated, is_official_client_url,
@@ -32,7 +32,6 @@ from playwright.async_api import async_playwright
 
 
 ALLOWED_TARGETS = frozenset({1, 3, 4, 9, 10, 12, 14, 16, 17, 18, 22, 25, 26})
-TARGET_NAMES_ZH = {english: chinese for chinese, english in TOWER_TYPE_ZH.items()}
 MAX_FACT_AGE_MS = 5_000
 MAX_SOURCE_TICK_STALL_MS = 1_000
 
@@ -154,20 +153,8 @@ def candidate_rows(state) -> list[dict]:
 
 
 def _names(type_id: int) -> set[str]:
-    if type(type_id) is not int or type_id not in range(len(TOWER_TYPES)):
-        return set()
-    result = {TOWER_TYPES[type_id]}
-    chinese = TARGET_NAMES_ZH.get(TOWER_TYPES[type_id])
-    if chinese:
-        result.add(chinese)
-    return result
-
-
-def _target_names(type_id: int) -> set[str]:
-    """Exact target labels currently pinned to the public English client catalog."""
-    if type(type_id) is not int or type_id not in range(len(TOWER_TYPES)):
-        return set()
-    return {TOWER_TYPES[type_id]}
+    """Source-verified default labels only; runtime translated labels stay unknown."""
+    return set(official_tower_labels(type_id))
 
 
 def inspect_upgrade_dom(dom_snapshot: dict, source_type: int, target_type: int) -> dict:
@@ -175,16 +162,17 @@ def inspect_upgrade_dom(dom_snapshot: dict, source_type: int, target_type: int) 
     reasons = []
     source_names = _names(source_type)
     headings = dom_snapshot.get("headings") if isinstance(dom_snapshot, dict) else None
-    heading_matches = ([str(h).strip() for h in headings if str(h).strip() in source_names]
+    heading_matches = ([h.strip() for h in headings if type(h) is str and h.strip() in source_names]
                        if isinstance(headings, list) else [])
     if len(heading_matches) != 1:
         reasons.append("SOURCE_HEADING_NOT_EXACT")
-    titles = {f"Upgrade to {name}" for name in _target_names(target_type)}
     buttons = dom_snapshot.get("buttons") if isinstance(dom_snapshot, dict) else None
     if not isinstance(buttons, list):
         reasons.append("UPGRADE_BUTTONS_UNKNOWN")
         buttons = []
-    matches = [b for b in buttons if isinstance(b, dict) and b.get("title") in titles and b.get("visible") is True]
+    matches = [b for b in buttons if isinstance(b, dict) and
+               match_upgrade_title(b.get("title"), target_type)["matched"] and
+               b.get("visible") is True]
     if len(matches) != 1:
         reasons.append("EXACT_VISIBLE_UPGRADE_TITLE_NOT_UNIQUE")
     selected = matches[0] if len(matches) == 1 else None
@@ -220,8 +208,7 @@ def verify_upgrade(before_state, ui_result: dict, after_states: list, target_typ
         reasons.append("OFFICIAL_UI_CLICK_NOT_CONFIRMED")
     if ui_result.get("dom_guard_passed") is not True:
         reasons.append("NORMAL_UPGRADE_DOM_GUARD_NOT_CONFIRMED")
-    expected_titles = {f"Upgrade to {name}" for name in _target_names(target_type)}
-    if ui_result.get("upgrade_title") not in expected_titles:
+    if not match_upgrade_title(ui_result.get("upgrade_title"), target_type)["matched"]:
         reasons.append("UPGRADE_TITLE_NOT_EXACT_FOR_TARGET")
     if any(ui_result.get(key) is not True for key in
            ("button_visible", "button_enabled", "pointer_events")) or any(
@@ -361,8 +348,8 @@ async def _selection_roundtrip(ex, page, stream, tower_id, source_type, identity
             remaining = max(0.01, local_deadline - time.monotonic())
             after_state, after_raw = await asyncio.wait_for(ex.sample(), timeout=remaining)
             after_identity = _state_identity(after_state)
-            heading_matches = [str(h).strip() for h in dom.get("headings", [])
-                               if str(h).strip() in _names(source_type)]
+            heading_matches = [h.strip() for h in dom.get("headings", [])
+                               if type(h) is str and h.strip() in _names(source_type)]
             heading = heading_matches[0] if len(heading_matches) == 1 else None
             heading_reason = ("SOURCE_HEADING_NOT_EXACT" if not heading_matches else
                               "SOURCE_HEADING_NOT_UNIQUE" if len(heading_matches) != 1 else None)

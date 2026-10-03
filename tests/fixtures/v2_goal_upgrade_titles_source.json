@@ -1,0 +1,71 @@
+{
+  "kodiak_commit": "c17719a1b54ae1eae663a26bbb39fd842cd9a5c2",
+  "source_checks": [
+    {
+      "path": "client/src/translation/cache.rs",
+      "git_blob": "978952fe42508957b55fc229b7bd3045284023f9",
+      "sha256": "0a22010a10827c907675fd81c38c9d5669387ecd0a3f9cdb28cc0338eae1c0e9"
+    },
+    {
+      "path": "client/src/translation/macros.rs",
+      "git_blob": "c0c6e38fe5959954ce056f5d597795ce4535517d",
+      "sha256": "ff4000e6bc686a5721217d6c5dcc5f00f250ee2721cec0319f482d2c532dfb55"
+    },
+    {
+      "path": "client/src/translation/mod.rs",
+      "git_blob": "5c5481687439a8ad1ac348e0ae6454a2ff62574f",
+      "sha256": "44023503b1ea2262596d2e9d758b8e4eb1acebedc83998bc6d950fadc002fca5"
+    },
+    {
+      "path": "client/src/translation/phrases.rs",
+      "git_blob": "f166192f1829d59c28bbc0ca16693e0e44746d3d",
+      "sha256": "ed568d898d8208035f9314430d925fe3a80a520d132701b6e2d19566c2a71839"
+    },
+    {
+      "path": "client/src/translation/translator.rs",
+      "git_blob": "211f3f9a9d8a4489ae8b381c231447977addb5df",
+      "sha256": "6a657529b31811f90f55ac68d6a459e46aa2053c70777d80ed280b4a33309366"
+    },
+    {
+      "path": "macros/src/translate.rs",
+      "git_blob": "8a619d7749a1e933982ca8de250f89f88a4a4831",
+      "sha256": "cad436bebfec4aedcc0ab55ca0b202f180930e30f0dd81d864839ee076a70108"
+    }
+  ],
+  "kiomet_source_sha256": {
+    "client\\src\\ui\\phrases.rs": "63ff0261c80e7b2483b0077e48ca44d0deb4a628e2c89d24c8865bcbd0a66a26",
+    "common\\src\\tower.rs": "ee82623ba74437470b9ab28b84c293f2559753083854e0a4101917a2bf62dff7",
+    "client\\src\\ui\\tower_overlay.rs": "c9f449b3fd0752fe2d7ed26bd5f76d87ed689190a42125b674138d4156563109"
+  },
+  "template": "Upgrade to {upgrade}",
+  "labels": {
+    "0": "Airfield",
+    "1": "Armory",
+    "2": "Artillery",
+    "3": "Barracks",
+    "4": "Bunker",
+    "5": "Centrifuge",
+    "6": "City",
+    "7": "Cliff",
+    "8": "EWS",
+    "9": "Factory",
+    "10": "Generator",
+    "11": "Headquarters",
+    "12": "Helipad",
+    "13": "Launcher",
+    "14": "Mine",
+    "15": "Projector",
+    "16": "Quarry",
+    "17": "Radar",
+    "18": "Rampart",
+    "19": "Reactor",
+    "20": "Refinery",
+    "21": "Rocket",
+    "22": "Runway",
+    "23": "Satellite",
+    "24": "Silo",
+    "25": "Town",
+    "26": "Village"
+  },
+  "catalog_scope": "Source-default English only; runtime translations and Traditional Chinese catalog UNKNOWN"
+}
