@@ -25,6 +25,7 @@ from kiomet_ai.v2.observe import rules
 from kiomet_ai.v2.observe.extractor import (
     CLIENT_SHA256, ClientExtractor, connect_dedicated, is_official_client_url,
 )
+from kiomet_ai.v2.state import Units
 from tools.v2_controlled_transition_capture import (
     is_project_headless_browser_process, release_writer, reserve_writer,
 )
@@ -87,6 +88,7 @@ def candidate_rows(state) -> list[dict]:
     own_towers = [t for t in getattr(state, "towers", ()) if _tower_visible_own(state, t)]
     for tower in sorted(own_towers, key=lambda t: t.id):
         type_ok, source_type = _known(tower.tower_type, state, coherent=True)
+        units_ok, source_units = _known(getattr(tower, "units", None), state, coherent=True)
         delay_ok, delay = _known(tower.delay_ticks, state, coherent=True)
         candidates_ok, candidates = _known(tower.upgrade_candidates, state, coherent=True)
         locks_ok, locks = _known(tower.upgrade_locks, state, coherent=True)
@@ -118,6 +120,16 @@ def candidate_rows(state) -> list[dict]:
                 reasons.append("SOURCE_TYPE_UNKNOWN")
             elif rules.DOWNGRADE[target_type] != source_type:
                 reasons.append("TARGET_NOT_DIRECT_UPGRADE")
+            if not units_ok or not isinstance(source_units, Units):
+                reasons.append("SOURCE_UNITS_UNKNOWN")
+            else:
+                unit_pairs = source_units.counts
+                if (len(unit_pairs) != 10 or tuple(unit for unit, _ in unit_pairs) != tuple(range(10)) or
+                        any(type(unit) is not int or type(count) is not int or count < 0
+                            for unit, count in unit_pairs)):
+                    reasons.append("SOURCE_UNITS_VECTOR_INCOMPLETE")
+                elif dict(unit_pairs)[9] != 0:
+                    reasons.append("SOURCE_HAS_RULER")
             if not delay_ok or delay != 0:
                 reasons.append("SOURCE_DELAY_NOT_KNOWN_ZERO")
             if direct is None:
@@ -327,7 +339,8 @@ async def _dom_snapshot(page):
         const lockGlyph=/[🔒🔐]/.test(text)||descendants.some(n=>vis(n)&&/[🔒🔐]/.test(n.innerText||''));
         const classes=String(e.className||'');
         return {title:e.getAttribute('title'),visible:vis(e),
-          enabled:!e.disabled&&e.getAttribute('aria-disabled')!=='true'&&!/disabled/i.test(classes),
+          enabled:!e.disabled&&e.getAttribute('aria-disabled')!=='true'&&!/disabled/i.test(classes)&&s.cursor==='pointer',
+          cursor:s.cursor,
           pointer_events:s.pointerEvents!=='none',locked_glyph:lockGlyph,hidden_lock_icon:lockMarker,
           bbox:[r.x,r.y,r.width,r.height]};
       });

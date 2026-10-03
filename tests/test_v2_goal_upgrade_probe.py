@@ -33,8 +33,8 @@ def unknown():
     return Fact()
 
 
-def units(shield=0):
-    return Units(tuple((i, shield if i == 0 else 0) for i in range(10)))
+def units(shield=0, ruler=0):
+    return Units(tuple((i, shield if i == 0 else ruler if i == 9 else 0) for i in range(10)))
 
 
 def make_tower(*, tower_id=TOWER_ID, source=SOURCE, owner=PLAYER,
@@ -154,6 +154,38 @@ def test_partial_coverage_does_not_block_positive_visible_own_candidate():
     assert row["source_type"] == SOURCE
     assert row["target_type"] == TARGET
     assert row["nominal_delay"] == NOMINAL
+
+
+@pytest.mark.parametrize(("unit_case", "expected_eligible", "expected_reason"), [
+    ("known_zero", True, None),
+    ("ruler_present", False, "SOURCE_HAS_RULER"),
+    ("unknown", False, "SOURCE_UNITS_UNKNOWN"),
+    ("partial_vector", False, "SOURCE_UNITS_VECTOR_INCOMPLETE"),
+    ("stale", False, "SOURCE_UNITS_UNKNOWN"),
+])
+def test_upgrade_requires_fresh_complete_known_zero_ruler(unit_case, expected_eligible, expected_reason):
+    state = make_state()
+    tower = state.towers[0]
+    sampled = state.sampled_at_ms
+    if unit_case == "known_zero":
+        units_fact = fact(units(), sampled)
+    elif unit_case == "ruler_present":
+        units_fact = fact(units(ruler=1), sampled)
+    elif unit_case == "unknown":
+        units_fact = unknown()
+    elif unit_case == "partial_vector":
+        partial = Units(tuple((i, 0) for i in range(9)))
+        units_fact = fact(partial, sampled)
+    else:
+        units_fact = fact(units(), sampled - probe.MAX_FACT_AGE_MS - 1)
+    state = replace(state, towers=(replace(tower, units=units_fact),))
+
+    row = target_row(state)
+    assert row["eligible"] is expected_eligible
+    if expected_reason is None:
+        assert "SOURCE_HAS_RULER" not in row["reasons"]
+    else:
+        assert expected_reason in row["reasons"]
 
 
 @pytest.mark.parametrize("field", ["owner", "relation", "visibility"])
