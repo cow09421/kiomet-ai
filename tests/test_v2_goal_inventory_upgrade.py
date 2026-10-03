@@ -120,6 +120,14 @@ def candidate(state_, tower_id=100):
                  if row.get("tower_id") == tower_id and row.get("target_type") == TARGET), None)
 
 
+def panel_for_counts(counts, *, heading="Cliff", buttons=None):
+    capacities = {"Shield": 30, "Tank": 2, "Soldier": 4}
+    rows = [{"title": "Shield", "text": f"{counts[0]}/30"}]
+    rows.extend({"title": name, "text": f"{counts[index]}/{capacities[name]}"}
+                for index, name in ((4, "Tank"), (5, "Soldier")) if counts[index] > 0)
+    return panel_dom(heading=heading, unit_rows=rows, buttons=buttons)
+
+
 def observation(tick, *, tower_id=100, source=SOURCE, delay=0, counts=SOURCE_COUNTS,
                 at=None, **tower_changes):
     sampled = RECEIVED + tick - TICK if at is None else at
@@ -148,10 +156,77 @@ def test_unique_complete_own_inventory_certifies_cliff_to_quarry_with_exact_twen
     assert row["shield_before"] == 30 and row["shield_after"] == 10
     assert row["shield_after_max_with_overflow"] == 25
     assert row["shield_loss_at_current_inventory"] == 20
-    assert row["nonshield_units_preserved"] is True
+    assert row["nonshield_units_preserved_for_source_legal_vector"] is True
     result = certify_inventory_panel(current, panel_dom(), 100)
     assert result["eligible"] is True
     assert result["tower_id"] == 100
+
+
+@pytest.mark.parametrize("index", range(13))
+def test_fresh_heldout_inventory_pairs_have_exact_positive_and_independent_refusal(index):
+    """First-exposure controls use new IDs and vectors outside the original fixture."""
+    tower_id = 781 if index == 12 else 2_000 + index
+    counts = ((45, 0, 0, 0, 7, 14, 0, 0, 0, 0) if index == 12 else
+              (28 + index, 0, 0, 0, index % 3, index % 5, 0, 0, 0, 0))
+    positive_state = state(towers=(tower(tower_id, counts=counts),))
+    positive_dom = panel_for_counts(counts)
+
+    accepted_candidate = next(row for row in bounded_candidate_rows(positive_state)
+                              if row["tower_id"] == tower_id and row["target_type"] == TARGET)
+    assert accepted_candidate["eligible"] is True
+    assert accepted_candidate["shield_loss_at_current_inventory"] <= 20
+    assert accepted_candidate["nonshield_units_preserved_for_source_legal_vector"] is True
+    accepted = certify_inventory_panel(positive_state, positive_dom, tower_id)
+    assert accepted["eligible"] is True and accepted["tower_id"] == tower_id
+
+    negative_state, negative_dom = positive_state, positive_dom
+    if index == 0:
+        negative_state = state(towers=(tower(tower_id, counts=counts),
+                                       tower(tower_id + 10_000, counts=counts)))
+    elif index == 1:
+        negative_state = state(towers=(tower(tower_id, counts=counts),
+                                       tower(tower_id + 10_000, counts=counts,
+                                             owner_fact=unknown())))
+    elif index == 2:
+        negative_state = state(towers=(tower(tower_id, counts=counts,
+                                             type_fact=unknown()),))
+    elif index == 3:
+        stale = tower(tower_id, counts=counts,
+                      units_fact=known(typed_units(counts), at=RECEIVED - 5_001))
+        negative_state = state(towers=(stale,))
+    elif index == 4:
+        partial = Units(tuple((i, n) for i, n in enumerate(counts) if i != 2))
+        negative_state = state(towers=(tower(tower_id, counts=counts,
+                                             units_fact=known(partial)),))
+    elif index == 5:
+        negative_state = state(towers=(tower(tower_id, counts=counts),), coverage="PARTIAL")
+    elif index == 6:
+        negative_dom = panel_for_counts(counts, heading="Village")
+    elif index == 7:
+        rows = list(positive_dom["panels"][0]["unit_rows"])
+        rows[0] = {"title": "Shield", "text": f"{counts[0] - 1}/30"}
+        negative_dom = panel_dom(unit_rows=rows)
+    elif index == 8:
+        rows = list(positive_dom["panels"][0]["unit_rows"])
+        rows[0] = {"title": "Shield", "text": f"{counts[0]}/31"}
+        negative_dom = panel_dom(unit_rows=rows)
+    elif index == 9:
+        rows = [row for row in positive_dom["panels"][0]["unit_rows"]
+                if row["title"] != "Soldier"]
+        negative_dom = panel_dom(unit_rows=rows)
+    elif index == 10:
+        button = positive_dom["panels"][0]["buttons"][0] | {"locked_glyph": True}
+        negative_dom = panel_for_counts(counts, buttons=[button])
+    elif index == 11:
+        button = positive_dom["panels"][0]["buttons"][0] | {
+            "title": "Upgrade to Rampart"}
+        negative_dom = panel_for_counts(counts, buttons=[button])
+    else:
+        button = positive_dom["panels"][0]["buttons"][0] | {"hidden_lock_icon": True}
+        negative_dom = panel_for_counts(counts, buttons=[button])
+
+    refused = certify_inventory_panel(negative_state, negative_dom, tower_id)
+    assert refused["eligible"] is False
 
 
 def test_inventory_protocol_verifies_target_type_with_coherent_non_unit_tick_countdown():
