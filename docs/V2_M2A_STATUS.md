@@ -1,4 +1,20 @@
-# M2A endpoint audit checkpoint — 2026-10-03
+# M2A ordinary arrival checkpoint — 2026-10-03
+
+CURRENT: M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.
+Endpoint research CLOSED: UNKNOWN_BUT_RESEARCH_CLOSED. Paired pilot 0 valid /
+0 actual dispatch; legal readiness blocked before UI input. No endpoint fix.
+Ordinary current-leg Arrival API implemented with explicit downstream censors.
+New accepted Grade B boundary evidence 8 across 4 contexts / 7 conservative
+transition groups; Grade A/formal added 0, full reinforcement/capture added 0.
+Five-case goal met at boundary scope; complete settlement status PARTIAL.
+OVERENGINEERING_TRIPWIRE CLEAR on accepted Grade B events only.
+NEXT P0: ordinary arrival settlement with before-certified terminal/line/fuel
+premises and bounded qualified own-friendly/neutral examples; no new endpoint
+research. See V2_M2A_ARRIVAL_THIN_SLICE_CHECKPOINT.md and its separate new JSON
+reports/fixtures. Historical Gates/formal counts remain unchanged. Final HEAD,
+dirty state, source hashes and full counts: runtime/research/v2/arrival-final-head-regression.json.
+
+## Historical endpoint checkpoint (superseded next-work decision)
 
 ACCEPTED ANALYSIS CHECKPOINT / upstream lineage PARTIAL.
 ENDPOINT VERDICT: NEEDS_MORE_EVIDENCE. Production repair NO_GO at admission;

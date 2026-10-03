@@ -1,0 +1,864 @@
+{
+  "analysis_version": "horizon-baselines-v1",
+  "git": {
+    "head": "8f8b61da4cf8df06e901cd08a292a4908b683019",
+    "dirty": true,
+    "status_porcelain": [
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md"
+    ]
+  },
+  "method_sha256": "cf516fc0024cfe7b62df618734891a87081d80836b9317ddda5af0e6992f64f1",
+  "method": {
+    "start_eligibility": "unchanged from_canonical succeeds; every retained origin inventoried",
+    "forecast": "continuous default no-action step, no resets, no shadow or inferred actions",
+    "horizons": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      20
+    ],
+    "baselines": "before-only fixed static owner, unchanged force count, two-sample current-leg velocity, nominal 250ms ETA countdown",
+    "eta_truth": "estimator agreement only; actual arrival error UNKNOWN"
+  },
+  "source_hashes": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/extractor.py": "a6f6b6fb088d6c2472ec28522d85ffadd878ad21aa487ae6e5f1b562bf57e269",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "c541da3eca074229c3b0a90520a8a1263f2d7f5321338b1589a9a94a15ad08a1",
+    "src/kiomet_ai/v2/sim/arrival.py": "abb0c15304fcff780d42fb23b139e16d8a5ab1ab8312a30c255264cbf142ee8c",
+    "src/kiomet_ai/v2/sim/aura.py": "7de263247643409fe30b05e475f647d5fa9daa2e07a1bda4135ef6147f1c1bbc",
+    "src/kiomet_ai/v2/sim/combat.py": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "d3e4e1062fdd25d3db52d5e9da4374835046e2c2f74695ed6d063548fd06cce5",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62"
+  },
+  "tool_sha256": "4533c39dd134f189bc517b6ecd0c60d207b13fbe03edd8a5d9d5b1ed1c9fb505",
+  "cohorts": [
+    {
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "inventory": {
+        "raw_records": 4767,
+        "sha256": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+        "retained": 2394
+      },
+      "counts": {
+        "retained_origins": 2394,
+        "ineligible:NOT_READY": 1948,
+        "ineligible:ACTIVE_UPGRADE_OR_EMP": 195,
+        "legal_origins": 251
+      },
+      "horizons": {
+        "1": {
+          "CENSORED_BY_UNKNOWN": 34,
+          "EXACT_MATCH": 216,
+          "MISMATCH": 1
+        },
+        "2": {
+          "CENSORED_BY_UNKNOWN": 64,
+          "EXACT_MATCH": 185,
+          "MISMATCH": 2
+        },
+        "4": {
+          "CENSORED_BY_UNKNOWN": 115,
+          "EXACT_MATCH": 132,
+          "MISMATCH": 4
+        },
+        "8": {
+          "CENSORED_BY_UNKNOWN": 193,
+          "EXACT_MATCH": 51,
+          "MISMATCH": 7
+        },
+        "16": {
+          "CENSORED_BY_UNKNOWN": 244,
+          "MISMATCH": 7
+        },
+        "20": {
+          "CENSORED_BY_UNKNOWN": 244,
+          "MISMATCH": 7
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:NEUTRAL_UNIT_DECAY": 9,
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 166,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 19,
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 47,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:ACTIVE_UPGRADE_OR_EMP": 3,
+        "MISMATCH:EXACT_OBSERVABLE_SIGNATURE_MISMATCH": 7
+      },
+      "baselines": {
+        "all_consecutive_edges": 2391,
+        "static_owner:broader:pairs": 64557,
+        "static_owner:broader:exact": 64535,
+        "static_owner:broader:absolute_error": 989,
+        "no_new_force_count:broader:pairs": 2391,
+        "no_new_force_count:broader:exact": 2203,
+        "no_new_force_count:broader:absolute_error": 192,
+        "static_owner:shared:pairs": 5859,
+        "static_owner:shared:exact": 5859,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 5859,
+        "sim_owner:shared:exact": 5859,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:shared:pairs": 217,
+        "no_new_force_count:shared:exact": 216,
+        "no_new_force_count:shared:absolute_error": 1,
+        "sim_force_count:shared:pairs": 217,
+        "sim_force_count:shared:exact": 216,
+        "sim_force_count:shared:absolute_error": 1,
+        "static_owner:owner_changed:pairs": 22,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 989,
+        "eta_countdown_estimator:broader:pairs": 7736,
+        "eta_countdown_estimator:broader:exact": 7736,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 7548,
+        "constant_velocity:broader:exact": 7548,
+        "constant_velocity:broader:absolute_error": 0,
+        "constant_velocity:shared:pairs": 276,
+        "constant_velocity:shared:exact": 276,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 276,
+        "sim_progress:shared:exact": 276,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 276,
+        "eta_countdown_estimator:shared:exact": 276,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 276,
+        "sim_eta_estimator:shared:exact": 276,
+        "sim_eta_estimator:shared:absolute_error": 0,
+        "excluded_gap_edges": 2
+      }
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "inventory": {
+        "raw_records": 2153,
+        "sha256": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+        "retained": 1077
+      },
+      "counts": {
+        "retained_origins": 1077,
+        "ineligible:NOT_READY": 720,
+        "legal_origins": 177,
+        "ineligible:ACTIVE_UPGRADE_OR_EMP": 180
+      },
+      "horizons": {
+        "1": {
+          "EXACT_MATCH": 150,
+          "CENSORED_BY_UNKNOWN": 25,
+          "MISMATCH": 2
+        },
+        "2": {
+          "EXACT_MATCH": 126,
+          "CENSORED_BY_UNKNOWN": 48,
+          "MISMATCH": 3
+        },
+        "4": {
+          "EXACT_MATCH": 86,
+          "CENSORED_BY_UNKNOWN": 87,
+          "MISMATCH": 4
+        },
+        "8": {
+          "EXACT_MATCH": 31,
+          "CENSORED_BY_UNKNOWN": 142,
+          "MISMATCH": 4
+        },
+        "16": {
+          "EXACT_MATCH": 2,
+          "CENSORED_BY_UNKNOWN": 171,
+          "MISMATCH": 4
+        },
+        "20": {
+          "CENSORED_BY_UNKNOWN": 173,
+          "MISMATCH": 4
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 37,
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 103,
+        "CENSORED_BY_UNKNOWN:NEUTRAL_UNIT_DECAY": 12,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:ACTIVE_UPGRADE_OR_EMP": 7,
+        "CENSORED_BY_UNKNOWN:UNVERIFIED_NORMAL_COMBAT": 10,
+        "MISMATCH:EXACT_OBSERVABLE_SIGNATURE_MISMATCH": 4,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 4
+      },
+      "baselines": {
+        "all_consecutive_edges": 1076,
+        "static_owner:broader:pairs": 30798,
+        "static_owner:broader:exact": 30773,
+        "static_owner:broader:absolute_error": 707,
+        "no_new_force_count:broader:pairs": 1076,
+        "no_new_force_count:broader:exact": 995,
+        "no_new_force_count:broader:absolute_error": 81,
+        "static_owner:owner_changed:pairs": 25,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 707,
+        "static_owner:shared:pairs": 4408,
+        "static_owner:shared:exact": 4408,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 4408,
+        "sim_owner:shared:exact": 4408,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:shared:pairs": 152,
+        "no_new_force_count:shared:exact": 150,
+        "no_new_force_count:shared:absolute_error": 2,
+        "sim_force_count:shared:pairs": 152,
+        "sim_force_count:shared:exact": 150,
+        "sim_force_count:shared:absolute_error": 2,
+        "eta_countdown_estimator:broader:pairs": 3613,
+        "eta_countdown_estimator:broader:exact": 3613,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 3522,
+        "constant_velocity:broader:exact": 3522,
+        "constant_velocity:broader:absolute_error": 0,
+        "constant_velocity:shared:pairs": 249,
+        "constant_velocity:shared:exact": 249,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 249,
+        "sim_progress:shared:exact": 249,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 249,
+        "eta_countdown_estimator:shared:exact": 249,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 249,
+        "sim_eta_estimator:shared:exact": 249,
+        "sim_eta_estimator:shared:absolute_error": 0
+      }
+    },
+    {
+      "cohort": "85391858b5d8",
+      "split": "holdout",
+      "inventory": {
+        "raw_records": 4794,
+        "sha256": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+        "retained": 2399
+      },
+      "counts": {
+        "retained_origins": 2399,
+        "legal_origins": 1597,
+        "ineligible:NOT_READY": 796,
+        "ineligible:ACTIVE_UPGRADE_OR_EMP": 6
+      },
+      "horizons": {
+        "1": {
+          "EXACT_MATCH": 1440,
+          "CENSORED_BY_UNKNOWN": 154,
+          "MISMATCH": 3
+        },
+        "2": {
+          "EXACT_MATCH": 1287,
+          "CENSORED_BY_UNKNOWN": 304,
+          "MISMATCH": 6
+        },
+        "4": {
+          "CENSORED_BY_UNKNOWN": 595,
+          "EXACT_MATCH": 993,
+          "MISMATCH": 9
+        },
+        "8": {
+          "CENSORED_BY_UNKNOWN": 1117,
+          "EXACT_MATCH": 467,
+          "MISMATCH": 13
+        },
+        "16": {
+          "CENSORED_BY_UNKNOWN": 1584,
+          "MISMATCH": 13
+        },
+        "20": {
+          "CENSORED_BY_UNKNOWN": 1584,
+          "MISMATCH": 13
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 1433,
+        "CENSORED_BY_UNKNOWN:NEUTRAL_UNIT_DECAY": 32,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 37,
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 58,
+        "MISMATCH:EXACT_OBSERVABLE_SIGNATURE_MISMATCH": 13,
+        "CENSORED_BY_UNKNOWN:MOBILE_OVERFLOW_SUPPLY_LINE": 24
+      },
+      "baselines": {
+        "all_consecutive_edges": 2398,
+        "static_owner:broader:pairs": 81532,
+        "static_owner:broader:exact": 81511,
+        "static_owner:broader:absolute_error": 1176,
+        "static_owner:shared:pairs": 49062,
+        "static_owner:shared:exact": 49062,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 49062,
+        "sim_owner:shared:exact": 49062,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:broader:pairs": 2398,
+        "no_new_force_count:broader:exact": 2354,
+        "no_new_force_count:broader:absolute_error": 45,
+        "no_new_force_count:shared:pairs": 1443,
+        "no_new_force_count:shared:exact": 1440,
+        "no_new_force_count:shared:absolute_error": 3,
+        "sim_force_count:shared:pairs": 1443,
+        "sim_force_count:shared:exact": 1440,
+        "sim_force_count:shared:absolute_error": 3,
+        "static_owner:owner_changed:pairs": 21,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 1176,
+        "eta_countdown_estimator:broader:pairs": 882,
+        "eta_countdown_estimator:broader:exact": 882,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 860,
+        "constant_velocity:broader:exact": 860,
+        "constant_velocity:broader:absolute_error": 0,
+        "constant_velocity:shared:pairs": 298,
+        "constant_velocity:shared:exact": 298,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 298,
+        "sim_progress:shared:exact": 298,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 298,
+        "eta_countdown_estimator:shared:exact": 298,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 298,
+        "sim_eta_estimator:shared:exact": 298,
+        "sim_eta_estimator:shared:absolute_error": 0
+      }
+    },
+    {
+      "cohort": "b1f7f9416e92",
+      "split": "holdout",
+      "inventory": {
+        "raw_records": 4799,
+        "sha256": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+        "retained": 2397
+      },
+      "counts": {
+        "retained_origins": 2397,
+        "legal_origins": 2361,
+        "ineligible:NOT_READY": 36
+      },
+      "horizons": {
+        "1": {
+          "EXACT_MATCH": 2126,
+          "CENSORED_BY_UNKNOWN": 234,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "2": {
+          "EXACT_MATCH": 1930,
+          "CENSORED_BY_UNKNOWN": 430,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "4": {
+          "EXACT_MATCH": 1540,
+          "CENSORED_BY_UNKNOWN": 820,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "8": {
+          "EXACT_MATCH": 760,
+          "CENSORED_BY_UNKNOWN": 1600,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "16": {
+          "EXACT_MATCH": 17,
+          "CENSORED_BY_UNKNOWN": 2343,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "20": {
+          "EXACT_MATCH": 13,
+          "CENSORED_BY_UNKNOWN": 2347,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 2334,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 2,
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 11,
+        "RIGHT_CENSORED_RECORDING_END:RECORDING_END": 1
+      },
+      "baselines": {
+        "all_consecutive_edges": 2396,
+        "static_owner:broader:pairs": 91048,
+        "static_owner:broader:exact": 91046,
+        "static_owner:broader:absolute_error": 28,
+        "static_owner:shared:pairs": 80788,
+        "static_owner:shared:exact": 80788,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 80788,
+        "sim_owner:shared:exact": 80788,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:broader:pairs": 2396,
+        "no_new_force_count:broader:exact": 2395,
+        "no_new_force_count:broader:absolute_error": 1,
+        "no_new_force_count:shared:pairs": 2126,
+        "no_new_force_count:shared:exact": 2126,
+        "no_new_force_count:shared:absolute_error": 0,
+        "sim_force_count:shared:pairs": 2126,
+        "sim_force_count:shared:exact": 2126,
+        "sim_force_count:shared:absolute_error": 0,
+        "static_owner:owner_changed:pairs": 2,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 28,
+        "eta_countdown_estimator:broader:pairs": 44,
+        "eta_countdown_estimator:broader:exact": 44,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 43,
+        "constant_velocity:broader:exact": 43,
+        "constant_velocity:broader:absolute_error": 0,
+        "constant_velocity:shared:pairs": 39,
+        "constant_velocity:shared:exact": 39,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 39,
+        "sim_progress:shared:exact": 39,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 39,
+        "eta_countdown_estimator:shared:exact": 39,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 39,
+        "sim_eta_estimator:shared:exact": 39,
+        "sim_eta_estimator:shared:absolute_error": 0
+      }
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "inventory": {
+        "raw_records": 4798,
+        "sha256": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+        "retained": 2399
+      },
+      "counts": {
+        "retained_origins": 2399,
+        "legal_origins": 1078,
+        "ineligible:NOT_READY": 1321
+      },
+      "horizons": {
+        "1": {
+          "CENSORED_BY_UNKNOWN": 124,
+          "EXACT_MATCH": 945,
+          "MISMATCH": 9
+        },
+        "2": {
+          "CENSORED_BY_UNKNOWN": 238,
+          "EXACT_MATCH": 823,
+          "MISMATCH": 17
+        },
+        "4": {
+          "CENSORED_BY_UNKNOWN": 445,
+          "EXACT_MATCH": 603,
+          "MISMATCH": 30
+        },
+        "8": {
+          "CENSORED_BY_UNKNOWN": 783,
+          "EXACT_MATCH": 250,
+          "MISMATCH": 45
+        },
+        "16": {
+          "CENSORED_BY_UNKNOWN": 1031,
+          "MISMATCH": 47
+        },
+        "20": {
+          "CENSORED_BY_UNKNOWN": 1031,
+          "MISMATCH": 47
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 26,
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 867,
+        "CENSORED_BY_UNKNOWN:NEUTRAL_DOWNGRADE": 11,
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 79,
+        "CENSORED_BY_UNKNOWN:UNVERIFIED_NORMAL_COMBAT": 16,
+        "CENSORED_BY_UNKNOWN:SPECIAL_PRODUCTION": 20,
+        "MISMATCH:EXACT_OBSERVABLE_SIGNATURE_MISMATCH": 47,
+        "CENSORED_BY_UNKNOWN:MOBILE_OVERFLOW_SUPPLY_LINE": 12
+      },
+      "baselines": {
+        "all_consecutive_edges": 2398,
+        "static_owner:broader:pairs": 79134,
+        "static_owner:broader:exact": 79122,
+        "static_owner:broader:absolute_error": 330,
+        "no_new_force_count:broader:pairs": 2398,
+        "no_new_force_count:broader:exact": 2226,
+        "no_new_force_count:broader:absolute_error": 177,
+        "eta_countdown_estimator:broader:pairs": 3493,
+        "eta_countdown_estimator:broader:exact": 3493,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 3365,
+        "constant_velocity:broader:exact": 3365,
+        "constant_velocity:broader:absolute_error": 0,
+        "static_owner:owner_changed:pairs": 12,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 330,
+        "static_owner:shared:pairs": 31482,
+        "static_owner:shared:exact": 31482,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 31482,
+        "sim_owner:shared:exact": 31482,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:shared:pairs": 954,
+        "no_new_force_count:shared:exact": 945,
+        "no_new_force_count:shared:absolute_error": 9,
+        "sim_force_count:shared:pairs": 954,
+        "sim_force_count:shared:exact": 945,
+        "sim_force_count:shared:absolute_error": 9,
+        "constant_velocity:shared:pairs": 421,
+        "constant_velocity:shared:exact": 421,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 421,
+        "sim_progress:shared:exact": 421,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 421,
+        "eta_countdown_estimator:shared:exact": 421,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 421,
+        "sim_eta_estimator:shared:exact": 421,
+        "sim_eta_estimator:shared:absolute_error": 0
+      }
+    },
+    {
+      "cohort": "fe678ebb30ce",
+      "split": "development",
+      "inventory": {
+        "raw_records": 4797,
+        "sha256": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b",
+        "retained": 2399
+      },
+      "counts": {
+        "retained_origins": 2399,
+        "ineligible:NOT_READY": 37,
+        "legal_origins": 2362
+      },
+      "horizons": {
+        "1": {
+          "EXACT_MATCH": 2321,
+          "CENSORED_BY_UNKNOWN": 40,
+          "RIGHT_CENSORED_RECORDING_END": 1
+        },
+        "2": {
+          "EXACT_MATCH": 2280,
+          "CENSORED_BY_UNKNOWN": 80,
+          "RIGHT_CENSORED_RECORDING_END": 2
+        },
+        "4": {
+          "EXACT_MATCH": 2198,
+          "CENSORED_BY_UNKNOWN": 160,
+          "RIGHT_CENSORED_RECORDING_END": 4
+        },
+        "8": {
+          "EXACT_MATCH": 2034,
+          "CENSORED_BY_UNKNOWN": 320,
+          "RIGHT_CENSORED_RECORDING_END": 8
+        },
+        "16": {
+          "EXACT_MATCH": 1709,
+          "CENSORED_BY_UNKNOWN": 637,
+          "RIGHT_CENSORED_RECORDING_END": 16
+        },
+        "20": {
+          "EXACT_MATCH": 1549,
+          "CENSORED_BY_UNKNOWN": 793,
+          "RIGHT_CENSORED_RECORDING_END": 20
+        }
+      },
+      "first_stops": {
+        "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 753,
+        "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 20,
+        "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 20,
+        "RIGHT_CENSORED_RECORDING_END:RECORDING_END": 20
+      },
+      "baselines": {
+        "all_consecutive_edges": 2398,
+        "static_owner:broader:pairs": 69542,
+        "static_owner:broader:exact": 69540,
+        "static_owner:broader:absolute_error": 86,
+        "no_new_force_count:broader:pairs": 2398,
+        "no_new_force_count:broader:exact": 2396,
+        "no_new_force_count:broader:absolute_error": 2,
+        "static_owner:shared:pairs": 67309,
+        "static_owner:shared:exact": 67309,
+        "static_owner:shared:absolute_error": 0,
+        "sim_owner:shared:pairs": 67309,
+        "sim_owner:shared:exact": 67309,
+        "sim_owner:shared:absolute_error": 0,
+        "no_new_force_count:shared:pairs": 2321,
+        "no_new_force_count:shared:exact": 2321,
+        "no_new_force_count:shared:absolute_error": 0,
+        "sim_force_count:shared:pairs": 2321,
+        "sim_force_count:shared:exact": 2321,
+        "sim_force_count:shared:absolute_error": 0,
+        "static_owner:owner_changed:pairs": 2,
+        "static_owner:owner_changed:exact": 0,
+        "static_owner:owner_changed:absolute_error": 86,
+        "eta_countdown_estimator:broader:pairs": 35,
+        "eta_countdown_estimator:broader:exact": 35,
+        "eta_countdown_estimator:broader:absolute_error": 0,
+        "constant_velocity:broader:pairs": 34,
+        "constant_velocity:broader:exact": 34,
+        "constant_velocity:broader:absolute_error": 0,
+        "constant_velocity:shared:pairs": 34,
+        "constant_velocity:shared:exact": 34,
+        "constant_velocity:shared:absolute_error": 0,
+        "sim_progress:shared:pairs": 34,
+        "sim_progress:shared:exact": 34,
+        "sim_progress:shared:absolute_error": 0,
+        "eta_countdown_estimator:shared:pairs": 34,
+        "eta_countdown_estimator:shared:exact": 34,
+        "eta_countdown_estimator:shared:absolute_error": 0,
+        "sim_eta_estimator:shared:pairs": 34,
+        "sim_eta_estimator:shared:exact": 34,
+        "sim_eta_estimator:shared:absolute_error": 0
+      }
+    }
+  ],
+  "totals": {
+    "counts": {
+      "retained_origins": 13065,
+      "ineligible:NOT_READY": 4858,
+      "ineligible:ACTIVE_UPGRADE_OR_EMP": 381,
+      "legal_origins": 7826
+    },
+    "horizons": {
+      "1": {
+        "CENSORED_BY_UNKNOWN": 611,
+        "EXACT_MATCH": 7198,
+        "MISMATCH": 15,
+        "RIGHT_CENSORED_RECORDING_END": 2
+      },
+      "2": {
+        "CENSORED_BY_UNKNOWN": 1164,
+        "EXACT_MATCH": 6631,
+        "MISMATCH": 28,
+        "RIGHT_CENSORED_RECORDING_END": 3
+      },
+      "4": {
+        "CENSORED_BY_UNKNOWN": 2222,
+        "EXACT_MATCH": 5552,
+        "MISMATCH": 47,
+        "RIGHT_CENSORED_RECORDING_END": 5
+      },
+      "8": {
+        "CENSORED_BY_UNKNOWN": 4155,
+        "EXACT_MATCH": 3593,
+        "MISMATCH": 69,
+        "RIGHT_CENSORED_RECORDING_END": 9
+      },
+      "16": {
+        "CENSORED_BY_UNKNOWN": 6010,
+        "MISMATCH": 71,
+        "EXACT_MATCH": 1728,
+        "RIGHT_CENSORED_RECORDING_END": 17
+      },
+      "20": {
+        "CENSORED_BY_UNKNOWN": 6172,
+        "MISMATCH": 71,
+        "EXACT_MATCH": 1562,
+        "RIGHT_CENSORED_RECORDING_END": 21
+      }
+    },
+    "first_stops": {
+      "CENSORED_BY_UNKNOWN:NEUTRAL_UNIT_DECAY": 53,
+      "CENSORED_BY_UNKNOWN:PRODUCTION_SUPPLY_LINE": 5656,
+      "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:NOT_READY": 108,
+      "CENSORED_BY_UNKNOWN:UNKNOWN_POST_ARRIVAL_PATH": 252,
+      "CENSORED_BY_UNKNOWN:OBSERVED_ENDPOINT:ACTIVE_UPGRADE_OR_EMP": 10,
+      "MISMATCH:EXACT_OBSERVABLE_SIGNATURE_MISMATCH": 71,
+      "CENSORED_BY_UNKNOWN:UNVERIFIED_NORMAL_COMBAT": 26,
+      "CENSORED_BY_UNKNOWN:MOBILE_OVERFLOW_SUPPLY_LINE": 36,
+      "RIGHT_CENSORED_RECORDING_END:RECORDING_END": 21,
+      "CENSORED_BY_UNKNOWN:NEUTRAL_DOWNGRADE": 11,
+      "CENSORED_BY_UNKNOWN:SPECIAL_PRODUCTION": 20
+    },
+    "baselines": {
+      "all_consecutive_edges": 13057,
+      "static_owner:broader:pairs": 416611,
+      "static_owner:broader:exact": 416527,
+      "static_owner:broader:absolute_error": 3316,
+      "no_new_force_count:broader:pairs": 13057,
+      "no_new_force_count:broader:exact": 12569,
+      "no_new_force_count:broader:absolute_error": 498,
+      "static_owner:shared:pairs": 238908,
+      "static_owner:shared:exact": 238908,
+      "static_owner:shared:absolute_error": 0,
+      "sim_owner:shared:pairs": 238908,
+      "sim_owner:shared:exact": 238908,
+      "sim_owner:shared:absolute_error": 0,
+      "no_new_force_count:shared:pairs": 7213,
+      "no_new_force_count:shared:exact": 7198,
+      "no_new_force_count:shared:absolute_error": 15,
+      "sim_force_count:shared:pairs": 7213,
+      "sim_force_count:shared:exact": 7198,
+      "sim_force_count:shared:absolute_error": 15,
+      "static_owner:owner_changed:pairs": 84,
+      "static_owner:owner_changed:exact": 0,
+      "static_owner:owner_changed:absolute_error": 3316,
+      "eta_countdown_estimator:broader:pairs": 15803,
+      "eta_countdown_estimator:broader:exact": 15803,
+      "eta_countdown_estimator:broader:absolute_error": 0,
+      "constant_velocity:broader:pairs": 15372,
+      "constant_velocity:broader:exact": 15372,
+      "constant_velocity:broader:absolute_error": 0,
+      "constant_velocity:shared:pairs": 1317,
+      "constant_velocity:shared:exact": 1317,
+      "constant_velocity:shared:absolute_error": 0,
+      "sim_progress:shared:pairs": 1317,
+      "sim_progress:shared:exact": 1317,
+      "sim_progress:shared:absolute_error": 0,
+      "eta_countdown_estimator:shared:pairs": 1317,
+      "eta_countdown_estimator:shared:exact": 1317,
+      "eta_countdown_estimator:shared:absolute_error": 0,
+      "sim_eta_estimator:shared:pairs": 1317,
+      "sim_eta_estimator:shared:exact": 1317,
+      "sim_eta_estimator:shared:absolute_error": 0,
+      "excluded_gap_edges": 2
+    },
+    "by_first_edge_activity": {
+      "ACTIVE_KNOWN": {
+        "legal_origins": 1274,
+        "horizons": {
+          "1": {
+            "CENSORED_BY_UNKNOWN": 207,
+            "EXACT_MATCH": 1052,
+            "MISMATCH": 15
+          },
+          "2": {
+            "CENSORED_BY_UNKNOWN": 345,
+            "EXACT_MATCH": 911,
+            "MISMATCH": 18
+          },
+          "4": {
+            "CENSORED_BY_UNKNOWN": 588,
+            "EXACT_MATCH": 662,
+            "MISMATCH": 24
+          },
+          "8": {
+            "CENSORED_BY_UNKNOWN": 964,
+            "EXACT_MATCH": 283,
+            "MISMATCH": 27
+          },
+          "16": {
+            "CENSORED_BY_UNKNOWN": 1207,
+            "MISMATCH": 27,
+            "EXACT_MATCH": 40
+          },
+          "20": {
+            "CENSORED_BY_UNKNOWN": 1218,
+            "MISMATCH": 27,
+            "EXACT_MATCH": 29
+          }
+        }
+      },
+      "ACTIVE_UNKNOWN": {
+        "legal_origins": 11,
+        "horizons": {
+          "1": {
+            "CENSORED_BY_UNKNOWN": 11
+          },
+          "2": {
+            "CENSORED_BY_UNKNOWN": 11
+          },
+          "4": {
+            "CENSORED_BY_UNKNOWN": 11
+          },
+          "8": {
+            "CENSORED_BY_UNKNOWN": 11
+          },
+          "16": {
+            "CENSORED_BY_UNKNOWN": 11
+          },
+          "20": {
+            "CENSORED_BY_UNKNOWN": 11
+          }
+        }
+      },
+      "INACTIVE": {
+        "legal_origins": 6539,
+        "horizons": {
+          "1": {
+            "EXACT_MATCH": 6146,
+            "CENSORED_BY_UNKNOWN": 393
+          },
+          "2": {
+            "EXACT_MATCH": 5720,
+            "CENSORED_BY_UNKNOWN": 808,
+            "MISMATCH": 10,
+            "RIGHT_CENSORED_RECORDING_END": 1
+          },
+          "4": {
+            "EXACT_MATCH": 4890,
+            "CENSORED_BY_UNKNOWN": 1623,
+            "MISMATCH": 23,
+            "RIGHT_CENSORED_RECORDING_END": 3
+          },
+          "8": {
+            "CENSORED_BY_UNKNOWN": 3180,
+            "EXACT_MATCH": 3310,
+            "MISMATCH": 42,
+            "RIGHT_CENSORED_RECORDING_END": 7
+          },
+          "16": {
+            "CENSORED_BY_UNKNOWN": 4792,
+            "MISMATCH": 44,
+            "EXACT_MATCH": 1688,
+            "RIGHT_CENSORED_RECORDING_END": 15
+          },
+          "20": {
+            "CENSORED_BY_UNKNOWN": 4943,
+            "MISMATCH": 44,
+            "EXACT_MATCH": 1533,
+            "RIGHT_CENSORED_RECORDING_END": 19
+          }
+        }
+      },
+      "NO_FUTURE_EDGE": {
+        "legal_origins": 2,
+        "horizons": {
+          "1": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          },
+          "2": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          },
+          "4": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          },
+          "8": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          },
+          "16": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          },
+          "20": {
+            "RIGHT_CENSORED_RECORDING_END": 2
+          }
+        }
+      }
+    }
+  },
+  "start_audit": {
+    "path": "tests/fixtures/v2/arrival-horizon-origins.jsonl.gz",
+    "sha256": "70fa5564ddc1296408aad79e8ad306998d982b04332b36bbc90e3a7790c4a683",
+    "rows": 7826
+  },
+  "git_after": {
+    "head": "8f8b61da4cf8df06e901cd08a292a4908b683019",
+    "dirty": true,
+    "status_porcelain": [
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md"
+    ]
+  },
+  "tool_hash_stable": true,
+  "source_hashes_stable": true,
+  "archived_execution_report": {
+    "path": "runtime/research/v2/arrival-current-core-horizons.json",
+    "sha256": "7f729553801e544bb6ba956b63eb0297222b8ef3d5a43ae7a5cd9780bc6f948d",
+    "change": "audit path relocated to committed identical fixture; measurements unchanged"
+  }
+}

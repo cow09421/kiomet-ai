@@ -1,0 +1,1902 @@
+{
+  "status": "CANDIDATE",
+  "analysis_version": "factorized-coverage-v1",
+  "question": "How much visible entity/factor support exists, and how do overlapping blocker unknowns bound potential unlock?",
+  "fixture": {
+    "path": "docs\\V2_M2A_COVERAGE_DENOMINATOR.json",
+    "sha256": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "complete_edge_audit_path": "tests\\fixtures\\v2\\coverage-denominator-edges.jsonl.gz",
+    "complete_edge_audit_sha256": "8a67b03919070a1385dc0269207f4622101b62e4c5409fc4df19b99ff9e5346d",
+    "complete_edge_audit_decompressed_sha256": "ea60e2a194953306c18c051e8be06b4adcfaee9571c090259f8798813613cc66",
+    "all_edges": 13059,
+    "active_known": 6458,
+    "active_unknown": 61,
+    "raw_sha256": {
+      "runtime/research/v2/snapshots-03d032d57e5b.jsonl": "a235af084be0cfa7279023a7b25c72840f946828ede4f89a0779bcbc1ac5e1c9",
+      "runtime/research/v2/snapshots-7d56a775bc4c.jsonl": "6ce53f98c943ada9cd9d6317002f8ec833c33b5c3a3aad5feda8bdb5922a0929",
+      "runtime/research/v2/snapshots-85391858b5d8.jsonl": "84ffabba28f1ce370cabf40988f5c78b753ea737845ffe2065d0d34d2ae43cb1",
+      "runtime/research/v2/snapshots-b1f7f9416e92.jsonl": "d50a936e051ebf788d63b34f37e088642884567a00777708a55aac48bd618937",
+      "runtime/research/v2/snapshots-daf86d0544b7.jsonl": "2bd8f553f205a608f8c47b4816ef67541b27fa393e1c0ba17bd9dd4ebccea144",
+      "runtime/research/v2/snapshots-fe678ebb30ce.jsonl": "58f58292e37727388942bd1e0fd67a00ddcd669511f555542cafa39ef8c3d92b"
+    }
+  },
+  "sources": {
+    "docs\\V2_M2A_COVERAGE_DENOMINATOR.json": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "src\\kiomet_ai\\v2\\control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src\\kiomet_ai\\v2\\sim\\model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src\\kiomet_ai\\v2\\sim\\step.py": "d3e4e1062fdd25d3db52d5e9da4374835046e2c2f74695ed6d063548fd06cce5",
+    "src\\kiomet_ai\\v2\\sim\\arrival.py": "abb0c15304fcff780d42fb23b139e16d8a5ab1ab8312a30c255264cbf142ee8c",
+    "src\\kiomet_ai\\v2\\observe\\forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e"
+  },
+  "tool_sha256": "2b9b23151b6a19503d412a5d98b8c77a16830027b98cd0f2ab5e09c44f0b1457",
+  "git": {
+    "head": "8f8b61da4cf8df06e901cd08a292a4908b683019",
+    "branch": "v2-rebuild",
+    "dirty": true,
+    "status_porcelain": [
+      "?? docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "?? docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md"
+    ]
+  },
+  "method": {
+    "order": "Development cohorts first, freeze tool hash/rules, then holdout with identical logic.",
+    "locality": "Tower/force local probes are conditional isolated operations, never whole-world success.",
+    "production": "Production arithmetic is always reported as a local conditional factor. Independent-complete eligibility additionally requires complete visible force collections, no visible forces in either endpoint, and no observed birth/disappearance; this cannot exclude unobserved external/scope effects and earns no whole-world credit.",
+    "all_blockers": "Each gate is BLOCKED, CLEAR, or NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN. No endpoint is imputed; exact source guards remain in place.",
+    "marginal": "New-unlock bounds exclude already-comparable SUCCESS and already-compared MISMATCH edges. Certified lower requires all relevant gates outside intervention set evaluable and clear; optimistic upper assumes unresolved upstream gates clear. Neither bound is an implementation promise.",
+    "cause_limit": "Visible force appearance, unit change, owner change and production due are observations/candidates; no inferred actor, capture, internal event, or production causality.",
+    "endpoint_stages": "Primary NOT_READY/UNKNOWN_PATH refusals are split by explicit stage; after-input gaps never become current endpoint blockers.",
+    "ownership": "Owner-field inputs are counted independently of simulator acceptance. Isolated owner projections are conditional local comparisons; whole-world owner-change agreement is a separate table, and owner change is not labeled capture.",
+    "production_due": "A due production period is a potential local arithmetic opportunity, not proof of an observed production event or independent production cause."
+  },
+  "cohorts": [
+    {
+      "cohort": "fe678ebb30ce",
+      "split": "development",
+      "edges": 2398,
+      "active_known": 90,
+      "active_unknown": 1,
+      "endpoint_blocked_active_edges": 36,
+      "primary_unknown_path_not_ready_active_edges": 36,
+      "primary_before_endpoint_not_ready_active_edges": 36,
+      "primary_after_only_endpoint_not_ready_active_edges": 0,
+      "after_input_endpoint_unknown_active_edges": 0,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 69542,
+          "input_ready": 69542,
+          "semantically_supported": 69465,
+          "comparable": 69465,
+          "matches": 69463,
+          "unsupported": 77,
+          "mismatches": 2,
+          "input_readiness": {
+            "numerator": 69542,
+            "denominator": 69542,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 69465,
+            "denominator": 69542,
+            "rate": 0.9988927554571339
+          },
+          "accuracy": {
+            "numerator": 69463,
+            "denominator": 69465,
+            "rate": 0.9999712085222774
+          }
+        },
+        "force_local": {
+          "opportunities": 72,
+          "input_not_ready": 36,
+          "input_ready": 36,
+          "semantically_supported": 35,
+          "comparable": 70,
+          "matches": 70,
+          "unsupported": 1,
+          "input_readiness": {
+            "numerator": 36,
+            "denominator": 72,
+            "rate": 0.5
+          },
+          "semantic_coverage": {
+            "numerator": 35,
+            "denominator": 36,
+            "rate": 0.9722222222222222
+          },
+          "accuracy": {
+            "numerator": 70,
+            "denominator": 70,
+            "rate": 1.0
+          }
+        },
+        "movement": {
+          "opportunities": 72,
+          "input_not_ready": 36,
+          "input_ready": 36,
+          "semantically_supported": 36,
+          "comparable": 35,
+          "matches": 35,
+          "not_comparable": 1,
+          "ambiguous_or_unavailable_continuation": 1,
+          "input_readiness": {
+            "numerator": 36,
+            "denominator": 72,
+            "rate": 0.5
+          },
+          "semantic_coverage": {
+            "numerator": 36,
+            "denominator": 36,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 35,
+            "denominator": 35,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 1364,
+          "input_ready": 1364,
+          "semantically_supported": 1210,
+          "comparable": 1210,
+          "matches": 1210,
+          "unsupported": 154,
+          "input_readiness": {
+            "numerator": 1364,
+            "denominator": 1364,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 1210,
+            "denominator": 1364,
+            "rate": 0.8870967741935484
+          },
+          "accuracy": {
+            "numerator": 1210,
+            "denominator": 1210,
+            "rate": 1.0
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 36,
+          "opportunities": 1,
+          "input_ready": 1,
+          "current_leg_boundary_supported": 1,
+          "boundary_downstream_censored": 1,
+          "input_readiness": {
+            "numerator": 1,
+            "denominator": 1,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 69465,
+          "conditional_projection_comparable": 69465,
+          "conditional_projection_matches": 69463,
+          "opportunities": 69542,
+          "input_ready": 69542,
+          "whole_world_input_unavailable_edges": 77,
+          "comparable": 67309,
+          "semantically_supported": 67309,
+          "matches": 67309,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 2321,
+          "conditional_projection_mismatches": 2,
+          "input_readiness": {
+            "numerator": 69542,
+            "denominator": 69542,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 67309,
+            "denominator": 69542,
+            "rate": 0.9678899082568807
+          },
+          "accuracy": {
+            "numerator": 67309,
+            "denominator": 67309,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:CLEAR": 2362,
+        "upgrade_emp:CLEAR": 2398,
+        "supply_line:CLEAR": 2359,
+        "special:CLEAR": 2362,
+        "movement:CLEAR": 2362,
+        "arrival:CLEAR": 2362,
+        "combat:CLEAR": 2362,
+        "unknown_path:CLEAR": 2361,
+        "relation:CLEAR": 2362,
+        "fuel:CLEAR": 2361,
+        "other:BLOCKED": 1,
+        "after_input_endpoint:CLEAR": 2397,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 77,
+        "other:CLEAR": 2361,
+        "comparison:CLEAR": 2321,
+        "supply_line:BLOCKED": 39,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1,
+        "endpoint:BLOCKED": 36,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "unknown_path:BLOCKED": 1,
+        "fuel:BLOCKED": 1
+      },
+      "endpoint_entities": 0
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "split": "development",
+      "edges": 2393,
+      "active_known": 2290,
+      "active_unknown": 44,
+      "endpoint_blocked_active_edges": 1903,
+      "primary_unknown_path_not_ready_active_edges": 1859,
+      "primary_before_endpoint_not_ready_active_edges": 1856,
+      "primary_after_only_endpoint_not_ready_active_edges": 3,
+      "after_input_endpoint_unknown_active_edges": 3,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 64611,
+          "input_ready": 64611,
+          "semantically_supported": 63386,
+          "comparable": 63335,
+          "matches": 63231,
+          "unsupported": 1225,
+          "mismatches": 104,
+          "not_comparable": 51,
+          "input_readiness": {
+            "numerator": 64611,
+            "denominator": 64611,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 63386,
+            "denominator": 64611,
+            "rate": 0.981040380121032
+          },
+          "accuracy": {
+            "numerator": 63231,
+            "denominator": 63335,
+            "rate": 0.9983579379490013
+          }
+        },
+        "force_local": {
+          "opportunities": 14653,
+          "input_not_ready": 6191,
+          "input_ready": 8462,
+          "semantically_supported": 8092,
+          "comparable": 16164,
+          "matches": 16129,
+          "mismatches": 35,
+          "unsupported": 370,
+          "not_comparable": 20,
+          "input_readiness": {
+            "numerator": 8462,
+            "denominator": 14653,
+            "rate": 0.5774926636183717
+          },
+          "semantic_coverage": {
+            "numerator": 8092,
+            "denominator": 8462,
+            "rate": 0.9562751122666037
+          },
+          "accuracy": {
+            "numerator": 16129,
+            "denominator": 16164,
+            "rate": 0.9978346943825785
+          }
+        },
+        "movement": {
+          "opportunities": 14653,
+          "input_not_ready": 6191,
+          "input_ready": 8462,
+          "semantically_supported": 8462,
+          "comparable": 7736,
+          "matches": 7736,
+          "not_comparable": 726,
+          "ambiguous_or_unavailable_continuation": 726,
+          "input_readiness": {
+            "numerator": 8462,
+            "denominator": 14653,
+            "rate": 0.5774926636183717
+          },
+          "semantic_coverage": {
+            "numerator": 8462,
+            "denominator": 8462,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 7736,
+            "denominator": 7736,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 2513,
+          "input_ready": 2513,
+          "unsupported": 329,
+          "semantically_supported": 2184,
+          "comparable": 2184,
+          "matches": 2179,
+          "mismatches": 5,
+          "input_readiness": {
+            "numerator": 2513,
+            "denominator": 2513,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 2184,
+            "denominator": 2513,
+            "rate": 0.8690807799442897
+          },
+          "accuracy": {
+            "numerator": 2179,
+            "denominator": 2184,
+            "rate": 0.9977106227106227
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 6191,
+          "opportunities": 189,
+          "input_ready": 189,
+          "current_leg_boundary_supported": 152,
+          "boundary_downstream_censored": 152,
+          "current_leg_boundary_excluded": 37,
+          "input_readiness": {
+            "numerator": 189,
+            "denominator": 189,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 189,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 63335,
+          "conditional_projection_comparable": 63335,
+          "conditional_projection_matches": 63313,
+          "opportunities": 64611,
+          "input_ready": 64611,
+          "whole_world_input_unavailable_edges": 2176,
+          "comparable": 5859,
+          "semantically_supported": 5859,
+          "matches": 5859,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 217,
+          "conditional_projection_mismatches": 22,
+          "input_readiness": {
+            "numerator": 64611,
+            "denominator": 64611,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 5859,
+            "denominator": 64611,
+            "rate": 0.09068115336397826
+          },
+          "accuracy": {
+            "numerator": 5859,
+            "denominator": 5859,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:CLEAR": 447,
+        "upgrade_emp:BLOCKED": 663,
+        "supply_line:CLEAR": 2194,
+        "special:CLEAR": 447,
+        "movement:CLEAR": 447,
+        "arrival:CLEAR": 447,
+        "combat:CLEAR": 447,
+        "unknown_path:CLEAR": 435,
+        "relation:CLEAR": 447,
+        "fuel:CLEAR": 435,
+        "other:BLOCKED": 93,
+        "after_input_endpoint:CLEAR": 2389,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 2176,
+        "other:CLEAR": 443,
+        "supply_line:BLOCKED": 199,
+        "upgrade_emp:CLEAR": 1730,
+        "comparison:CLEAR": 216,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4,
+        "endpoint:BLOCKED": 1946,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1946,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1946,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1946,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1935,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1778,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1946,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1778,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1857,
+        "unknown_path:BLOCKED": 180,
+        "fuel:BLOCKED": 180,
+        "combat:BLOCKED": 11,
+        "comparison:BLOCKED": 1
+      },
+      "endpoint_entities": 0
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "split": "development",
+      "edges": 2398,
+      "active_known": 1814,
+      "active_unknown": 3,
+      "endpoint_blocked_active_edges": 1318,
+      "primary_unknown_path_not_ready_active_edges": 1323,
+      "primary_before_endpoint_not_ready_active_edges": 1318,
+      "primary_after_only_endpoint_not_ready_active_edges": 5,
+      "after_input_endpoint_unknown_active_edges": 5,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 79134,
+          "input_ready": 79134,
+          "semantically_supported": 78335,
+          "comparable": 78335,
+          "matches": 78252,
+          "unsupported": 799,
+          "mismatches": 83,
+          "input_readiness": {
+            "numerator": 79134,
+            "denominator": 79134,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 78335,
+            "denominator": 79134,
+            "rate": 0.989903202163419
+          },
+          "accuracy": {
+            "numerator": 78252,
+            "denominator": 78335,
+            "rate": 0.9989404480755728
+          }
+        },
+        "force_local": {
+          "opportunities": 6855,
+          "input_ready": 3615,
+          "semantically_supported": 3275,
+          "comparable": 6550,
+          "matches": 6537,
+          "input_not_ready": 3240,
+          "unsupported": 340,
+          "mismatches": 13,
+          "input_readiness": {
+            "numerator": 3615,
+            "denominator": 6855,
+            "rate": 0.5273522975929978
+          },
+          "semantic_coverage": {
+            "numerator": 3275,
+            "denominator": 3615,
+            "rate": 0.9059474412171508
+          },
+          "accuracy": {
+            "numerator": 6537,
+            "denominator": 6550,
+            "rate": 0.9980152671755725
+          }
+        },
+        "movement": {
+          "opportunities": 6855,
+          "input_ready": 3615,
+          "semantically_supported": 3615,
+          "comparable": 3493,
+          "matches": 3493,
+          "input_not_ready": 3240,
+          "not_comparable": 122,
+          "ambiguous_or_unavailable_continuation": 122,
+          "input_readiness": {
+            "numerator": 3615,
+            "denominator": 6855,
+            "rate": 0.5273522975929978
+          },
+          "semantic_coverage": {
+            "numerator": 3615,
+            "denominator": 3615,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 3493,
+            "denominator": 3493,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 3194,
+          "input_ready": 3194,
+          "semantically_supported": 2602,
+          "comparable": 2602,
+          "matches": 2600,
+          "unsupported": 592,
+          "mismatches": 2,
+          "input_readiness": {
+            "numerator": 3194,
+            "denominator": 3194,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 2602,
+            "denominator": 3194,
+            "rate": 0.8146524733876017
+          },
+          "accuracy": {
+            "numerator": 2600,
+            "denominator": 2602,
+            "rate": 0.9992313604919293
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 3240,
+          "opportunities": 122,
+          "input_ready": 122,
+          "current_leg_boundary_supported": 73,
+          "boundary_downstream_censored": 73,
+          "current_leg_boundary_excluded": 49,
+          "input_readiness": {
+            "numerator": 122,
+            "denominator": 122,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 122,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 78335,
+          "conditional_projection_comparable": 78335,
+          "conditional_projection_matches": 78323,
+          "opportunities": 79134,
+          "input_ready": 79134,
+          "whole_world_input_unavailable_edges": 1444,
+          "conditional_projection_mismatches": 12,
+          "comparable": 31482,
+          "semantically_supported": 31482,
+          "matches": 31482,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 954,
+          "input_readiness": {
+            "numerator": 79134,
+            "denominator": 79134,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 31482,
+            "denominator": 79134,
+            "rate": 0.3978315262718932
+          },
+          "accuracy": {
+            "numerator": 31482,
+            "denominator": 31482,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:CLEAR": 1078,
+        "upgrade_emp:CLEAR": 2192,
+        "supply_line:CLEAR": 2195,
+        "special:CLEAR": 1071,
+        "movement:CLEAR": 1078,
+        "arrival:CLEAR": 1078,
+        "combat:CLEAR": 1075,
+        "unknown_path:CLEAR": 1053,
+        "relation:CLEAR": 1078,
+        "fuel:CLEAR": 1053,
+        "other:CLEAR": 1076,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 6,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1444,
+        "endpoint:BLOCKED": 1320,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1312,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1320,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1320,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1309,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1232,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1320,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1232,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1320,
+        "after_input_endpoint:CLEAR": 2392,
+        "supply_line:BLOCKED": 203,
+        "unknown_path:BLOCKED": 113,
+        "fuel:BLOCKED": 113,
+        "comparison:CLEAR": 945,
+        "other:BLOCKED": 2,
+        "special:BLOCKED": 15,
+        "combat:BLOCKED": 14,
+        "comparison:BLOCKED": 9,
+        "upgrade_emp:BLOCKED": 206
+      },
+      "endpoint_entities": 0
+    },
+    {
+      "cohort": "85391858b5d8",
+      "split": "holdout",
+      "edges": 2398,
+      "active_known": 1105,
+      "active_unknown": 11,
+      "endpoint_blocked_active_edges": 791,
+      "primary_unknown_path_not_ready_active_edges": 793,
+      "primary_before_endpoint_not_ready_active_edges": 791,
+      "primary_after_only_endpoint_not_ready_active_edges": 2,
+      "after_input_endpoint_unknown_active_edges": 2,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 81532,
+          "input_ready": 81532,
+          "semantically_supported": 81030,
+          "comparable": 81030,
+          "matches": 80996,
+          "unsupported": 502,
+          "mismatches": 34,
+          "input_readiness": {
+            "numerator": 81532,
+            "denominator": 81532,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 81030,
+            "denominator": 81532,
+            "rate": 0.9938429083059412
+          },
+          "accuracy": {
+            "numerator": 80996,
+            "denominator": 81030,
+            "rate": 0.9995804023201283
+          }
+        },
+        "force_local": {
+          "opportunities": 2146,
+          "input_not_ready": 1244,
+          "input_ready": 902,
+          "semantically_supported": 828,
+          "comparable": 1656,
+          "matches": 1653,
+          "unsupported": 74,
+          "mismatches": 3,
+          "input_readiness": {
+            "numerator": 902,
+            "denominator": 2146,
+            "rate": 0.42031686859273065
+          },
+          "semantic_coverage": {
+            "numerator": 828,
+            "denominator": 902,
+            "rate": 0.917960088691796
+          },
+          "accuracy": {
+            "numerator": 1653,
+            "denominator": 1656,
+            "rate": 0.9981884057971014
+          }
+        },
+        "movement": {
+          "opportunities": 2146,
+          "input_not_ready": 1244,
+          "input_ready": 902,
+          "semantically_supported": 902,
+          "comparable": 882,
+          "matches": 882,
+          "not_comparable": 20,
+          "ambiguous_or_unavailable_continuation": 20,
+          "input_readiness": {
+            "numerator": 902,
+            "denominator": 2146,
+            "rate": 0.42031686859273065
+          },
+          "semantic_coverage": {
+            "numerator": 902,
+            "denominator": 902,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 882,
+            "denominator": 882,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 2259,
+          "input_ready": 2259,
+          "unsupported": 411,
+          "semantically_supported": 1848,
+          "comparable": 1848,
+          "matches": 1847,
+          "mismatches": 1,
+          "input_readiness": {
+            "numerator": 2259,
+            "denominator": 2259,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 1848,
+            "denominator": 2259,
+            "rate": 0.8180610889774237
+          },
+          "accuracy": {
+            "numerator": 1847,
+            "denominator": 1848,
+            "rate": 0.9994588744588745
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 1244,
+          "opportunities": 20,
+          "input_ready": 20,
+          "current_leg_boundary_supported": 17,
+          "boundary_downstream_censored": 17,
+          "current_leg_boundary_excluded": 3,
+          "input_readiness": {
+            "numerator": 20,
+            "denominator": 20,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 20,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 81030,
+          "conditional_projection_comparable": 81030,
+          "conditional_projection_matches": 81009,
+          "opportunities": 81532,
+          "input_ready": 81532,
+          "comparable": 49062,
+          "semantically_supported": 49062,
+          "matches": 49062,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 1443,
+          "whole_world_input_unavailable_edges": 955,
+          "conditional_projection_mismatches": 21,
+          "input_readiness": {
+            "numerator": 81532,
+            "denominator": 81532,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 49062,
+            "denominator": 81532,
+            "rate": 0.6017514595496247
+          },
+          "accuracy": {
+            "numerator": 49062,
+            "denominator": 49062,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:CLEAR": 1603,
+        "upgrade_emp:CLEAR": 2283,
+        "supply_line:CLEAR": 2198,
+        "special:CLEAR": 1603,
+        "movement:CLEAR": 1603,
+        "arrival:CLEAR": 1603,
+        "combat:CLEAR": 1603,
+        "unknown_path:CLEAR": 1592,
+        "relation:CLEAR": 1603,
+        "fuel:CLEAR": 1592,
+        "other:CLEAR": 1599,
+        "after_input_endpoint:CLEAR": 2391,
+        "comparison:CLEAR": 1440,
+        "supply_line:BLOCKED": 200,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 955,
+        "other:BLOCKED": 4,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 7,
+        "endpoint:BLOCKED": 795,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 786,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 786,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 795,
+        "unknown_path:BLOCKED": 20,
+        "fuel:BLOCKED": 20,
+        "comparison:BLOCKED": 3,
+        "upgrade_emp:BLOCKED": 115
+      },
+      "endpoint_entities": 0
+    },
+    {
+      "cohort": "7d56a775bc4c",
+      "split": "holdout",
+      "edges": 1076,
+      "active_known": 1057,
+      "active_unknown": 1,
+      "endpoint_blocked_active_edges": 718,
+      "primary_unknown_path_not_ready_active_edges": 719,
+      "primary_before_endpoint_not_ready_active_edges": 718,
+      "primary_after_only_endpoint_not_ready_active_edges": 1,
+      "after_input_endpoint_unknown_active_edges": 1,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 30808,
+          "input_ready": 30808,
+          "semantically_supported": 30026,
+          "comparable": 30016,
+          "matches": 29941,
+          "unsupported": 782,
+          "mismatches": 75,
+          "not_comparable": 10,
+          "input_readiness": {
+            "numerator": 30808,
+            "denominator": 30808,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 30026,
+            "denominator": 30808,
+            "rate": 0.9746169826019215
+          },
+          "accuracy": {
+            "numerator": 29941,
+            "denominator": 30016,
+            "rate": 0.9975013326226013
+          }
+        },
+        "force_local": {
+          "opportunities": 5643,
+          "input_not_ready": 1948,
+          "input_ready": 3695,
+          "semantically_supported": 3350,
+          "comparable": 6696,
+          "matches": 6666,
+          "unsupported": 345,
+          "mismatches": 30,
+          "not_comparable": 2,
+          "input_readiness": {
+            "numerator": 3695,
+            "denominator": 5643,
+            "rate": 0.6547935495303916
+          },
+          "semantic_coverage": {
+            "numerator": 3350,
+            "denominator": 3695,
+            "rate": 0.9066305818673883
+          },
+          "accuracy": {
+            "numerator": 6666,
+            "denominator": 6696,
+            "rate": 0.9955197132616488
+          }
+        },
+        "movement": {
+          "opportunities": 5643,
+          "input_not_ready": 1948,
+          "input_ready": 3695,
+          "semantically_supported": 3695,
+          "comparable": 3613,
+          "matches": 3613,
+          "not_comparable": 82,
+          "ambiguous_or_unavailable_continuation": 82,
+          "input_readiness": {
+            "numerator": 3695,
+            "denominator": 5643,
+            "rate": 0.6547935495303916
+          },
+          "semantic_coverage": {
+            "numerator": 3695,
+            "denominator": 3695,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 3613,
+            "denominator": 3613,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 1166,
+          "input_ready": 1166,
+          "semantically_supported": 1020,
+          "comparable": 1020,
+          "matches": 1016,
+          "unsupported": 146,
+          "mismatches": 4,
+          "input_readiness": {
+            "numerator": 1166,
+            "denominator": 1166,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 1020,
+            "denominator": 1166,
+            "rate": 0.8747855917667239
+          },
+          "accuracy": {
+            "numerator": 1016,
+            "denominator": 1020,
+            "rate": 0.996078431372549
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 1948,
+          "opportunities": 80,
+          "input_ready": 80,
+          "current_leg_boundary_supported": 51,
+          "boundary_downstream_censored": 51,
+          "current_leg_boundary_excluded": 29,
+          "input_readiness": {
+            "numerator": 80,
+            "denominator": 80,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 80,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 30016,
+          "conditional_projection_comparable": 30016,
+          "conditional_projection_matches": 29991,
+          "opportunities": 30808,
+          "input_ready": 30798,
+          "whole_world_input_unavailable_edges": 924,
+          "conditional_projection_mismatches": 25,
+          "comparable": 4408,
+          "semantically_supported": 4408,
+          "matches": 4408,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 152,
+          "input_not_ready": 10,
+          "input_readiness": {
+            "numerator": 30798,
+            "denominator": 30808,
+            "rate": 0.9996754089846793
+          },
+          "semantic_coverage": {
+            "numerator": 4408,
+            "denominator": 30798,
+            "rate": 0.1431261770244821
+          },
+          "accuracy": {
+            "numerator": 4408,
+            "denominator": 4408,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:BLOCKED": 719,
+        "upgrade_emp:CLEAR": 591,
+        "supply_line:CLEAR": 982,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 719,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 719,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 719,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 703,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 655,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 719,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 655,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 713,
+        "after_input_endpoint:CLEAR": 1075,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 924,
+        "other:BLOCKED": 12,
+        "endpoint:CLEAR": 357,
+        "special:CLEAR": 357,
+        "movement:CLEAR": 357,
+        "arrival:CLEAR": 357,
+        "combat:CLEAR": 354,
+        "unknown_path:CLEAR": 346,
+        "relation:CLEAR": 357,
+        "fuel:CLEAR": 346,
+        "other:CLEAR": 351,
+        "comparison:CLEAR": 150,
+        "unknown_path:BLOCKED": 75,
+        "fuel:BLOCKED": 75,
+        "supply_line:BLOCKED": 94,
+        "upgrade_emp:BLOCKED": 485,
+        "combat:BLOCKED": 19,
+        "comparison:BLOCKED": 2,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1
+      },
+      "endpoint_entities": 0
+    },
+    {
+      "cohort": "b1f7f9416e92",
+      "split": "holdout",
+      "edges": 2396,
+      "active_known": 102,
+      "active_unknown": 1,
+      "endpoint_blocked_active_edges": 36,
+      "primary_unknown_path_not_ready_active_edges": 36,
+      "primary_before_endpoint_not_ready_active_edges": 36,
+      "primary_after_only_endpoint_not_ready_active_edges": 0,
+      "after_input_endpoint_unknown_active_edges": 0,
+      "factor_totals": {
+        "tower_local": {
+          "opportunities": 91048,
+          "input_ready": 91048,
+          "semantically_supported": 90813,
+          "comparable": 90813,
+          "matches": 90811,
+          "unsupported": 235,
+          "mismatches": 2,
+          "input_readiness": {
+            "numerator": 91048,
+            "denominator": 91048,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 90813,
+            "denominator": 91048,
+            "rate": 0.9974189438537914
+          },
+          "accuracy": {
+            "numerator": 90811,
+            "denominator": 90813,
+            "rate": 0.9999779767213945
+          }
+        },
+        "force_local": {
+          "opportunities": 81,
+          "input_not_ready": 36,
+          "input_ready": 45,
+          "semantically_supported": 44,
+          "comparable": 88,
+          "matches": 88,
+          "unsupported": 1,
+          "input_readiness": {
+            "numerator": 45,
+            "denominator": 81,
+            "rate": 0.5555555555555556
+          },
+          "semantic_coverage": {
+            "numerator": 44,
+            "denominator": 45,
+            "rate": 0.9777777777777777
+          },
+          "accuracy": {
+            "numerator": 88,
+            "denominator": 88,
+            "rate": 1.0
+          }
+        },
+        "movement": {
+          "opportunities": 81,
+          "input_not_ready": 36,
+          "input_ready": 45,
+          "semantically_supported": 45,
+          "comparable": 44,
+          "matches": 44,
+          "not_comparable": 1,
+          "ambiguous_or_unavailable_continuation": 1,
+          "input_readiness": {
+            "numerator": 45,
+            "denominator": 81,
+            "rate": 0.5555555555555556
+          },
+          "semantic_coverage": {
+            "numerator": 45,
+            "denominator": 45,
+            "rate": 1.0
+          },
+          "accuracy": {
+            "numerator": 44,
+            "denominator": 44,
+            "rate": 1.0
+          }
+        },
+        "production": {
+          "opportunities": 1438,
+          "input_ready": 1438,
+          "semantically_supported": 1126,
+          "comparable": 1126,
+          "matches": 1126,
+          "unsupported": 312,
+          "input_readiness": {
+            "numerator": 1438,
+            "denominator": 1438,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 1126,
+            "denominator": 1438,
+            "rate": 0.7830319888734353
+          },
+          "accuracy": {
+            "numerator": 1126,
+            "denominator": 1126,
+            "rate": 1.0
+          }
+        },
+        "arrival": {
+          "upstream_unknown_force_instances": 36,
+          "opportunities": 1,
+          "input_ready": 1,
+          "current_leg_boundary_supported": 1,
+          "boundary_downstream_censored": 1,
+          "input_readiness": {
+            "numerator": 1,
+            "denominator": 1,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 0,
+            "denominator": 1,
+            "rate": 0.0
+          },
+          "accuracy": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        },
+        "ownership": {
+          "conditional_projection_opportunities": 90813,
+          "conditional_projection_comparable": 90813,
+          "conditional_projection_matches": 90811,
+          "opportunities": 91048,
+          "input_ready": 91048,
+          "comparable": 80788,
+          "semantically_supported": 80788,
+          "matches": 80788,
+          "mismatches": 0,
+          "whole_world_comparable_edges": 2126,
+          "whole_world_input_unavailable_edges": 270,
+          "conditional_projection_mismatches": 2,
+          "input_readiness": {
+            "numerator": 91048,
+            "denominator": 91048,
+            "rate": 1.0
+          },
+          "semantic_coverage": {
+            "numerator": 80788,
+            "denominator": 91048,
+            "rate": 0.8873121869782972
+          },
+          "accuracy": {
+            "numerator": 80788,
+            "denominator": 80788,
+            "rate": 1.0
+          }
+        }
+      },
+      "gate_states": {
+        "endpoint:CLEAR": 2360,
+        "upgrade_emp:CLEAR": 2396,
+        "supply_line:CLEAR": 2161,
+        "special:CLEAR": 2360,
+        "movement:CLEAR": 2360,
+        "arrival:CLEAR": 2360,
+        "combat:CLEAR": 2360,
+        "unknown_path:CLEAR": 2359,
+        "relation:CLEAR": 2360,
+        "fuel:CLEAR": 2359,
+        "other:CLEAR": 2360,
+        "after_input_endpoint:CLEAR": 2395,
+        "comparison:CLEAR": 2126,
+        "supply_line:BLOCKED": 235,
+        "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 270,
+        "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 1,
+        "endpoint:BLOCKED": 36,
+        "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 36,
+        "unknown_path:BLOCKED": 1,
+        "fuel:BLOCKED": 1
+      },
+      "endpoint_entities": 0
+    }
+  ],
+  "development_freeze_checkpoint": {
+    "completed_cohorts": [
+      "fe678ebb30ce",
+      "03d032d57e5b",
+      "daf86d0544b7"
+    ],
+    "rule_version": "factorized-coverage-v1",
+    "tool_sha256_frozen_before_holdout": "2b9b23151b6a19503d412a5d98b8c77a16830027b98cd0f2ab5e09c44f0b1457",
+    "fixture_sha256": "211bada91282635e7e8f210f09351aa179d964df253d87c96cc63020fcd76d97",
+    "statement": "No rule or threshold was changed after these development summaries; holdout is processed next with the identical frozen tool hash."
+  },
+  "factor_totals": {
+    "tower_local": {
+      "opportunities": 416675,
+      "input_ready": 416675,
+      "semantically_supported": 413055,
+      "comparable": 412994,
+      "matches": 412694,
+      "unsupported": 3620,
+      "mismatches": 300,
+      "not_comparable": 61,
+      "input_readiness": {
+        "numerator": 416675,
+        "denominator": 416675,
+        "rate": 1.0
+      },
+      "semantic_coverage": {
+        "numerator": 413055,
+        "denominator": 416675,
+        "rate": 0.9913121737565249
+      },
+      "accuracy": {
+        "numerator": 412694,
+        "denominator": 412994,
+        "rate": 0.9992735971951167
+      }
+    },
+    "force_local": {
+      "opportunities": 29450,
+      "input_not_ready": 12695,
+      "input_ready": 16755,
+      "semantically_supported": 15624,
+      "comparable": 31224,
+      "matches": 31143,
+      "unsupported": 1131,
+      "mismatches": 81,
+      "not_comparable": 22,
+      "input_readiness": {
+        "numerator": 16755,
+        "denominator": 29450,
+        "rate": 0.5689303904923599
+      },
+      "semantic_coverage": {
+        "numerator": 15624,
+        "denominator": 16755,
+        "rate": 0.9324977618621307
+      },
+      "accuracy": {
+        "numerator": 31143,
+        "denominator": 31224,
+        "rate": 0.9974058416602614
+      }
+    },
+    "movement": {
+      "opportunities": 29450,
+      "input_not_ready": 12695,
+      "input_ready": 16755,
+      "semantically_supported": 16755,
+      "comparable": 15803,
+      "matches": 15803,
+      "not_comparable": 952,
+      "ambiguous_or_unavailable_continuation": 952,
+      "input_readiness": {
+        "numerator": 16755,
+        "denominator": 29450,
+        "rate": 0.5689303904923599
+      },
+      "semantic_coverage": {
+        "numerator": 16755,
+        "denominator": 16755,
+        "rate": 1.0
+      },
+      "accuracy": {
+        "numerator": 15803,
+        "denominator": 15803,
+        "rate": 1.0
+      }
+    },
+    "production": {
+      "opportunities": 11934,
+      "input_ready": 11934,
+      "semantically_supported": 9990,
+      "comparable": 9990,
+      "matches": 9978,
+      "unsupported": 1944,
+      "mismatches": 12,
+      "input_readiness": {
+        "numerator": 11934,
+        "denominator": 11934,
+        "rate": 1.0
+      },
+      "semantic_coverage": {
+        "numerator": 9990,
+        "denominator": 11934,
+        "rate": 0.8371040723981901
+      },
+      "accuracy": {
+        "numerator": 9978,
+        "denominator": 9990,
+        "rate": 0.9987987987987988
+      }
+    },
+    "arrival": {
+      "upstream_unknown_force_instances": 12695,
+      "opportunities": 413,
+      "input_ready": 413,
+      "current_leg_boundary_supported": 295,
+      "boundary_downstream_censored": 295,
+      "current_leg_boundary_excluded": 118,
+      "input_readiness": {
+        "numerator": 413,
+        "denominator": 413,
+        "rate": 1.0
+      },
+      "semantic_coverage": {
+        "numerator": 0,
+        "denominator": 413,
+        "rate": 0.0
+      },
+      "accuracy": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      }
+    },
+    "ownership": {
+      "conditional_projection_opportunities": 412994,
+      "conditional_projection_comparable": 412994,
+      "conditional_projection_matches": 412910,
+      "opportunities": 416675,
+      "input_ready": 416665,
+      "whole_world_input_unavailable_edges": 5846,
+      "comparable": 238908,
+      "semantically_supported": 238908,
+      "matches": 238908,
+      "mismatches": 0,
+      "whole_world_comparable_edges": 7213,
+      "conditional_projection_mismatches": 84,
+      "input_not_ready": 10,
+      "input_readiness": {
+        "numerator": 416665,
+        "denominator": 416675,
+        "rate": 0.9999760004799904
+      },
+      "semantic_coverage": {
+        "numerator": 238908,
+        "denominator": 416665,
+        "rate": 0.5733814935259741
+      },
+      "accuracy": {
+        "numerator": 238908,
+        "denominator": 238908,
+        "rate": 1.0
+      }
+    }
+  },
+  "all_blocker_counts": {
+    "endpoint:CLEAR": 8207,
+    "upgrade_emp:CLEAR": 11590,
+    "supply_line:CLEAR": 12089,
+    "special:CLEAR": 8200,
+    "movement:CLEAR": 8207,
+    "arrival:CLEAR": 8207,
+    "combat:CLEAR": 8201,
+    "unknown_path:CLEAR": 8146,
+    "relation:CLEAR": 8207,
+    "fuel:CLEAR": 8146,
+    "other:BLOCKED": 112,
+    "after_input_endpoint:CLEAR": 13039,
+    "comparison:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 5846,
+    "other:CLEAR": 8190,
+    "comparison:CLEAR": 7198,
+    "supply_line:BLOCKED": 970,
+    "after_input_endpoint:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 20,
+    "endpoint:BLOCKED": 4852,
+    "special:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4844,
+    "movement:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4852,
+    "arrival:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4852,
+    "combat:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4814,
+    "unknown_path:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4523,
+    "relation:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4852,
+    "fuel:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4523,
+    "other:NOT_EVALUABLE_DUE_TO_UPSTREAM_UNKNOWN": 4757,
+    "unknown_path:BLOCKED": 390,
+    "fuel:BLOCKED": 390,
+    "upgrade_emp:BLOCKED": 1469,
+    "combat:BLOCKED": 44,
+    "comparison:BLOCKED": 15,
+    "special:BLOCKED": 15
+  },
+  "raw_readiness_gap_occurrences": {
+    "source_continuity": 90,
+    "force:0:source": 2023,
+    "force:0:destination": 1391,
+    "force:1:source": 635,
+    "force:1:destination": 1318,
+    "force:2:destination": 956,
+    "force:2:source": 409,
+    "force:3:destination": 841,
+    "force:3:source": 182,
+    "force:4:destination": 865,
+    "force:5:destination": 530,
+    "force:6:destination": 592,
+    "force:7:destination": 319,
+    "force:8:destination": 233,
+    "force:9:destination": 177,
+    "force:8:source": 164,
+    "force:7:source": 271,
+    "force:6:source": 202,
+    "force:5:source": 245,
+    "force:9:source": 165,
+    "force:10:source": 160,
+    "force:11:source": 68,
+    "force:10:destination": 158,
+    "force:11:destination": 142,
+    "force:12:destination": 136,
+    "force:4:source": 266,
+    "force:13:source": 40,
+    "force:12:source": 71,
+    "force:13:destination": 93,
+    "force:14:source": 13,
+    "match_id": 88,
+    "force:14:destination": 13,
+    "force:15:source": 7
+  },
+  "after_input_readiness_gap_occurrences": {
+    "force:0:source": 15,
+    "force:0:destination": 3,
+    "force:2:destination": 1,
+    "force:2:source": 1
+  },
+  "endpoint_field_gap_occurrences": {
+    "source": 4876,
+    "destination": 7617
+  },
+  "endpoint_blocked_active_edges_by_cohort": {
+    "fe678ebb30ce": 36,
+    "03d032d57e5b": 1903,
+    "daf86d0544b7": 1318,
+    "85391858b5d8": 791,
+    "7d56a775bc4c": 718,
+    "b1f7f9416e92": 36
+  },
+  "endpoint_stage_counts": {
+    "primary_unknown_path_not_ready_active_edges": 4766,
+    "primary_before_endpoint_not_ready_active_edges": 4755,
+    "primary_after_only_endpoint_not_ready_active_edges": 11,
+    "after_input_endpoint_unknown_active_edges": 11
+  },
+  "success_confirmed_blocked_gate_counts": {},
+  "marginal_bounds": {
+    "active_known_edge_denominator": 6458,
+    "new_unlock_analysis_population_excluding_success_and_mismatch": 5391,
+    "excluded_already_compared_success_edges": 1052,
+    "excluded_already_compared_mismatch_edges": 15,
+    "observed_comparison_mismatch_edges": 15,
+    "comparison_mismatch_exclusive_residual_edges_descriptive_only": 15,
+    "exclusive_blocker_counts_certified": {
+      "endpoint": 0,
+      "upgrade_emp": 0,
+      "supply_line": 0,
+      "special": 0,
+      "movement": 0,
+      "arrival": 0,
+      "combat": 0,
+      "unknown_path": 0,
+      "relation": 0,
+      "fuel": 0,
+      "other": 0,
+      "after_input_endpoint": 0,
+      "comparison": 0
+    },
+    "marginal_scenario_bounds": [
+      {
+        "resolved_gates": [
+          "endpoint"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "upgrade_emp"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 343,
+        "upper_minus_lower_due_to_unknown": 343,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "supply_line"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 126,
+        "upper_minus_lower_due_to_unknown": 126,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "special"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 4,
+        "upper_minus_lower_due_to_unknown": 4,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "movement"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "arrival"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "combat"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "unknown_path"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "relation"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "fuel"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "other"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 8,
+        "upper_minus_lower_due_to_unknown": 8,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "after_input_endpoint"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "comparison"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 0,
+        "upper_minus_lower_due_to_unknown": 0,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "upgrade_emp"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 4396,
+        "upper_minus_lower_due_to_unknown": 4396,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "supply_line"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3606,
+        "upper_minus_lower_due_to_unknown": 3606,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "combat"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "special"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3200,
+        "upper_minus_lower_due_to_unknown": 3200,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "movement"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "arrival"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "unknown_path"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "relation"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "fuel"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "other"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3205,
+        "upper_minus_lower_due_to_unknown": 3205,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "after_input_endpoint"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      },
+      {
+        "resolved_gates": [
+          "endpoint",
+          "comparison"
+        ],
+        "certified_lower_edges": 0,
+        "optimistic_upper_edges": 3192,
+        "upper_minus_lower_due_to_unknown": 3192,
+        "bound_kind": "GUARD_SUPPORT_BOUND_NOT_ACTUAL_COMPARABILITY",
+        "interpretation": "unknown residual inputs widen the guard-support upper; these bounds do not predict a code fix or whole-world match"
+      }
+    ],
+    "greedy_order_all_gates_hypothetical": [
+      {
+        "newly_resolved_gate": "endpoint",
+        "cumulative_lower": 0,
+        "cumulative_upper": 3192,
+        "marginal_lower": 0,
+        "marginal_upper": 3192,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "upgrade_emp",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4396,
+        "marginal_lower": 0,
+        "marginal_upper": 4396,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "supply_line",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4922,
+        "marginal_lower": 0,
+        "marginal_upper": 4922,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "combat",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4922,
+        "marginal_lower": 0,
+        "marginal_upper": 4922,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "special",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4935,
+        "marginal_lower": 0,
+        "marginal_upper": 4935,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "movement",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4935,
+        "marginal_lower": 0,
+        "marginal_upper": 4935,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "arrival",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4935,
+        "marginal_lower": 0,
+        "marginal_upper": 4935,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "unknown_path",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4935,
+        "marginal_lower": 0,
+        "marginal_upper": 4935,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "relation",
+        "cumulative_lower": 0,
+        "cumulative_upper": 4935,
+        "marginal_lower": 0,
+        "marginal_upper": 4935,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "fuel",
+        "cumulative_lower": 0,
+        "cumulative_upper": 5311,
+        "marginal_lower": 0,
+        "marginal_upper": 5311,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "other",
+        "cumulative_lower": 0,
+        "cumulative_upper": 5380,
+        "marginal_lower": 0,
+        "marginal_upper": 5380,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "after_input_endpoint",
+        "cumulative_lower": 0,
+        "cumulative_upper": 5380,
+        "marginal_lower": 0,
+        "marginal_upper": 5380,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      },
+      {
+        "newly_resolved_gate": "comparison",
+        "cumulative_lower": 5380,
+        "cumulative_upper": 5380,
+        "marginal_lower": 0,
+        "marginal_upper": 5380,
+        "marginal_interval_method": "max(0,new_lower-previous_upper) .. max(0,new_upper-previous_lower)"
+      }
+    ],
+    "solver_note": "A guard is exclusive only when all other gates, including the comparison/exogenous residual gate, are evaluable and clear. Whole-world exact mismatches are confirmed comparison blockers with UNKNOWN cause; unexecuted/rejected comparisons are NOT_EVALUABLE. Reported unlock bounds concern guard support only; actual newly comparable lower bound is 0 and causal actual upper is UNKNOWN.",
+    "actual_newly_comparable_edges_lower": 0,
+    "actual_newly_comparable_edges_upper": null
+  },
+  "edge_audit": {
+    "path": "tests/fixtures/v2/arrival-factor-edge-audit.jsonl.gz",
+    "sha256": "b5671b5f9f2362cebd872f44b3c5a4e3cf1a0a3c9c3ad09ead98c7c0fb94ff16",
+    "decompressed_sha256": "5f66c49b01253af461fbe92c8576f344a0d8c15c0ddb07fe5d9249ea93e5d755",
+    "encoding": "deterministic gzip JSONL; one row per frozen edge",
+    "edge_rows": 13059
+  },
+  "archived_execution_report": {
+    "path": "runtime/research/v2/factorized-coverage-candidate.json",
+    "sha256": "13ac893770964ab41b0867c77bfe79db0cd08db2512cf63eeb551cabac505300",
+    "change": "audit path relocated to committed identical fixture; measurements unchanged"
+  }
+}

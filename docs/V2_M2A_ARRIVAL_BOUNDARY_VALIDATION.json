@@ -1,0 +1,555 @@
+{
+  "status": "PARTIAL",
+  "formal_grade_a_added": 0,
+  "accepted_grade_b_boundary_added": 8,
+  "independent_world_transition_groups": 7,
+  "five_case_goal_met": true,
+  "independence_limit": "distinct observed transition groups, not independent randomized trials; shared matches/source/composition retained",
+  "accepted_contexts": 4,
+  "full_reinforcement_credit_added": 0,
+  "capture_credit_added": 0,
+  "fixture_sha256": "70cc261e57ae9bf953b578b98a0db69bedf0fa8d77b313d9f6eb3f40803da6e6",
+  "live_fixture_sha256": "9335792c535f91565fc66c9ccfc3e65c53c4e048a97fcf3c4a6bf52f136b0bd8",
+  "source_sha256": {
+    "tools\\v2_arrival_boundary_validation.py": "3927d3181ff23e8bcd9d12c97c46045a98f0d53cfe1569288cfc72dc46b32086",
+    "src\\kiomet_ai\\v2\\sim\\arrival.py": "abb0c15304fcff780d42fb23b139e16d8a5ab1ab8312a30c255264cbf142ee8c"
+  },
+  "cases": [
+    {
+      "cohort": "03d032d57e5b",
+      "tick": 22670,
+      "source": 13828326,
+      "target": 13893863,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 22671,
+        "source": 13828326,
+        "destination": 13893863,
+        "owner": 10,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 72,
+        "required": 72,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "tick": 22697,
+      "source": 13631720,
+      "target": 13631721,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": false,
+      "formal_grade_a": false,
+      "acceleration_basis": "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 22698,
+        "source": 13631720,
+        "destination": 13631721,
+        "owner": 77,
+        "units": [
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 90,
+        "required": 90,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": false,
+        "target_owner_next_tick": true,
+        "target_production_due": [
+          0
+        ],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "UNQUALIFIED_BOUNDARY_CANDIDATE"
+    },
+    {
+      "cohort": "03d032d57e5b",
+      "tick": 22757,
+      "source": 13893864,
+      "target": 13893863,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": false,
+      "formal_grade_a": false,
+      "acceleration_basis": "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 22758,
+        "source": 13893864,
+        "destination": 13893863,
+        "owner": 10,
+        "units": [
+          0,
+          0,
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 90,
+        "required": 90,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": false,
+        "target_owner_next_tick": true,
+        "target_production_due": [
+          4
+        ],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "UNIQUE_PINNED_ETA_INVERSION_FOR_KNOWN_LEG_ONLY",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "UNQUALIFIED_BOUNDARY_CANDIDATE"
+    },
+    {
+      "cohort": "85391858b5d8",
+      "tick": 32781,
+      "source": 14876886,
+      "target": 14942422,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 32782,
+        "source": 14876886,
+        "destination": 14942422,
+        "owner": 64,
+        "units": [
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 72,
+        "required": 72,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "tick": 25874,
+      "source": 17301773,
+      "target": 17236237,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 25875,
+        "source": 17301773,
+        "destination": 17236237,
+        "owner": 24,
+        "units": [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 45,
+        "required": 43,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "daf86d0544b7",
+      "tick": 25926,
+      "source": 17236238,
+      "target": 17170702,
+      "kind": "NONSELF_SAME_OWNER_REINFORCEMENT_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 25927,
+        "source": 17236238,
+        "destination": 17170702,
+        "owner": 24,
+        "units": [
+          0,
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 72,
+        "required": 72,
+        "branch": "REINFORCEMENT_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_INBOUND_CONTEXT",
+          "UNKNOWN_REINFORCEMENT_SUPPLY_LINE",
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "live-ae45ad53c1b4",
+      "tick": 34,
+      "source": 16974089,
+      "target": 16908553,
+      "kind": "NEUTRAL_CAPTURE_BOUNDARY_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 35,
+        "source": 16974089,
+        "destination": 16908553,
+        "owner": 1,
+        "units": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 54,
+        "required": 54,
+        "branch": "CAPTURE_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "live-ae45ad53c1b4",
+      "tick": 43,
+      "source": 16974089,
+      "target": 16908552,
+      "kind": "NEUTRAL_CAPTURE_BOUNDARY_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 44,
+        "source": 16974089,
+        "destination": 16908552,
+        "owner": 1,
+        "units": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 72,
+        "required": 72,
+        "branch": "CAPTURE_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "live-ae45ad53c1b4",
+      "tick": 43,
+      "source": 16974089,
+      "target": 16974088,
+      "kind": "NEUTRAL_CAPTURE_BOUNDARY_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 44,
+        "source": 16974089,
+        "destination": 16974088,
+        "owner": 1,
+        "units": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 72,
+        "required": 72,
+        "branch": "CAPTURE_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    },
+    {
+      "cohort": "live-ae45ad53c1b4",
+      "tick": 52,
+      "source": 16974089,
+      "target": 17039625,
+      "kind": "NEUTRAL_CAPTURE_BOUNDARY_CANDIDATE",
+      "accepted_grade_b": true,
+      "formal_grade_a": false,
+      "acceleration_basis": "OBSERVED_CURRENT_FORCE_ACCELERATION",
+      "event": {
+        "status": "SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN",
+        "tick": 53,
+        "source": 16974089,
+        "destination": 17039625,
+        "owner": 1,
+        "units": [
+          15,
+          0,
+          0,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        "progress": 90,
+        "required": 90,
+        "branch": "CAPTURE_REQUIRED",
+        "downstream_censors": [
+          "UNKNOWN_POST_ARRIVAL_PATH",
+          "UNKNOWN_ARRIVAL_FUEL"
+        ]
+      },
+      "checks": {
+        "arrival_tick": true,
+        "three_contiguous_scoped_observations": true,
+        "force_signature_absent_after_and_next": true,
+        "target_vector_delta": true,
+        "target_owner_next_tick": true,
+        "target_production_due": [],
+        "next_tick_inventory_observed": true,
+        "endpoint_identity": true
+      },
+      "premises": [
+        "OBSERVED_CURRENT_FORCE_ACCELERATION",
+        "fixed morale over this one tick; no launch attribution",
+        "current-leg boundary only; unknown relay/terminal/fuel never becomes full reinforcement proof"
+      ],
+      "reason": "CORROBORATED_CURRENT_LEG_BOUNDARY"
+    }
+  ]
+}
