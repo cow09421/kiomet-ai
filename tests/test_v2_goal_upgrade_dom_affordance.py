@@ -7,7 +7,9 @@ from tools import v2_goal_upgrade_probe as probe
 def _snapshot(button_markup):
     async def collect():
         async with probe.async_playwright() as playwright:
-            browser = await playwright.chromium.launch(headless=True, args=["--mute-audio"])
+            browser = await playwright.chromium.launch(
+                executable_path=playwright.chromium.executable_path,
+                headless=True, args=["--mute-audio"])
             try:
                 page = await browser.new_page()
                 await page.set_content(f"""
