@@ -1,0 +1,18 @@
+{
+  "version": "development-residual-freeze-v1",
+  "initial_rule_commit": "978100e",
+  "combat_input_correction_commit": "31f399c",
+  "holdout_settlement_outcomes_seen": false,
+  "development_naive": {
+    "empty_neutral_capture": {"match": 3, "mismatch": 21, "scorable": 24, "first_difference": "inventory_after", "owner_match": 24},
+    "same_owner_reinforcement": {"match": 13, "mismatch": 167, "scorable": 180}
+  },
+  "capture_revision_count": 1,
+  "reinforcement_revision_count": 1,
+  "revision": "Require before-known terminal=True for an exact incoming-vector deposit claim. The development counterexamples show that force continuation can change CURRENT target inventory, not merely a later forecast. Terminal UNKNOWN does not erase the arrival boundary or observed ownership transition, but cannot authorize this frozen inventory-deposit rule.",
+  "final_capture": "Initial exact owner+inventory rule, with established ordinary boundary, complete relevant inbound, scoped consecutive observations, zero known endpoint delays, neutral empty target, no confirmed active local relay, sufficient capacity without clipping, and before-known terminal=True. Known expired arrival fuel also refuses. Unknown later fuel, route, supply and aura remain downstream uncertainty only when they cannot change current deposit.",
+  "final_reinforcement": "Initial exact additive rule, with established ordinary boundary, complete relevant inbound, scoped consecutive observations, zero known endpoint delays, no combat/special destination, before-known terminal=True, before-known line-free target, no same-tick production or overflow ambiguity. No formula/clipping revision.",
+  "protocol": "Score all unfiltered holdout candidates under the original naive formula and this fixed eligibility separately. No holdout tuning. Unknown terminal excludes exact deposit eligibility using BEFORE data only; post-arrival absence or transformation is never an admission criterion.",
+  "production_decision": "Do not implement either deposit branch if no eligible holdout denominator and the >=90% gate cannot be established. Do not promote an owner-only alternative using the already seen outcomes. Stop Arrival expansion and finish the requested passive combat replay.",
+  "formal_credit": 0
+}
