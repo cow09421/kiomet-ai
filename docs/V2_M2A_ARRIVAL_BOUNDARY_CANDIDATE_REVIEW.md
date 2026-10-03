@@ -1,0 +1,38 @@
+# Arrival-boundary candidate review
+
+Status: bounded observational review; no new formal credit. Pinned input cohort snapshot hashes, raw observation lines, and source/target facts are packaged in `tests/fixtures/v2/arrival-boundary-candidates.json.gz`.
+
+## Finding
+
+Four of the six force-disappearance candidates support a narrow Grade B candidate for `ARRIVAL_REACHED` at the current-leg boundary. Before each transition, the visible force is one nominal motion update from the pinned threshold; on the next displayed world tick it is absent, the destination owner remains the force owner, and the destination gains exactly the incoming vector without overflow. The following observation preserves that owner and the arrival vector. This supports only the current-leg boundary. It does not establish a full reinforcement merge, terminal route, supply-line/relay status, fuel admission, or action provenance. Formal credit remains zero.
+
+`progress` is observed from `Force.path_progress+22`. The ETA is a derived nominal simulation duration using the pinned current-leg estimator, not a server timestamp. I applied that pure motion rule to pre-tick geometry and progress. The matching boost hypothesis is unique for each candidate but is derived from the same estimator, not an independent read of the Force boost byte. Each candidate’s arrival observation is exactly one displayed tick after the pre-observation and is one nominal 250 ms simulation update later.
+
+| Cohort; before → arrival → following tick | Force vector (nonzero slot) | Pre-progress → threshold (speed) | ETA-matched boost | Target change and phase check | Review |
+| --- | --- | --- | --- | --- | --- |
+| `03d032d57e5b`; 22670→22671→22672 | slot 4: 1 | 71→72 (+1) | false | Exact slot-4 +1; owner 10 and vector persist. Target slot-4 production is not due at the arrival phase (`clock=26013`, not divisible by 60). | Grade B current-leg candidate. The pinned phase rule rules out a coincident slot-4 production on this transition. |
+| `03d032d57e5b`; 22697→22698→22699 | slot 3: 4 | 87→90 (+3) | false | Target instead gains slot 0 +1; owner 77/vector persist. Slot-0 production is due at the arrival phase (`26040 % 20 = 0`). | Excluded as arrival-vector corroboration; the changed slot matches due destination production. |
+| `03d032d57e5b`; 22757→22758→22759 | slot 3: 3 | 87→90 (+3) | false | Target instead gains slot 4 +1; owner 10/vector persist. Slot-4 production is due (`26100 % 60 = 0`). | Excluded as arrival-vector corroboration; the changed slot matches due destination production. |
+| `85391858b5d8`; 32781→32782→32783 | slot 4: 2 | 71→72 (+1) | false | Exact slot-4 +2; owner 64 persists. On the following tick, slot 0 rises by 1, and slot-0 production is due (`36380 % 20 = 0`). | Grade B current-leg candidate; the later change is consistent with a separate production tick. |
+| `daf86d0544b7`; 25874→25875→25876 | slot 3: 1 | 42→43 (+3) | true | Exact slot-3 +1; owner 24 and vector persist. Slot-0 production is not due at arrival (`29987 % 20 != 0`). | Grade B current-leg candidate. The source’s current morale flag is true, consistent with ETA-matched boost; launch-time state remains unobserved. |
+| `daf86d0544b7`; 25926→25927→25928 | slot 1: 2 | 69→72 (+3) | false | Exact slot-1 +2; owner 24/vector persist. Slot-0 production is due at the following tick but the target is already at slot-0 capacity. | Grade B current-leg candidate. |
+
+The phase comparison uses the existing simulator formula `clock = (arrival_tick + phase_offset(target_id)) & 65535` and the recorded potential production intervals. It identifies due generation for both vector-mismatch cases, while the exact-vector cases do not have a same-slot production event at arrival. This is a pinned offline consistency check, not independent proof that the live server executed the simulator model.
+
+All six current-leg source/target IDs are adjacent in the recorded source tower’s visible neighbor list. The incoming vectors use ordinary unit slots only (1–4); no special or ruler units are present. Each target has one player-visible inbound force before the transition, and the collection is marked player-visible complete. Other visible forces exist in these observations, but none is another inbound to the candidate target. This does not disclose any future leg or route beyond the current segment.
+
+Both endpoints have observed delay zero and no active delay-based upgrade before the transition. Current `MORALE_BOOST` is false at both endpoints for three exact-vector candidates; the tick-25874 case has source true and target false. Those facts do not recover the force’s historical boost value. All four ETA-matched boost hypotheses agree with the source’s current flag, but that agreement is not launch-time proof. Complete force actor records and complete source/target tower fact objects are retained in the fixture.
+
+Three of the four exact-vector cases have a source-tower unit vector that does not currently contain the incoming composition; the remaining source has one matching unit but its visible vector is unchanged at the arrival observation. This does not disprove the current-leg event, because source state at arrival is not launch-time state; it prevents a source-dispatch or action-conservation claim. The four events are all non-self arrivals relative to the observing player (the force owner matches the target owner, not the observer). They provide no own-action linkage or proof of who issued the action.
+
+## Typed boundary API review
+
+`src/kiomet_ai/v2/sim/arrival.py` factors only the existing current-leg advance arithmetic: unboosted speed/threshold, the 4/5 boosted threshold, one progress increment, and a `before_tick + 1` arrival tick. `src/kiomet_ai/v2/sim/step.py` uses the same helper before its existing arrival branches; whole-step route, fuel, combat, and reinforcement outcomes remain separately guarded. The new `ordinary_arrival_boundary` preserves downstream censors for unknown terminal path, fuel, inbound context, supply line, or unverified combat and does not synthesize a replacement world state. Rejection of known relay, special-unit, delay, simultaneous-inbound, and uncertain-acceleration cases matches the scope of these candidates.
+
+The candidate data has unknown supply-line/relay, terminal, and fuel facts for these foreign-owned forces. Any per-candidate API result should therefore remain `SUPPORTED_ARRIVAL_BUT_DOWNSTREAM_UNKNOWN`; it must not be described as a supported merge or full simulator transition. The API’s `if source.delay or destination.delay` check treats manually supplied `None` as false. Canonical state construction rejects unknown delay through readiness, but a direct caller can bypass that construction; either require validated canonical construction in the API contract or reject non-integer delay explicitly.
+
+## Portable evidence
+
+`tests/fixtures/v2/arrival-boundary-candidates.json.gz` contains six candidates × three observations. Each observation retains scope, timing, coverage, every visible force actor record in full, complete source and target tower fact objects when present, raw source file hash and line number, and SHA-256 of the original JSONL line payload with its terminator removed. Force observer IDs are preserved only as raw recorded fields; candidate matching uses visible owner/current-leg/vector signatures, not IDs alone.
+
+The fixture is a selected-observation projection, not a replacement raw recording. Candidate universe and status are from `runtime/research/v2/arrival-candidate-audit.json` (SHA-256 `645e096088aa26a2e4654b7f9b18cd7821a2cad5aa6e0616472296c0643c8bec`); formal credit: 0.

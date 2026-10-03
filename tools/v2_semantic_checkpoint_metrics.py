@@ -40,9 +40,9 @@ def _load(report, key):
         return [json.loads(line) for line in stream]
 
 
-def run(output):
+def run(output, horizon_path=None):
     coverage_path = ROOT / 'docs/V2_M2A_COVERAGE_DENOMINATOR.json'
-    horizon_path = ROOT / 'docs/V2_M2A_HORIZON_BASELINES.json'
+    horizon_path = horizon_path or ROOT / 'docs/V2_M2A_HORIZON_BASELINES.json'
     coverage = json.loads(coverage_path.read_text(encoding='utf8'))
     horizon = json.loads(horizon_path.read_text(encoding='utf8'))
     edges = _load(coverage, 'edge_audit')
@@ -83,9 +83,11 @@ def run(output):
             'selection_limit': 'Static baseline fails by subset definition. This is a descriptive discriminator, not evidence of causal attribution or an independently frozen prospective benchmark.',
             'edge_rows': selected},
         'horizon_competing_risks': {'legal_origin_denominator': len(starts),
+            'execution_provenance': horizon.get('git_before', horizon.get('git')),
+            'source_hashes': horizon.get('source_hashes'),
             'active_legal_origin_denominator': sum(x['first_edge_activity'] == 'ACTIVE_KNOWN' for x in starts),
             'all_legal_origins': all_risks, 'active_legal_origins': active_risks, 'by_split': by_split,
-            'source_forecast': 'Accepted unchanged default no-action continuous predictions; no resets. First stop competes; origins overlap and are not independent events.',
+            'source_forecast': 'Pinned default no-action continuous predictions from the identified source report; no resets. First stop competes; origins overlap and are not independent events.',
             'classification': 'Exact source refusal reason mapped to one risk; observed input loss is separate from semantic step refusal.'}}
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2)+'\n', encoding='utf8')

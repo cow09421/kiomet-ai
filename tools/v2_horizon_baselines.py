@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from tools import v2_coverage_denominator as coverage
 VERSION = "horizon-baselines-v1"
-HORIZONS = (1, 2, 4, 8, 20)
+HORIZONS = (1, 2, 4, 8, 16, 20)
 METHOD = ROOT / "docs/V2_M2A_ENDPOINT_AUDIT_METHOD.md"
 
 

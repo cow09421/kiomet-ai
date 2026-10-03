@@ -1,10 +1,10 @@
 from dataclasses import dataclass, replace
 from functools import lru_cache
 from ..state import Units
-from ..observe.forces import motion
 from ..observe.rules import DOWNGRADE, production
 from .model import SimulationState, SimForce, UnsupportedState
 from .combat import fight_ground, fight_ordinary, shield_retaining_defense
+from .arrival import advance_current_leg, movement_parameters
 
 
 @dataclass(frozen=True,slots=True)
@@ -45,14 +45,6 @@ def phase_offset(tower_id):
 
 def phase(sequence,tower_id):
     return (sequence+phase_offset(tower_id)) & 65535
-
-
-@lru_cache(maxsize=4096)
-def movement_parameters(units,source_position,destination_position):
-    # Pure immutable rule inputs; cache never keys on identity or clock.
-    vector=Units(tuple(enumerate(units)))
-    speed,required,_=motion(vector,source_position,destination_position,False,0)
-    return speed,required
 
 
 def _captured_relation(owner,player,arriving_relation):
@@ -159,14 +151,9 @@ def step(state: SimulationState, actions: tuple[Launch|LaunchAll,...]=(), scenar
     remaining=[]
     for index,force in enumerate(forces):
         src,dst=towers[force.source],towers[force.destination]
-        speed,required=movement_parameters(force.units,src.position,dst.position)
-        if force.accelerated is None:
-            earliest=max(1,required*4//5)
-            if force.progress+speed>=earliest: raise UnsupportedState('UNKNOWN_ARRIVAL_ACCELERATION')
-        elif force.accelerated:
-            required=max(1,required*4//5)
-        progress=min(255,force.progress+speed)
-        if progress<required:
+        advanced=advance_current_leg(force,src,dst)
+        progress=advanced.progress
+        if not advanced.reached:
             remaining.append(SimForce(force.owner,force.source,force.destination,force.units,
                                       progress,force.accelerated,force.relation,force.terminal,force.fuel))
             continue

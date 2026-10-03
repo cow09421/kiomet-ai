@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from kiomet_ai.v2.observe.forces import motion
-from kiomet_ai.v2.sim import SimulationState, UnsupportedState, step
+from kiomet_ai.v2.sim import SimulationState, UnsupportedState, step, ordinary_arrival_boundary
 from kiomet_ai.v2.sim.model import SimForce, SimTower
 from kiomet_ai.v2.sim.step import phase
 from kiomet_ai.v2.observe.rules import DOWNGRADE
@@ -619,6 +619,22 @@ def _factor_edge(edge: dict[str, Any], before: dict[str, Any], after: dict[str, 
                 "semantic_support": "EXECUTED_CONDITIONAL" if edge.get("comparison_execution") == "EXECUTED" else "NOT_REACHED_OR_REFUSED",
                 "whole_world_comparison_status": edge.get("comparison_status"),
                 "reason": "combat/path/fuel evaluated independently in ALL_BLOCKERS"})
+            try:
+                boundary = ordinary_arrival_boundary(force, src, dst, val(before.get('tick')),
+                    other_inbound=tuple(other['force'] for other in available_forces if other['index'] != index),
+                    inbound_context_complete=not unavailable and is_known(before.get('forces'))
+                        and before.get('coverage') == 'PLAYER_VISIBLE_COMPLETE', fixed_morale=True)
+                if boundary is not None:
+                    stats['arrival']['current_leg_boundary_supported'] += 1
+                    stats['arrival']['boundary_downstream_censored'] += bool(boundary.downstream_censors)
+                    details['arrival'][-1]['current_leg_boundary'] = {
+                        'status': boundary.status, 'tick': boundary.tick, 'branch': boundary.branch,
+                        'censors': boundary.downstream_censors,
+                        'accuracy': 'UNKNOWN_UNTIL_INDEPENDENT_EVENT_CORROBORATION',
+                        'premise': 'fixed one-tick morale; local known-leg factor, not whole-world result'}
+            except UnsupportedState as exc:
+                stats['arrival']['current_leg_boundary_excluded'] += 1
+                details['arrival'][-1]['boundary_exclusion'] = str(exc)
     for item in unavailable:
         for factor in ("force_local", "movement"):
             stats[factor]["opportunities"] += 1
@@ -807,7 +823,8 @@ def run(report_path: Path = DEFAULT_REPORT, audit_path: Path = DEFAULT_AUDIT) ->
             raise RuntimeError(f"raw pin mismatch: {rel}")
         input_hashes[rel.replace("\\", "/")] = actual
     source_paths = [FIXTURE, ROOT / "src/kiomet_ai/v2/control.py", ROOT / "src/kiomet_ai/v2/sim/model.py",
-                    ROOT / "src/kiomet_ai/v2/sim/step.py", ROOT / "src/kiomet_ai/v2/observe/forces.py"]
+                    ROOT / "src/kiomet_ai/v2/sim/step.py", ROOT / "src/kiomet_ai/v2/sim/arrival.py",
+                    ROOT / "src/kiomet_ai/v2/observe/forces.py"]
     source_hashes = {str(p.relative_to(ROOT)): sha256(p) for p in source_paths}
     tool_hash = sha256(Path(__file__).resolve())
     edges_by_cohort: dict[str, list[dict[str, Any]]] = collections.defaultdict(list)
