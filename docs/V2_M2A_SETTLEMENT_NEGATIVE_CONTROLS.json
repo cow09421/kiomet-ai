@@ -1,0 +1,418 @@
+{
+  "version": "before-only-capture-negative-controls-v1",
+  "scope": "analysis-only eligibility recognizer; no settlement prediction, production mutation, or holdout outcome access",
+  "production_gate_passed": false,
+  "this_control_pack_holdout_outcomes_accessed": false,
+  "actual_development_close_invalid_cases": [
+    {
+      "case_id": "fe678ebb30ce:1584:0",
+      "source": 16318687,
+      "target": 16384223,
+      "tick": 41072,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:187:0",
+      "source": 13828326,
+      "target": 13893863,
+      "tick": 20959,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:232:0",
+      "source": 13893863,
+      "target": 13893864,
+      "tick": 21004,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:268:0",
+      "source": 13893864,
+      "target": 13828328,
+      "tick": 21040,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:400:0",
+      "source": 13893864,
+      "target": 13893865,
+      "tick": 21172,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:991:0",
+      "source": 13566184,
+      "target": 13566185,
+      "tick": 21763,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:1185:0",
+      "source": 13631718,
+      "target": 13697255,
+      "tick": 21957,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:1209:0",
+      "source": 13697255,
+      "target": 13631719,
+      "tick": 21981,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "03d032d57e5b:1221:0",
+      "source": 13631719,
+      "target": 13631720,
+      "tick": 21993,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "case_id": "daf86d0544b7:1492:0",
+      "source": 17170705,
+      "target": 17236241,
+      "tick": 25166,
+      "target_owner_before": 0,
+      "target_inventory_before": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "terminal_before": null,
+      "refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN",
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    }
+  ],
+  "actual_case_count": 10,
+  "actual_case_rejected_count": 10,
+  "synthetic_positive_baseline": {
+    "source_case_id": "fe678ebb30ce:1584:0",
+    "only_change": "before-snapshot incoming Force terminal changed from unknown/missing to OBSERVED true",
+    "eligible_under_frozen_before_premises": true,
+    "outcome_fields_consulted": false
+  },
+  "public_input_mutations": [
+    {
+      "name": "defended_neutral",
+      "expected_refusal": "TARGET_DEFENDED_OR_NONEMPTY",
+      "actual_refusals": [
+        "TARGET_DEFENDED_OR_NONEMPTY"
+      ]
+    },
+    {
+      "name": "multiple_inbound",
+      "expected_refusal": "MULTIPLE_VISIBLE_INBOUND",
+      "actual_refusals": [
+        "MULTIPLE_VISIBLE_INBOUND"
+      ]
+    },
+    {
+      "name": "source_delay_active",
+      "expected_refusal": "SOURCE_DELAY_ACTIVE_OR_INVALID",
+      "actual_refusals": [
+        "SOURCE_DELAY_ACTIVE_OR_INVALID"
+      ]
+    },
+    {
+      "name": "target_delay_active",
+      "expected_refusal": "TARGET_DELAY_ACTIVE_OR_INVALID",
+      "actual_refusals": [
+        "TARGET_DELAY_ACTIVE_OR_INVALID"
+      ]
+    },
+    {
+      "name": "source_delay_unknown",
+      "expected_refusal": "SOURCE_DELAY_UNKNOWN",
+      "actual_refusals": [
+        "SOURCE_DELAY_UNKNOWN"
+      ]
+    },
+    {
+      "name": "target_delay_unknown",
+      "expected_refusal": "TARGET_DELAY_UNKNOWN",
+      "actual_refusals": [
+        "TARGET_DELAY_UNKNOWN"
+      ]
+    },
+    {
+      "name": "special_incoming",
+      "expected_refusal": "SPECIAL_OR_RULER_INCOMING_VECTOR",
+      "actual_refusals": [
+        "SPECIAL_OR_RULER_INCOMING_VECTOR",
+        "SPECIAL_DESTINATION_OR_UNKNOWN",
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR"
+      ]
+    },
+    {
+      "name": "hostile_occupied_target",
+      "expected_refusal": "TARGET_NOT_NEUTRAL",
+      "actual_refusals": [
+        "TARGET_NOT_NEUTRAL"
+      ]
+    },
+    {
+      "name": "active_local_relay",
+      "expected_refusal": "ACTIVE_LOCAL_RELAY",
+      "actual_refusals": [
+        "ACTIVE_LOCAL_RELAY"
+      ]
+    },
+    {
+      "name": "terminal_unknown",
+      "expected_refusal": "TERMINAL_NOT_KNOWN_TRUE_BEFORE",
+      "actual_refusals": [
+        "TERMINAL_NOT_KNOWN_TRUE_BEFORE"
+      ]
+    },
+    {
+      "name": "wrong_target_inventory",
+      "expected_refusal": "TARGET_DEFENDED_OR_NONEMPTY",
+      "actual_refusals": [
+        "TARGET_DEFENDED_OR_NONEMPTY"
+      ]
+    },
+    {
+      "name": "capacity_too_small",
+      "expected_refusal": "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR",
+      "actual_refusals": [
+        "CAPACITY_UNKNOWN_OR_CLIPPING_CONTEXT",
+        "CAPACITY_WOULD_CHANGE_FROZEN_VECTOR"
+      ]
+    },
+    {
+      "name": "target_owner_unknown",
+      "expected_refusal": "TARGET_OWNER_UNKNOWN",
+      "actual_refusals": [
+        "TARGET_OWNER_UNKNOWN"
+      ]
+    },
+    {
+      "name": "incoming_owner_unknown",
+      "expected_refusal": "INCOMING_OWNER_UNKNOWN",
+      "actual_refusals": [
+        "MULTIPLE_VISIBLE_INBOUND",
+        "INCOMING_OWNER_UNKNOWN"
+      ]
+    },
+    {
+      "name": "inbound_scope_partial",
+      "expected_refusal": "UNKNOWN_BEFORE_SCOPE",
+      "actual_refusals": [
+        "UNKNOWN_BEFORE_SCOPE"
+      ]
+    },
+    {
+      "name": "unknown_inbound_destination",
+      "expected_refusal": "INBOUND_DESTINATION_UNKNOWN",
+      "actual_refusals": [
+        "INBOUND_SCOPE_UNKNOWN",
+        "INBOUND_DESTINATION_UNKNOWN"
+      ]
+    },
+    {
+      "name": "no_capture_boundary",
+      "expected_refusal": "NO_SUPPORTED_CAPTURE_BOUNDARY",
+      "actual_refusals": [
+        "NO_SUPPORTED_CAPTURE_BOUNDARY"
+      ]
+    },
+    {
+      "name": "known_expired_fuel",
+      "expected_refusal": "KNOWN_EXPIRED_OR_INVALID_ARRIVAL_FUEL",
+      "actual_refusals": [
+        "KNOWN_EXPIRED_OR_INVALID_ARRIVAL_FUEL"
+      ]
+    }
+  ],
+  "mutation_count": 18,
+  "mutation_rejected_count": 18,
+  "negative_control_total": 28,
+  "negative_control_rejected": 28,
+  "false_admissions": 0,
+  "review_guards": [
+    "Use t_minus_1 endpoint/force facts only; never admit based on t/t+1 force absence or transformation.",
+    "Terminal must be known true in the before snapshot; UNKNOWN is a hard refusal for exact inventory deposit.",
+    "A local precondition violation remains a refusal even when a synthetic positive supplies terminal=true.",
+    "This pack checks eligibility/refusal only; it does not mirror or verify the naive incoming-vector prediction."
+  ],
+  "source_manifest_sha256": {
+    "development_replay_fixture": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "premise_freeze": "a63ec93476c8c5d83e5b5083ed4563764db185b335adaeaa9dd7a669431632f6",
+    "replay_tool": "09269bd9dd37b14f557f7d2d317a9db34bafce6d6a0cf0b66790c590263860fc",
+    "negative_controls_tool": "90816c428cdc2be770f42c110e706158597a82802c090dce6f4abf2835fe8b99",
+    "negative_controls_test": "5d15609c95a6d4cdc562bdaaaee1c892457586a58df1946fbfc5cc55083aadbb"
+  }
+}

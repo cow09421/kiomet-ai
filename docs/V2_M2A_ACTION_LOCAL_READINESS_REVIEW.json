@@ -74,7 +74,7 @@
   "action_local_fix": {
     "applicable_now": false,
     "status": "NOT APPLICABLE",
-    "reason": "The exact blocker was an Enemy force source gap, but whether that force was unrelated to the action cannot be proved without the same-sample action pair.",
+    "reason": "An Enemy force with unknown source tripped the global readiness gate. Whether that force was unrelated to the intended action cannot be proved without the same-sample action pair.",
     "safe_conditions_if_reconsidered": [
       "Same snapshot and identity must bind the intended source, destination, typed units, route certificate, lifecycle, tick, and match/document continuity.",
       "Unknown own source, own target, route legality, units, selected UI branch prerequisites, or match identity must still refuse.",
