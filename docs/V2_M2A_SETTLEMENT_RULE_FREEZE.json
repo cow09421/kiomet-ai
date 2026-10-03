@@ -1,0 +1,22 @@
+{
+  "version": "naive-v1-before-unfiltered-results",
+  "starting_head": "77f6906922135ce246ba67cdc637a9dcb2720ae2",
+  "population": "All 413 known due-arrival opportunities in arrival-factor-edge-audit.jsonl.gz; retain the 118 excluded boundaries with explicit status. No disappearance or observed-delta filter.",
+  "capture": {
+    "before": "Established arrival; target owner 0 and typed inventory zero; incoming nonneutral owner and known ordinary vector",
+    "prediction": "target owner = incoming owner; target inventory = incoming vector"
+  },
+  "reinforcement": {
+    "before": "Established arrival; incoming owner equals nonneutral target owner; both vectors known",
+    "prediction": "target owner unchanged; inventory = before inventory + incoming vector"
+  },
+  "force": "Observe t+1 and t+2 by signature and continuity. Do not assume permanent termination; ID alone cannot establish transformation or disappearance.",
+  "split": {
+    "development": ["fe678ebb30ce", "03d032d57e5b", "daf86d0544b7"],
+    "holdout": ["85391858b5d8", "7d56a775bc4c", "b1f7f9416e92"]
+  },
+  "protocol": "Score naive rule without outcome eligibility. Inspect development only for at most two premise revisions per branch. Freeze final premises before holdout scoring. Existing selected live cases are previously seen corroboration, never fresh prospective holdout.",
+  "combat": "Passive only: pinned fight_ordinary(attacker, defender, capacity, defender_is_tower=True, attacker_morale=source morale, defender_morale=target morale). Attacker victory predicts owner incoming and surviving attacker vector; defender victory predicts owner unchanged and surviving defender vector. Unknown aura, production or simultaneous arrival must be explicit. No formula revision or production promotion.",
+  "combat_source_sha256": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+  "formal_credit": 0
+}
