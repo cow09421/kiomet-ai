@@ -1,0 +1,118 @@
+{
+  "review": "V2_M2A_ACTION_LOCAL_READINESS_REVIEW",
+  "scope": "bounded read-only readiness cause review; no production edits, commits, or live actions",
+  "source_instruction_sections": [
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "classification": {
+    "primary": "R3_ROUTE_OR_ACTION_LEGALITY_UNPROVEN",
+    "r1_candidate": true,
+    "explicit_r1_proven": false,
+    "r2": "not evidenced as the actual gate reason; exact action endpoints are not bound to the rejected preparation",
+    "r4": "separate later lease-margin preflight exclusion; not the recorded force:0:source rejection",
+    "r5": "not selected; the evidence gap maps to R3/action binding"
+  },
+  "actual_blocker": {
+    "reason": [
+      "force:0:source",
+      "wait_deadline_exhausted"
+    ],
+    "dispatch_attempts": 0,
+    "intent_created": false,
+    "source": "tests/fixtures/v2/endpoint-pilot-controlled-transition-2fafb60c2e7a.json.gz"
+  },
+  "same_sample_evidence": {
+    "source": "tests/fixtures/v2/endpoint-pilot-paired-layers-726f0775adde.jsonl.gz",
+    "document_id": "67e39eb29a0e41d3aeb8cb9a89c26c65",
+    "match_id": "67e39eb29a0e41d3aeb8cb9a89c26c65:p43:29ffd3701c1a46119020e9cd83c6df27",
+    "player_id": 43,
+    "initial_tick": 584,
+    "readiness_gap": "force:0:source",
+    "l4_conversion": "REFUSED: NOT_READY: force:0:source",
+    "l1_force": {
+      "owner": 17,
+      "relation": "ENEMY",
+      "source": null,
+      "destination": 17105164,
+      "visibility_source": "normal renderer: visible tower inbound"
+    },
+    "local_state": "Canonical L2 contains observed/derived own and neutral towers, typed unit vectors, deployable vectors, neighbor lists, positions, and the same document/match/player/tick identity. No action-bound source/destination pair or raw selected_tower evidence is retained."
+  },
+  "cross_sample_preview_exclusion": {
+    "source": "tests/fixtures/v2/endpoint-pilot-controlled-transition-78964b1c5f9b.json.gz",
+    "document_id": "99ed523d250b4a39ae3c676f57b3ce30",
+    "match_id": "99ed523d250b4a39ae3c676f57b3ce30:p43:23fdc1643f124b7f87ed71e0503127e9",
+    "candidate": [
+      16908556,
+      16974092
+    ],
+    "route_certificate": "qualified=true, scope=BEFORE_SNAPSHOT_ONLY, gesture_continuity=UNKNOWN",
+    "usable_for_r1": false,
+    "reason": "Different document/match from the readiness-rejection layer; cannot supply the rejected preparation's same-sample endpoint or route proof."
+  },
+  "second_preview": {
+    "source": "tests/fixtures/v2/endpoint-pilot-controlled-transition-a7c8a769c215.json.gz",
+    "document_id": "92e09bca7cc64c4f98cff080a45d85a8",
+    "match_id": "92e09bca7cc64c4f98cff080a45d85a8:p1:bc94367c453f47e4a264749aeb0564a1",
+    "readiness_gaps": [
+      "force:0:source",
+      "force:1:source"
+    ],
+    "sample_attempts": 48,
+    "candidates": 0,
+    "usable_for_r1": false
+  },
+  "control_flow": {
+    "global_gate": "control_readiness_gaps iterates all visible towers and all observed forces; any force with unknown source adds force:<index>:source.",
+    "execute_gate": "wait_initial_readiness rejects before validate_scenario/selection when gaps remain; pre-intent execute flow also calls global readiness.",
+    "route_semantics": "A qualified before-only direct-route path certifies the pinned one-expansion A* path. gesture_continuity=UNKNOWN is an attribution/gesture gap, not a failed route certificate. This distinction cannot be applied to the rejected preparation because its action pair and certificate were not recorded."
+  },
+  "action_local_fix": {
+    "applicable_now": false,
+    "status": "NOT APPLICABLE",
+    "reason": "The exact blocker was an Enemy force source gap, but whether that force was unrelated to the action cannot be proved without the same-sample action pair.",
+    "safe_conditions_if_reconsidered": [
+      "Same snapshot and identity must bind the intended source, destination, typed units, route certificate, lifecycle, tick, and match/document continuity.",
+      "Unknown own source, own target, route legality, units, selected UI branch prerequisites, or match identity must still refuse.",
+      "Only an unknown remote Enemy endpoint proven unrelated to that action may cease blocking the action-local gate.",
+      "Keep the world-level strict readiness behavior unchanged for full-world simulation/differential claims."
+    ],
+    "negative_tests_required": [
+      "own source UNKNOWN -> refuse",
+      "own target UNKNOWN -> refuse",
+      "own route legality UNKNOWN -> refuse",
+      "units UNKNOWN -> refuse",
+      "match identity UNKNOWN -> refuse",
+      "remote unrelated Enemy UNKNOWN alone -> action may pass when every action-local prerequisite is known"
+    ]
+  },
+  "stop": "No production change or further endpoint/callback/queue/canvas/WASM/input-entry research. Stop this bounded check because R1 is not explicit.",
+  "evidence_paths": [
+    "docs/V2_M2A_PAIRED_ENDPOINT_PILOT.md",
+    "docs/V2_M2A_PAIRED_ENDPOINT_PILOT.json",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-78964b1c5f9b.json.gz",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-2fafb60c2e7a.json.gz",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-a7c8a769c215.json.gz",
+    "tests/fixtures/v2/endpoint-pilot-paired-layers-726f0775adde.jsonl.gz",
+    "tests/fixtures/v2/endpoint-pilot-paired-layers-d9075298573c.jsonl.gz",
+    "src/kiomet_ai/v2/control.py",
+    "tools/v2_controlled_transition_capture.py",
+    "tools/v2_direct_route_certificate.py"
+  ],
+  "evidence_sha256": {
+    "docs/V2_M2A_PAIRED_ENDPOINT_PILOT.md": "2200f56b27d807e015758dd82407649c1a5d62730a528c01b262f1af3045504c",
+    "docs/V2_M2A_PAIRED_ENDPOINT_PILOT.json": "89b3b76f3707b0565c75e0d7478f6b886217dd4d3340d62855aa06691ef12712",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-78964b1c5f9b.json.gz": "2c8fccf9edb66af1ba8f0dac91e378d1555e22c1f998715ab480f316726b8c97",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-2fafb60c2e7a.json.gz": "4f6a3415ea3e8ee0357452f8a9e8d135669ed4e7f4f7dd8df3e2bfa8d88b3740",
+    "tests/fixtures/v2/endpoint-pilot-controlled-transition-a7c8a769c215.json.gz": "886ae57ca1e413793eac6b6328af12c1bb03c08e0c75ae7691b46aeb086dcc15",
+    "tests/fixtures/v2/endpoint-pilot-paired-layers-726f0775adde.jsonl.gz": "2f6dd9f7d686b34c49045c5e5490d293e7b1b98e7220acfeb54db84f8b7620ff",
+    "tests/fixtures/v2/endpoint-pilot-paired-layers-d9075298573c.jsonl.gz": "505e845f09c7ed50e42f32a759a7f1cba830874bb9a079219df258563a6a00d7",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "tools/v2_controlled_transition_capture.py": "dcf8c3cb8901fde1f30756bcdb760f393330b08e6f0c3c5f9130ad7d50e73e04",
+    "tools/v2_direct_route_certificate.py": "cb651091db5c0518402071beabbf4fc5ec85a02729428cd20288656dda08fc6f"
+  }
+}
