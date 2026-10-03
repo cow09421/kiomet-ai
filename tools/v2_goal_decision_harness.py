@@ -46,17 +46,17 @@ class TowerView:
     owner: int | None
     units: tuple[int, ...]
     delay: int
-    supply: bool
+    supply: bool | None
 
 
 @dataclass(frozen=True)
 class ForceView:
-    owner: int
-    source: int
-    target: int
-    progress: int
-    fuel: int
-    units: tuple[int, ...]
+    visible: bool = True
+    owner: int | None = None
+    source: int | None = None
+    target: int | None = None
+    progress: int | None = None
+    units: tuple[int, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -185,7 +185,7 @@ def visible_state(case: Mapping[str, Any]) -> VisiblePolicyState:
             raise ValueError("tower visibility must be explicit boolean")
         if row["visible"] is False:
             continue
-        required = {"id", "xy", "kind", "owner", "units", "delay", "supply"}
+        required = {"id", "xy", "kind", "owner", "units", "delay"}
         if not required.issubset(row):
             raise ValueError("visible tower is missing current facts")
         ident, xy, kind, owner, delay = row["id"], row["xy"], row["kind"], row["owner"], row["delay"]
@@ -193,12 +193,17 @@ def visible_state(case: Mapping[str, Any]) -> VisiblePolicyState:
                 or (owner is not None and (type(owner) is not int or owner not in (1, 2)))
                 or not isinstance(xy, list) or len(xy) != 2
                 or any(type(v) is not int or not 0 <= v < WORLD_TOWER_LIMIT for v in xy)
-                or type(delay) is not int or not 0 <= delay <= 255
-                or type(row["supply"]) is not bool):
+                or type(delay) is not int or not 0 <= delay <= 255):
             raise ValueError("visible tower has malformed current facts")
+        if owner == player:
+            if "supply" not in row or type(row["supply"]) is not bool:
+                raise ValueError("own tower supply presence must be known boolean")
+            supply = row["supply"]
+        else:
+            supply = None
         tower_views.append(TowerView(ident, tuple(xy), kind, owner,
                                      _vector(row["units"], "tower units"), delay,
-                                     row["supply"]))
+                                     supply))
     towers = tuple(sorted(tower_views, key=lambda t: t.id))
     force_views = []
     for row in case["forces"]:
@@ -206,20 +211,12 @@ def visible_state(case: Mapping[str, Any]) -> VisiblePolicyState:
             raise ValueError("force visibility must be explicit boolean")
         if row["visible"] is False:
             continue
-        required = {"owner", "src", "dst", "progress", "fuel", "units"}
-        if not required.issubset(row):
-            raise ValueError("visible force is missing current facts")
-        owner, src, dst = row["owner"], row["src"], row["dst"]
-        progress, fuel = row["progress"], row["fuel"]
-        if (type(owner) is not int or owner not in (1, 2)
-                or type(src) is not int or src < 0 or type(dst) is not int or dst < 0
-                or type(progress) is not int or not 0 <= progress <= 255
-                or type(fuel) is not int or not 0 <= fuel <= 255):
-            raise ValueError("visible force has malformed current facts")
-        force_views.append(ForceView(owner, src, dst, progress, fuel,
-                                     _vector(row["units"], "force units")))
-    forces = tuple(sorted(force_views,
-                          key=lambda f: (f.owner, f.source, f.target, f.progress, f.units)))
+        # The scenario force row is evaluator input. Presence alone is not a
+        # fieldwise normal-observation certificate for owner, route, progress,
+        # or composition, so only its visible entity marker crosses the policy
+        # boundary. Preserve visible-row multiplicity and order.
+        force_views.append(ForceView())
+    forces = tuple(force_views)
     return VisiblePolicyState(observed_tick, player, towers, forces, _menu(towers, player))
 
 
