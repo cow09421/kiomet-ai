@@ -1,0 +1,91 @@
+{
+  "version": "post-arrival-before-trigger-screen-v1",
+  "status": "NO_BEFORE_TRIGGER_FOUND",
+  "scope": "Development-only screen of the 24 scored EMPTY_NEUTRAL_CAPTURE cases using only the predeclared before-state fields. No combinations, identifiers, cohort labels, or tower memorization were used.",
+  "claim_scope": "No trigger found within this bounded predeclared field set; this is not a claim that no trigger could exist outside it.",
+  "population": {
+    "development_scored_capture_cases": 24,
+    "inventory_match": 3,
+    "zero_inventory_mismatch": 21,
+    "holdout_outcomes_read_in_this_review": false,
+    "new_formal_credit": 0
+  },
+  "before_field_counts": {
+    "visible_local_line_fact": {
+      "UNKNOWN": {
+        "match": 3,
+        "zero_inventory": 21
+      }
+    },
+    "incoming_terminal": {
+      "UNKNOWN": {
+        "match": 3,
+        "zero_inventory": 21
+      }
+    },
+    "production_due": {
+      "false": {
+        "match": 3,
+        "zero_inventory": 21
+      }
+    },
+    "source_delay_ticks": {
+      "0": {
+        "match": 3,
+        "zero_inventory": 21
+      }
+    },
+    "target_delay_ticks": {
+      "0": {
+        "match": 3,
+        "zero_inventory": 21
+      }
+    },
+    "inbound_complete": {
+      "true": {
+        "match": 2,
+        "zero_inventory": 10
+      },
+      "false": {
+        "match": 1,
+        "zero_inventory": 11
+      }
+    },
+    "capacity_class": {
+      "WITHIN_NORMAL_CAPACITY": {
+        "match": 1,
+        "zero_inventory": 4
+      },
+      "WITHIN_PINNED_GROUND_OVERFLOW": {
+        "match": 1,
+        "zero_inventory": 4
+      },
+      "CLIPPING_OR_CAPACITY_AMBIGUITY": {
+        "match": 1,
+        "zero_inventory": 13
+      }
+    }
+  },
+  "single_boolean_screen": {
+    "field": "capacity_class == CLIPPING_OR_CAPACITY_AMBIGUITY",
+    "candidate_prediction_if_true": "zero inventory",
+    "development_positive_group": {
+      "zero_inventory": 13,
+      "match_false_positive": 1
+    },
+    "development_false_group": {
+      "zero_inventory": 8,
+      "match": 2
+    },
+    "whole_population_accuracy_if_false_predicts_inventory_match": "15/24 (62.5%)",
+    "zero_only_baseline_accuracy": "21/24 (87.5%)",
+    "decision": "Not frozen: this single field does not separate the outcomes and performs below the zero-only baseline."
+  },
+  "trigger": null,
+  "holdout_protocol": "No trigger was frozen, so this review performed no holdout outcome evaluation. Existing holdout outcomes were previously seen; this retrospective screen grants no new credit.",
+  "source_sha256": {
+    "development_replay_fixture": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "disposition_freeze": "ee45abea842d5f2f9e4a909c27da29882a9388fe9207c7f68be9bb200b29d6c3",
+    "development_replay_tool": "09269bd9dd37b14f557f7d2d317a9db34bafce6d6a0cf0b66790c590263860fc"
+  }
+}
