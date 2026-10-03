@@ -1,3 +1,26 @@
+# Current M2A unfiltered settlement checkpoint - 2026-10-03
+
+CURRENT: OLD M1 FAIL / M1B PASS / M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.
+Naive Capture falsified: 13/45 exact; holdout 10/21. Reinforcement 16/219 exact;
+holdout 3/39. All 413 due opportunities retained (295 supported / 118 excluded).
+PROVISIONAL_CAPTURE NO / PROVISIONAL_REINFORCEMENT NO / production Combat 0.
+Target-local final eligible cases/groups/contexts 0 for both branches; even the
+no-terminal Capture proxy is only 7/19 exact. Stop Arrival expansion under the
+user's explicit falsification exception; OVERENGINEERING_TRIPWIRE TRIGGERED.
+No production core/control changes. Strict diagnostic 131 supported / 116 correct
+and horizons unchanged after verification of all 17 core source hashes.
+Passive Combat PARTIAL: raw 26/31; qualified 4/4 with 27 unqualified.
+NEXT P0: controlled ordinary combat evidence; then bounded Supply-local diagnosis;
+then strategy review under inventory/continuation uncertainty. No new framework.
+Readiness R3/unbound action proof; R1 only candidate, action-local fix NOT_APPLICABLE.
+0 valid trials / 0 dispatch / 0 new Grade A or Grade B / 0 provisional credits.
+Endpoint UNKNOWN_BUT_RESEARCH_CLOSED. Historical formal counts 1053/1053 unchanged.
+See V2_M2A_SETTLEMENT_CHECKPOINT.md/.json. Actual final HEAD, branch, dirty status,
+hashes and full regression counts: runtime/research/v2/settlement-final-head-regression.json.
+All final documents precede that final-HEAD regression; no docs commit after it.
+
+## Historical arrival checkpoint (superseded next-work decision)
+
 # M2A ordinary arrival checkpoint — 2026-10-03
 
 CURRENT: M2A IN_PROGRESS / M2 IN_PROGRESS / M3 NOT_STARTED.

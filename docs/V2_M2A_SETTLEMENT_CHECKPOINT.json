@@ -1,0 +1,346 @@
+{
+  "checkpoint": "M2A_UNFILTERED_SETTLEMENT_2026-10-03",
+  "starting_head": "77f6906922135ce246ba67cdc637a9dcb2720ae2",
+  "branch": "v2-rebuild",
+  "main_expected": "234cfad918381adfd2a48a183ca17d35b64970e0",
+  "milestones": {
+    "OLD_M1": "FAIL",
+    "M1B": "PASS",
+    "M2A": "IN_PROGRESS",
+    "M2": "IN_PROGRESS",
+    "M3": "NOT_STARTED"
+  },
+  "population": {
+    "total_known_due_opportunities": 413,
+    "boundary_supported": 295,
+    "boundary_excluded_retained": 118,
+    "supported_by_branch": {
+      "EMPTY_NEUTRAL_CAPTURE": 45,
+      "SAME_OWNER_REINFORCEMENT": 219,
+      "NO_NAIVE_SETTLEMENT_BRANCH": 31
+    },
+    "raw_candidate_branch_counts_all_cases": {
+      "EMPTY_NEUTRAL_CAPTURE": 51,
+      "NO_NAIVE_SETTLEMENT_BRANCH": 45,
+      "SAME_OWNER_REINFORCEMENT": 317
+    }
+  },
+  "naive_all_scoring": {
+    "MATCH": 29,
+    "MISMATCH": 235,
+    "UNSCORABLE": 149
+  },
+  "branch_results": {
+    "EMPTY_NEUTRAL_CAPTURE": {
+      "development": {
+        "candidates": 24,
+        "scored": 24,
+        "match": 3,
+        "mismatch": 21,
+        "unscorable": 0,
+        "conservative_groups": 24,
+        "contexts": 3
+      },
+      "holdout": {
+        "candidates": 27,
+        "scored": 21,
+        "match": 10,
+        "mismatch": 11,
+        "unscorable": 6,
+        "conservative_groups": 21,
+        "contexts": 3
+      },
+      "all": {
+        "candidates": 51,
+        "scored": 45,
+        "match": 13,
+        "mismatch": 32,
+        "unscorable": 6,
+        "conservative_groups": 45,
+        "contexts": 6
+      }
+    },
+    "SAME_OWNER_REINFORCEMENT": {
+      "development": {
+        "candidates": 262,
+        "scored": 180,
+        "match": 13,
+        "mismatch": 167,
+        "unscorable": 82,
+        "conservative_groups": 175,
+        "contexts": 2
+      },
+      "holdout": {
+        "candidates": 55,
+        "scored": 39,
+        "match": 3,
+        "mismatch": 36,
+        "unscorable": 16,
+        "conservative_groups": 39,
+        "contexts": 2
+      },
+      "all": {
+        "candidates": 317,
+        "scored": 219,
+        "match": 16,
+        "mismatch": 203,
+        "unscorable": 98,
+        "conservative_groups": 214,
+        "contexts": 4
+      }
+    }
+  },
+  "premise_revisions": {
+    "capture": 1,
+    "reinforcement": 1,
+    "holdout_tuning": false
+  },
+  "strict_world_eligibility": {
+    "cases": 0,
+    "groups": 0,
+    "contexts": 0
+  },
+  "target_local_final_eligibility": {
+    "capture": {
+      "cases": 0,
+      "groups": 0,
+      "contexts": 0
+    },
+    "reinforcement": {
+      "cases": 0,
+      "groups": 0,
+      "contexts": 0
+    }
+  },
+  "capture_no_terminal_proxy": {
+    "cases": 19,
+    "groups": 19,
+    "contexts": 6,
+    "match": 7,
+    "mismatch": 12,
+    "development": "2/8",
+    "holdout": "5/11",
+    "production_claim": false
+  },
+  "force_status_all_413": {
+    "t_plus_1": {
+      "DISAPPEARED": 57,
+      "TRANSFORMED": 215,
+      "AMBIGUOUS": 128,
+      "CONTINUES": 12,
+      "UNKNOWN": 1
+    },
+    "t_plus_2": {
+      "DISAPPEARED": 56,
+      "TRANSFORMED": 213,
+      "AMBIGUOUS": 128,
+      "CONTINUES": 14,
+      "UNKNOWN": 2
+    }
+  },
+  "capture_residual_contexts": {
+    "supported_cases": 45,
+    "owner_after_matches_incoming": 45,
+    "observed_inventory_zero_after": 32,
+    "first_difference_counts": {
+      "inventory_after": 32
+    },
+    "supported_inventory_mismatch_before_context": {
+      "cases": 32,
+      "production_due_true": 0,
+      "target_delay_nonzero": 0,
+      "source_delay_nonzero": 0,
+      "special_destination_true": 0,
+      "confirmed_local_relay_true": 0,
+      "local_relay_unknown": 32,
+      "possible_unknown_destination_inbound": 15,
+      "incomplete_local_inbound_context": 15,
+      "capacity_status_counts": {
+        "WITHIN_NORMAL_CAPACITY": 8,
+        "WITHIN_PINNED_GROUND_OVERFLOW": 8,
+        "CLIPPING_OR_CAPACITY_AMBIGUITY": 16
+      }
+    }
+  },
+  "reinforcement_mismatch_contexts": {
+    "mismatches": 203,
+    "production_due": 2,
+    "confirmed_local_relay": 0,
+    "relay_unknown": 203,
+    "possible_unknown_inbound": 171,
+    "delay": 0,
+    "special": 0,
+    "capacity_normal": 50,
+    "pinned_ground_overflow": 35,
+    "capacity_ambiguous": 118,
+    "causal_attribution": "UNRESOLVED; overlapping before-context counts"
+  },
+  "production_interaction_attribution_censors": [
+    {
+      "case_id": "03d032d57e5b:1924:0",
+      "naive_forecast_classification": "MISMATCH",
+      "settlement_attribution": "CENSOR_PRODUCTION_INTERACTION"
+    },
+    {
+      "case_id": "03d032d57e5b:1984:0",
+      "naive_forecast_classification": "MISMATCH",
+      "settlement_attribution": "CENSOR_PRODUCTION_INTERACTION"
+    }
+  ],
+  "provisional_capture": false,
+  "provisional_reinforcement": false,
+  "new_production_combat": 0,
+  "production_decision": "Naive exact inventory deposit falsified; do not fit an owner-only replacement on these outcomes. Stop Arrival expansion under user section 46 exception.",
+  "negative_controls": {
+    "total": 28,
+    "correctly_rejected": 28,
+    "false_accepts": 0,
+    "actual": 10,
+    "isolated_mutations": 18,
+    "synthetic_positive_empirical_credit": 0
+  },
+  "combat": {
+    "candidates": 31,
+    "submitted_alias_rows": 35,
+    "unique_union": 31,
+    "evaluable": 4,
+    "qualified_match": 4,
+    "qualified_mismatch": 0,
+    "unqualified": 27,
+    "raw_match": 26,
+    "raw_mismatch": 5,
+    "verdict": "COMBAT_REPLAY_PARTIAL",
+    "legacy_new_unique": 0,
+    "production": false
+  },
+  "live_readiness": {
+    "reason": "R3_ROUTE_OR_ACTION_LEGALITY_UNPROVEN",
+    "r1_candidate": true,
+    "explicit_r1_proven": false,
+    "action_local_fix": "NOT_APPLICABLE",
+    "dispatch_attempts": 0,
+    "valid_trials": 0,
+    "new_grade_a": 0
+  },
+  "baseline_diagnostic": {
+    "observed": 907,
+    "before_supported": 131,
+    "before_correct": 116,
+    "after_supported": 131,
+    "after_correct": 116,
+    "new_capture": 0,
+    "new_reinforcement": 0,
+    "new_combat": 0,
+    "static_correct": 0,
+    "prospective": false
+  },
+  "horizons": [
+    {
+      "horizon": 4,
+      "exact": 5552,
+      "mismatch": 47,
+      "input": 69,
+      "supply": 1946,
+      "arrival": 132,
+      "combat": 18,
+      "upgrade": 8,
+      "other": 49,
+      "recording_end": 5
+    },
+    {
+      "horizon": 8,
+      "exact": 3593,
+      "mismatch": 69,
+      "input": 94,
+      "supply": 3738,
+      "arrival": 210,
+      "combat": 26,
+      "upgrade": 10,
+      "other": 77,
+      "recording_end": 9
+    },
+    {
+      "horizon": 16,
+      "exact": 1728,
+      "mismatch": 71,
+      "input": 104,
+      "supply": 5540,
+      "arrival": 246,
+      "combat": 26,
+      "upgrade": 10,
+      "other": 84,
+      "recording_end": 17
+    },
+    {
+      "horizon": 20,
+      "exact": 1562,
+      "mismatch": 71,
+      "input": 108,
+      "supply": 5692,
+      "arrival": 252,
+      "combat": 26,
+      "upgrade": 10,
+      "other": 84,
+      "recording_end": 21
+    }
+  ],
+  "horizon_evidence": "Accepted earlier results reused after all 17 core source hashes verified unchanged; not a new prediction run. All 7,826 origins remain in each denominator.",
+  "core_source_hashes_verified": {
+    "src/kiomet_ai/v2/__init__.py": "38dc7da03089c5ad158277f105fcc9775253b5323addd0050d0f7ea178467365",
+    "src/kiomet_ai/v2/control.py": "90868cb128b29d10122f665d58cacba874e5c960cf1b0d7f7e2eb8d24e5cae89",
+    "src/kiomet_ai/v2/observe/__init__.py": "58bc934130c7c2b6bd7700d2e183b956cb53570f9f9f3a7f98c28bf32479c8d8",
+    "src/kiomet_ai/v2/observe/extractor.py": "a6f6b6fb088d6c2472ec28522d85ffadd878ad21aa487ae6e5f1b562bf57e269",
+    "src/kiomet_ai/v2/observe/forces.py": "c99432bcdeaaba15b3508a6be1e3a98d5110d1cba6604aee2c2fa1b075d9580e",
+    "src/kiomet_ai/v2/observe/lifecycle.py": "32d336d804aa20c30f89c5c03fae9d88b442866094444967f2dff4f1f928ba9e",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/source_clock.py": "bf66018c0f9fa5b2fdf22fc49753fdc7d53a3d64b8eca77124ed833a1e786cfd",
+    "src/kiomet_ai/v2/observe/upgrades.py": "9ccd2df8ca14598932cb14b19c9d52f34908321343b8798e684e2e00bc4c65e7",
+    "src/kiomet_ai/v2/serialization.py": "085ea93588e5239f3396adf2f91f63deb47b8e1f45553892925c6a6e60fb4ee0",
+    "src/kiomet_ai/v2/sim/__init__.py": "c541da3eca074229c3b0a90520a8a1263f2d7f5321338b1589a9a94a15ad08a1",
+    "src/kiomet_ai/v2/sim/arrival.py": "abb0c15304fcff780d42fb23b139e16d8a5ab1ab8312a30c255264cbf142ee8c",
+    "src/kiomet_ai/v2/sim/aura.py": "7de263247643409fe30b05e475f647d5fa9daa2e07a1bda4135ef6147f1c1bbc",
+    "src/kiomet_ai/v2/sim/combat.py": "8b84726349cc52d718dc8f4fbc42416067ae2df9924cefbe88e899cd8d0edfd3",
+    "src/kiomet_ai/v2/sim/model.py": "2f1a75837586ad7ff6d1342ddc63a64210c0aedc6bff71c9a9f793f03d8e718c",
+    "src/kiomet_ai/v2/sim/step.py": "d3e4e1062fdd25d3db52d5e9da4374835046e2c2f74695ed6d063548fd06cce5",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62"
+  },
+  "credits": {
+    "new_grade_a": 0,
+    "new_grade_b": 0,
+    "retained_grade_b_boundaries": 8,
+    "retained_grade_b_groups": 7,
+    "retained_grade_b_contexts": 4,
+    "capture_provisional": 0,
+    "reinforcement_provisional": 0,
+    "new_certified": 0,
+    "historical_formal_before": 1053,
+    "historical_formal_after": 1053
+  },
+  "overengineering_tripwire": "TRIGGERED_WITH_USER_AUTHORIZED_FALSIFICATION_EXCEPTION",
+  "next_p0_ranked": [
+    "Controlled ordinary combat evidence: less than 10 qualified passive cases; freeze unchanged formula, obtain bounded lawful isolated cases.",
+    "Supply-local current inventory diagnosis: 5,692 censored 20-tick origins; distinguish immediate local effect without building a generic supply engine.",
+    "Bounded strategy review under unknown inventory/continuation; no planner, belief, or MPC implementation in this round."
+  ],
+  "endpoint": "UNKNOWN_BUT_RESEARCH_CLOSED",
+  "source_manifest_sha256": {
+    "docs/V2_M2A_UNFILTERED_SETTLEMENT.json": "05bc70084f1838b5f18138dc443ccee842c954c383d9f90f7a5931df494af004",
+    "docs/V2_M2A_COMBAT_PASSIVE_REPLAY.json": "cf6235cb3f11629671d6b7b13589db5d477c6bdde465ae92beb70a12151b7deb",
+    "docs/V2_M2A_SETTLEMENT_NEGATIVE_CONTROLS.json": "a6743d4b0bcabf4a47f6f5104e420e04e2e71390ec850a64aa18caa5fc7d2758",
+    "docs/V2_M2A_ACTION_LOCAL_READINESS_REVIEW.json": "ea61b816fe2c04fcfcf2b61aa1dfbddc286993e2353c58161e9c4ddc9a2b20e1",
+    "docs/V2_M2A_SETTLEMENT_RULE_FREEZE.json": "449e4a33584d1f82a897bc32f7d14023ad85023a2d531b4cfbc4e925b09ddb50",
+    "docs/V2_M2A_SETTLEMENT_PREMISE_FREEZE.json": "a63ec93476c8c5d83e5b5083ed4563764db185b335adaeaa9dd7a669431632f6",
+    "tests/fixtures/v2/arrival-settlement-replay-development.json.gz": "1d97e321cd5a0dbf38583c27df475ff0cd94f70409eda6e25587ab181fe4e412",
+    "tests/fixtures/v2/arrival-settlement-replay-holdout.json.gz": "07d67410076ecc013754ec02d1691f3f346f25799b03a861e35d36fc90d807a6",
+    "tests/fixtures/v2/combat-passive-replay.json.gz": "dcdd714ad077f39366a8a0fdfaa8016399c8f0080dd6f6c605e18eeea4efc4b0"
+  },
+  "final_verification": {
+    "receipt": "runtime/research/v2/settlement-final-head-regression.json",
+    "policy": "Commit this checkpoint and all documents before tests -k v2 on actual final HEAD. Final HEAD, branch, dirty status, hashes and counts live in that receipt. No documentation commit after it. Push v2-rebuild and verify main unchanged.",
+    "focused_root_acceptance": "45 passed",
+    "preserved_untracked_notes": [
+      "docs/V2_M2A_REGISTERED_MOUSE_QUEUE_CONSUMER_REVIEW.md",
+      "docs/V2_M2A_TS_CAPACITY_CONTEXT_REVIEW.md"
+    ]
+  }
+}
