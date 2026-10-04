@@ -1,0 +1,46 @@
+{
+  "ID": "goal-015",
+  "phase": "B1-baseline-DEV",
+  "utc": "2026-10-04T01:38:15.328710+00:00",
+  "evaluated_commit": "4d3043fe37d07fe76cf3535648f390ba2b629928",
+  "manifest_tree": "c314fda36f11269f50dcac4848b5300a7eb8a1eb",
+  "working_tree": "CLEAN/STABLE",
+  "command": [
+    "E:/SteamLibrary/kiomet/.venv/Scripts/python.exe",
+    "-m",
+    "tools.v2_goal015_baseline_dev",
+    "--evaluate",
+    "--freeze-commit",
+    "4d3043fe37d07fe76cf3535648f390ba2b629928",
+    "--fixture-sha256",
+    "47c27226cb3f78302b355a85005d6c356feefe12f8e41a7c3b0681d6334b3619"
+  ],
+  "result": {
+    "episodes": 60,
+    "denominator": 60,
+    "known_score_delta": 60,
+    "EVALUATED": 60,
+    "choice_in_unchanged_menu": 60,
+    "nonterminal": 60,
+    "scale": 2.0,
+    "scale_rank": 54,
+    "score_delta_counts": {
+      "1.0": 15,
+      "2.0": 6,
+      "-1.0": 1,
+      "0.0": 27,
+      "4.0": 1,
+      "-2.0": 8,
+      "-4.0": 2
+    },
+    "B1_tuning": 0,
+    "Planner": 0,
+    "Final": 0
+  },
+  "raw_sha256": "f6594cac2141b12a80c449bb937d30da88a8e4d48bc5f13cb5c5b198d90ad0e4",
+  "raw_bytes": 3245386,
+  "log_sha256": "236f3bb70f4db8dfc4b187502924ce1c3dd54d2a0a4ddeeafc584e7ee55694c2",
+  "source_hashes_unchanged": true,
+  "policy_force_facts": "all visibleforces retain owner/route/progress/vectorUNKNOWN",
+  "validity": "VALID baselineonly normalization; no superiority/tuning/Finalcredit"
+}

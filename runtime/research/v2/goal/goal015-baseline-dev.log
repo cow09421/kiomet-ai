@@ -1,0 +1,36 @@
+{
+  "baseline": "B1",
+  "fixture_sha256": "47c27226cb3f78302b355a85005d6c356feefe12f8e41a7c3b0681d6334b3619",
+  "output": "E:\\SteamLibrary\\kiomet\\runtime\\research\\v2\\goal-action-worktree\\runtime\\research\\v2\\goal\\goal015-baseline-dev.json",
+  "qualification_summary": {
+    "all_cases_qualified": true,
+    "case_count": 60,
+    "episode_calls": 0,
+    "expected_case_count": 60,
+    "expected_stratum_counts": {
+      "S1_expansion": 10,
+      "S2_contested_expansion": 10,
+      "S3_threat_defense": 10,
+      "S4_reinforcement_choice": 10,
+      "S5_combat_risk": 10,
+      "S6_uncertainty": 10
+    },
+    "policy_calls": 0,
+    "qualification_calls": [
+      "admit_case",
+      "visible_state"
+    ],
+    "stratum_counts": {
+      "S1_expansion": 10,
+      "S2_contested_expansion": 10,
+      "S3_threat_defense": 10,
+      "S4_reinforcement_choice": 10,
+      "S5_combat_risk": 10,
+      "S6_uncertainty": 10
+    }
+  },
+  "row_count": 60,
+  "scale": 2.0,
+  "scale_input_count": 60,
+  "scale_status": "KNOWN"
+}

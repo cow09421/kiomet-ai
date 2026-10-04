@@ -1,0 +1,39 @@
+{
+  "ID": "goal-015",
+  "phase": "independent-utility-sanity-and-regression",
+  "utc": "2026-10-04T01:38:15.328710+00:00",
+  "DEV_evaluated_commit": "4d3043fe37d07fe76cf3535648f390ba2b629928",
+  "DEV_raw_sha256": "f6594cac2141b12a80c449bb937d30da88a8e4d48bc5f13cb5c5b198d90ad0e4",
+  "DEV_scale": 2.0,
+  "DEV_scale_recipe": "all60 signed source score deltas, abs nearest-rank90 ceil(.9*60)=rank54; no exclusions/no epsilon; anyunknown blocks",
+  "source_sha256": {
+    "tools/v2_goal_decision_harness.py": "933a776822915299059698065e77c7b74c0cb4e406536f1c8f92ba5b2d09c627",
+    "tools/v2_goal_typed_baselines.py": "640ab5b94a4fa5dd537dfc38e9bdae6499ff86e100a0c14b0f8cc6c43d4c9424",
+    "tools/v2_goal_official_utility.py": "11271c43597bafb05fb09d286c9fed40ef39a6e653f0a6bd3dc92950399d0f19",
+    "tools/v2_goal015_baseline_dev.py": "c95aba2c511903125a5f9d96064456967dca486bdb3500c18ebbb28e33b53e2f",
+    "tests/fixtures/v2_goal015_baseline_dev.json": "47c27226cb3f78302b355a85005d6c356feefe12f8e41a7c3b0681d6334b3619",
+    "tests/fixtures/v2_goal015_utility_sanity.json": "9c06534b85d1b5cc5716011c26ea9bbab7177aa1c4f79332a114cd867c0b2d6b",
+    "tests/test_v2_goal_official_utility.py": "5f3f78669fe2c4115857c7907434723bbbc06d0dd8c663b5e4e7158b0f54c756",
+    "docs/V2_GOAL_L1_CONTRACT.md": "08877f8bf584785e1607fc5b6031f09133fd849f4617a938c03d1a6d434a0f41",
+    "docs/V2_GOAL_L1_AMENDMENT_001.md": "e90413a18ce35e9b86fa261061fccc3a399ed1ff5d5514f86c7929b0207c682b",
+    "docs/V2_GOAL_OFFICIAL_UTILITY_PROTOCOL.md": "004adc2d75c4de424e5518c5cf4cda319b79d66a963c669126506f033d1342c6"
+  },
+  "counts": {
+    "score_strict": 100,
+    "force_nondecrease": 50,
+    "production_nondecrease": 50,
+    "antiProxy_strict": 20,
+    "additional_guards": "input/fullhorizon/terminal/active-delay/clipping/scale/permutation"
+  },
+  "command": "tools/v2_regression_receipt.py --output runtime/research/v2/goal/goal015-regression.json -- tests -k v2 -q --basetemp=runtime/tests/goal015-regression",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pytest": "9.1.1",
+    "playwright": "1.63.0",
+    "chromium_sha256": "9b07943f834485b43c9d54caea2951c78715f9f07070a80ab6658465ebd3e711"
+  },
+  "old_test_status": "DIAGNOSTIC compatibility; newGoal015 controls freshsingleexposure",
+  "required": "all220 authorizedsanity +guards pass; fullv2regression0fail0skip0error; cleanstablecodehashes",
+  "evaluation_binding": "annotated goal/p0-015-utility-freeze created with committedrawDEV/s and thismanifest before firstsanityoutputs"
+}
