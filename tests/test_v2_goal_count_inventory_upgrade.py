@@ -188,6 +188,12 @@ def fixture(index, *, unit_ids=(0, 4, 5), morale=False,
     # Cross-type rivals remain within each declared public overflow bound.
     if index in (3, 4, 21):
         counts = (12 + index % 10, 0, 0, 0, 3, 5, 0, 0, 0, 0)
+    if index in (203, 204, 221):
+        shield = {203: 15, 204: 16, 221: 13}[index]
+        counts = (shield, 0, 0, 0, 3, 7, 0, 0, 0, 0)
+    elif index in (230, 231, 232):
+        shield = {230: 27, 231: 28, 232: 29}[index]
+        counts = (shield, 0, 0, 0, 7, 7, 0, 0, 0, 0)
     tower_id = BASE_ID + index * 37
     at = BASE_AT + index * 307
     current = make_tower(
@@ -422,9 +428,7 @@ def player_enemy(index):
     return 1 + ((PLAYER + 17 + index) % 65_534)
 
 
-@pytest.mark.parametrize("index,scenario", tuple(enumerate(PAIR_SCENARIOS)),
-                         ids=lambda value: f"pair-{value}")
-def test_thirty_three_fresh_explicit_count_pairs_accept_unique_projection_and_refuse_its_counterfactual(index, scenario):
+def _assert_pair_control(index, scenario):
     assert len(PAIR_SCENARIOS) >= 33
     unit_projection = ((0, 4, 5), (0,), (0, 4), (0, 5))[index % 4]
     if scenario == "omitted_ruler_duplicate":
@@ -492,9 +496,22 @@ def test_thirty_three_fresh_explicit_count_pairs_accept_unique_projection_and_re
         assert refused["tower_id"] is None
 
 
-def test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_capacity_aliases():
+@pytest.mark.parametrize("index,scenario", tuple(enumerate(PAIR_SCENARIOS)),
+                         ids=lambda value: f"diag-pair-{value}")
+def test_diagnostic_thirty_three_explicit_count_pairs(index, scenario):
+    _assert_pair_control(index, scenario)
+
+
+@pytest.mark.parametrize("offset,scenario", tuple(enumerate(PAIR_SCENARIOS)),
+                         ids=lambda value: f"confirmation-pair-{value}")
+def test_frozen_confirmation_thirty_three_fresh_pairs(offset, scenario):
+    assert len(PAIR_SCENARIOS) >= 33
+    _assert_pair_control(200 + offset, scenario)
+
+
+def _assert_morale_capacity(index):
     current, dom, source, counts, _at = fixture(
-        31, unit_ids=(0, 4), morale=True, capacity_known=False)
+        index, unit_ids=(0, 4), morale=True, capacity_known=False)
     capacity_fact = source.capacity
     capacity_value = source.capacity.value
     morale_fact = source.effects
@@ -515,7 +532,10 @@ def test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_ca
     assert row["public_clamp_source_with_overflow"] == 45
     assert row["public_clamp_target_with_overflow"] == 25
     assert row["public_clamp_shield_loss_upper_bound"] == max(0, counts[0] - 25)
-    assert row["public_clamp_provenance"] == "SOURCE_RULE_CONDITIONAL"
+    assert row["public_clamp_provenance"] == (
+        "pinned public raw TowerType capacity plus fixed overflow rule; "
+        "conservative clamp only, not an observed current UI capacity"
+    )
     assert source.capacity is capacity_fact
     assert source.capacity == capacity_fact
     assert source.capacity.value is capacity_value
@@ -533,6 +553,14 @@ def test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_ca
     ]
     assert legacy_certificate(
         current, panel_dom(counts, rows=legacy_rows), source.id)["eligible"] is False
+
+
+def test_diagnostic_morale_true_and_unknown_observer_capacity_are_positive():
+    _assert_morale_capacity(31)
+
+
+def test_frozen_confirmation_morale_capacity_uses_fresh_fixture():
+    _assert_morale_capacity(240)
 
 
 def test_partial_count_projection_can_still_be_unique_when_other_visible_tower_differs_on_a_shown_count():

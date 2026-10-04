@@ -1,0 +1,52 @@
+........................................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 19%]
+.......................................................................F [ 25%]
+........................................................................ [ 32%]
+........................................................................ [ 38%]
+........................................................................ [ 45%]
+........................................................................ [ 51%]
+........................................................................ [ 58%]
+........................................................................ [ 64%]
+........................................................................ [ 71%]
+........................................................................ [ 77%]
+........................................................................ [ 84%]
+........................................................................ [ 90%]
+........................................................................ [ 97%]
+...............................                                          [100%]
+================================== FAILURES ===================================
+_ test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_capacity_aliases _
+
+    def test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_capacity_aliases():
+        current, dom, source, counts, _at = fixture(
+            31, unit_ids=(0, 4), morale=True, capacity_known=False)
+        capacity_fact = source.capacity
+        capacity_value = source.capacity.value
+        morale_fact = source.effects
+        morale_value = source.effects.value
+        candidate_rows_before = count_candidate_rows(current)
+        result = certify_count_inventory_panel(current, dom, source.id)
+        assert result["eligible"] is True and result["tower_id"] == source.id
+        row = next(row for row in candidate_rows_before
+                   if row.get("tower_id") == source.id and
+                   row.get("target_type") == QUARRY)
+        assert row["eligible"] is True
+        assert row["shield_before"] is None and row["shield_after"] is None
+        assert row["shield_before_max_with_overflow"] is None
+        assert row["shield_after_max_with_overflow"] is None
+        assert row["shield_loss_at_current_inventory"] is None
+        assert row["public_clamp_source_raw_capacity"] == 30
+        assert row["public_clamp_target_raw_capacity"] == 10
+        assert row["public_clamp_source_with_overflow"] == 45
+        assert row["public_clamp_target_with_overflow"] == 25
+        assert row["public_clamp_shield_loss_upper_bound"] == max(0, counts[0] - 25)
+>       assert row["public_clamp_provenance"] == "SOURCE_RULE_CONDITIONAL"
+E       AssertionError: assert 'pinned publi...t UI capacity' == 'SOURCE_RULE_CONDITIONAL'
+E         
+E         - SOURCE_RULE_CONDITIONAL
+E         + pinned public raw TowerType capacity plus fixed overflow rule; conservative clamp only, not an observed current UI capacity
+
+tests\test_v2_goal_count_inventory_upgrade.py:518: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_v2_goal_count_inventory_upgrade.py::test_morale_true_and_unknown_observer_capacity_are_positive_without_exact_capacity_aliases
+1 failed, 1110 passed, 1363 deselected in 33.61s

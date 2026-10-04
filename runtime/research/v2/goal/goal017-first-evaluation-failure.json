@@ -1,0 +1,40 @@
+{
+  "ID": "goal-017",
+  "kind": "INTERMEDIATE_EVALUATION_FAILURE",
+  "utc": "2026-10-04T03:33:29.979821+00:00",
+  "evaluated_commit": "f2e8c7ed3fab722375d301e221bfa0413e26bdeb",
+  "manifest_tree": "b01ce65656ab5c9da76bb01be5adb354cb320e96",
+  "command": [
+    "E:\\SteamLibrary\\kiomet\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests",
+    "-k",
+    "v2",
+    "-q",
+    "--basetemp=runtime/tests/goal017-regression",
+    "--junitxml=E:\\SteamLibrary\\kiomet\\runtime\\research\\v2\\goal-action-worktree\\runtime\\research\\v2\\goal\\goal017-regression.junit.xml",
+    "-p",
+    "regression_receipt_plugin"
+  ],
+  "result": {
+    "pass": 1110,
+    "fail": 1,
+    "skip": 0,
+    "errors": 0,
+    "deselected": 1363
+  },
+  "validity": "VALID clean stable first execution; FAIL is retained; exposed first controls are DIAGNOSTIC for any follow-up.",
+  "cause": "Single independent test assertion expected the provenance token SOURCE_RULE_CONDITIONAL, while frozen helper returns a descriptive conditional public-rule provenance. All33 paired identity controls passed. No helper behavior change is authorized by this ordinary test-definition repair.",
+  "next": "Freeze wholly fresh33 paired fixtures plus fresh capacity/morale guard before one final third information attempt within the original deadline; all old cases compatibility DIAGNOSTIC.",
+  "artifacts_sha256": {
+    "goal017-regression.json": "9b88f629c171a4195332e8858815f6845cd0d01f69c1235f32d56d74b37e4b33",
+    "goal017-regression.log": "fbdd1d1388c84d9afd7d338b2d735d7d0ebfc78fab245cb6e259f55591399521",
+    "goal017-regression.junit.xml": "0b27f98c6de354fe0417b5b63aee599744bcf82b394729e9e18413c13bb5fb4f",
+    "goal017-evaluation-manifest.json": "28b27639118d203edbdec350554f3b4d8dbc0343913bb8c59efa668982e818c4"
+  },
+  "information_attempt_index": 2,
+  "closed_gate_credit": false,
+  "no_live_or_final_credit": true
+}
