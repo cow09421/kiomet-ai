@@ -1,0 +1,101 @@
+{
+  "ID": "goal-015",
+  "phase": "B1-baseline-DEV",
+  "utc": "2026-10-04T01:36:22.902353+00:00",
+  "prereg_commit": "3094610bd1a5ec9f29325a23b7e8a9a0ed76a196",
+  "base": "3094610bd1a5ec9f29325a23b7e8a9a0ed76a196",
+  "source_sha256": {
+    "tools/v2_goal_decision_harness.py": "933a776822915299059698065e77c7b74c0cb4e406536f1c8f92ba5b2d09c627",
+    "tools/v2_goal_typed_baselines.py": "640ab5b94a4fa5dd537dfc38e9bdae6499ff86e100a0c14b0f8cc6c43d4c9424",
+    "tools/v2_goal_official_utility.py": "11271c43597bafb05fb09d286c9fed40ef39a6e653f0a6bd3dc92950399d0f19",
+    "tools/v2_goal015_baseline_dev.py": "c95aba2c511903125a5f9d96064456967dca486bdb3500c18ebbb28e33b53e2f",
+    "tests/fixtures/v2_goal015_baseline_dev.json": "47c27226cb3f78302b355a85005d6c356feefe12f8e41a7c3b0681d6334b3619",
+    "tests/fixtures/v2_goal015_utility_sanity.json": "9c06534b85d1b5cc5716011c26ea9bbab7177aa1c4f79332a114cd867c0b2d6b",
+    "tests/test_v2_goal_official_utility.py": "5f3f78669fe2c4115857c7907434723bbbc06d0dd8c663b5e4e7158b0f54c756",
+    "docs/V2_GOAL_L1_CONTRACT.md": "08877f8bf584785e1607fc5b6031f09133fd849f4617a938c03d1a6d434a0f41",
+    "docs/V2_GOAL_L1_AMENDMENT_001.md": "e90413a18ce35e9b86fa261061fccc3a399ed1ff5d5514f86c7929b0207c682b",
+    "docs/V2_GOAL_OFFICIAL_UTILITY_PROTOCOL.md": "004adc2d75c4de424e5518c5cf4cda319b79d66a963c669126506f033d1342c6"
+  },
+  "pinned_primary_source_sha256": {
+    "runtime/research/v2/goal/goal006-source/server__src__service.rs": "df620c3a3ea0756ad2a157906f6979447e394b5489c8eea097e6833ee4d89ee4",
+    "runtime/research/v2/goal/goal006-source/common__src__tower.rs": "ee82623ba74437470b9ab28b84c293f2559753083854e0a4101917a2bf62dff7",
+    "runtime/research/v2/goal/goal006-source/macros__src__lib.rs": "b1b05b90b94308eda3db6d05ba85bed18215c34cc055ff85cb2f5e24a424900f",
+    "runtime/research/v2/goal/goal006-source/server__src__world.rs": "cc7a06c37b5a7f26abd24cfd9690c8bb485a0cbe7ddd9a5c01bbc4b96cae5be3",
+    "runtime/research/v2/goal/goal006-source/common__src__ticks.rs": "485a813171b735354a08b29d4a28a92b047cc0c1408be3c21fb35db7588f2dcf",
+    "runtime/research/v2/goal/goal007-source/client__src__ui__game_ui.rs": "1e4db8019441fdbf7ce442ae99a0c393ee9777c6cb4143920e98306ac266c1d8",
+    "tools/v2_goal_decision_harness.py": "12678193b0aa8807f2a6f3d0da3cb5f22e4d030377522dd678ab53180da0dc76",
+    "docs/V2_GOAL_L1_CONTRACT.md": "08877f8bf584785e1607fc5b6031f09133fd849f4617a938c03d1a6d434a0f41"
+  },
+  "vendor": "d3f0956f27f48f6cac9ac9991f948fa7f90ba77c",
+  "deployed_source_parity": "UNKNOWN",
+  "qualification": {
+    "all_cases_qualified": true,
+    "case_count": 60,
+    "episode_calls": 0,
+    "expected_case_count": 60,
+    "expected_stratum_counts": {
+      "S1_expansion": 10,
+      "S2_contested_expansion": 10,
+      "S3_threat_defense": 10,
+      "S4_reinforcement_choice": 10,
+      "S5_combat_risk": 10,
+      "S6_uncertainty": 10
+    },
+    "policy_calls": 0,
+    "qualification_calls": [
+      "admit_case",
+      "visible_state"
+    ],
+    "stratum_counts": {
+      "S1_expansion": 10,
+      "S2_contested_expansion": 10,
+      "S3_threat_defense": 10,
+      "S4_reinforcement_choice": 10,
+      "S5_combat_risk": 10,
+      "S6_uncertainty": 10
+    }
+  },
+  "source_transition_change": "AST identical to preregistration after removing only tower_delays/final_tower_delays outputkeys",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pytest": "9.1.1",
+    "playwright": "1.63.0",
+    "chromium_sha256": "9b07943f834485b43c9d54caea2951c78715f9f07070a80ab6658465ebd3e711"
+  },
+  "baseline": "unchanged Goal013 B1; history index0 first_observed_tick=currentview.tick; no tuning/Planner",
+  "normalization": "all60 signed source score deltas, abs nearest-rank90 ceil(.9*60)=rank54; no exclusions/no epsilon; anyunknown blocks",
+  "sampling": "60new metadata-qualified generated cases10eachactualS1-6; allzero initialdelay; isolatedRulercores, no force/script/body routes tocores; every attempt remainsdenominator; no postoutputreplacement",
+  "controls": "fresh200=100officialscorestrict+50forceonlynondecrease+50productiononlynondecrease;20antiProxy plusguards; not executed untilrawscalecommitted",
+  "command": [
+    "E:/SteamLibrary/kiomet/.venv/Scripts/python.exe",
+    "-m",
+    "tools.v2_goal015_baseline_dev",
+    "--evaluate",
+    "--freeze-commit",
+    "RESOLVE_ANNOTATED_FREEZE_COMMIT",
+    "--fixture-sha256",
+    "47c27226cb3f78302b355a85005d6c356feefe12f8e41a7c3b0681d6334b3619"
+  ],
+  "output": "runtime/research/v2/goal/goal015-baseline-dev.json",
+  "evaluation_binding": "annotated goal/p0-015-dev-freeze commit and tree created atomically with this manifest before alloutputs",
+  "resource_use": {
+    "information_attempts_intended": 1,
+    "baseline_DEV_episodes_max": 60,
+    "B1_tuning": 0,
+    "Planner": 0,
+    "live": 0,
+    "passive": 0,
+    "Final": 0
+  },
+  "subagents": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "xhigh",
+    "dispatched": [
+      "utility_builder_xhigh",
+      "utility_cases_xhigh",
+      "utility_auditor_xhigh"
+    ],
+    "actual_parallel": "rolling; temporary thread-limit while rootauthoredcontrols;3actualxhighdispatches"
+  }
+}

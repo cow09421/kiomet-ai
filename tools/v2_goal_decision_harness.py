@@ -848,6 +848,7 @@ def evaluate(case: Mapping[str, Any], choice: Action | Mapping[str, Any]) -> dic
             "tick": tick, "local_phase": phase, "inputs_after_tick": input_rows,
             "tower_owners": tuple(sorted((i, t["owner"]) for i, t in towers.items())),
             "tower_units": tuple(sorted((i, tuple(t["units"])) for i, t in towers.items())),
+            "tower_delays": tuple(sorted((i, t["delay"]) for i, t in towers.items())),
             "forces": tuple(sorted((f["owner"], f["src"], f["dst"], f["progress"],
                                     tuple(f["units"])) for f in forces)),
             "alive": tuple(sorted(alive.items())),
@@ -865,6 +866,7 @@ def evaluate(case: Mapping[str, Any], choice: Action | Mapping[str, Any]) -> dic
         "pending_core_losses": tuple(sorted(pending_death)),
         "final_towers": tuple(sorted((i, t["kind"], t["owner"], tuple(t["units"]))
                                      for i, t in towers.items())),
+        "final_tower_delays": tuple(sorted((i, t["delay"]) for i, t in towers.items())),
         "final_forces": tuple(sorted((f["owner"], f["src"], f["dst"], f["progress"],
                                       tuple(f["units"])) for f in forces)),
         "trace": trace,
