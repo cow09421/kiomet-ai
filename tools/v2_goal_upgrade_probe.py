@@ -937,7 +937,9 @@ async def run_probe(args, *, protocol=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true", help="permit one explicit normal UI upgrade click")
-    parser.add_argument("--inventory-cliff-quarry", action="store_true", help="Goal011 explicit public inventory identity and bounded Cliff-to-Quarry protocol")
+    inventory_modes = parser.add_mutually_exclusive_group()
+    inventory_modes.add_argument("--inventory-cliff-quarry", action="store_true", help="Goal011 explicit public inventory identity and bounded Cliff-to-Quarry protocol")
+    inventory_modes.add_argument("--count-inventory-cliff-quarry", action="store_true", help="Goal017 explicit-count normal-panel identity and bounded Cliff-to-Quarry protocol")
     parser.add_argument("--seconds", type=int, default=60, help="hard wall-time bound, 1..60 seconds")
     parser.add_argument("--out", type=Path, help="new JSONL evidence path; must not already exist")
     args = parser.parse_args(argv)
@@ -947,6 +949,8 @@ def main(argv=None):
         protocol = None
         if args.inventory_cliff_quarry:
             from tools import v2_goal_inventory_upgrade as protocol
+        elif args.count_inventory_cliff_quarry:
+            from tools import v2_goal_count_inventory_upgrade as protocol
         result = asyncio.run(asyncio.wait_for(run_probe(args, protocol=protocol), timeout=args.seconds + 15))
     except asyncio.TimeoutError:
         result = {"status": "UNKNOWN", "reasons": ["PROBE_WALL_TIME_BOUND_EXPIRED"]}

@@ -1,0 +1,43 @@
+{
+  "ID": "goal-017",
+  "phase": "bounded static input premise review",
+  "utc": "2026-10-04T02:55:36.532744+00:00",
+  "source_sha256": {
+    "src/kiomet_ai/observe.py": "ec0ca28979e244e746c5ceeb7b5e8e7e94e9e287e101366d23c7e360e3ac8fa1",
+    "src/kiomet_ai/v2/state.py": "d573c272388b0f26ad80b6df87f6ef090d108fd455291c37fc00cc328143bd62",
+    "src/kiomet_ai/v2/observe/extractor.py": "a6f6b6fb088d6c2472ec28522d85ffadd878ad21aa487ae6e5f1b562bf57e269",
+    "src/kiomet_ai/v2/observe/rules.py": "4d81159dff8f0d0a42edbc949925d94e7a76488e842136a98e066977eec6016b",
+    "src/kiomet_ai/v2/observe/rules_fae13.json": "fb9a01df44fa9bf27da3fac1e21a1e8e2dd2f7e65877dedfd15b2fb3cb9a1ccc",
+    "tools/v2_goal_inventory_upgrade.py": "5168255657b76b3b78383df912ff8d66013794f91c34a8b6921d1068d8ad94c6",
+    "tools/v2_goal_count_inventory_upgrade.py": "ceb28d8c5b73fc4a4aef8ca3397e7b5a08bcf80168ea460b87409fadd5b654e1",
+    "tools/v2_goal_upgrade_probe.py": "0ee962aaac9e59166b3c56a8d6246ae37edb0fe7441de9753560e00b394ecc0d",
+    "runtime/research/v2/goal/goal006-source/common__src__units.rs": "52ea302ec12896e8522af085ae30fa29757ade43a9974e8085fc27657937220d",
+    "runtime/research/v2/goal/goal006-source/common__src__tower.rs": "ee82623ba74437470b9ab28b84c293f2559753083854e0a4101917a2bf62dff7",
+    "runtime/research/v2/goal/goal007-source/client__src__ui__tower_overlay.rs": "c9f449b3fd0752fe2d7ed26bd5f76d87ed689190a42125b674138d4156563109",
+    "docs/V2_GOAL_L1_CONTRACT.md": "08877f8bf584785e1607fc5b6031f09133fd849f4617a938c03d1a6d434a0f41"
+  },
+  "source_gate": "SUPPORTED under declared current normal-panel/current visible-complete typed boundary; no fundamental static blocker found by independent xhigh reviewer",
+  "coverage": "normalize requires network/active/connected/normal visibility and positive_refs==len(towers); DERIVED evidence records refs and decoded count. GameState rejects duplicateIDs; helper adds defensive guard. Current own tower sensors support full own coverage; not hidden/global enemy coverage.",
+  "count_projection": "Only observed explicit English unit count numerators; omitted rows unconstrained; all current visible complete vectors precede action eligibility. Unknown/duplicate/ambiguous matches refuse. Capacity/morale remain untouched and unknown formula not promoted.",
+  "clamp": "Separate SOURCE_RULE_CONDITIONAL raw30/10 overflow45/25 and conservative max20; exactcapacity/loss aliasesNone. Currentdeployed/server parity remainsUNKNOWN.",
+  "probe_compatibility": {
+    "changed_functions": [
+      "main"
+    ],
+    "unchanged_functions": 21,
+    "new_opt_in_only": true
+  },
+  "limitations": [
+    "No actual current official panel identity or action acceptance sampled",
+    "No Cliff availability proof; oldGoal011rows[] not morale bottleneck",
+    "No atomicDOM/world synchronization proof; laterofficialprotocol still brackets snapshots",
+    "No newforce/endpoint/supply/Planner/Final outcomes"
+  ],
+  "independent_review": "utility_auditor_xhigh source/boundary acceptance; controls still being corrected statically before first outputs",
+  "resource_use": {
+    "information_attempts": 1,
+    "tests": 0,
+    "live_sessions": 0,
+    "Planner_outcomes": 0
+  }
+}
